@@ -3,8 +3,10 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "Texture.h"
+#include "TextureManager.h"
 
-void Shader::Initialize(char* vertexPath, char* fragmentPath)
+void Shader::Initialize(TextureManager* textureManager, char* vertexPath, char* fragmentPath, std::vector<char*> texturePaths)
 {
 	SetVertexShader(vertexPath);
 	SetFragmentShader(fragmentPath);
@@ -27,8 +29,28 @@ void Shader::Initialize(char* vertexPath, char* fragmentPath)
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+
+	textures.clear();
+	for (char* texturePath : texturePaths)
+	{
+		//if(TextureManager::textures.find(texturePath))
+		
+		textures.push_back(textureManager->LoadNewTexture(texturePath));
+		//textures[textures.size() - 1]->SetDefaultTextureParameters();
+		//textures[textures.size() - 1]->LoadTexture(texturePath);
+	}
+}
+
+void Shader::BindTextures()
+{
+	for (unsigned int i = 0; i < textures.size(); i++)
+		textures[i]->UseTexture(i);
+
+	SetShaderUniform_veci1((char*)"albedoMap", textures[0]->GetTextureID());
+	SetShaderUniform_veci1((char*)"normalMap", textures[1]->GetTextureID());
+		//glBindTexture(GL_TEXTURE_2D, (GLuint)textures[0]->GetTextureID());
 }
 
 void Shader::SetVertexShader(char* vertexPath)
@@ -132,6 +154,11 @@ unsigned int Shader::GetShaderProgram()
 	return shaderProgram;
 }
 
+void Shader::UseShader()
+{
+	glUseProgram(shaderProgram);
+}
+
 int Shader::GetShaderUniform_vec1(char * uniformName)
 {
 	return 0;
@@ -141,5 +168,54 @@ void Shader::SetShaderUniform_vec1(char * uniformName, int uniformValue)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
-	glUniform1f(uniformLocation, uniformValue);
+	glUniform1f(uniformLocation, (GLfloat)uniformValue);
+}
+
+void Shader::SetShaderUniform_vec2(char * uniformName, int x, int y)
+{
+	glUseProgram(shaderProgram);
+	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
+	glUniform2f(uniformLocation, (GLfloat)x, (GLfloat)y);
+}
+
+void Shader::SetShaderUniform_vec3(char * uniformName, int x, int y, int z)
+{
+	glUseProgram(shaderProgram);
+	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
+	glUniform3f(uniformLocation, (GLfloat)x, (GLfloat)y, (GLfloat)z);
+}
+
+void Shader::SetShaderUniform_vec4(char * uniformName, int x, int y, int z, int w)
+{
+	glUseProgram(shaderProgram);
+	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
+	glUniform4f(uniformLocation, (GLfloat)x, (GLfloat)y, (GLfloat)z, (GLfloat)w);
+}
+
+void Shader::SetShaderUniform_veci1(char * uniformName, int uniformValue)
+{
+	glUseProgram(shaderProgram);
+	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
+	glUniform1i(uniformLocation, uniformValue);
+}
+
+void Shader::SetShaderUniform_veci2(char * uniformName, int x, int y)
+{
+	glUseProgram(shaderProgram);
+	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
+	glUniform2i(uniformLocation, x, y);
+}
+
+void Shader::SetShaderUniform_veci3(char * uniformName, int x, int y, int z)
+{
+	glUseProgram(shaderProgram);
+	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
+	glUniform3i(uniformLocation, x, y, z);
+}
+
+void Shader::SetShaderUniform_veci4(char * uniformName, int x, int y, int z, int w)
+{
+	glUseProgram(shaderProgram);
+	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
+	glUniform4i(uniformLocation, x, y, z, w);
 }

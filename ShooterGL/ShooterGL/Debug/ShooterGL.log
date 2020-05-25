@@ -1,3 +1,1 @@
-﻿  Shader.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\shader.cpp(144): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-  ShooterGL.vcxproj -> C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\Debug\ShooterGL.exe
+﻿  ShooterGL.vcxproj -> C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\Debug\ShooterGL.exe

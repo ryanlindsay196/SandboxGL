@@ -41,6 +41,7 @@ int main()
 
 	ModelManager* modelManager = new ModelManager();
 	modelManager->LoadModel();
+	modelManager->LoadModel();
 
 	//TODO: Scene Loader
 #pragma endregion

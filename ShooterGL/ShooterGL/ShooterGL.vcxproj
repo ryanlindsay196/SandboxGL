@@ -123,15 +123,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\Glad\src\glad.c" />
+    <ClCompile Include="Dependencies\stb_image.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ModelManager.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\stb_image.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\ModelManager.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\FragmentDefault.glsl" />
