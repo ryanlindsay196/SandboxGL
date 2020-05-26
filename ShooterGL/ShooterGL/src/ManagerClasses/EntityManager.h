@@ -33,4 +33,6 @@ public:
 	void InstantiateEntity(EntityProperties entityProperties, glm::vec3 startPos, glm::vec3 startRotationAxis, float rotationAngle, glm::vec3 startScale, Entity* parent);
 
 	void Update(float gameTime);
+
+	Entity* GetEntity(int i);
 };

@@ -124,8 +124,11 @@
   <ItemGroup>
     <ClCompile Include="Dependencies\Glad\src\glad.c" />
     <ClCompile Include="Dependencies\stb_image.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ManagerClasses\CameraManager.cpp" />
     <ClCompile Include="src\ManagerClasses\EntityManager.cpp" />
     <ClCompile Include="src\ManagerClasses\ObjectManager.cpp" />
     <ClCompile Include="src\Renderables\Model.cpp" />
@@ -136,8 +139,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\stb_image.h" />
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\ManagerClasses\CameraManager.h" />
     <ClInclude Include="src\ManagerClasses\EntityManager.h" />
     <ClInclude Include="src\Renderables\Model.h" />
     <ClInclude Include="src\ManagerClasses\ModelManager.h" />

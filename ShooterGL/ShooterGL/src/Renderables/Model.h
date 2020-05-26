@@ -18,7 +18,7 @@ public:
 	void SetVertexShader(char* vertexPath);
 	void SetFragmentShader(char* fragmentPath);
 
-	void Update(float gameTime);
+	virtual void Update(float gameTime) override;
 	void Render();
 
 private:
@@ -26,6 +26,7 @@ private:
 	unsigned int VAO;//Vertex array object - stores settings from VBO
 	unsigned int EBO;//Element buffer object (Index buffer) - stores indices of vertices so we only store each vertex once
 
+	ObjectManager* m_objectManager;
 	TextureManager* m_textureManager;
 	Shader* shader;
 };

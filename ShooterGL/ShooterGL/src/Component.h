@@ -6,5 +6,5 @@ class Component
 public:
 	Entity* componentParent;
 
-	void Update(float gameTime);
+	virtual void Update(float gameTime);
 };

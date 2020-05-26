@@ -23,13 +23,18 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale
 
 void Entity::Update(float gameTime)
 {
-	//Rotate(glm::vec3(0.2f, 0, 0));
+	Rotate(glm::vec3(0.2f, 0, 0));
 	//Translate(glm::vec3(0, 0.002f, 0.002f));
-	Scale(glm::vec3(0.001f));
+	//Scale(glm::vec3(0.001f));
+
+	for (Component* component : components)
+	{
+		component->Update(gameTime);
+	}
 
 	transform = glm::mat4(1);
-	transform = glm::rotate(transform, 0.f, rotation);
 	transform = glm::scale(transform, scale);
+	transform = glm::rotate(transform, 4.1f, rotation);
 	transform = glm::translate(transform, position);
 }
 
@@ -54,9 +59,11 @@ void Entity::Translate(glm::vec3 translateBy)
 void Entity::Rotate(glm::vec3 rotateBy)
 {
 	rotation += rotateBy;
-	rotation.x = fmod(rotation.x, 3.14f);
-	rotation.y = fmod(rotation.y, 3.14f);
-	rotation.z = fmod(rotation.z, 3.14f);
+	rotation += glm::vec3(glm::radians(rotateBy.x), glm::radians(rotateBy.y), glm::radians(rotateBy.z));
+
+	//rotation.x = fmod(rotation.x, 300 * 3.14f);
+	//rotation.y = fmod(rotation.y, 300 * 3.14f);
+	//rotation.z = fmod(rotation.z, 300 * 3.14f);
 	//glm::rotate(rotation, rotateBy);
 }
 
@@ -73,7 +80,7 @@ void Entity::SetTranslation(glm::vec3 newPosition)
 
 void Entity::SetRotation(glm::vec3 newRotation)
 {
-	rotation = newRotation;
+	rotation = glm::vec3(glm::radians(newRotation.x), glm::radians(newRotation.y), glm::radians(newRotation.z));
 }
 
 void Entity::SetScale(glm::vec3 newScale)

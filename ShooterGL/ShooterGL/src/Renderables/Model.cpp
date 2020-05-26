@@ -17,6 +17,7 @@ Model::~Model()
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset)
 {
 	m_textureManager = objectManager->textureManager;
+	m_objectManager = objectManager;
 
 	float vertices[] = {
 		// positions          // colors           // texture coords
@@ -60,8 +61,8 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
 	offsetTransform = glm::translate(offsetTransform, initialPositionOffset);
 
-	shader->SetShaderUniform_mat4fv((char*)"transform", offsetTransform);
-	//shader->SetShaderUniform_mat4fv((char*)"transform", glm::mat4(6000.0f));
+	shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
+	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(6000.0f));
 }
 
 void Model::SetDefaultShaders()
@@ -80,9 +81,17 @@ void Model::Update(float gameTime)
 void Model::Render()
 {
 	if (componentParent != nullptr)
-		shader->SetShaderUniform_mat4fv((char*)"transform", offsetTransform * componentParent->GetTransform());
+	{
+		shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * componentParent->GetTransform());
+		shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
+		shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
+	}
 	else
-		shader->SetShaderUniform_mat4fv((char*)"transform", offsetTransform);
+	{
+		shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
+		shader->SetShaderUniform_mat4fv((char*)"view", glm::mat4(1));
+		shader->SetShaderUniform_mat4fv((char*)"projection", glm::mat4(1));
+	}
 	//Drawing code (in render loop)
 	glUseProgram(shader->GetShaderProgram());
 	glBindVertexArray(VAO);
