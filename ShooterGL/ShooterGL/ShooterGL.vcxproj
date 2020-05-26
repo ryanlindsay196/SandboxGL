@@ -124,20 +124,27 @@
   <ItemGroup>
     <ClCompile Include="Dependencies\Glad\src\glad.c" />
     <ClCompile Include="Dependencies\stb_image.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Model.cpp" />
-    <ClCompile Include="src\ModelManager.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\TextureManager.cpp" />
+    <ClCompile Include="src\ManagerClasses\EntityManager.cpp" />
+    <ClCompile Include="src\ManagerClasses\ObjectManager.cpp" />
+    <ClCompile Include="src\Renderables\Model.cpp" />
+    <ClCompile Include="src\ManagerClasses\ModelManager.cpp" />
+    <ClCompile Include="src\Renderables\Shader.cpp" />
+    <ClCompile Include="src\Renderables\Texture.cpp" />
+    <ClCompile Include="src\ManagerClasses\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\stb_image.h" />
-    <ClInclude Include="src\Model.h" />
-    <ClInclude Include="src\ModelManager.h" />
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\Texture.h" />
-    <ClInclude Include="src\TextureManager.h" />
+    <ClInclude Include="src\Component.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\ManagerClasses\EntityManager.h" />
+    <ClInclude Include="src\Renderables\Model.h" />
+    <ClInclude Include="src\ManagerClasses\ModelManager.h" />
+    <ClInclude Include="src\ManagerClasses\ObjectManager.h" />
+    <ClInclude Include="src\Renderables\Shader.h" />
+    <ClInclude Include="src\Renderables\Texture.h" />
+    <ClInclude Include="src\ManagerClasses\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\FragmentDefault.glsl" />

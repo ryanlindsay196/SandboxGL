@@ -3,8 +3,8 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <ModelManager.h>
-
+//#include <ModelManager.h>
+#include "ManagerClasses/ObjectManager.h"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -39,9 +39,10 @@ int main()
 	}
 #pragma endregion
 
-	ModelManager* modelManager = new ModelManager();
-	modelManager->LoadModel();
-	modelManager->LoadModel();
+	ObjectManager* objectManager = new ObjectManager();
+	//ModelManager* modelManager = new ModelManager();
+	//modelManager->LoadModel();
+	//modelManager->LoadModel();
 
 	//TODO: Scene Loader
 #pragma endregion
@@ -53,8 +54,8 @@ int main()
 
 		glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		modelManager->UpdateModels();
-		modelManager->RenderModels();
+		//modelManager->UpdateModels();
+		//modelManager->RenderModels();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

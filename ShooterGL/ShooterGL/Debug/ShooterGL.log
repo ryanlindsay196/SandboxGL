@@ -1,1 +1,16 @@
-﻿  ShooterGL.vcxproj -> C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\Debug\ShooterGL.exe
+﻿  Entity.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\entity.cpp(36): error C2664: 'void std::vector<Component,std::allocator<_Ty>>::push_back(_Ty &&)': cannot convert argument 1 from 'Component *' to 'const _Ty &'
+          with
+          [
+              _Ty=Component
+          ]
+  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\entity.cpp(36): note: Reason: cannot convert from 'Component *' to 'const _Ty'
+          with
+          [
+              _Ty=Component
+          ]
+  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\entity.cpp(36): note: No constructor could take the source type, or constructor overload resolution was ambiguous
+  main.cpp
+  EntityManager.cpp
+  ObjectManager.cpp
+  Generating Code...
