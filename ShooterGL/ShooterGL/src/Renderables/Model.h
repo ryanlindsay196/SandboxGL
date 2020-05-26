@@ -2,6 +2,7 @@
 #include "Component.h"
 
 class Shader;
+class ObjectManager;
 class TextureManager;
 
 class Model : public Component
@@ -10,7 +11,7 @@ public:
 	Model();
 	~Model();
 
-	void Initialize(TextureManager* textureManager);
+	void Initialize(ObjectManager* textureManager);
 	void SetDefaultShaders();
 	void SetShaders(char* vertexPath, char* fragmentPath);
 	void SetVertexShader(char* vertexPath);

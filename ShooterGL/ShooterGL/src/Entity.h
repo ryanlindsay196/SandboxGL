@@ -12,7 +12,7 @@ public:
 	Entity();
 	~Entity();
 
-	void Instantiate(glm::vec4 position, glm::vec4 rotation, glm::vec4 scale, Entity* newParent);
+	void Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Entity* newParent);
 	void Update(float gameTime);
 
 	void SetParent(Entity* newParent);
@@ -34,6 +34,6 @@ private:
 	glm::vec3 rotation;
 	glm::vec3 scale;
 
-	std::vector<Component> components;
+	std::vector<Component*> components;
 	std::vector<std::string> tags;
 };

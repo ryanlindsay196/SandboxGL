@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include <glad/glad.h>
 #include "ManagerClasses/TextureManager.h"
+#include "ManagerClasses/ObjectManager.h"
 
 Model::Model()
 {
@@ -12,9 +13,9 @@ Model::~Model()
 {
 }
 
-void Model::Initialize(TextureManager* textureManager)
+void Model::Initialize(ObjectManager* objectManager)
 {
-	m_textureManager = textureManager;
+	m_textureManager = objectManager->textureManager;
 
 	float vertices[] = {
 		// positions          // colors           // texture coords

@@ -1,6 +1,11 @@
 #include "TextureManager.h"
 #include "Renderables/Texture.h"
 
+TextureManager::TextureManager()
+{
+	textures = std::unordered_map<char*, Texture*>();
+}
+
 Texture * TextureManager::LoadNewTexture(char * texturePath)
 {
 	auto texture = textures.find(texturePath);

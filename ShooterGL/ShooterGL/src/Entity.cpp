@@ -12,14 +12,13 @@ Entity::~Entity()
 {
 }
 
-void Entity::Instantiate(glm::vec4 position, glm::vec4 rotation, glm::vec4 scale, Entity * newParent)
+void Entity::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Entity * newParent)
 {
 	SetTranslation(position);
 	SetRotation(rotation);
 	SetScale(scale);
-	SetParent(newParent);
-
-	AddComponent(new Model());
+	if(newParent != nullptr)
+		SetParent(newParent);
 }
 
 void Entity::Update(float gameTime)
@@ -33,6 +32,7 @@ void Entity::SetParent(Entity * newParent)
 
 void Entity::AddComponent(Component* newComponent)
 {
+	//TODO: complete function
 	components.push_back(newComponent);
 }
 

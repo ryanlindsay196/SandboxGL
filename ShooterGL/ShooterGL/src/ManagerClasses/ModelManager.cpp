@@ -1,32 +1,44 @@
 #include "ModelManager.h"
 #include "TextureManager.h"
+#include "ObjectManager.h"
 
 ModelManager::ModelManager()
 {
-	m_textureManager = new TextureManager();
+	//m_textureManager = new TextureManager();
 }
 
 ModelManager::~ModelManager()
 {
-	for (int i = 0; i < models.size(); i++)
+	for (unsigned int i = 0; i < models.size(); i++)
 		delete models[i];
 	delete(m_textureManager);
 }
 
-void ModelManager::LoadModel()
+void ModelManager::Initialize(ObjectManager * objectManager)
 {
-	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_textureManager);
+	m_objectManager = objectManager;
+	m_textureManager = objectManager->textureManager;
 }
 
-void ModelManager::LoadModel(char * modelPath)
-{
+Model* ModelManager::LoadModel()
+{//Loads default model (triangle/rectangle)
 	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_textureManager);
+	models[models.size() - 1]->Initialize(m_objectManager);
+
+	return models[models.size() - 1];
 }
 
-void ModelManager::LoadModel(char * modelPath, char * texturePath)
+Model* ModelManager::LoadModel(char * modelPath)
 {
+	models.push_back(new Model());
+	models[models.size() - 1]->Initialize(m_objectManager);
+
+	return models[models.size() - 1];
+}
+
+Model* ModelManager::LoadModel(char * modelPath, char * texturePath)
+{//TODO: Check for depreciation
+	return LoadModel(modelPath);
 }
 
 void ModelManager::UpdateModels()
@@ -41,4 +53,9 @@ void ModelManager::RenderModels()
 	{
 		models[i]->Render();
 	}
+}
+
+Model * ModelManager::GetModel(int index)
+{
+	return models[index];
 }
