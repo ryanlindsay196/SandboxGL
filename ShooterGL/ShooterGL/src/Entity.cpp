@@ -24,7 +24,8 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale
 void Entity::Update(float gameTime)
 {
 	//Rotate(glm::vec3(0.2f, 0, 0));
-	Translate(glm::vec3(0, 0.002f, 0.002f));
+	//Translate(glm::vec3(0, 0.002f, 0.002f));
+	Scale(glm::vec3(0.001f));
 
 	transform = glm::mat4(1);
 	transform = glm::rotate(transform, 0.f, rotation);
