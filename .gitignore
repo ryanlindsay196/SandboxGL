@@ -1,3 +1,5 @@
-ShooterGL/Debug
-ShooterGL/.vs
+/ShooterGL/Debug/*
+/ShooterGL/.vs/*
 ShooterGL/ShooterGL/Debug
+*.obj
+*.exe
