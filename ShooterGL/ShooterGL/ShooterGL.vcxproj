@@ -145,6 +145,7 @@
     <ClInclude Include="src\Renderables\Shader.h" />
     <ClInclude Include="src\Renderables\Texture.h" />
     <ClInclude Include="src\ManagerClasses\TextureManager.h" />
+    <ClInclude Include="WorldComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\FragmentDefault.glsl" />

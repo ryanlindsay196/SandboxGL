@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include "ManagerClasses/TextureManager.h"
 #include "ManagerClasses/ObjectManager.h"
+#include "matrix.hpp"
 
 Model::Model()
 {
@@ -13,7 +14,7 @@ Model::~Model()
 {
 }
 
-void Model::Initialize(ObjectManager* objectManager)
+void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset)
 {
 	m_textureManager = objectManager->textureManager;
 
@@ -53,6 +54,14 @@ void Model::Initialize(ObjectManager* objectManager)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	SetDefaultShaders();
+
+	offsetTransform = glm::mat4(1);
+	offsetTransform = glm::scale(offsetTransform, initialScaleOffset);
+	offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
+	offsetTransform = glm::translate(offsetTransform, initialPositionOffset);
+
+	shader->SetShaderUniform_mat4fv((char*)"transform", offsetTransform);
+	//shader->SetShaderUniform_mat4fv((char*)"transform", glm::mat4(6000.0f));
 }
 
 void Model::SetDefaultShaders()
@@ -61,14 +70,19 @@ void Model::SetDefaultShaders()
 		delete(shader);
 	shader = new Shader();
 	shader->Initialize(m_textureManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", { (char*)"Resources/Textures/Rick.jpg", (char*)"Resources/Textures/Sword_low_Blade_Normal.png" });
+
 }
 
-void Model::Update()
+void Model::Update(float gameTime)
 {
 }
 
 void Model::Render()
 {
+	if (componentParent != nullptr)
+		shader->SetShaderUniform_mat4fv((char*)"transform", offsetTransform * componentParent->GetTransform());
+	else
+		shader->SetShaderUniform_mat4fv((char*)"transform", offsetTransform);
 	//Drawing code (in render loop)
 	glUseProgram(shader->GetShaderProgram());
 	glBindVertexArray(VAO);

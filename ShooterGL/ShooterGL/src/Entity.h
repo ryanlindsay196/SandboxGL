@@ -9,7 +9,7 @@ class Component;
 class Entity
 {
 public:
-	Entity();
+	//Entity();
 	~Entity();
 
 	void Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Entity* newParent);
@@ -25,6 +25,8 @@ public:
 	void SetTranslation(glm::vec3 newPosition);
 	void SetRotation(glm::vec3 newRotation);
 	void SetScale(glm::vec3 newScale);
+
+	glm::mat4 GetTransform();
 
 private:
 	Entity* parent;

@@ -55,7 +55,7 @@ int main()
 
 		glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		objectManager->Update(0.2f);//TODO: Make a tick function that tracks time from last frame
+		objectManager->Update((float)glfwGetTime());
 		objectManager->modelManager->RenderModels();
 		//modelManager->UpdateModels();
 		//modelManager->RenderModels();

@@ -30,7 +30,7 @@ public:
 	//LoadPropsFromPrefabsFile();
 	//LoadEntitiesFromSceneFile(char* entityName);//Instantiate entities from loaded entity properties
 	//Scene file has prefab ids, and transform data;
-	void InstantiateEntity(EntityProperties entityProperties);
+	void InstantiateEntity(EntityProperties entityProperties, glm::vec3 startPos, glm::vec3 startRotationAxis, float rotationAngle, glm::vec3 startScale, Entity* parent);
 
 	void Update(float gameTime);
 };

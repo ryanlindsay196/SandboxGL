@@ -20,11 +20,11 @@ public:
 
 	void Initialize(ObjectManager * objectManager);
 
-	Model* LoadModel();
-	Model* LoadModel(char* modelPath);
-	Model* LoadModel(char* modelPath, char* texturePath);
+	Model* LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
+	Model* LoadModel(char* modelPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
+	Model* LoadModel(char* modelPath, char* texturePath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
 
-	void UpdateModels();
+	void UpdateModels(float gameTime);
 
 	void RenderModels();
 

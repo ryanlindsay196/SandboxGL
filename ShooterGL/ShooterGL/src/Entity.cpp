@@ -4,10 +4,6 @@
 //TODO: find a way to remove this
 #include "Renderables/Model.h"
 
-Entity::Entity()
-{
-}
-
 Entity::~Entity()
 {
 }
@@ -17,12 +13,23 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale
 	SetTranslation(position);
 	SetRotation(rotation);
 	SetScale(scale);
+	transform = glm::mat4(1);
+	transform = glm::rotate(transform, 0.4f, glm::vec3(1, 0, 0));
+	transform = glm::scale(transform, scale);
+	transform = glm::translate(transform, position);
 	if(newParent != nullptr)
 		SetParent(newParent);
 }
 
 void Entity::Update(float gameTime)
 {
+	//Rotate(glm::vec3(0.2f, 0, 0));
+	Translate(glm::vec3(0, 0.002f, 0.002f));
+
+	transform = glm::mat4(1);
+	transform = glm::rotate(transform, 0.f, rotation);
+	transform = glm::scale(transform, scale);
+	transform = glm::translate(transform, position);
 }
 
 void Entity::SetParent(Entity * newParent)
@@ -34,6 +41,7 @@ void Entity::AddComponent(Component* newComponent)
 {
 	//TODO: complete function
 	components.push_back(newComponent);
+	newComponent->componentParent = this;
 }
 
 void Entity::Translate(glm::vec3 translateBy)
@@ -45,6 +53,9 @@ void Entity::Translate(glm::vec3 translateBy)
 void Entity::Rotate(glm::vec3 rotateBy)
 {
 	rotation += rotateBy;
+	rotation.x = fmod(rotation.x, 3.14f);
+	rotation.y = fmod(rotation.y, 3.14f);
+	rotation.z = fmod(rotation.z, 3.14f);
 	//glm::rotate(rotation, rotateBy);
 }
 
@@ -67,4 +78,9 @@ void Entity::SetRotation(glm::vec3 newRotation)
 void Entity::SetScale(glm::vec3 newScale)
 {
 	scale = newScale;
+}
+
+glm::mat4 Entity::GetTransform()
+{
+	return transform;
 }

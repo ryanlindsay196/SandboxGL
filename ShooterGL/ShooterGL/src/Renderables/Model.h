@@ -1,23 +1,24 @@
 #pragma once
-#include "Component.h"
+//#include "Component.h"
+#include "../WorldComponent.h"
 
 class Shader;
 class ObjectManager;
 class TextureManager;
 
-class Model : public Component
+class Model : public WorldComponent
 {
 public:
 	Model();
 	~Model();
 
-	void Initialize(ObjectManager* textureManager);
+	void Initialize(ObjectManager* textureManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset);
 	void SetDefaultShaders();
 	void SetShaders(char* vertexPath, char* fragmentPath);
 	void SetVertexShader(char* vertexPath);
 	void SetFragmentShader(char* fragmentPath);
 
-	void Update();
+	void Update(float gameTime);
 	void Render();
 
 private:

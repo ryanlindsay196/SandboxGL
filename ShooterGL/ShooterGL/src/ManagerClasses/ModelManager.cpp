@@ -20,31 +20,31 @@ void ModelManager::Initialize(ObjectManager * objectManager)
 	m_textureManager = objectManager->textureManager;
 }
 
-Model* ModelManager::LoadModel()
+Model* ModelManager::LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
 {//Loads default model (triangle/rectangle)
 	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_objectManager);
+	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset);
 
 	return models[models.size() - 1];
 }
 
-Model* ModelManager::LoadModel(char * modelPath)
+Model* ModelManager::LoadModel(char * modelPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
 {
 	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_objectManager);
+	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset);
 
 	return models[models.size() - 1];
 }
 
-Model* ModelManager::LoadModel(char * modelPath, char * texturePath)
-{//TODO: Check for depreciation
-	return LoadModel(modelPath);
+Model* ModelManager::LoadModel(char * modelPath, char * texturePath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
+{//TODO: Check for depreciation because the textures will be on the shader/materials
+	return LoadModel(modelPath, positionOffset, rotationAxis, rotationAngle, scaleOffset);
 }
 
-void ModelManager::UpdateModels()
+void ModelManager::UpdateModels(float gameTime)
 {
 	for (Model* model : models)
-		model->Update();
+		model->Update(gameTime);
 }
 
 void ModelManager::RenderModels()

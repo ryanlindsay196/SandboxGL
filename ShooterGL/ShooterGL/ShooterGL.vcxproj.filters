@@ -80,6 +80,9 @@
     <ClInclude Include="src\Renderables\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WorldComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexDefault.glsl" />

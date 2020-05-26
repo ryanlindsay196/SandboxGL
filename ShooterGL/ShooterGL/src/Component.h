@@ -5,4 +5,6 @@ class Component
 {
 public:
 	Entity* componentParent;
+
+	void Update(float gameTime);
 };
