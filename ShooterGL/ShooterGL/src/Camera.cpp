@@ -12,7 +12,7 @@ void Camera::Initialize(Entity * newParent)
 void Camera::Update(float gameTime)
 {
 	//Translate(glm::vec3(0, 0, 0.0001));
-	Rotate(glm::vec3(0, 1, 0), gameTime * 0.01);
+	//Rotate(glm::vec3(0, 1, 0), gameTime * 0.001f);
 }
 
 void Camera::Translate(glm::vec3 moveBy)

@@ -11,8 +11,8 @@ void ObjectManager::Initialize()
 	modelManager->Initialize(this);
 	cameraManager->Initialize(this);
 
-	modelManager->LoadModel(glm::vec3(0, 0, 1), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, 1, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1));
+	modelManager->LoadModel(glm::vec3(0, 0, -2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, 1, -2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1));
 	//modelManager->LoadModel(glm::vec3(1, 0, 0), glm::vec3(0, 0, 1), 0.0f, glm::vec3(1.f, 1.f, 1.f));
 	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
 	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0.0f, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
@@ -28,9 +28,9 @@ void ObjectManager::Initialize()
 
 void ObjectManager::Update(float gameTime)
 {
-
-	entityManager->GetEntity(1)->Translate(glm::vec3(0.001f, 0.f, 0.f));
-	entityManager->GetEntity(0)->Translate(glm::vec3(-0.0001f, 0.f, 0.f));
+	entityManager->GetEntity(1)->Rotate(glm::vec3(1, 0, 0));
+	//entityManager->GetEntity(1)->Translate(glm::vec3(0.001f, 0.f, 0.f));
+	//entityManager->GetEntity(0)->Translate(glm::vec3(-0.0001f, 0.f, 0.f));
 
 	modelManager->UpdateModels(gameTime);
 	entityManager->Update(gameTime);
