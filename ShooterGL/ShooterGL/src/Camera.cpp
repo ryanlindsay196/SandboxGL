@@ -13,15 +13,16 @@ void Camera::Update(float gameTime)
 {
 	//Translate(glm::vec3(0, 0, 0.0001));
 	//Rotate(glm::vec3(0, 1, 0), gameTime * 0.001f);
-	cameraDirection = glm::normalize(componentParent->GetTranslation() - glm::vec3(0, 0, 0));
+	cameraDirection = glm::normalize(glm::vec3(0, 0, -1.f));
 	cameraRight = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), cameraDirection);
 	cameraUp = glm::cross(cameraDirection, cameraRight);
 	//float camX = sin(gameTime * 1.0f);
 	//float camZ = cos(gameTime * 1.0f);
-	//viewMatrix = glm::lookAt(componentParent->GetTranslation(),
-	//						componentParent->GetTranslation() + cameraDirection,
-	//						cameraUp);
-	componentParent->Rotate(glm::vec3(1, 0, 0));
+	//viewMatrix = componentParent->GetTransform() * offsetTransform;
+	viewMatrix = glm::lookAt(componentParent->GetTranslation(),
+							componentParent->GetTranslation() + cameraDirection,
+							cameraUp);
+	//componentParent->Rotate(glm::vec3(1, 0, 0));
 }
 
 void Camera::Translate(glm::vec3 moveBy)

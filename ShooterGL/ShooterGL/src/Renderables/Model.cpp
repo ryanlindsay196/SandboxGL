@@ -124,17 +124,18 @@ void Model::Update(float gameTime)
 
 void Model::Render()
 {
+	shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
+	shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
 	if (componentParent != nullptr)
 	{
 		shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * componentParent->GetTransform());
-		shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
-		shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
+		//shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform);
 	}
 	else
 	{
 		shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
-		shader->SetShaderUniform_mat4fv((char*)"view", glm::mat4(1));
-		shader->SetShaderUniform_mat4fv((char*)"projection", glm::mat4(1));
+		//shader->SetShaderUniform_mat4fv((char*)"view", glm::mat4(1));
+		//shader->SetShaderUniform_mat4fv((char*)"projection", glm::mat4(1));
 	}
 	//Drawing code (in render loop)
 	glUseProgram(shader->GetShaderProgram());
