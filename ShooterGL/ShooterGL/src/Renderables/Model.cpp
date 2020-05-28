@@ -114,7 +114,7 @@ void Model::SetDefaultShaders()
 	if (shader != nullptr)
 		delete(shader);
 	shader = new Shader();
-	shader->Initialize(m_textureManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", { (char*)"Resources/Textures/Rick.jpg", (char*)"Resources/Textures/Sword_low_Blade_Normal.png" });
+	shader->Initialize(m_textureManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", { (char*)"Resources/Textures/Resume.jpg", (char*)"Resources/Textures/Sword_low_Blade_Normal.png" });
 
 }
 

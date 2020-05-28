@@ -13,4 +13,5 @@ void main()
 	//FragColor = texture(albedoMap, TexCoord) * texture(normalMap, TexCoord);
 	//FragColor = texture(normalMap, TexCoord);
 	FragColor = mix(texture(albedoMap, TexCoord), texture(normalMap, TexCoord), 0.0) * vec4(ourColor, 1);
+	FragColor = vec4((FragColor.x + FragColor.y + FragColor.z) / 3, (FragColor.x + FragColor.y + FragColor.z) / 3, (FragColor.x + FragColor.y + FragColor.z) / 3, 1);
 }

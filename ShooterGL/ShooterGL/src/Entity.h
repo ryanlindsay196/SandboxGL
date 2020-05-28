@@ -26,6 +26,10 @@ public:
 	void SetRotation(glm::vec3 newRotation);
 	void SetScale(glm::vec3 newScale);
 
+	glm::vec3 GetTranslation();
+	glm::vec3 GetRotation();
+	glm::vec3 GetScale();
+
 	glm::mat4 GetTransform();
 
 private:

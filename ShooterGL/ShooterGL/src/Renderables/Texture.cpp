@@ -39,7 +39,7 @@ void Texture::LoadTexture(char *texturePath)
 void Texture::UseTexture(int textureSlot)
 {
 	glActiveTexture(GL_TEXTURE0 + textureSlot); 
-	glBindTexture(GL_TEXTURE_2D, textureID);//For the normal map (image slot [1]), the textureID get's cleared on the second loop
+	glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
 void Texture::SetDefaultTextureParameters()

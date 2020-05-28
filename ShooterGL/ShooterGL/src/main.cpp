@@ -40,7 +40,7 @@ int main()
 #pragma endregion
 
 	ObjectManager* objectManager = new ObjectManager();
-	objectManager->Initialize();
+	objectManager->Initialize(window);
 	//ModelManager* modelManager = new ModelManager();
 	//modelManager->LoadModel();
 	//modelManager->LoadModel();

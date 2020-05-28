@@ -10,6 +10,7 @@ Camera& CameraManager::CreateCamera(Entity * newParent)
 	cameras.push_back(Camera());
 	cameras[cameras.size() - 1].Initialize(nullptr);
 	cameras[cameras.size() - 1].componentParent = newParent;
+	newParent->AddComponent(&cameras[cameras.size() - 1]);
 	return cameras[cameras.size() - 1];
 }
 
