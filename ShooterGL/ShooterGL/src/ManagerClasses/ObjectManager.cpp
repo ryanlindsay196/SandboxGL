@@ -30,30 +30,30 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	//move model transformations by entity transformations
 
 	//Makeshift floor
-	modelManager->LoadModel(glm::vec3(-1, -1, -1), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(-1, -1, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(-1, -1, 1), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, -1, -1), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, -1, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, -1, 1), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(1, -1, -1), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(1, -1, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(1, -1, 1), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(-1, -1, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, -1, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(1, -1, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(-1, -1, 3), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, -1, 3), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(1, -1, 3), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(-1, -1, 4), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, -1, 4), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(1, -1, 4), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(-1, -1, 5), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, -1, 5), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(1, -1, 5), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(-1, -1, 6), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(0, -1, 6), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	modelManager->LoadModel(glm::vec3(1, -1, 6), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(-1, -1, -1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(-1, -1, 0), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(-1, -1, 1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, -1, -1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, -1, 0), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, -1, 1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(1, -1, -1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(1, -1, 0), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(1, -1, 1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(-1, -1, 2), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, -1, 2), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(1, -1, 2), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(-1, -1, 3), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, -1, 3), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(1, -1, 3), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(-1, -1, 4), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, -1, 4), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(1, -1, 4), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(-1, -1, 5), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, -1, 5), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(1, -1, 5), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(-1, -1, 6), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(0, -1, 6), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
+	modelManager->LoadModel(glm::vec3(1, -1, 6), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
 
 }
 

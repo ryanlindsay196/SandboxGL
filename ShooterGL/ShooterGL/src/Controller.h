@@ -13,6 +13,8 @@ public:
 	//Needs to have keyboard/controller support
 	//Needs to reference the controlled object (player) using componentParent
 	//Needs to support different entity states. These should be hot swappable
+
+	//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 private:
 	GLFWwindow* window;
 };

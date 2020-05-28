@@ -104,6 +104,8 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	offsetTransform = glm::scale(offsetTransform, initialScaleOffset);
 	offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
 	offsetTransform = glm::translate(offsetTransform, initialPositionOffset);
+	//positionOffset = initialPositionOffset;
+	//rotationOffset = initialrotationOffset;
 
 	shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
 	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(6000.0f));
@@ -120,6 +122,10 @@ void Model::SetDefaultShaders()
 
 void Model::Update(float gameTime)
 {
+	///offsetTransform = glm::mat4(1);
+	///offsetTransform = glm::scale(offsetTransform, initialScaleOffset);
+	///offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
+	///offsetTransform = glm::translate(offsetTransform, initialPositionOffset);
 }
 
 void Model::Render()

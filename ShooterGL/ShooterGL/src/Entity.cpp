@@ -19,6 +19,8 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale
 	transform = glm::translate(transform, position);
 	if(newParent != nullptr)
 		SetParent(newParent);
+
+	yaw = -90.0f;
 }
 
 void Entity::Update(float gameTime)
@@ -26,10 +28,22 @@ void Entity::Update(float gameTime)
 	//Rotate(glm::vec3(0.2f, 0, 0));
 	//Translate(glm::vec3(0, 0.002f, 0.002f));
 	//Scale(glm::vec3(0.001f));
+	
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+
 	transform = glm::mat4(1);
 	transform = glm::scale(transform, scale);
-	transform = glm::rotate(transform, 40.1f, rotation);
+	//transform = glm::rotate(transform, 40.1f, rotation);
+	transform = glm::lookAt(position, position + direction, glm::vec3(0, 1, 0));
 	transform = glm::translate(transform, position);
+
 
 	for (Component* component : components)
 	{
@@ -86,9 +100,21 @@ void Entity::SetRotation(glm::vec3 newRotation)
 	rotation = glm::vec3(glm::radians(newRotation.x), glm::radians(newRotation.y), glm::radians(newRotation.z));
 }
 
+void Entity::SetEulerAngles(glm::vec3 newEuler)
+{
+	pitch = newEuler.x;
+	yaw = newEuler.y;
+	roll = newEuler.z;
+}
+
 void Entity::SetScale(glm::vec3 newScale)
 {
 	scale = newScale;
+}
+
+glm::vec3 Entity::GetDirection()
+{
+	return direction;
 }
 
 glm::vec3 Entity::GetTranslation()
@@ -99,6 +125,11 @@ glm::vec3 Entity::GetTranslation()
 glm::vec3 Entity::GetRotation()
 {
 	return rotation;
+}
+
+glm::vec3 Entity::GetEulerAngles()
+{
+	return glm::vec3(pitch, yaw, roll);
 }
 
 glm::vec3 Entity::GetScale()

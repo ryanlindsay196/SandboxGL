@@ -13,7 +13,7 @@ void Camera::Update(float gameTime)
 {
 	//Translate(glm::vec3(0, 0, 0.0001));
 	//Rotate(glm::vec3(0, 1, 0), gameTime * 0.001f);
-	cameraDirection = glm::normalize(glm::vec3(0, 0, -1.f));
+	cameraDirection = glm::normalize(componentParent->GetDirection());
 	cameraRight = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), cameraDirection);
 	cameraUp = glm::cross(cameraDirection, cameraRight);
 	//float camX = sin(gameTime * 1.0f);
@@ -35,4 +35,19 @@ void Camera::Rotate(glm::vec3 rotationAxis, float rotationAngle)
 {
 	//TODO: make this work
 	viewMatrix = glm::rotate(viewMatrix, rotationAngle, rotationAxis);
+}
+
+glm::vec3 Camera::GetCameraDirection()
+{
+	return cameraDirection;
+}
+
+glm::vec3 Camera::GetCameraRight()
+{
+	return cameraRight;
+}
+
+glm::vec3 Camera::GetCameraUp()
+{
+	return cameraUp;
 }

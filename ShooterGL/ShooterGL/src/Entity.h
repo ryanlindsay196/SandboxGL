@@ -24,10 +24,13 @@ public:
 
 	void SetTranslation(glm::vec3 newPosition);
 	void SetRotation(glm::vec3 newRotation);
+	void SetEulerAngles(glm::vec3 newEuler);
 	void SetScale(glm::vec3 newScale);
 
+	glm::vec3 GetDirection();
 	glm::vec3 GetTranslation();
 	glm::vec3 GetRotation();
+	glm::vec3 GetEulerAngles();
 	glm::vec3 GetScale();
 
 	glm::mat4 GetTransform();
@@ -39,6 +42,9 @@ private:
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 scale;
+
+	glm::vec3 direction;
+	float roll, pitch, yaw;
 
 	std::vector<Component*> components;
 	std::vector<std::string> tags;

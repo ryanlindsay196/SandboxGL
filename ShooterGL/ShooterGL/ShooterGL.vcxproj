@@ -138,6 +138,7 @@
     <ClCompile Include="src\Renderables\Shader.cpp" />
     <ClCompile Include="src\Renderables\Texture.cpp" />
     <ClCompile Include="src\ManagerClasses\TextureManager.cpp" />
+    <ClCompile Include="WorldComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\stb_image.h" />
