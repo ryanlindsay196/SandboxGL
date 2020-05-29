@@ -20,20 +20,32 @@ void Controller::AddKeyBinding()
 
 void Controller::Update(float gameTime)
 {
+	glm::vec3 moveDirection = glm::vec3(0);
 	if (glfwGetKey(window, GLFW_KEY_W))
-		componentParent->Translate(componentParent->GetDirection() * gameTime);
+		moveDirection += componentParent->GetDirection();
 	if (glfwGetKey(window, GLFW_KEY_S))
-		componentParent->Translate(-componentParent->GetDirection() * gameTime);
+		moveDirection += -componentParent->GetDirection();
 	if (glfwGetKey(window, GLFW_KEY_A))
-		componentParent->Translate(-glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0)) * gameTime);
+		moveDirection += -glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
 	if (glfwGetKey(window, GLFW_KEY_D))
-		componentParent->Translate(glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0)) * gameTime);
+		moveDirection += glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
+
+	Move(moveDirection, 0.03f);
 
 	if (xoffset != 0 || yoffset != 0)
 	{
 		componentParent->SetEulerAngles(componentParent->GetEulerAngles() + glm::vec3(yoffset, xoffset, 0));
 		xoffset = 0;
 		yoffset = 0;
+	}
+}
+
+void Controller::Move(glm::vec3 direction, float moveSpeed)
+{
+	if (direction != glm::vec3(0))
+	{
+		direction.y = 0;
+		componentParent->Translate(glm::normalize(direction) * moveSpeed);
 	}
 }
 

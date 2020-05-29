@@ -10,10 +10,9 @@ public:
 	void Initialize(GLFWwindow* newWindow);
 	void AddKeyBinding(/*Function to call*/);
 	virtual void Update(float gameTime) override;
-	//Needs to have keyboard/controller support
-	//Needs to reference the controlled object (player) using componentParent
-	//Needs to support different entity states. These should be hot swappable
-
+	//TODO: Add keyboard/controller support
+	//TODO: Add support for different entity states. These should be hot swappable
+	void Move(glm::vec3 direction, float moveSpeed);
 	//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 private:
 	GLFWwindow* window;
