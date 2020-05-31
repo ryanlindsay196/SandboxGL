@@ -23,7 +23,7 @@ void ModelManager::Initialize(ObjectManager * objectManager)
 Model* ModelManager::LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
 {//Loads default model (triangle/rectangle)
 	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset);
+	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"", (char*)"");
 
 	return models[models.size() - 1];
 }
@@ -31,7 +31,7 @@ Model* ModelManager::LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis,
 Model* ModelManager::LoadModel(char * modelPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
 {
 	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset);
+	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, (char*)"");
 
 	return models[models.size() - 1];
 }
@@ -58,4 +58,9 @@ void ModelManager::RenderModels()
 Model * ModelManager::GetModel(int index)
 {
 	return models[index];
+}
+
+unsigned int ModelManager::LoadedModelsCount()
+{
+	return models.size();
 }

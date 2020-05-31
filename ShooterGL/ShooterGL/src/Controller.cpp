@@ -12,6 +12,7 @@ void Controller::Initialize(GLFWwindow* newWindow)
 {
 	window = newWindow;
 	glfwSetCursorPosCallback(window, mouse_callback);
+	firstMouse = true;
 }
 
 void Controller::AddKeyBinding()
@@ -59,13 +60,13 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	}
 	
 	xoffset = xpos - lastX;
-	yoffset = lastY - ypos; // reversed sinxe y-coordinates go from bottom to top
+	yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
 	lastX = xpos;
 	lastY = ypos;
 
-	std::ostringstream ss;
-	ss << "X: " << xoffset << ", Y: " << yoffset << "\n";
-	printf(ss.str().c_str());
+	//std::ostringstream ss;
+	//ss << "X: " << xoffset << ", Y: " << yoffset << "\n";
+	//printf(ss.str().c_str());
 	float sensitivity = 0.1f;
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;

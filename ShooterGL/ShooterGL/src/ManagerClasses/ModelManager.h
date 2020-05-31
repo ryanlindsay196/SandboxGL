@@ -29,4 +29,6 @@ public:
 	void RenderModels();
 
 	Model* GetModel(int index);
+
+	unsigned int LoadedModelsCount();
 };

@@ -12,6 +12,8 @@ public:
 	void SetVertexShader(char* vertexPath);
 	void SetFragmentShader(char* fragmentPath);
 
+	std::vector<Texture*> GetTextures();
+
 	unsigned int GetShaderProgram();
 	void UseShader();
 
@@ -19,6 +21,7 @@ public:
 	void SetShaderUniform_vec1(char* uniformName, int uniformValue);
 	void SetShaderUniform_vec2(char* uniformName, int x, int y);
 	void SetShaderUniform_vec3(char* uniformName, int x, int y, int z);
+	void SetShaderUniform_vec3(char* uniformName, glm::vec3 &value);
 	void SetShaderUniform_vec4(char* uniformName, int x, int y, int z, int w);
 
 	void SetShaderUniform_veci1(char* uniformName, int uniformValue);

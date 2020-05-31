@@ -31,6 +31,7 @@ int main()
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 #pragma endregion
 #pragma region GLAD Setup
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -60,7 +61,8 @@ int main()
 		glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		objectManager->Update(deltaTime);
-		objectManager->modelManager->RenderModels();
+		objectManager->Render();
+		//objectManager->modelManager->RenderModels();
 		//modelManager->UpdateModels();
 		//modelManager->RenderModels();
 		glfwSwapBuffers(window);

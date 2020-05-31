@@ -1,0 +1,62 @@
+﻿  glad.c
+  stb_image.cpp
+  Camera.cpp
+  Component.cpp
+  Controller.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(62): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(64): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(65): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Entity.cpp
+  main.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\main.cpp(59): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  CameraManager.cpp
+  ControllerManager.cpp
+  EntityManager.cpp
+  ObjectManager.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\objectmanager.cpp(91): warning C4018: '<': signed/unsigned mismatch
+  Mesh.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\mesh.cpp(22): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\mesh.cpp(61): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  Model.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\importer.hpp(83): warning C4099: 'aiScene': type name first seen using 'class' now seen using 'struct'
+  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\model.h(12): note: see declaration of 'aiScene'
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\mesh.h(497): warning C4099: 'aiMesh': type name first seen using 'class' now seen using 'struct'
+  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\mesh.h(496): note: see declaration of 'aiMesh'
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\scene.h(79): warning C4099: 'aiNode': type name first seen using 'class' now seen using 'struct'
+  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\scene.h(78): note: see declaration of 'aiNode'
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\scene.h(241): warning C4099: 'aiScene': type name first seen using 'class' now seen using 'struct'
+  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\scene.h(240): note: see declaration of 'aiScene'
+  ModelManager.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\modelmanager.cpp(65): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+  Shader.cpp
+  Texture.cpp
+  TextureManager.cpp
+  WorldComponent.cpp
+  Generating Code...
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\model.cpp(266): warning C4715: 'Model::ProcessMesh': not all control paths return a value
+Controller.obj : error LNK2019: unresolved external symbol glfwGetKey referenced in function "public: virtual void __cdecl Controller::Update(float)" (?Update@Controller@@UEAAXM@Z)
+main.obj : error LNK2001: unresolved external symbol glfwGetKey
+Controller.obj : error LNK2019: unresolved external symbol glfwSetCursorPosCallback referenced in function "public: void __cdecl Controller::Initialize(struct GLFWwindow *)" (?Initialize@Controller@@QEAAXPEAUGLFWwindow@@@Z)
+main.obj : error LNK2019: unresolved external symbol glfwInit referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwWindowHint referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSetWindowShouldClose referenced in function "void __cdecl processInput(struct GLFWwindow *)" (?processInput@@YAXPEAUGLFWwindow@@@Z)
+main.obj : error LNK2019: unresolved external symbol glfwSetFramebufferSizeCallback referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSetInputMode referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwGetTime referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwGetProcAddress referenced in function main
+Model.obj : error LNK2019: unresolved external symbol "public: class aiScene const * __cdecl Assimp::Importer::ReadFile(char const *,unsigned int)" (?ReadFile@Importer@Assimp@@QEAAPEBVaiScene@@PEBDI@Z) referenced in function "public: class aiScene const * __cdecl Assimp::Importer::ReadFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?ReadFile@Importer@Assimp@@QEAAPEBVaiScene@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\GLFW\lib-vc2017\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\GLEW\lib\Release\Win32\glew32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\GLEW\lib\Release\Win32\glew32s.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\SOIL2\lib\soil2.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\SOIL2\lib\soil2-debug.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\x64\Debug\ShooterGL.exe : fatal error LNK1120: 16 unresolved externals
