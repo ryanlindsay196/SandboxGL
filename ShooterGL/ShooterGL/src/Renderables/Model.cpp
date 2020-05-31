@@ -110,7 +110,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 #pragma endregion
-	//LoadModel(modelPath);
+	LoadModel(modelPath);
 	if(materialPath == "")
 		SetDefaultShaders();
 	//TODO: Else, load shaders from material
@@ -132,20 +132,20 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 
 void Model::LoadModel(std::string modelPath)
 {
-	//Assimp::Importer importer;
-	//const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-	////check for errors
-	//if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) //if is Not Zero
-	//{
-	//	std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
-	//	return;
-	//}
-	//
-	////retrieve the directory path of the filepath
-	//directory = modelPath.substr(0, modelPath.find_last_of('/'));
-	//
-	////process ASSIMP's root node recursively
-	//ProcessNode(scene->mRootNode, scene, "");
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	//check for errors
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) //if is Not Zero
+	{
+		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+		return;
+	}
+	
+	//retrieve the directory path of the filepath
+	directory = modelPath.substr(0, modelPath.find_last_of('/'));
+	
+	//process ASSIMP's root node recursively
+	ProcessNode(scene->mRootNode, scene, "");
 #pragma region To DELETE?
 
 
@@ -267,8 +267,8 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 		//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 		// return a mesh object created from the extracted mesh data
-		return Mesh(vertices, indices, materialPath);
 	}
+	return Mesh(vertices, indices, materialPath);
 }
 
 void Model::SetDefaultShaders()

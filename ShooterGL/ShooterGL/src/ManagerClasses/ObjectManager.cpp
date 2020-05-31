@@ -60,7 +60,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	modelManager->LoadModel(glm::vec3(0, -1, 6), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
 	modelManager->LoadModel(glm::vec3(1, -1, 6), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
 
-	for(int i = 1; i < modelManager->LoadedModelsCount(); i++)
+	for(unsigned int i = 1; i < modelManager->LoadedModelsCount(); i++)
 		entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(i));
 
 
@@ -91,7 +91,7 @@ void ObjectManager::Render()
 	//entityManager->GetEntity(1)->SetTranslation(lightPos);
 	//entityManager->entities[1]->Rotate(glm::vec3(0, 1, 0));
 	lightPos = entityManager->entities[0]->GetTranslation();
-	for (int i = 0; i < modelManager->LoadedModelsCount(); i++)
+	for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
 		modelManager->GetModel(i)->GetShader()->SetShaderUniform_vec3((char*)"lightPos", lightPos);
 	//lightPos += glm::vec3(0, 0, -gameTime * 100);
 	modelManager->RenderModels();

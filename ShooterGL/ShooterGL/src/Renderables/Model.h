@@ -7,9 +7,9 @@ class Shader;
 class ObjectManager;
 class TextureManager;
 class Mesh;
-class aiMesh;
-class aiNode;
-class aiScene;
+struct aiMesh;
+struct aiNode;
+struct aiScene;
 
 class Model : public WorldComponent
 {
