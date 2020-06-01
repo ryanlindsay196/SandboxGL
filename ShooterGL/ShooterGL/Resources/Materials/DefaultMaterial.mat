@@ -7,7 +7,7 @@
 {
 	textures
 	{
-		albedoMap : Resources/Models/guitar_backpack/1001_albedo.jpg
+		albedoMap : Resources/Textures/Rick.jpg
 		normalMap : Resources/Textures/Sword_low_Blade_Normal.png
 	}
 }

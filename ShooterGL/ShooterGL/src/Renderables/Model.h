@@ -30,7 +30,9 @@ public:
 	void SetVertexShader(char* vertexPath);
 	void SetFragmentShader(char* fragmentPath);
 
-	Shader* GetShader();
+	//Shader* GetShader();
+	unsigned int GetLoadedMeshesCount();
+	Mesh* GetMesh(int i);
 
 	virtual void Update(float gameTime) override;
 	void Render();

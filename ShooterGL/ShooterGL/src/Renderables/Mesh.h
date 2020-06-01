@@ -28,6 +28,7 @@ public:
 	//void ReadMaterial(char* materialPath);
 	void SetDefaultShaders();
 	void SetShaders(char * vertexPath, char * fragmentPath, char* materialPath);
+	Shader* GetShader();
 	void Draw();
 	void SetupMesh();
 

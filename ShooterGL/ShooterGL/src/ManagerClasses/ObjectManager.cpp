@@ -1,6 +1,7 @@
 #include "ObjectManager.h"
 #include "EntityManager.h"
 #include "GLFW/glfw3.h"
+#include "Renderables/Mesh.h"
 
 //TODO: Delete this later
 #include "../Renderables/Shader.h"
@@ -22,8 +23,8 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	controllerManager->Initialize(window);
 
 	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
-	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(0.2f, 0.2f, 0.2f));
-	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.2f, 1.2f, 1.2f));
+	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(0.2f, 0.2f, 0.2f));
+	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.2f, 1.2f, 1.2f));
 	//entityManager->GetEntity(0)->AddComponent(modelManager->GetModel(0));
 	cameraManager->CreateCamera(entityManager->GetEntity(0));
 	entityManager->GetEntity(0)->AddComponent(controllerManager->CreateController(entityManager->GetEntity(0)));
@@ -83,7 +84,7 @@ void ObjectManager::Update(float gameTime)
 
 	//entityManager->entities[1]->SetEulerAngles(glm::vec3(0, 1, 0) + entityManager->entities[1]->GetEulerAngles());
 	//modelManager->GetModel(3)->RotateQuaternion(glm::vec3(0, 1, 0), 0.2f);
-	//lightPos += glm::vec3(0, 0, -gameTime);
+	lightPos += glm::vec3(0, 0, -gameTime);
 
 }
 
@@ -91,9 +92,10 @@ void ObjectManager::Render()
 {
 	//entityManager->GetEntity(1)->SetTranslation(lightPos);
 	//entityManager->entities[1]->Rotate(glm::vec3(0, 1, 0));
-	//lightPos = entityManager->entities[0]->GetTranslation();
-	//for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
-	//	modelManager->GetModel(i)->GetShader()->SetShaderUniform_vec3((char*)"lightPos", lightPos);
+	lightPos = entityManager->entities[0]->GetTranslation();
+	for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
+		for(unsigned int j = 0; j < modelManager->GetModel(i)->GetLoadedMeshesCount(); j++)
+			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"lightPos", lightPos);
 	//lightPos += glm::vec3(0, 0, -gameTime * 100);
 	modelManager->RenderModels();
 }

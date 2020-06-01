@@ -27,6 +27,7 @@ Model::~Model()
 
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath)
 {
+	yaw = -90;
 	m_textureManager = objectManager->textureManager;
 	m_objectManager = objectManager;
 #pragma region To REMOVE?
@@ -299,12 +300,24 @@ void Model::SetFragmentShader(char * fragmentPath)
 {
 }
 
-Shader * Model::GetShader()
+unsigned int Model::GetLoadedMeshesCount()
 {
-	//TODO: Remove this function and all references
-	return nullptr;
-	//return shader;
+	return m_meshes.size();
 }
+
+Mesh * Model::GetMesh(int i)
+{
+	if (i < m_meshes.size())
+		return &m_meshes[i];
+	return nullptr;
+}
+
+//Shader * Model::GetShader()
+//{
+//	//TODO: Remove this function and all references
+//	return nullptr;
+//	//return shader;
+//}
 
 void Model::Update(float gameTime)
 {
