@@ -23,7 +23,8 @@ void ModelManager::Initialize(ObjectManager * objectManager)
 Model* ModelManager::LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
 {//Loads default model (triangle/rectangle)
 	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"", (char*)"");
+	//models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/survival-guitar-backpack-low-poly/source/Survival_BackPack2/Survival_BackPack_2.fbx", (char*)"");
+	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/Altar.fbx", (char*)"");
 
 	return models[models.size() - 1];
 }

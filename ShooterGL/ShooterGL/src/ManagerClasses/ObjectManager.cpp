@@ -90,9 +90,9 @@ void ObjectManager::Render()
 {
 	//entityManager->GetEntity(1)->SetTranslation(lightPos);
 	//entityManager->entities[1]->Rotate(glm::vec3(0, 1, 0));
-	lightPos = entityManager->entities[0]->GetTranslation();
-	for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
-		modelManager->GetModel(i)->GetShader()->SetShaderUniform_vec3((char*)"lightPos", lightPos);
+	//lightPos = entityManager->entities[0]->GetTranslation();
+	//for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
+	//	modelManager->GetModel(i)->GetShader()->SetShaderUniform_vec3((char*)"lightPos", lightPos);
 	//lightPos += glm::vec3(0, 0, -gameTime * 100);
 	modelManager->RenderModels();
 }

@@ -3,14 +3,24 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 #include "Texture.h"
 #include "ManagerClasses/TextureManager.h"
 #include <gtc/type_ptr.hpp>
+//TODO: potentially remove pragma warning disable : 4996
+#pragma warning (disable : 4996)
 
-void Shader::Initialize(TextureManager* textureManager, char* vertexPath, char* fragmentPath, std::vector<char*> texturePaths)
+void Shader::Initialize(TextureManager * in_textureManager, char* vertexPath, char* fragmentPath, char* materialPath)
 {
-	SetVertexShader(vertexPath);
-	SetFragmentShader(fragmentPath);
+	textureManager = in_textureManager;
+
+	if (materialPath)
+		LoadMaterial(materialPath);
+	else
+	{
+		SetVertexShader(vertexPath);
+		SetFragmentShader(fragmentPath);
+	}
 
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
@@ -33,15 +43,87 @@ void Shader::Initialize(TextureManager* textureManager, char* vertexPath, char* 
 	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	//glEnableVertexAttribArray(0);
 
-	textures.clear();
-	for (char* texturePath : texturePaths)
+	//textures.clear();
+	//for (char* texturePath : texturePaths)
+	//{
+	//	//if(TextureManager::textures.find(texturePath))
+	//	
+	//	textures.push_back(textureManager->LoadNewTexture(texturePath));
+	//	//textures[textures.size() - 1]->SetDefaultTextureParameters();
+	//	//textures[textures.size() - 1]->LoadTexture(texturePath);
+	//}
+}
+
+void Shader::LoadMaterial(char * materialPath)
+{
+	std::ifstream materialFile(materialPath);
+
+	std::string line;
+	//std::vector<char*> texturePathsForShader;
+	char* VertexPath = (char*)"";
+	char* FragmentPath = (char*)"";
+	char* currentShader = (char*)"";
+
+	while (getline(materialFile, line))
 	{
-		//if(TextureManager::textures.find(texturePath))
-		
-		textures.push_back(textureManager->LoadNewTexture(texturePath));
-		//textures[textures.size() - 1]->SetDefaultTextureParameters();
-		//textures[textures.size() - 1]->LoadTexture(texturePath);
+		line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+		if (line.substr(0, 2) == "&&")
+		{
+			currentShader = ((char*)line.erase(0, 2).c_str());
+			std::string tempTok[2];
+
+			tempTok[0] = line;
+			tempTok[0] = strtok((char*)tempTok[0].c_str(), " ");
+			tempTok[1] = line;
+			tempTok[1] = tempTok[1].substr(tempTok[1].find_first_of(" ") + 1);
+			if (tempTok[0] == (char*)"VertexShader")
+				SetVertexShader((char*)tempTok[1].c_str());
+			else if (tempTok[0] == (char*)"FragmentShader")
+				SetFragmentShader((char*)tempTok[1].c_str());
+		}
+		else if (line == "textures")
+		{
+			while (getline(materialFile, line) && line != "}")
+			{
+				//Remove tabs
+				line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+				//Skip "{"
+				if (line == "{")
+					continue;
+				else if (line == "}")
+					break;
+				//Remove spaces
+				line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+
+				//Get the texture path
+				std::string newTexturePath = line.substr(line.find_first_of(":") + 1);
+				AddNewTexture((char*)newTexturePath.c_str());
+				//texturePathsForShader.push_back(newTexturePath.copy(, 0, newTexturePath.size()).c_str();
+				//texturePathsForShader.push_back((char*)(newTexturePath).c_str());
+				//newTexturePath = line;
+				//memcpy(texturePathsForShader[texturePathsForShader.size() - 1], (char*)newTexturePath.c_str(), strlen(newTexturePath.c_str()));
+
+			}
+		}
 	}
+
+	//if (VertexPath == (char*)"")
+	//	VertexPath = (char*)"Resources/Shaders/VertexDefault.glsl";
+	//if (FragmentPath == (char*)"")
+	//	FragmentPath = (char*)"Resources/Shaders/FragmentDefault.glsl";
+
+	materialFile.close();
+}
+
+
+void Shader::AddNewTexture(char * texturePath)
+{
+	textures.push_back(textureManager->LoadNewTexture(texturePath));
+}
+
+void Shader::ClearTextures()
+{
+	textures.clear();
 }
 
 void Shader::BindTextures()

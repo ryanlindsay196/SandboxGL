@@ -7,7 +7,10 @@ class TextureManager;
 class Shader
 {
 public:
-	void Initialize(TextureManager* textureManager, char* vertexPath, char* fragmentPath, std::vector<char*> texturePaths);
+	void Initialize(TextureManager * in_textureManager, char* vertexPath, char* fragmentPath, char* materialPath);
+	void LoadMaterial(char* materialPath);
+	void AddNewTexture(char* texturePath);
+	void ClearTextures();
 	void BindTextures();
 	void SetVertexShader(char* vertexPath);
 	void SetFragmentShader(char* fragmentPath);

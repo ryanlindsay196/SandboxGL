@@ -5,12 +5,14 @@
 #include "Shader.h"
 #include "Texture.h"
 
+class ObjectManager;
+
 struct Vertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
-	//TODO: add tangents?
-	//TODO: add bittangents?
+	glm::vec3 Tangent;
+	glm::vec3 Bitangent;
 };
 
 class Mesh {
@@ -21,11 +23,15 @@ public:
 	Shader* shader;
 	unsigned int VAO;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath);
+	Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath);
 
+	//void ReadMaterial(char* materialPath);
+	void SetDefaultShaders();
+	void SetShaders(char * vertexPath, char * fragmentPath, char* materialPath);
 	void Draw();
 	void SetupMesh();
 
 private:
 	unsigned int VBO, EBO;
+	TextureManager* textureManager;
 };

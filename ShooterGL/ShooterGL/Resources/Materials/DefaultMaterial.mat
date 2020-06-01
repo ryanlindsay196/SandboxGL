@@ -1,0 +1,13 @@
+&&VertexShader Shaders/VertexDefault.glsl
+{
+
+}
+
+&&FragmentShader Shaders/FragmentDefault.glsl
+{
+	textures
+	{
+		albedoMap : Resources/Textures/Resume.PNG
+		normalMap : Resources/Textures/Sword_low_Blade_Normal.png
+	}
+}

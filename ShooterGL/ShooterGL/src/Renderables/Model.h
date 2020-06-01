@@ -50,7 +50,7 @@ private:
 
 	ObjectManager* m_objectManager;
 	TextureManager* m_textureManager;
-	Shader* shader;
+	//Shader* shader;
 	std::vector<Mesh> m_meshes;
 };
 
