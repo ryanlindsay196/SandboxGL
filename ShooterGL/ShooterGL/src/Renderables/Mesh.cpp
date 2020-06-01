@@ -45,9 +45,11 @@ void Mesh::SetShaders(char * vertexPath, char * fragmentPath, char* materialPath
 
 void Mesh::Draw()
 {
+	shader->UseShader();
 	shader->BindTextures();
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_TRIANGLES, 0, indices.size());
+	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
@@ -87,11 +89,11 @@ void Mesh::SetupMesh()
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 
 	glBindVertexArray(0);
-	//// draw mesh
-	//glBindVertexArray(VAO);
-	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	//glBindVertexArray(0);
-	//
-	//// always good practice to set everything back to defaults once configured.
-	//glActiveTexture(GL_TEXTURE0);
+	// draw mesh
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	
+	// always good practice to set everything back to defaults once configured.
+	glActiveTexture(GL_TEXTURE0);
 }

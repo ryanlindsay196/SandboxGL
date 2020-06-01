@@ -121,7 +121,8 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 
 	offsetTransform = glm::mat4(1);
 	positionOffset = glm::mat4(1);
-	//scaleOffset = glm::scale()
+	scaleOffset = glm::mat4(1);
+	scaleOffset = glm::scale(scaleOffset, initialScaleOffset);
 	rotationQuat = glm::quat(0, 0, 0, 1);
 	rotationQuat *= glm::angleAxis(rotationAngle, rotationAxis);
 	positionOffset = glm::translate(positionOffset, initialPositionOffset);
@@ -199,26 +200,28 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 
 Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath)
 {
+	// data to fill
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
 
-	//walk thorugh each of the mesh's vertices
+	// walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
 		glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-		//positions
+		// positions
 		vector.x = mesh->mVertices[i].x;
 		vector.y = mesh->mVertices[i].y;
 		vector.z = mesh->mVertices[i].z;
-		//normals
+		vertex.Position = vector;
+		// normals
 		vector.x = mesh->mNormals[i].x;
 		vector.y = mesh->mNormals[i].y;
 		vector.z = mesh->mNormals[i].z;
 		vertex.Normal = vector;
 		// texture coordinates
-		if (mesh->mTextureCoords[0]) //does the mesh have texture coordinates?
+		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
 		{
 			glm::vec2 vec;
 			// a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
@@ -230,48 +233,48 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 		else
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 		// tangent
-		//vector.x = mesh->mTangents[i].x;
-		//vector.y = mesh->mTangents[i].y;
-		//vector.z = mesh->mTangents[i].z;
-		//vertex.Tangent = vector;
+		vector.x = mesh->mTangents[i].x;
+		vector.y = mesh->mTangents[i].y;
+		vector.z = mesh->mTangents[i].z;
+		vertex.Tangent = vector;
 		// bitangent
-		//vector.x = mesh->mBitangents[i].x;
-		//vector.y = mesh->mBitangents[i].y;
-		//vector.z = mesh->mBitangents[i].z;
-		//vertex.Bitangent = vector;
+		vector.x = mesh->mBitangents[i].x;
+		vector.y = mesh->mBitangents[i].y;
+		vector.z = mesh->mBitangents[i].z;
+		vertex.Bitangent = vector;
 		vertices.push_back(vertex);
-		// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-		{
-			aiFace face = mesh->mFaces[i];
-			// retrieve all indices of the face and store them in the indices vector
-			for (unsigned int j = 0; j < face.mNumIndices; j++)
-				indices.push_back(face.mIndices[j]);
-		}
-		// process materials
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-		// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-		// Same applies to other texture as the following list summarizes:
-		// diffuse: texture_diffuseN
-		// specular: texture_specularN
-		// normal: texture_normalN
-
-		//// 1. diffuse maps
-		//vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-		//textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-		//// 2. specular maps
-		//vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-		//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		//// 3. normal maps
-		//std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
-		//textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-		//// 4. height maps
-		//std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-		//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
-		// return a mesh object created from the extracted mesh data
 	}
+	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+	{
+		aiFace face = mesh->mFaces[i];
+		// retrieve all indices of the face and store them in the indices vector
+		for (unsigned int j = 0; j < face.mNumIndices; j++)
+			indices.push_back(face.mIndices[j]);
+	}
+	// process materials
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
+	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
+	// Same applies to other texture as the following list summarizes:
+	// diffuse: texture_diffuseN
+	// specular: texture_specularN
+	// normal: texture_normalN
+
+	// 1. diffuse maps
+	//vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	//textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+	// 2. specular maps
+	//vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+	//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+	// 3. normal maps
+	//std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+	//textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+	// 4. height maps
+	//std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+	//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+
+	// return a mesh object created from the extracted mesh data
 	return Mesh(m_objectManager, vertices, indices, materialPath);
 }
 
@@ -316,7 +319,7 @@ void Model::Render()
 {
 	//glm::vec3 tempVec = glm::vec3(0, 1, 0);
 	//shader->SetShaderUniform_vec3((char*)"lightPos", tempVec);
-	offsetTransform = positionOffset * glm::toMat4(rotationQuat);
+	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
 
 	//shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
 	//shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
@@ -333,6 +336,16 @@ void Model::Render()
 	
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
+		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
+		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
+		if (componentParent != nullptr)
+		{
+			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform);
+		}
+		else
+		{
+			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
+		}
 		m_meshes[i].Draw();
 	}
 	//glBindVertexArray(VAO);

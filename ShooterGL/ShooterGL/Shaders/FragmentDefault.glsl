@@ -20,6 +20,8 @@ void main()
 	float diff = max(dot(norm, lightDir), 0.0);
 	
 	FragColor = (diff + ambientStrength) * mix(texture(albedoMap, TexCoord), texture(normalMap, TexCoord), 0.0) * vec4(ourColor, 1);
+	FragColor = (diff + ambientStrength) * texture(albedoMap, TexCoord) * vec4(ourColor, 1);
+	FragColor = texture(albedoMap, TexCoord) * vec4(ourColor, 1);
 	//FragColor = vec4(tempLightPos, 1.0);
 	//FragColor = vec4(diff, diff, diff, 1.0);
 	//FragColor = texture(albedoMap, TexCoord);// * vec4(ourColor, 1.0);

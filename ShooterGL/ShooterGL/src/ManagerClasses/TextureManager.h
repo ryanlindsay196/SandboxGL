@@ -5,8 +5,8 @@ class Texture;
 class TextureManager
 {
 private:
-	std::unordered_map<char*, Texture*> textures;
+	std::unordered_map<std::string, Texture*> textures;
 public:
 	TextureManager();
-	Texture* LoadNewTexture(char* texturePath);
+	Texture* LoadNewTexture(std::string texturePath);
 };

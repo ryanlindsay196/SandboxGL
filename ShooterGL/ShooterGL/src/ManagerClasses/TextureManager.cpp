@@ -3,18 +3,18 @@
 
 TextureManager::TextureManager()
 {
-	textures = std::unordered_map<char*, Texture*>();
+	textures = std::unordered_map<std::string, Texture*>();
 }
 
-Texture * TextureManager::LoadNewTexture(char * texturePath)
+Texture * TextureManager::LoadNewTexture(std::string texturePath)
 {
 	auto texture = textures.find(texturePath);
 	if (texture == textures.end())
 	{
 		Texture* newTexture = new Texture();
-		newTexture->LoadTexture(texturePath);
+		newTexture->LoadTexture((char*)texturePath.c_str());
 
-		std::pair<char*, Texture*> newTextureEntry(texturePath, newTexture);
+		std::pair<std::string, Texture*> newTextureEntry(texturePath, newTexture);
 		textures.insert(newTextureEntry);
 		return newTextureEntry.second;// textures.find(texturePath);
 	}
