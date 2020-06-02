@@ -38,9 +38,9 @@ public:
 	void Render();
 
 private:
-	unsigned int VBO;//Vertex buffer object
-	unsigned int VAO;//Vertex array object - stores settings from VBO
-	unsigned int EBO;//Element buffer object (Index buffer) - stores indices of vertices so we only store each vertex once
+	//unsigned int VBO;//Vertex buffer object
+	//unsigned int VAO;//Vertex array object - stores settings from VBO
+	//unsigned int EBO;//Element buffer object (Index buffer) - stores indices of vertices so we only store each vertex once
 
 	//struct Vertex {
 	//	glm::vec3 Position;

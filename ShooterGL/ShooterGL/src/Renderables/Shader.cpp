@@ -131,6 +131,7 @@ void Shader::BindTextures()
 	for (unsigned int i = 0; i < textures.size(); i++)
 		textures[i]->UseTexture(i);
 
+	//TODO: Get uniform names from material, make hash map using these names and the texture ID
 	SetShaderUniform_veci1((char*)"albedoMap", textures[0]->GetTextureID());
 	SetShaderUniform_veci1((char*)"normalMap", textures[1]->GetTextureID());
 		//glBindTexture(GL_TEXTURE_2D, (GLuint)textures[0]->GetTextureID());

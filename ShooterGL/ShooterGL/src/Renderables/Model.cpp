@@ -27,7 +27,7 @@ Model::~Model()
 
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath)
 {
-	yaw = -90;
+	//yaw = -90;
 	m_textureManager = objectManager->textureManager;
 	m_objectManager = objectManager;
 #pragma region To REMOVE?
@@ -152,34 +152,6 @@ void Model::LoadModel(std::string modelPath)
 	
 	//process ASSIMP's root node recursively
 	ProcessNode(scene->mRootNode, scene, "Resources/Materials/DefaultMaterial.mat");
-#pragma region To DELETE?
-
-
-	//glGenVertexArrays(1, &VAO);
-	//glGenBuffers(1, &VBO);
-	//glGenBuffers(1, &EBO);
-	//
-	//glBindVertexArray(VAO);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//
-	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
-	//
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
-	//	&indices[0], GL_STATIC_DRAW);
-	//
-	//// vertex positions
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	//// vertex normals
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	//// vertex texture coords
-	//glEnableVertexAttribArray(2);
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-	//
-	//glBindVertexArray(0);
-#pragma endregion
 }
 
 void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materialPath)
@@ -191,6 +163,12 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		m_meshes.push_back(ProcessMesh(mesh, scene, (char*)materialPath.c_str()));
+		m_meshes[m_meshes.size() - 1].componentParent = componentParent;
+		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(node->mTransformation.a1, node->mTransformation.a2, node->mTransformation.a3, node->mTransformation.a4,
+		//	node->mTransformation.b1, node->mTransformation.b2, node->mTransformation.b3, node->mTransformation.b4,
+		//	node->mTransformation.c1, node->mTransformation.c2, node->mTransformation.c3, node->mTransformation.c4,
+		//	node->mTransformation.d1, node->mTransformation.d2, node->mTransformation.d3, node->mTransformation.d4));
+		//m_meshes[m_meshes.size() - 1].SetTransform(glm::scale(glm::mat4(1), glm::vec3(0.1f, 0.1f, 0.1f)));
 	}
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -254,7 +232,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 			indices.push_back(face.mIndices[j]);
 	}
 	// process materials
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	//aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
 	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
 	// Same applies to other texture as the following list summarizes:
@@ -276,7 +254,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 	//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 	// return a mesh object created from the extracted mesh data
-	return Mesh(m_objectManager, vertices, indices, materialPath);
+	return Mesh(m_objectManager, vertices, indices, materialPath, this);
 }
 
 void Model::SetDefaultShaders()

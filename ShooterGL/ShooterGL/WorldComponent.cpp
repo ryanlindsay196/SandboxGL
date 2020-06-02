@@ -30,6 +30,11 @@ void WorldComponent::Update(float gameTime)
 	offsetTransform = positionOffset * glm::toMat4(rotationQuat);
 }
 
+void WorldComponent::SetTransform(glm::mat4 newTransform)
+{
+	offsetTransform = newTransform;
+}
+
 void WorldComponent::Translate(glm::vec3 translateBy)
 {
 	positionOffset += glm::translate(positionOffset, translateBy);

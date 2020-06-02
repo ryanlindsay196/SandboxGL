@@ -19,6 +19,7 @@ public:
 	bool isActive;
 	inline glm::mat4 GetOffsetTransform() { return offsetTransform; }
 
+	void SetTransform(glm::mat4 newTransform);
 	void Translate(glm::vec3 translateBy);
 	void Rotate(glm::vec3 rotateBy);
 	void Scale(glm::vec3 scaleBy);

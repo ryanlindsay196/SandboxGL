@@ -23,7 +23,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	controllerManager->Initialize(window);
 
 	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
-	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(0.2f, 0.2f, 0.2f));
+	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(0.02f, 0.02f, 0.02f));
 	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.2f, 1.2f, 1.2f));
 	//entityManager->GetEntity(0)->AddComponent(modelManager->GetModel(0));
 	cameraManager->CreateCamera(entityManager->GetEntity(0));

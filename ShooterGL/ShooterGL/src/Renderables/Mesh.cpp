@@ -10,9 +10,13 @@
 //TODO: Potentially remove the no warnings thing
 //#include "Texture.h"
 
-Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char * materialPath)
+Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char * materialPath, WorldComponent* newParent)
 {
-	textureManager = objectManager->textureManager;;
+	parentMesh = newParent;
+	yaw = -90;
+	textureManager = objectManager->textureManager;
+
+	
 
 	this->vertices = vertices;
 	this->indices = indices;
@@ -50,6 +54,9 @@ Shader * Mesh::GetShader()
 
 void Mesh::Draw()
 {
+	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->GetOffsetTransform() * offsetTransform);
+	//shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
+	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->GetOffsetTransform() * offsetTransform);
 	shader->UseShader();
 	shader->BindTextures();
 	glBindVertexArray(VAO);
@@ -74,6 +81,7 @@ void Mesh::SetupMesh()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 	// set the vertex attribute pointers
+	//TODO: modivy vertex attribute pointers based on material/shader?
 	// vertex Positions
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);

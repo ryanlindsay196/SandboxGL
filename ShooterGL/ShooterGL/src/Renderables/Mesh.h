@@ -4,6 +4,7 @@
 #include "glm.hpp"
 #include "Shader.h"
 #include "Texture.h"
+#include "../WorldComponent.h"
 
 class ObjectManager;
 
@@ -15,7 +16,7 @@ struct Vertex {
 	glm::vec3 Bitangent;
 };
 
-class Mesh {
+class Mesh : public WorldComponent {
 public:
 	//mesh data
 	std::vector<Vertex> vertices;
@@ -23,7 +24,7 @@ public:
 	Shader* shader;
 	unsigned int VAO;
 
-	Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath);
+	Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
 
 	//void ReadMaterial(char* materialPath);
 	void SetDefaultShaders();
@@ -31,6 +32,8 @@ public:
 	Shader* GetShader();
 	void Draw();
 	void SetupMesh();
+
+	WorldComponent* parentMesh;
 
 private:
 	unsigned int VBO, EBO;
