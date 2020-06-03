@@ -9,17 +9,48 @@ in vec3 FragPos;
 uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
 uniform vec3 lightPos;
+struct Material {
+	vec3 ambient;
+	vec3 specular;
+	vec3 diffuse;
+	float shininess;
+};
+struct Light {
+	vec3 position;
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+uniform Material material;
+uniform Light light;
+
+uniform vec3 viewPos;//TODO: Use the view matrix?
 
 void main()
 {
-	//vec3 tempLightPos = vec3(lightPos);
-	//vec3 tempLightPos = vec3(20, 0.4, 0);
-	float ambientStrength = 0.1;
+	//ambient
+	vec3 ambient = light.ambient * material.ambient;
+
+	//diffuse
 	vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(lightPos - FragPos);
+	vec3 lightDir = normalize(light.position - FragPos);
 	float diff = max(dot(norm, lightDir), 0.0);
-	
-	FragColor = (diff + ambientStrength) * mix(texture(albedoMap, TexCoord), texture(normalMap, TexCoord), 0.0) * vec4(Color, 1);
-	FragColor = (diff + ambientStrength) * texture(albedoMap, TexCoord.xy) * vec4(Color, 1);
-	FragColor = texture(albedoMap, TexCoord) * vec4(Color, 1);
+	vec3 diffuse = light.diffuse * (diff * material.diffuse);
+
+	//specular
+	vec3 viewDir = normalize(viewPos - FragPos);
+	vec3 reflectDir = reflect(-lightDir, norm);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess * 128);
+	vec3 specular = light.specular * (spec * material.specular);
+
+	FragColor = vec4(vec3(ambient + diffuse + specular), 1.0);
+
+	//float ambientStrength = 0.1;
+	//vec3 norm = normalize(Normal);
+	//vec3 lightDir = normalize(lightPos - FragPos);
+	//float diff = max(dot(norm, lightDir), 0.0);
+	//
+	//FragColor = (diff + ambientStrength) * texture(albedoMap, TexCoord.xy) * vec4(Color, 1);
 }
