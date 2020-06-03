@@ -294,7 +294,7 @@ unsigned int Model::GetLoadedMeshesCount()
 	return m_meshes.size();
 }
 
-Mesh * Model::GetMesh(int i)
+Mesh * Model::GetMesh(unsigned int i)
 {
 	if (i < m_meshes.size())
 		return &m_meshes[i];

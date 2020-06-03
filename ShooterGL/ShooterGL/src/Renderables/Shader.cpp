@@ -97,7 +97,8 @@ void Shader::LoadMaterial(char * materialPath)
 
 				//Get the texture path
 				std::string newTexturePath = line.substr(line.find_first_of(":") + 1);
-				AddNewTexture((char*)newTexturePath.c_str());
+				std::string newTextureUniform = strtok((char*)line.c_str(), ":");
+				AddNewTexture((char*)newTexturePath.c_str(), (char*)newTextureUniform.c_str());
 				//texturePathsForShader.push_back(newTexturePath.copy(, 0, newTexturePath.size()).c_str();
 				//texturePathsForShader.push_back((char*)(newTexturePath).c_str());
 				//newTexturePath = line;
@@ -116,9 +117,10 @@ void Shader::LoadMaterial(char * materialPath)
 }
 
 
-void Shader::AddNewTexture(char * texturePath)
+void Shader::AddNewTexture(char * texturePath, char* textureUniform)
 {
 	textures.push_back(textureManager->LoadNewTexture(texturePath));
+	textureUniforms.push_back(textureUniform);
 }
 
 void Shader::ClearTextures()
@@ -132,9 +134,12 @@ void Shader::BindTextures()
 		textures[i]->UseTexture(i);
 
 	//TODO: Get uniform names from material, make hash map using these names and the texture ID
-	SetShaderUniform_veci1((char*)"albedoMap", textures[0]->GetTextureID());
-	SetShaderUniform_veci1((char*)"normalMap", textures[1]->GetTextureID());
-		//glBindTexture(GL_TEXTURE_2D, (GLuint)textures[0]->GetTextureID());
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		SetShaderUniform_veci1((char*)textureUniforms[i].c_str(), textures[i]->GetTextureID());
+		//SetShaderUniform_veci1((char*)"normalMap", textures[1]->GetTextureID());
+	}
+	//glBindTexture(GL_TEXTURE_2D, (GLuint)textures[0]->GetTextureID());
 }
 
 //TODO: Create shader manager cpp and h files that function like the other manager files
@@ -176,17 +181,6 @@ void Shader::SetVertexShader(char* vertexPath)
 	{
 		std::cout << "ERROR:VERTEX_SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
 	}
-
-	//vertexShaderSource = "#version 330 core\n"
-	//	"layout(location = 0) in vec3 aPos;\n"
-	//	"layout (location = 1) in vec3 aColor;\n"
-	//	"out vec3 ourColor;\n"
-	//
-	//	"void main()\n"
-	//	"{\n"
-	//	"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	//	"ourColor = aColor;\n"
-	//	"}";
 }
 
 void Shader::SetFragmentShader(char* fragmentPath)
@@ -226,14 +220,6 @@ void Shader::SetFragmentShader(char* fragmentPath)
 	{
 		std::cout << "ERROR:FRAGMENT_SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
 	}
-
-	//fragmentShaderSource = "#version 330 core\n"
-	//	"out vec4 FragColor;\n"
-	//	"in vec3 ourColor;\n"
-	//	"void main()\n"
-	//	"{\n"
-	//	"FragColor = vec4(ourColor, 1.0);\n"
-	//	"}\n";
 }
 
 std::vector<Texture*> Shader::GetTextures()

@@ -32,7 +32,7 @@ public:
 
 	//Shader* GetShader();
 	unsigned int GetLoadedMeshesCount();
-	Mesh* GetMesh(int i);
+	Mesh* GetMesh(unsigned int i);
 
 	virtual void Update(float gameTime) override;
 	void Render();

@@ -9,7 +9,7 @@ class Shader
 public:
 	void Initialize(TextureManager * in_textureManager, char* vertexPath, char* fragmentPath, char* materialPath);
 	void LoadMaterial(char* materialPath);
-	void AddNewTexture(char* texturePath);
+	void AddNewTexture(char* texturePath, char* textureUniform);
 	void ClearTextures();
 	void BindTextures();
 	void SetVertexShader(char* vertexPath);
@@ -46,4 +46,5 @@ private:
 	unsigned int shaderProgram;
 
 	std::vector<Texture*> textures;
+	std::vector<std::string> textureUniforms;
 };
