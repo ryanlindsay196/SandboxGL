@@ -16,7 +16,7 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 	yaw = -90;
 	textureManager = objectManager->textureManager;
 
-	
+	offsetTransform = glm::mat4(1);
 
 	this->vertices = vertices;
 	this->indices = indices;
@@ -54,7 +54,7 @@ Shader * Mesh::GetShader()
 
 void Mesh::Draw()
 {
-	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->GetOffsetTransform() * offsetTransform);
+	//shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * parentMesh->GetOffsetTransform());
 	//shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
 	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->GetOffsetTransform() * offsetTransform);
 	shader->UseShader();

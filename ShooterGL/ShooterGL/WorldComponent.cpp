@@ -44,6 +44,8 @@ void WorldComponent::Rotate(glm::vec3 rotateBy)
 {
 	//TODO: make this work
 	//rotationOffset += rotateBy;
+
+	rotationQuat = glm::rotate(rotationQuat, rotateBy);
 }
 
 

@@ -251,6 +251,7 @@ void Shader::UseShader()
 	glUseProgram(shaderProgram);
 }
 
+//TODO: REmove this or make it work
 int Shader::GetShaderUniform_vec1(char * uniformName)
 {
 	return 0;

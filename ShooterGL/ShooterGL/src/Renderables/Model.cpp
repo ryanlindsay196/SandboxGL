@@ -126,6 +126,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	scaleOffset = glm::scale(scaleOffset, initialScaleOffset);
 	rotationQuat = glm::quat(0, 0, 0, 1);
 	rotationQuat *= glm::angleAxis(rotationAngle, rotationAxis);
+	rotationQuat = glm::rotate(rotationQuat, glm::vec3(M_PI / 2, 0, 0));
 	positionOffset = glm::translate(positionOffset, initialPositionOffset);
 	//offsetTransform = glm::scale(offsetTransform, initialScaleOffset);
 	//offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
@@ -163,7 +164,20 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		m_meshes.push_back(ProcessMesh(mesh, scene, (char*)materialPath.c_str()));
-		m_meshes[m_meshes.size() - 1].componentParent = componentParent;
+		
+		if (aiString("Cube.028") == node->mName)
+		{
+			m_meshes[m_meshes.size() - 1].Translate(glm::vec3(30, 0, 0));
+			m_meshes[m_meshes.size() - 1].Scale(glm::vec3(30, 0, 0));
+		}
+		//if(mesh->mNumBones > 0)
+			//m_meshes[m_meshes.size() - 1].SetTransform(glm::inverse(glm::mat4(mesh->mBones[0]->mOffsetMatrix.a1, mesh->mBones[0]->mOffsetMatrix.a2, mesh->mBones[0]->mOffsetMatrix.a3, mesh->mBones[0]->mOffsetMatrix.a4,
+			//	mesh->mBones[0]->mOffsetMatrix.b1, mesh->mBones[0]->mOffsetMatrix.b2, mesh->mBones[0]->mOffsetMatrix.b3, mesh->mBones[0]->mOffsetMatrix.b4,
+			//	mesh->mBones[0]->mOffsetMatrix.c1, mesh->mBones[0]->mOffsetMatrix.c2, mesh->mBones[0]->mOffsetMatrix.c3, mesh->mBones[0]->mOffsetMatrix.c4,
+			//	mesh->mBones[0]->mOffsetMatrix.d1, mesh->mBones[0]->mOffsetMatrix.d2, mesh->mBones[0]->mOffsetMatrix.d3, mesh->mBones[0]->mOffsetMatrix.d4)));
+		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
+		//m_meshes[m_meshes.size() - 1].SetTransform(glm::scale(m_meshes[m_meshes.size() - 1].GetOffsetTransform(), glm::vec3(1, 1, 1)));
+		//m_meshes[m_meshes.size() - 1].componentParent = componentParent;
 		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(node->mTransformation.a1, node->mTransformation.a2, node->mTransformation.a3, node->mTransformation.a4,
 		//	node->mTransformation.b1, node->mTransformation.b2, node->mTransformation.b3, node->mTransformation.b4,
 		//	node->mTransformation.c1, node->mTransformation.c2, node->mTransformation.c3, node->mTransformation.c4,
@@ -257,6 +271,8 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 	return Mesh(m_objectManager, vertices, indices, materialPath, this);
 }
 
+#pragma region DELETE?
+
 void Model::SetDefaultShaders()
 {
 	//if (shader != nullptr)
@@ -277,6 +293,7 @@ void Model::SetVertexShader(char * vertexPath)
 void Model::SetFragmentShader(char * fragmentPath)
 {
 }
+#pragma endregion
 
 unsigned int Model::GetLoadedMeshesCount()
 {
@@ -331,11 +348,14 @@ void Model::Render()
 		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
 		if (componentParent != nullptr)
 		{
-			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform);
+			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * m_meshes[i].GetOffsetTransform());
+			//if(i == 0)
+			//	m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * glm::translate(m_meshes[i].GetOffsetTransform(), glm::vec3(0, 200, 0)));
 		}
 		else
 		{
-			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
+			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * m_meshes[i].GetOffsetTransform());
+			//m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", glm::translate(glm::scale(m_meshes[i].GetOffsetTransform(), glm::vec3(0.02f, 0.02f, 0.02f)), glm::vec3(20, i * 20, 0)));
 		}
 		m_meshes[i].Draw();
 	}
