@@ -24,8 +24,8 @@ Model* ModelManager::LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis,
 {//Loads default model (triangle/rectangle)
 	models.push_back(new Model());
 	//models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/arms.fbx", (char*)"");
-	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/Survival_BackPack_2.fbx", (char*)"");
-	//models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/Rock_Low.fbx", (char*)"");
+	//models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/Survival_BackPack_2.fbx", (char*)"");
+	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/Rock_Low.fbx", (char*)"");
 	//models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/plane.fbx", (char*)"");
 	//models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/Altar.fbx", (char*)"");
 

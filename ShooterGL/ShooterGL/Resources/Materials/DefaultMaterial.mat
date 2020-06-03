@@ -10,4 +10,10 @@
 		albedoMap : Resources/Textures/1001_albedo.jpg
 		normalMap : Resources/Textures/Sword_low_Blade_Normal.png
 	}
+	vec3
+	{
+		ambient : 0.1,0.1,0.1
+		specular : 1
+		diffuse : 1
+	}
 }

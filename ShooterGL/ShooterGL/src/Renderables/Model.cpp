@@ -164,24 +164,18 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		m_meshes.push_back(ProcessMesh(mesh, scene, (char*)materialPath.c_str()));
-		
-		if (aiString("Cube.028") == node->mName)
-		{
-			m_meshes[m_meshes.size() - 1].Translate(glm::vec3(30, 0, 0));
-			m_meshes[m_meshes.size() - 1].Scale(glm::vec3(30, 0, 0));
-		}
-		//if(mesh->mNumBones > 0)
-			//m_meshes[m_meshes.size() - 1].SetTransform(glm::inverse(glm::mat4(mesh->mBones[0]->mOffsetMatrix.a1, mesh->mBones[0]->mOffsetMatrix.a2, mesh->mBones[0]->mOffsetMatrix.a3, mesh->mBones[0]->mOffsetMatrix.a4,
-			//	mesh->mBones[0]->mOffsetMatrix.b1, mesh->mBones[0]->mOffsetMatrix.b2, mesh->mBones[0]->mOffsetMatrix.b3, mesh->mBones[0]->mOffsetMatrix.b4,
-			//	mesh->mBones[0]->mOffsetMatrix.c1, mesh->mBones[0]->mOffsetMatrix.c2, mesh->mBones[0]->mOffsetMatrix.c3, mesh->mBones[0]->mOffsetMatrix.c4,
-			//	mesh->mBones[0]->mOffsetMatrix.d1, mesh->mBones[0]->mOffsetMatrix.d2, mesh->mBones[0]->mOffsetMatrix.d3, mesh->mBones[0]->mOffsetMatrix.d4)));
-		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
-		//m_meshes[m_meshes.size() - 1].SetTransform(glm::scale(m_meshes[m_meshes.size() - 1].GetOffsetTransform(), glm::vec3(1, 1, 1)));
+		//m_meshes[m_meshes.size() - 1].SetTransform(node->mTransformation);
+		//if (aiString("Cube.028") == node->mName)
+		//{
+		//	m_meshes[m_meshes.size() - 1].Translate(glm::vec3(30, 0, 0));
+		//	m_meshes[m_meshes.size() - 1].Scale(glm::vec3(30, 0, 0));
+		//}
 		//m_meshes[m_meshes.size() - 1].componentParent = componentParent;
-		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(node->mTransformation.a1, node->mTransformation.a2, node->mTransformation.a3, node->mTransformation.a4,
-		//	node->mTransformation.b1, node->mTransformation.b2, node->mTransformation.b3, node->mTransformation.b4,
-		//	node->mTransformation.c1, node->mTransformation.c2, node->mTransformation.c3, node->mTransformation.c4,
-		//	node->mTransformation.d1, node->mTransformation.d2, node->mTransformation.d3, node->mTransformation.d4));
+		//m_meshes[m_meshes.size() - 1].SetTransform((glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
+		//	node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
+		//	node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
+		//	node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4)));
+		//m_meshes[m_meshes.size() - 1].SetTransform(glm::scale(m_meshes[m_meshes.size() - 1].GetOffsetTransform(), glm::vec3(0.1f, 0.1f, 0.1f)));
 		//m_meshes[m_meshes.size() - 1].SetTransform(glm::scale(glm::mat4(1), glm::vec3(0.1f, 0.1f, 0.1f)));
 	}
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
@@ -359,13 +353,4 @@ void Model::Render()
 		}
 		m_meshes[i].Draw();
 	}
-	//glBindVertexArray(VAO);
-	////TODO: Comment this out when shaders work on meshes
-	//shader->UseShader();
-	//shader->BindTextures();
-	////TODO: Set the 6 to the amount of indices
-	////glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	//glDrawArrays(GL_TRIANGLES, 0, 36);
-	//glBindVertexArray(0);
-	////glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 }

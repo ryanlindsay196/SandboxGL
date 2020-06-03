@@ -12,6 +12,8 @@ void EntityManager::Initialize(ObjectManager * in_objectManager)
 	//InstantiateEntity(EntityProperties());
 }
 
+
+//TODO: Make private and use the entity properties for properties, and load all entities from the scene file
 void EntityManager::InstantiateEntity(EntityProperties entityProperties, glm::vec3 startPos, glm::vec3 startRotationAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
 	//TODO: Instantiate entity based on entity properties unordered map

@@ -21,16 +21,18 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	modelManager->Initialize(this);
 	cameraManager->Initialize(this);
 	controllerManager->Initialize(window);
-
+	//TODO: Make models scale with entity scale
 	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
 	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
 	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
 	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.2f, 1.2f, 1.2f));
 	entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(0));
 	cameraManager->CreateCamera(entityManager->GetEntity(0));
+
+	//TODO: Make models that are children of an entity rotate with that entity
 	entityManager->GetEntity(0)->AddComponent(controllerManager->CreateController(entityManager->GetEntity(0)));
 	
-	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, -2.0f, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
+	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, -0.f, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
 	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), 0.0f, glm::vec3(0.f, 0.f, 0.f));
 	//entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));
 
@@ -91,12 +93,14 @@ void ObjectManager::Update(float gameTime)
 
 void ObjectManager::Render()
 {
-	//entityManager->GetEntity(1)->SetTranslation(lightPos);
+	//entityManager->GetEntity(0)->SetTranslation(lightPos);
+	//TODO: make model rotate with parent entity
+	//TODO: Make the rotate function and other transformation functions use mat4
 	//entityManager->entities[1]->Rotate(glm::vec3(0, 1, 0));
 	lightPos = entityManager->entities[0]->GetTranslation();
 	for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
 		for(unsigned int j = 0; j < modelManager->GetModel(i)->GetLoadedMeshesCount(); j++)
-			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"lightPos", lightPos);
+			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"lightPos", lightPos.x, lightPos.y, lightPos.z);
 	//lightPos += glm::vec3(0, 0, -gameTime * 100);
 	modelManager->RenderModels();
 }
