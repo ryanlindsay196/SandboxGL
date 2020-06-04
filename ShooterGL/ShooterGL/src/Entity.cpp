@@ -42,7 +42,7 @@ void Entity::Update(float gameTime)
 	//transform = glm::rotate(transform, 40.1f, rotation);
 	transform = glm::lookAt(position, position + direction, glm::vec3(0, 1, 0));
 
-	//TODO: Look at moving this elsewhere?
+	//TODO: Look at moving this elsewhere because scale should probably done before rotation
 	transform = glm::scale(transform, scale);
 	//transform = glm::translate(transform, position);
 

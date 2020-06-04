@@ -4,15 +4,15 @@
 textures
 {
 	albedoMap : Resources/Textures/Rock_Albedo2.png
-	normalMap : Resources/Textures/Sword_low_Blade_Normal.png
+	normalMap : Resources/Textures/Rock_Normal.png
 }
 vec3
 {
 	mat.ambient : 0.4
-	mat.specular : 1
-	mat.diffuse : 0.2
+	mat.specular : 0.7
+	mat.diffuse : 0.5
 }
 float
 {
-	mat.shininess : 0.3
+	mat.shininess : 1
 }

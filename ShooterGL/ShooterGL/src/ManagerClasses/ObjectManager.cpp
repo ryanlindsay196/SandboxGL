@@ -93,7 +93,7 @@ void ObjectManager::Update(float gameTime)
 	//entityManager->GetEntity(1)->Translate(glm::vec3(0.f, 0.f, -0.001f));
 	//entityManager->GetEntity(0)->Translate(glm::vec3(0.f, 0.001f, 0.f));
 
-	entityManager->GetEntity(1)->SetTranslation(glm::vec3(2 * (float)sin((float)glfwGetTime()), 0, 2 * (float)cos((float)glfwGetTime())));
+	entityManager->GetEntity(1)->SetTranslation(glm::vec3(7 * (float)sin((float)glfwGetTime()), 0, 7 * (float)cos((float)glfwGetTime())));
 
 	modelManager->UpdateModels(gameTime);
 	entityManager->Update(gameTime);
