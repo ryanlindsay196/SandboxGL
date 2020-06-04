@@ -4,17 +4,19 @@
 #include "glad/glad.h"
 #include <string>
 #include <algorithm>
-//#include <fstream>
-//#include <iostream>
 #include "ManagerClasses/ObjectManager.h"
-//TODO: Potentially remove the no warnings thing
-//#include "Texture.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "gtx/quaternion.hpp"
 
 Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char * materialPath, WorldComponent* newParent)
 {
 	parentMesh = newParent;
 	yaw = -90;
 	textureManager = objectManager->textureManager;
+
+	scaleOffset = glm::mat4(1);
+	rotationQuat = glm::quat();
+	positionOffset = glm::mat4(1);
 
 	offsetTransform = glm::mat4(1);
 
@@ -27,8 +29,6 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 		shader->Initialize(textureManager, (char*)"", (char*)"", materialPath);
 	else
 		shader->Initialize(textureManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", materialPath);
-	//this->textures = textures;
-	//ReadMaterial(materialPath);
 	// now that we have all the required data, set the vertex buffers and its attribute pointers.
 	SetupMesh();
 }
@@ -54,9 +54,19 @@ Shader * Mesh::GetShader()
 
 void Mesh::Draw()
 {
+	//if (parentMesh->componentParent != nullptr)
+	//	offsetTransform = parentMesh->componentParent->GetTransform();
+	//offsetTransform *= positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
+	
 	//shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * parentMesh->GetOffsetTransform());
 	//shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
+	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->componentParent->GetTransform() * offsetTransform);
 	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->GetOffsetTransform() * offsetTransform);
+	//RotateQuaternion(glm::vec3(1, 1, 1), 0.2f);
+	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->componentParent->GetTransform());
+	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(1));
+
+
 	shader->UseShader();
 	shader->BindTextures();
 	glBindVertexArray(VAO);
@@ -100,4 +110,9 @@ void Mesh::SetupMesh()
 
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void Mesh::Update(float gameTime)
+{
+	//SetTransform(parentMesh->componentParent->GetTransform());
 }

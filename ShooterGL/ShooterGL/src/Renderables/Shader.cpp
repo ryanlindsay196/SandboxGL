@@ -13,6 +13,7 @@
 void Shader::Initialize(TextureManager * in_textureManager, char* vertexPath, char* fragmentPath, char* materialPath)
 {
 	textureManager = in_textureManager;
+	shaderProgram = glCreateProgram();
 
 	if (materialPath)
 		LoadMaterial(materialPath);
@@ -21,11 +22,6 @@ void Shader::Initialize(TextureManager * in_textureManager, char* vertexPath, ch
 		SetVertexShader(vertexPath);
 		SetFragmentShader(fragmentPath);
 	}
-
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
 
 	int success;
 	char infoLog[512];
@@ -37,21 +33,37 @@ void Shader::Initialize(TextureManager * in_textureManager, char* vertexPath, ch
 	}
 	glUseProgram(shaderProgram);
 
+	GLint i;
+	GLint count;
+
+	GLint size; // size of the variable
+	GLenum type; // type of the variable (float, vec3 or mat4, etc)
+
+	const GLsizei bufSize = 16; // maximum name length
+	GLchar name[bufSize]; // variable name in GLSL
+	GLsizei length; // name length
+	glGetProgramiv(shaderProgram, GL_ACTIVE_ATTRIBUTES, &count);
+	printf("Active Attributes: %d\n", count);
+
+	for (i = 0; i < count; i++)
+	{
+		glGetActiveAttrib(shaderProgram, (GLuint)i, bufSize, &length, &size, &type, name);
+
+		printf("Attribute #%d Type: %u Name: %s\n", i, type, name);
+	}
+
+	glGetProgramiv(shaderProgram, GL_ACTIVE_UNIFORMS, &count);
+	printf("Active Uniforms: %d\n", count);
+
+	for (i = 0; i < count; i++)
+	{
+		glGetActiveUniform(shaderProgram, (GLuint)i, bufSize, &length, &size, &type, name);
+
+		printf("Uniform #%d Type: %u Name: %s\n", i, type, name);
+	}
+
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
-
-	//textures.clear();
-	//for (char* texturePath : texturePaths)
-	//{
-	//	//if(TextureManager::textures.find(texturePath))
-	//	
-	//	textures.push_back(textureManager->LoadNewTexture(texturePath));
-	//	//textures[textures.size() - 1]->SetDefaultTextureParameters();
-	//	//textures[textures.size() - 1]->LoadTexture(texturePath);
-	//}
 }
 
 void Shader::LoadMaterial(char * materialPath)
@@ -60,8 +72,8 @@ void Shader::LoadMaterial(char * materialPath)
 
 	std::string line;
 	//std::vector<char*> texturePathsForShader;
-	char* VertexPath = (char*)"";
-	char* FragmentPath = (char*)"";
+	//char* VertexPath = (char*)"";
+	//char* FragmentPath = (char*)"";
 	char* currentShader = (char*)"";
 
 	while (getline(materialFile, line))
@@ -81,6 +93,12 @@ void Shader::LoadMaterial(char * materialPath)
 			else if (tempTok[0] == (char*)"FragmentShader")
 				SetFragmentShader((char*)tempTok[1].c_str());
 		}
+		else if (line == "<ATTACH AND LINK SHADER>")
+		{
+			glAttachShader(shaderProgram, vertexShader);
+			glAttachShader(shaderProgram, fragmentShader);
+			glLinkProgram(shaderProgram);
+		}
 		else if (line == "textures")
 		{
 			while (getline(materialFile, line) && line != "}")
@@ -99,14 +117,46 @@ void Shader::LoadMaterial(char * materialPath)
 				std::string newTexturePath = line.substr(line.find_first_of(":") + 1);
 				std::string newTextureUniform = strtok((char*)line.c_str(), ":");
 				AddNewTexture((char*)newTexturePath.c_str(), (char*)newTextureUniform.c_str());
-				//texturePathsForShader.push_back(newTexturePath.copy(, 0, newTexturePath.size()).c_str();
-				//texturePathsForShader.push_back((char*)(newTexturePath).c_str());
-				//newTexturePath = line;
-				//memcpy(texturePathsForShader[texturePathsForShader.size() - 1], (char*)newTexturePath.c_str(), strlen(newTexturePath.c_str()));
+			}
+		}
+		else if (line == "vec3")
+		{
+			while (getline(materialFile, line) && line != "}")
+			{
 
+				line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+				line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+				//Skip "{"
+				if (line == "{")
+					continue;
+				else if (line == "}")
+					break;
+				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line);
+
+				glm::vec3 newVector = ParseMaterialVector(keyValuePair.second);
+				SetShaderUniform_vec3((char*)keyValuePair.first.c_str(), newVector);
+			}
+		}
+		else if (line == "float")
+		{
+			while (getline(materialFile, line) && line != "}")
+			{
+
+				line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+				line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+				//Skip "{"
+				if (line == "{")
+					continue;
+				else if (line == "}")
+					break;
+				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line);
+
+				SetShaderUniform_vec1((char*)keyValuePair.first.c_str(), strtof(keyValuePair.second.c_str(), nullptr));
 			}
 		}
 	}
+
+	//SetShaderUniform_vec1("mat.ambient");
 
 	//if (VertexPath == (char*)"")
 	//	VertexPath = (char*)"Resources/Shaders/VertexDefault.glsl";
@@ -114,6 +164,37 @@ void Shader::LoadMaterial(char * materialPath)
 	//	FragmentPath = (char*)"Resources/Shaders/FragmentDefault.glsl";
 
 	materialFile.close();
+}
+
+std::pair<std::string, std::string> Shader::GenerateKeyValuePair(std::string line)
+{
+	std::pair<std::string, std::string> newKeyValuePair;
+	newKeyValuePair.second = line.substr(line.find_first_of(":") + 1);
+	newKeyValuePair.first = strtok((char*)line.c_str(), ":");
+	return newKeyValuePair;
+}
+
+glm::vec3 Shader::ParseMaterialVector(std::string line)
+{
+	if(line.find(",") == line.npos)
+		return glm::vec3(strtof((char*)line.c_str(), nullptr));
+
+	float x, y, z;
+	std::string xLine, yLine, zLine;
+	xLine = yLine = zLine = line;
+
+	xLine = strtok((char*)xLine.c_str(), ",");
+	
+	yLine = yLine.substr(yLine.find_first_of(",") + 1);
+	yLine = strtok((char*)yLine.c_str(), ",");
+
+	zLine = zLine.substr(zLine.find_last_of(",") + 1);
+	//zLine = strtok((char*)zLine.c_str(), ",");
+
+	x = strtof((char*)xLine.c_str(), nullptr);
+	y = strtof((char*)yLine.c_str(), nullptr);
+	z = strtof((char*)zLine.c_str(), nullptr);
+	return glm::vec3(x, y, z);
 }
 
 
@@ -137,8 +218,11 @@ void Shader::BindTextures()
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		SetShaderUniform_veci1((char*)textureUniforms[i].c_str(), textures[i]->GetTextureID());
-		//SetShaderUniform_veci1((char*)"normalMap", textures[1]->GetTextureID());
 	}
+	
+	//SetShaderUniform_veci1((char*)"albedoMap", textures[0]->GetTextureID());
+	//SetShaderUniform_veci1((char*)"normalMap", textures[1]->GetTextureID());
+	
 	//glBindTexture(GL_TEXTURE_2D, (GLuint)textures[0]->GetTextureID());
 }
 
@@ -243,21 +327,21 @@ int Shader::GetShaderUniform_vec1(char * uniformName)
 	return 0;
 }
 
-void Shader::SetShaderUniform_vec1(char * uniformName, int uniformValue)
+void Shader::SetShaderUniform_vec1(char * uniformName, float uniformValue)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform1f(uniformLocation, (GLfloat)uniformValue);
 }
 
-void Shader::SetShaderUniform_vec2(char * uniformName, int x, int y)
+void Shader::SetShaderUniform_vec2(char * uniformName, float x, float y)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform2f(uniformLocation, (GLfloat)x, (GLfloat)y);
 }
 
-void Shader::SetShaderUniform_vec3(char * uniformName, int x, int y, int z)
+void Shader::SetShaderUniform_vec3(char * uniformName, float x, float y, float z)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
@@ -271,7 +355,7 @@ void Shader::SetShaderUniform_vec3(char * uniformName, glm::vec3 & value)
 	glUniform3fv(uniformLocation, 1, &value[0]);
 }
 
-void Shader::SetShaderUniform_vec4(char * uniformName, int x, int y, int z, int w)
+void Shader::SetShaderUniform_vec4(char * uniformName, float x, float y, float z, float w)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);

@@ -27,7 +27,15 @@ void WorldComponent::Update(float gameTime)
 	//transform = glm::rotate(transform, 40.1f, rotation);
 	//offsetTransform = glm::translate(offsetTransform, positionOffset);
 	
-	offsetTransform = positionOffset * glm::toMat4(rotationQuat);
+	//RotateQuaternion(glm::vec3(0, 0, 0.1), 0.02);
+	//Translate(glm::vec3(0, 0.0000001, 0));
+
+	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
+
+	if (componentParent != nullptr)
+	{
+		//offsetTransform *= componentParent->GetTransform();
+	}
 }
 
 void WorldComponent::SetTransform(glm::mat4 newTransform)

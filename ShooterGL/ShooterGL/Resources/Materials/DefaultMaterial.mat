@@ -1,19 +1,18 @@
 &&VertexShader Shaders/VertexDefault.glsl
-{
-
-}
-
 &&FragmentShader Shaders/FragmentDefault.glsl
+<ATTACH AND LINK SHADER>
+textures
 {
-	textures
-	{
-		albedoMap : Resources/Textures/1001_albedo.jpg
-		normalMap : Resources/Textures/Sword_low_Blade_Normal.png
-	}
-	vec3
-	{
-		ambient : 0.1,0.1,0.1
-		specular : 1
-		diffuse : 1
-	}
+	albedoMap : Resources/Textures/Rock_Albedo2.png
+	normalMap : Resources/Textures/Sword_low_Blade_Normal.png
+}
+vec3
+{
+	mat.ambient : 0.4
+	mat.specular : 1
+	mat.diffuse : 0.2
+}
+float
+{
+	mat.shininess : 0.3
 }

@@ -5,6 +5,7 @@
 #include "TextureManager.h"
 #include "CameraManager.h"
 #include "ControllerManager.h"
+#include "LightManager.h"
 //TODO: include all managers
 struct GLFWwindow;
 
@@ -16,6 +17,7 @@ public:
 	TextureManager* textureManager;
 	CameraManager* cameraManager;
 	ControllerManager* controllerManager;
+	LightManager* lightManager;
 
 	void Initialize(GLFWwindow* window);
 	void Update(float gameTime);

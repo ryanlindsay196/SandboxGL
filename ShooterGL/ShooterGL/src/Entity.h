@@ -33,6 +33,12 @@ public:
 	glm::vec3 GetEulerAngles();
 	glm::vec3 GetScale();
 
+	glm::vec3& GetDirectionReference();
+	glm::vec3& GetTranslationReference();
+	glm::vec3& GetRotationReference();
+	//glm::vec3& GetEulerAnglesReference();
+	glm::vec3& GetScaleReference();
+
 	glm::mat4 GetTransform();
 
 private:

@@ -139,7 +139,9 @@
     <ClCompile Include="src\ManagerClasses\CameraManager.cpp" />
     <ClCompile Include="src\ManagerClasses\ControllerManager.cpp" />
     <ClCompile Include="src\ManagerClasses\EntityManager.cpp" />
+    <ClCompile Include="src\ManagerClasses\LightManager.cpp" />
     <ClCompile Include="src\ManagerClasses\ObjectManager.cpp" />
+    <ClCompile Include="src\Renderables\Light.cpp" />
     <ClCompile Include="src\Renderables\Mesh.cpp" />
     <ClCompile Include="src\Renderables\Model.cpp" />
     <ClCompile Include="src\ManagerClasses\ModelManager.cpp" />

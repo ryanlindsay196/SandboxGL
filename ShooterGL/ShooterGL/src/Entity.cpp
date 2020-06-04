@@ -14,7 +14,7 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale
 	SetRotation(rotation);
 	SetScale(scale);
 	transform = glm::mat4(1);
-	transform = glm::rotate(transform, 0.4f, glm::vec3(1, 0, 0));
+	//transform = glm::rotate(transform, 0.4f, glm::vec3(1, 0, 0));
 	transform = glm::scale(transform, scale);
 	transform = glm::translate(transform, position);
 	if(newParent != nullptr)
@@ -39,10 +39,12 @@ void Entity::Update(float gameTime)
 
 
 	transform = glm::mat4(1);
-	transform = glm::scale(transform, scale);
 	//transform = glm::rotate(transform, 40.1f, rotation);
 	transform = glm::lookAt(position, position + direction, glm::vec3(0, 1, 0));
-	transform = glm::translate(transform, position);
+
+	//TODO: Look at moving this elsewhere?
+	transform = glm::scale(transform, scale);
+	//transform = glm::translate(transform, position);
 
 
 	for (Component* component : components)
@@ -133,6 +135,26 @@ glm::vec3 Entity::GetEulerAngles()
 }
 
 glm::vec3 Entity::GetScale()
+{
+	return scale;
+}
+
+glm::vec3& Entity::GetDirectionReference()
+{
+	return direction;
+}
+
+glm::vec3 & Entity::GetTranslationReference()
+{
+	return position;
+}
+
+glm::vec3 & Entity::GetRotationReference()
+{
+	return rotation;
+}
+
+glm::vec3 & Entity::GetScaleReference()
 {
 	return scale;
 }

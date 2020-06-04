@@ -32,6 +32,7 @@ public:
 	Shader* GetShader();
 	void Draw();
 	void SetupMesh();
+	virtual void Update(float gameTime) override;
 
 	WorldComponent* parentMesh;
 

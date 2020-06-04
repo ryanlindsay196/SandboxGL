@@ -9,6 +9,8 @@ class Shader
 public:
 	void Initialize(TextureManager * in_textureManager, char* vertexPath, char* fragmentPath, char* materialPath);
 	void LoadMaterial(char* materialPath);
+	std::pair<std::string, std::string> GenerateKeyValuePair(std::string line);
+	glm::vec3 ParseMaterialVector(std::string line);
 	void AddNewTexture(char* texturePath, char* textureUniform);
 	void ClearTextures();
 	void BindTextures();
@@ -21,11 +23,11 @@ public:
 	void UseShader();
 
 	int GetShaderUniform_vec1(char* uniformName);
-	void SetShaderUniform_vec1(char* uniformName, int uniformValue);
-	void SetShaderUniform_vec2(char* uniformName, int x, int y);
-	void SetShaderUniform_vec3(char* uniformName, int x, int y, int z);
+	void SetShaderUniform_vec1(char* uniformName, float uniformValue);
+	void SetShaderUniform_vec2(char* uniformName, float x, float y);
+	void SetShaderUniform_vec3(char* uniformName, float x, float y, float z);
 	void SetShaderUniform_vec3(char* uniformName, glm::vec3 &value);
-	void SetShaderUniform_vec4(char* uniformName, int x, int y, int z, int w);
+	void SetShaderUniform_vec4(char* uniformName, float x, float y, float z, float w);
 
 	void SetShaderUniform_veci1(char* uniformName, int uniformValue);
 	void SetShaderUniform_veci2(char* uniformName, int x, int y);

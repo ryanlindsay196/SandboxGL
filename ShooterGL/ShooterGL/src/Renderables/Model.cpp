@@ -126,15 +126,14 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	scaleOffset = glm::scale(scaleOffset, initialScaleOffset);
 	rotationQuat = glm::quat(0, 0, 0, 1);
 	rotationQuat *= glm::angleAxis(rotationAngle, rotationAxis);
+
+	//Rotate imported models right-side up
 	rotationQuat = glm::rotate(rotationQuat, glm::vec3(M_PI / 2, 0, 0));
 	positionOffset = glm::translate(positionOffset, initialPositionOffset);
-	//offsetTransform = glm::scale(offsetTransform, initialScaleOffset);
-	//offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
-	//offsetTransform = glm::translate(offsetTransform, initialPositionOffset);
-	//rotationOffset = initialrotationOffset;
-	offsetTransform = positionOffset * glm::toMat4(rotationQuat);
-	//shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform);
-	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(6000.0f));
+	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
+
+	if (componentParent != nullptr)
+		offsetTransform *= componentParent->GetTransform();
 }
 
 void Model::LoadModel(std::string modelPath)
@@ -315,6 +314,11 @@ void Model::Update(float gameTime)
 	//offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
 	//offsetTransform = glm::translate(offsetTransform, positionOffset);
 	WorldComponent::Update(gameTime);
+	for (Mesh mesh : m_meshes)
+	{
+		//mesh.Update(gameTime);
+		//mesh.SetTransform(componentParent->GetTransform());
+	}
 }
 
 void Model::Render()
@@ -343,8 +347,6 @@ void Model::Render()
 		if (componentParent != nullptr)
 		{
 			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * m_meshes[i].GetOffsetTransform());
-			//if(i == 0)
-			//	m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * glm::translate(m_meshes[i].GetOffsetTransform(), glm::vec3(0, 200, 0)));
 		}
 		else
 		{
