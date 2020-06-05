@@ -3,6 +3,14 @@
 #include "GLFW/glfw3.h"
 #include "Renderables/Mesh.h"
 
+#include "EntityManager.h"
+#include "ModelManager.h"
+#include "TextureManager.h"
+#include "CameraManager.h"
+#include "ControllerManager.h"
+#include "LightManager.h"
+#include "ShaderManager.h"
+
 //TODO: Delete this later
 #include "../Renderables/Shader.h"
 //TODO: Delete this later
@@ -18,10 +26,12 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	cameraManager = new CameraManager();
 	controllerManager = new ControllerManager();
 	lightManager = new LightManager();
+	shaderManager = new ShaderManager();
 	entityManager->Initialize(this);
 	modelManager->Initialize(this);
 	cameraManager->Initialize(this);
 	lightManager->Initialize();
+	//shaderManager->Initialize();//doesn't exist yet
 	controllerManager->Initialize(window);
 	//TODO: Make models scale with entity scale
 	//TODO: Instantiate entities using entity properties loaded from each individual entity file

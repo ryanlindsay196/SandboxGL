@@ -5,6 +5,7 @@
 #include <string>
 #include <algorithm>
 #include "ManagerClasses/ObjectManager.h"
+#include "ManagerClasses/ShaderManager.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 
@@ -13,6 +14,7 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 	parentMesh = newParent;
 	yaw = -90;
 	textureManager = objectManager->textureManager;
+	m_objectManager = objectManager;
 
 	scaleOffset = glm::mat4(1);
 	rotationQuat = glm::quat();
@@ -25,8 +27,9 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 
 	//TODO: When making the shadermanager (like the textureManager), replace this to search for an existing shader
 	shader = new Shader();
-	if(materialPath)
-		shader->Initialize(textureManager, (char*)"", (char*)"", materialPath);
+	if (materialPath)
+		SetShaders(materialPath);
+		//shader->Initialize(textureManager, (char*)"", (char*)"", materialPath);
 	else
 		shader->Initialize(textureManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", materialPath);
 	// now that we have all the required data, set the vertex buffers and its attribute pointers.
@@ -35,15 +38,16 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 
 void Mesh::SetDefaultShaders()
 {
-	SetShaders((char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", (char*)"");
+	SetShaders((char*)"Resources/Materials/DefaultMaterial.mat");
 }
 
-void Mesh::SetShaders(char * vertexPath, char * fragmentPath, char* materialPath)
+void Mesh::SetShaders(char* materialPath)
 {
-	if (shader != nullptr)
-		delete(shader);
-	shader = new Shader();
-	shader->Initialize(textureManager, vertexPath, fragmentPath, materialPath);
+	//if (shader != nullptr)
+	//	delete(shader);
+	//shader = new Shader();
+	shader = m_objectManager->shaderManager->LoadNewShader(materialPath, m_objectManager);
+	//shader->Initialize(textureManager, vertexPath, fragmentPath, materialPath);
 
 }
 

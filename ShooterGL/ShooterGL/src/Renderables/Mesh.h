@@ -28,7 +28,7 @@ public:
 
 	//void ReadMaterial(char* materialPath);
 	void SetDefaultShaders();
-	void SetShaders(char * vertexPath, char * fragmentPath, char* materialPath);
+	void SetShaders(char* materialPath);
 	Shader* GetShader();
 	void Draw();
 	void SetupMesh();
@@ -39,4 +39,5 @@ public:
 private:
 	unsigned int VBO, EBO;
 	TextureManager* textureManager;
+	ObjectManager* m_objectManager;
 };

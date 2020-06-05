@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include "ManagerClasses/TextureManager.h"
 #include "ManagerClasses/ObjectManager.h"
+#include "ManagerClasses/ObjectManager.h"
+#include "ManagerClasses/CameraManager.h"
 #include "Mesh.h"
 #include "matrix.hpp"
 #include <iostream>

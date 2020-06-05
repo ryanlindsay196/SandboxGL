@@ -5,12 +5,10 @@ textures
 {
 	albedoMap : Resources/Textures/Rock_Albedo2.png
 	normalMap : Resources/Textures/Rock_Normal.png
+	specularMap : Resources/Textures/Rock_MetallicSmoothness.png
 }
 vec3
 {
-	mat.ambient : 0.4
-	mat.specular : 0.7
-	mat.diffuse : 0.5
 }
 float
 {
