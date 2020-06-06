@@ -25,8 +25,6 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 	this->vertices = vertices;
 	this->indices = indices;
 
-	//TODO: When making the shadermanager (like the textureManager), replace this to search for an existing shader
-	shader = new Shader();
 	if (materialPath)
 		SetShaders(materialPath);
 		//shader->Initialize(textureManager, (char*)"", (char*)"", materialPath);
@@ -95,7 +93,7 @@ void Mesh::SetupMesh()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 	// set the vertex attribute pointers
-	//TODO: modivy vertex attribute pointers based on material/shader?
+	//TODO: modify vertex attribute pointers based on material/shader?
 	// vertex Positions
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);

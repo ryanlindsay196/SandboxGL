@@ -39,6 +39,7 @@ void Entity::Update(float gameTime)
 
 
 	transform = glm::mat4(1);
+	//TODO: Make entity scale affect model components' scale
 	//transform = glm::rotate(transform, 40.1f, rotation);
 	transform = glm::lookAt(position, position + direction, glm::vec3(0, 1, 0));
 
@@ -61,7 +62,6 @@ void Entity::SetParent(Entity * newParent)
 
 void Entity::AddComponent(Component* newComponent)
 {
-	//TODO: complete function
 	if (newComponent != nullptr)
 	{
 		components.push_back(newComponent);

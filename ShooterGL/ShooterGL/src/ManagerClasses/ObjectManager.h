@@ -7,6 +7,8 @@ class CameraManager;
 class ControllerManager;
 class LightManager;
 class ShaderManager;
+//TODO: Remove this
+class ParticleEmitter;
 
 //TODO: include all managers
 struct GLFWwindow;
@@ -21,6 +23,9 @@ public:
 	ControllerManager* controllerManager;
 	LightManager* lightManager;
 	ShaderManager* shaderManager;
+
+	//TODO: Remove this
+	ParticleEmitter* particleEmitter;
 
 	void Initialize(GLFWwindow* window);
 	void Update(float gameTime);

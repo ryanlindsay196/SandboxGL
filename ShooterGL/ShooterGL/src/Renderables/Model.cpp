@@ -114,13 +114,6 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 #pragma endregion
 	LoadModel(modelPath);
-	if(materialPath == "")
-		SetDefaultShaders();
-	//TODO: Else, load shaders from material
-
-	//TODO: Remove these
-	//shader->AddNewTexture((char*)"Resources/Textures/Resume.PNG");
-	//shader->AddNewTexture((char*)"Resources/Textures/Sword_low_Blade_Normal.png");
 
 	offsetTransform = glm::mat4(1);
 	positionOffset = glm::mat4(1);
@@ -266,30 +259,6 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 	return Mesh(m_objectManager, vertices, indices, materialPath, this);
 }
 
-#pragma region DELETE?
-
-void Model::SetDefaultShaders()
-{
-	//if (shader != nullptr)
-	//	delete(shader);
-	//shader = new Shader();
-	//shader->Initialize(m_textureManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl");
-
-}
-
-void Model::SetShaders(char * vertexPath, char * fragmentPath)
-{
-}
-
-void Model::SetVertexShader(char * vertexPath)
-{
-}
-
-void Model::SetFragmentShader(char * fragmentPath)
-{
-}
-#pragma endregion
-
 unsigned int Model::GetLoadedMeshesCount()
 {
 	return m_meshes.size();
@@ -301,13 +270,6 @@ Mesh * Model::GetMesh(unsigned int i)
 		return &m_meshes[i];
 	return nullptr;
 }
-
-//Shader * Model::GetShader()
-//{
-//	//TODO: Remove this function and all references
-//	return nullptr;
-//	//return shader;
-//}
 
 void Model::Update(float gameTime)
 {

@@ -1,9 +1,6 @@
 #include "Controller.h"
 #include "GLFW/glfw3.h"
 
-//TODO: Remove sstream
-#include <sstream>
-
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 float lastX, lastY, xoffset, yoffset;
 bool firstMouse;

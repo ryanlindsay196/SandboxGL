@@ -9,7 +9,7 @@ class EntityManager
 {
 private:
 	ObjectManager* objectManager;
-public://TODO: Remove
+public://TODO: Implement
 	struct EntityProperties
 	{
 		//components
@@ -19,12 +19,12 @@ public://TODO: Remove
 		////children
 		//std::vector<std::string> childEntities;
 	};
-private://TODO: Remove
+private://TODO: Implement
 	//The string is the name of the entity
 	std::unordered_map<std::string, EntityProperties*> entityPropertiesMap;
+	std::vector<Entity*> entities;
 public:
 	std::unordered_map<std::string, Entity*> entitiesByTag;
-	std::vector<Entity*> entities;
 
 	void Initialize(ObjectManager* in_objectManager);
 	//LoadPropsFromPrefabsFile();

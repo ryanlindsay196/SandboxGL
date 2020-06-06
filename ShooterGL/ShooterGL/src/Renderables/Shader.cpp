@@ -226,9 +226,6 @@ void Shader::BindTextures()
 	//glBindTexture(GL_TEXTURE_2D, (GLuint)textures[0]->GetTextureID());
 }
 
-//TODO: Create shader manager cpp and h files that function like the other manager files
-//TODO: Load shader from material file. Materials will have paths to the vertex and fragment shaders, and have all default uniforms set.
-
 void Shader::SetVertexShader(char* vertexPath)
 {
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -321,12 +318,6 @@ void Shader::UseShader()
 	glUseProgram(shaderProgram);
 }
 
-//TODO: REmove this or make it work
-int Shader::GetShaderUniform_vec1(char * uniformName)
-{
-	return 0;
-}
-
 void Shader::SetShaderUniform_vec1(char * uniformName, float uniformValue)
 {
 	glUseProgram(shaderProgram);
@@ -392,6 +383,7 @@ void Shader::SetShaderUniform_veci4(char * uniformName, int x, int y, int z, int
 
 void Shader::SetShaderUniform_mat4fv(char * uniformName, glm::mat4 matrix)
 {
+	glUseProgram(shaderProgram);
 	unsigned int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
 }

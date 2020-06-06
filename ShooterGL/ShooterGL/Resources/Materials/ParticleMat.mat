@@ -1,0 +1,15 @@
+&&VertexShader Shaders/ParticleVertex.glsl
+&&FragmentShader Shaders/ParticleFragment.glsl
+<ATTACH AND LINK SHADER>
+textures
+{
+	sprite :  Resources/Textures/Rick.jpg
+}
+vec2
+{
+	offset: 
+}
+vec4
+{
+	color: 
+}

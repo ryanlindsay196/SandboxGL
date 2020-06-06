@@ -25,11 +25,6 @@ public:
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, char* materialPath);
 	//vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 	
-	void SetDefaultShaders();
-	void SetShaders(char* vertexPath, char* fragmentPath);
-	void SetVertexShader(char* vertexPath);
-	void SetFragmentShader(char* fragmentPath);
-
 	//Shader* GetShader();
 	unsigned int GetLoadedMeshesCount();
 	Mesh* GetMesh(unsigned int i);

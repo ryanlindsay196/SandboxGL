@@ -146,6 +146,7 @@
     <ClCompile Include="src\Renderables\Mesh.cpp" />
     <ClCompile Include="src\Renderables\Model.cpp" />
     <ClCompile Include="src\ManagerClasses\ModelManager.cpp" />
+    <ClCompile Include="src\Renderables\ParticleEmitter.cpp" />
     <ClCompile Include="src\Renderables\Shader.cpp" />
     <ClCompile Include="src\Renderables\Texture.cpp" />
     <ClCompile Include="src\ManagerClasses\TextureManager.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="src\Renderables\Model.h" />
     <ClInclude Include="src\ManagerClasses\ModelManager.h" />
     <ClInclude Include="src\ManagerClasses\ObjectManager.h" />
+    <ClInclude Include="src\Renderables\ParticleEmitter.h" />
     <ClInclude Include="src\Renderables\Shader.h" />
     <ClInclude Include="src\Renderables\Texture.h" />
     <ClInclude Include="src\ManagerClasses\TextureManager.h" />
@@ -228,7 +230,11 @@
     <None Include="Dependencies\Assimp\lib\assimp-vc140-mt.pdb" />
     <None Include="Dependencies\GLM\include\detail\type_vec4.inl" />
     <None Include="Dependencies\GLM\include\detail\type_vec4_simd.inl" />
+    <None Include="Resources\Materials\DefaultMaterial.mat" />
+    <None Include="Resources\Materials\ParticleMat.mat" />
     <None Include="Shaders\FragmentDefault.glsl" />
+    <None Include="Shaders\ParticleFragment.glsl" />
+    <None Include="Shaders\ParticleVertex.glsl" />
     <None Include="Shaders\VertexDefault.glsl" />
   </ItemGroup>
   <ItemGroup>

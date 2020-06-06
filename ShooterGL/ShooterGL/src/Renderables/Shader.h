@@ -22,7 +22,6 @@ public:
 	unsigned int GetShaderProgram();
 	void UseShader();
 
-	int GetShaderUniform_vec1(char* uniformName);
 	void SetShaderUniform_vec1(char* uniformName, float uniformValue);
 	void SetShaderUniform_vec2(char* uniformName, float x, float y);
 	void SetShaderUniform_vec3(char* uniformName, float x, float y, float z);

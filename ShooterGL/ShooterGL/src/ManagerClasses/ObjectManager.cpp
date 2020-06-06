@@ -11,10 +11,9 @@
 #include "LightManager.h"
 #include "ShaderManager.h"
 
-//TODO: Delete this later
-#include "../Renderables/Shader.h"
-//TODO: Delete this later
-//glm::vec3 lightPos;
+#include "../Renderables/ParticleEmitter.h"
+
+#include <iostream>
 
 void ObjectManager::Initialize(GLFWwindow* window)
 {
@@ -31,19 +30,18 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	modelManager->Initialize(this);
 	cameraManager->Initialize(this);
 	lightManager->Initialize();
-	//shaderManager->Initialize();//doesn't exist yet
+	//shaderManager->Initialize();//this function doesn't exist yet
 	controllerManager->Initialize(window);
-	//TODO: Make models scale with entity scale
 	//TODO: Instantiate entities using entity properties loaded from each individual entity file
 	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
 	cameraManager->CreateCamera(entityManager->GetEntity(0));
 	entityManager->GetEntity(0)->AddComponent(controllerManager->CreateController(entityManager->GetEntity(0)));
 	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
 	
-	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(2, 1, 1), nullptr);
-	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(.1f, .1f, .1f));
-	entityManager->entities[1]->AddComponent(lightManager->AddLight(glm::vec3(0), glm::vec3(1, 0, 0), 0.f, glm::vec3(1)));
-	entityManager->entities[1]->AddComponent(modelManager->GetModel(1));
+	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
+	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(.001f, .001f, .01f));
+	entityManager->GetEntity(1)->AddComponent(lightManager->AddLight(glm::vec3(0), glm::vec3(1, 0, 0), 0.f, glm::vec3(1)));
+	entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));
 	
 	
 	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.2f, 1.2f, 1.2f));
@@ -51,7 +49,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 
 	//TODO: Make models that are children of an entity rotate with that entity
 	
-	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, -0.f, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
+	//entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, -0.f, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(15, 1, 1), nullptr);
 	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), 0.0f, glm::vec3(0.f, 0.f, 0.f));
 	//entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));
 
@@ -89,12 +87,16 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	//for(unsigned int i = 1; i < modelManager->LoadedModelsCount(); i++)
 	//	entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(i));
 #pragma endregion
-
+	particleEmitter = new ParticleEmitter();
+	particleEmitter->Initialize(this, (char*)"Resources/Materials/ParticleMat.mat");
+	entityManager->GetEntity(1)->AddComponent(particleEmitter);
 
 }
 
 void ObjectManager::Update(float gameTime)
 {
+	//TODO: make entities in the entityManager private;
+	//entityManager->GetEntity(1)->SetEulerAngles(entityManager->GetEntity(1)->GetEulerAngles() + glm::vec3(0, 1, 0));
 	//cameraManager->GetCamera(0)->Rotate(glm::vec3(1, 0, 0), 0.02f);
 	//cameraManager->GetCamera(0)->Translate(glm::vec3(0, 0, -0.011f));
 	//entityManager->GetEntity(0)->Rotate(glm::vec3(1, 0, 0));
@@ -104,7 +106,10 @@ void ObjectManager::Update(float gameTime)
 	//entityManager->GetEntity(0)->Translate(glm::vec3(0.f, 0.001f, 0.f));
 
 	entityManager->GetEntity(1)->SetTranslation(glm::vec3(7 * (float)sin((float)glfwGetTime()), 0, 7 * (float)cos((float)glfwGetTime())));
-
+	//entityManager->GetEntity(1)->SetTranslation(glm::vec3(2.f, 0.f, 0.f));
+	glm::vec3 newPos = -entityManager->GetEntity(0)->GetTranslation() - entityManager->GetEntity(0)->GetDirection();
+	entityManager->GetEntity(1)->SetTranslation(newPos);
+	//entityManager->GetEntity(1)->SetTranslation(entityManager->GetEntity(0)->GetTranslation() + (entityManager->GetEntity(0)->GetDirection() * glm::vec3(-3)));
 	modelManager->UpdateModels(gameTime);
 	entityManager->Update(gameTime);
 	cameraManager->Update();
@@ -113,6 +118,7 @@ void ObjectManager::Update(float gameTime)
 	//modelManager->GetModel(3)->RotateQuaternion(glm::vec3(0, 1, 0), 0.2f);
 	//lightPos += glm::vec3(0, 0, -gameTime);
 
+	particleEmitter->Update(gameTime);
 }
 
 void ObjectManager::Render()
@@ -137,4 +143,6 @@ void ObjectManager::Render()
 		}
 	}
 	modelManager->RenderModels();
+
+	particleEmitter->Render();
 }

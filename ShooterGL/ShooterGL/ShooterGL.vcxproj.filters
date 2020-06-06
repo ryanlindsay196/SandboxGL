@@ -78,6 +78,9 @@
     <ClCompile Include="src\ManagerClasses\ShaderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderables\ParticleEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\stb_image.h">
@@ -263,6 +266,9 @@
     <ClInclude Include="src\ManagerClasses\ShaderManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderables\ParticleEmitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexDefault.glsl" />
@@ -298,6 +304,10 @@
     <None Include="Dependencies\GLM\include\detail\type_vec4_simd.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Shaders\ParticleVertex.glsl" />
+    <None Include="Shaders\ParticleFragment.glsl" />
+    <None Include="Resources\Materials\ParticleMat.mat" />
+    <None Include="Resources\Materials\DefaultMaterial.mat" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\Assimp\lib\assimp-vc140-mt.lib" />
