@@ -3,6 +3,8 @@
 #include "ManagerClasses/ShaderManager.h"
 //#include "GLFW/glfw3.h"
 #include <glad/glad.h>
+#include "ManagerClasses/ObjectManager.h"
+#include "ManagerClasses/CameraManager.h"
 
 void ParticleEmitter::Initialize(ObjectManager * objectManager, char* materialPath)
 {
@@ -28,6 +30,7 @@ void ParticleEmitter::Initialize(ObjectManager * objectManager, char* materialPa
 	glBindVertexArray(0);
 
 	m_shader = objectManager->shaderManager->LoadNewShader(materialPath, objectManager);
+	m_objectManager = objectManager;
 	//create the correct amount of particle instances
 	for (unsigned int i = 0; i < totalParticleCount; ++i)
 	{
@@ -66,8 +69,9 @@ void ParticleEmitter::Render()
 	{
 		if (particle.Life > 0.0f)
 		{
-			m_shader->SetShaderUniform_vec2((char*)"offset", particle.Position.x, particle.Position.y);
+			m_shader->SetShaderUniform_vec3((char*)"offset", particle.Position.x, particle.Position.y, particle.Position.z);
 			m_shader->SetShaderUniform_vec4((char*)"color", particle.Color.r, particle.Color.g, particle.Color.b, particle.Color.a);
+			m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
 			m_shader->BindTextures();
 			glBindVertexArray(VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -104,7 +108,7 @@ void ParticleEmitter::RespawnParticle(Particle * particle, glm::vec3 offset)
 	float random = ((rand() % 100) - 50) / 10.0f;
 	float rColor = 0.5f + ((rand() % 100) / 100.0f);
 	particle->Position = componentParent->GetTranslation() + random + offset;
-	particle->Color = glm::vec4(rColor, rColor, rColor, 1.0f);
+	particle->Color = glm::vec4(rColor, rColor, rColor, 255.0f);
 	particle->Life = 1.0f;
 	//TODO: Load velocity values from file
 	particle->Velocity = glm::vec3(rColor) * 2.1f;

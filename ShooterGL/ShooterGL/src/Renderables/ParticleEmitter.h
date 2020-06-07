@@ -12,7 +12,7 @@ struct Particle {
 	float Life;
 
 	Particle()
-		:Position(0.0f), Velocity(1.0f), Color(1.0f), Life(0.0f) {}
+		:Position(0.0f), Velocity(1.0f), Color(1.0f), Life(1.0f) {}
 };
 
 class ParticleEmitter : public WorldComponent
@@ -34,4 +34,5 @@ private:
 	unsigned int FirstUnusedParticle();
 	void RespawnParticle(Particle *particle, glm::vec3 offset);
 	Shader* m_shader;
+	ObjectManager* m_objectManager;
 };
