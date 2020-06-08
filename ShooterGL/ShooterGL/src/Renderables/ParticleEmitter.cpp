@@ -5,8 +5,14 @@
 #include <glad/glad.h>
 #include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/CameraManager.h"
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <gtc/random.hpp>
+//TODO: potentially remove pragma warning disable : 4996
+#pragma warning (disable : 4996)
 
-void ParticleEmitter::Initialize(ObjectManager * objectManager, char* materialPath)
+void ParticleEmitter::Initialize(ObjectManager * objectManager, char* particlePath)
 {
 	float particle_quad[] = {
 	0.0f, 1.0f, 0.0f, 1.0f,
@@ -29,34 +35,124 @@ void ParticleEmitter::Initialize(ObjectManager * objectManager, char* materialPa
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glBindVertexArray(0);
 
-	m_shader = objectManager->shaderManager->LoadNewShader(materialPath, objectManager);
 	m_objectManager = objectManager;
+	LoadParticleSettings(particlePath);
 	//create the correct amount of particle instances
-	for (unsigned int i = 0; i < totalParticleCount; ++i)
+	for (unsigned int i = 0; i < spawnerSettings.maxParticles; ++i)
 	{
 		particles.push_back(Particle());
 	}
 
 }
 
+void ParticleEmitter::LoadParticleSettings(char * particlePath)
+{
+	std::ifstream materialFile(particlePath);
+
+	std::string line;
+	while (getline(materialFile, line))
+	{
+		line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+		line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+		std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line, ":");
+		if (keyValuePair.first == "material")
+			m_shader = m_objectManager->shaderManager->LoadNewShader(keyValuePair.second, m_objectManager);
+		else if (keyValuePair.first == "spawnsPerSecond")
+			spawnerSettings.spawnsPerSecond = strtof(keyValuePair.second.c_str(), nullptr);
+		else if (keyValuePair.first == "particlesPerSpawn")
+			spawnerSettings.particlesPerSpawn = strtof(keyValuePair.second.c_str(), nullptr);
+		else if (keyValuePair.first == "minLifeTime")
+			spawnerSettings.minLifeTime = strtof(keyValuePair.second.c_str(), nullptr);
+		else if (keyValuePair.first == "maxLifeTime")
+			spawnerSettings.maxLifeTime = strtof(keyValuePair.second.c_str(), nullptr);
+		else if (keyValuePair.first == "maxParticles")
+			spawnerSettings.maxParticles = strtof(keyValuePair.second.c_str(), nullptr);
+		else if (keyValuePair.first == "spawnerShape")
+		{
+			if (keyValuePair.second == "sphere")
+				spawnerSettings.spawnerShape = SpawnerShape::sphere;
+			else if (keyValuePair.second == "rectangle")
+				spawnerSettings.spawnerShape = SpawnerShape::rectangle;
+		}
+		else if (keyValuePair.first == "spawnerDimensions")
+			spawnerSettings.spawnerDimensions = ParseVector(keyValuePair.second);
+		else if (keyValuePair.first == "spawnerOffset")
+			spawnerSettings.spawnerDimensions = ParseVector(keyValuePair.second);
+		else if (keyValuePair.first == "velocityShape")
+		{
+			if (keyValuePair.second == "sphere")
+				spawnerSettings.velocityShape = SpawnerShape::sphere;
+			else if (keyValuePair.second == "rectangle")
+				spawnerSettings.velocityShape = SpawnerShape::rectangle;
+		}
+		else if (keyValuePair.first == "velocityDimensions")
+			spawnerSettings.velocityDimensions = ParseVector(keyValuePair.second);
+		else if (keyValuePair.first == "velocityOffset")
+			spawnerSettings.velocityDimensions = ParseVector(keyValuePair.second);
+		else if (keyValuePair.first == "accelerationShape")
+		{
+			if (keyValuePair.second == "sphere")
+				spawnerSettings.accelerationShape = SpawnerShape::sphere;
+			else if (keyValuePair.second == "rectangle")
+				spawnerSettings.accelerationShape = SpawnerShape::rectangle;
+		}
+		else if (keyValuePair.first == "accelerationDimensions")
+			spawnerSettings.accelerationDimensions = ParseVector(keyValuePair.second);
+		else if (keyValuePair.first == "accelerationOffset")
+			spawnerSettings.accelerationDimensions = ParseVector(keyValuePair.second);
+	}
+	materialFile.close();
+}
+
+std::pair<std::string, std::string> ParticleEmitter::GenerateKeyValuePair(std::string line, std::string delimiter)
+{
+	std::pair<std::string, std::string> newKeyValuePair;
+	newKeyValuePair.second = line.substr(line.find_first_of(":") + 1);
+	newKeyValuePair.first = strtok((char*)line.c_str(), delimiter.c_str());
+	return newKeyValuePair;
+}
+
+glm::vec3 ParticleEmitter::ParseVector(std::string line)
+{
+	if (line.find(",") == line.npos)
+		return glm::vec3(strtof((char*)line.c_str(), nullptr));
+
+	float x, y, z;
+	std::string xLine, yLine, zLine;
+	xLine = yLine = zLine = line;
+
+	xLine = strtok((char*)xLine.c_str(), ",");
+
+	yLine = yLine.substr(yLine.find_first_of(",") + 1);
+	yLine = strtok((char*)yLine.c_str(), ",");
+
+	zLine = zLine.substr(zLine.find_last_of(",") + 1);
+	//zLine = strtok((char*)zLine.c_str(), ",");
+
+	x = strtof((char*)xLine.c_str(), nullptr);
+	y = strtof((char*)yLine.c_str(), nullptr);
+	z = strtof((char*)zLine.c_str(), nullptr);
+	return glm::vec3(x, y, z);
+}
+
 void ParticleEmitter::Update(float gameTime)
 {
 	//add new particles
-	for (unsigned int i = 0; i < newParticlesPerSecond * gameTime; ++i)
+	for (unsigned int i = 0; i < spawnerSettings.particlesPerSpawn; ++i)
 	{
 		int unusedParticle = FirstUnusedParticle();
-		RespawnParticle(&particles[unusedParticle], glm::vec3(0, 0, 0));
-		
-		//update all particles
-		for (unsigned int i = 0; i < totalParticleCount; ++i)
-		{
-			Particle &p = particles[i];
-			p.Life -= gameTime; // reduce life
-			if (p.Life > 0.0f)
-			{ // particle is alife, thus update
-				p.Position -= p.Velocity * gameTime;
-				p.Color.a -= gameTime * 2.5f;
-			}
+		RespawnParticle(&particles[unusedParticle]);
+	}
+	
+	//update all particles
+	for (unsigned int i = 0; i < spawnerSettings.maxParticles; ++i)
+	{
+		Particle &p = particles[i];
+		p.Life -= gameTime; // reduce life
+		if (p.Life > 0.0f)
+		{ // particle is alife, thus update
+			p.Position -= p.Velocity * gameTime;
+			p.Color.a -= gameTime * 2.5f;
 		}
 	}
 }
@@ -87,7 +183,7 @@ void ParticleEmitter::Render()
 unsigned int ParticleEmitter::FirstUnusedParticle()
 {
 	//search from last used particle, this will usually return almost instantly
-	for (unsigned int i = lastUsedParticle; i < totalParticleCount; ++i)
+	for (unsigned int i = lastUsedParticle; i < spawnerSettings.maxParticles; ++i)
 	{
 		if (particles[i].Life <= 0.0f) {
 			lastUsedParticle = i;
@@ -106,13 +202,17 @@ unsigned int ParticleEmitter::FirstUnusedParticle()
 	return 0;
 }
 
-void ParticleEmitter::RespawnParticle(Particle * particle, glm::vec3 offset)
+void ParticleEmitter::RespawnParticle(Particle * particle)
 {
-	float random = 0 * ((rand() % 100) - 50) / 10.0f;
-	float rColor = 0.5f + ((rand() % 100) / 100.0f);
-	particle->Position = -componentParent->GetTranslation() + random + offset;
-	particle->Color = glm::vec4(rColor, rColor, rColor, 1.0f);
+	//float random = 0 * ((rand() % 100) - 50) / 10.0f;
+	//float rColor = 0.5f + ((rand() % 100) / 100.0f);
+
+	//Randomly positioned inside the area of the shape (rect/sphere)
+	particle->Position = -componentParent->GetTranslation() + 
+		(glm::sphericalRand(glm::length(spawnerSettings.spawnerDimensions)) * spawnerSettings.spawnerDimensions) +
+		spawnerSettings.spawnerOffset * glm::vec3(0);
+	//particle->Color = glm::vec4(rColor, rColor, rColor, 1.0f);
 	particle->Life = 1.0f;
 	//TODO: Load velocity values from file
-	particle->Velocity = glm::vec3(0, 1, 0) * 2.1f;
+	particle->Velocity = glm::vec3(0, 0, 0) * 2.1f;
 }

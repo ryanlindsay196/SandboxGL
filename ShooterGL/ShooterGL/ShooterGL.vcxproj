@@ -232,6 +232,7 @@
     <None Include="Dependencies\GLM\include\detail\type_vec4_simd.inl" />
     <None Include="Resources\Materials\DefaultMaterial.mat" />
     <None Include="Resources\Materials\ParticleMat.mat" />
+    <None Include="Resources\ParticleSystems\ParticleDefault.part" />
     <None Include="Shaders\FragmentDefault.glsl" />
     <None Include="Shaders\ParticleFragment.glsl" />
     <None Include="Shaders\ParticleVertex.glsl" />
