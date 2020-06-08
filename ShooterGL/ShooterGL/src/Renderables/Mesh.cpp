@@ -54,6 +54,7 @@ Shader * Mesh::GetShader()
 	return shader;
 }
 
+//TODO: Change name to Render()
 void Mesh::Draw()
 {
 	//if (parentMesh->componentParent != nullptr)

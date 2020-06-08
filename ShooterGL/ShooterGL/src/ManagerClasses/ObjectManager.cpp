@@ -39,7 +39,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
 	
 	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
-	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(.001f, .001f, .01f));
+	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(.1f, .1f, .1f));
 	entityManager->GetEntity(1)->AddComponent(lightManager->AddLight(glm::vec3(0), glm::vec3(1, 0, 0), 0.f, glm::vec3(1)));
 	entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));
 	
@@ -107,8 +107,8 @@ void ObjectManager::Update(float gameTime)
 
 	entityManager->GetEntity(1)->SetTranslation(glm::vec3(7 * (float)sin((float)glfwGetTime()), 0, 7 * (float)cos((float)glfwGetTime())));
 	//entityManager->GetEntity(1)->SetTranslation(glm::vec3(2.f, 0.f, 0.f));
-	glm::vec3 newPos = -entityManager->GetEntity(0)->GetTranslation() - entityManager->GetEntity(0)->GetDirection();
-	entityManager->GetEntity(1)->SetTranslation(newPos);
+	//glm::vec3 newPos = -entityManager->GetEntity(0)->GetTranslation() - entityManager->GetEntity(0)->GetDirection();
+	//entityManager->GetEntity(1)->SetTranslation(newPos);
 	//entityManager->GetEntity(1)->SetTranslation(entityManager->GetEntity(0)->GetTranslation() + (entityManager->GetEntity(0)->GetDirection() * glm::vec3(-3)));
 	modelManager->UpdateModels(gameTime);
 	entityManager->Update(gameTime);

@@ -3,7 +3,7 @@
 <ATTACH AND LINK SHADER>
 textures
 {
-	sprite :  Resources/Textures/Rick.jpg
+	sprite :  Resources/Textures/Rock_Albedo2.png
 }
 vec2
 {

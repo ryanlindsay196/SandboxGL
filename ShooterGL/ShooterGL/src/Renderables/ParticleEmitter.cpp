@@ -65,13 +65,16 @@ void ParticleEmitter::Render()
 {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	m_shader->UseShader();
+	m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
+	m_shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
 	for (Particle particle : particles)
 	{
 		if (particle.Life > 0.0f)
 		{
-			m_shader->SetShaderUniform_vec3((char*)"offset", particle.Position.x, particle.Position.y, particle.Position.z);
+			m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), particle.Position));
+			//m_shader->SetShaderUniform_vec3((char*)"offset", particle.Position.x, particle.Position.y, particle.Position.z);
 			m_shader->SetShaderUniform_vec4((char*)"color", particle.Color.r, particle.Color.g, particle.Color.b, particle.Color.a);
-			m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
+			m_shader->SetShaderUniform_vec4((char*)"color", 0, 1, 1, 1);
 			m_shader->BindTextures();
 			glBindVertexArray(VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -105,11 +108,11 @@ unsigned int ParticleEmitter::FirstUnusedParticle()
 
 void ParticleEmitter::RespawnParticle(Particle * particle, glm::vec3 offset)
 {
-	float random = ((rand() % 100) - 50) / 10.0f;
+	float random = 0 * ((rand() % 100) - 50) / 10.0f;
 	float rColor = 0.5f + ((rand() % 100) / 100.0f);
-	particle->Position = componentParent->GetTranslation() + random + offset;
-	particle->Color = glm::vec4(rColor, rColor, rColor, 255.0f);
+	particle->Position = -componentParent->GetTranslation() + random + offset;
+	particle->Color = glm::vec4(rColor, rColor, rColor, 1.0f);
 	particle->Life = 1.0f;
 	//TODO: Load velocity values from file
-	particle->Velocity = glm::vec3(rColor) * 2.1f;
+	particle->Velocity = glm::vec3(0, 1, 0) * 2.1f;
 }
