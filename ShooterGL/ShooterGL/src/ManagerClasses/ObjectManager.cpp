@@ -95,6 +95,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 
 void ObjectManager::Update(float gameTime)
 {
+	std::cout << 1 / gameTime << std::endl;
 	//TODO: make entities in the entityManager private;
 	//entityManager->GetEntity(1)->SetEulerAngles(entityManager->GetEntity(1)->GetEulerAngles() + glm::vec3(0, 1, 0));
 	//cameraManager->GetCamera(0)->Rotate(glm::vec3(1, 0, 0), 0.02f);
