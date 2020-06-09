@@ -55,4 +55,5 @@ private:
 	void RespawnParticle(Particle *particle);
 	Shader* m_shader;
 	ObjectManager* m_objectManager;
+	float timeUntilSpawn;
 };

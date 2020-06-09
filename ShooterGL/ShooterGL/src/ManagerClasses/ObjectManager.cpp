@@ -106,7 +106,7 @@ void ObjectManager::Update(float gameTime)
 	//entityManager->GetEntity(0)->Translate(glm::vec3(0.f, 0.001f, 0.f));
 
 	entityManager->GetEntity(1)->SetTranslation(glm::vec3(7 * (float)sin((float)glfwGetTime()), 0, 7 * (float)cos((float)glfwGetTime())));
-	entityManager->GetEntity(1)->SetTranslation(glm::vec3(2.f, 0.f, 0.f));
+	entityManager->GetEntity(1)->SetTranslation(glm::vec3(4.f, 0.f, 0.f));
 	//glm::vec3 newPos = -entityManager->GetEntity(0)->GetTranslation() - entityManager->GetEntity(0)->GetDirection();
 	//entityManager->GetEntity(1)->SetTranslation(newPos);
 	//entityManager->GetEntity(1)->SetTranslation(entityManager->GetEntity(0)->GetTranslation() + (entityManager->GetEntity(0)->GetDirection() * glm::vec3(-3)));

@@ -77,7 +77,7 @@ void ParticleEmitter::LoadParticleSettings(char * particlePath)
 		else if (keyValuePair.first == "spawnerDimensions")
 			spawnerSettings.spawnerDimensions = ParseVector(keyValuePair.second);
 		else if (keyValuePair.first == "spawnerOffset")
-			spawnerSettings.spawnerDimensions = ParseVector(keyValuePair.second);
+			spawnerSettings.spawnerOffset = ParseVector(keyValuePair.second);
 		else if (keyValuePair.first == "velocityShape")
 		{
 			if (keyValuePair.second == "sphere")
@@ -88,7 +88,7 @@ void ParticleEmitter::LoadParticleSettings(char * particlePath)
 		else if (keyValuePair.first == "velocityDimensions")
 			spawnerSettings.velocityDimensions = ParseVector(keyValuePair.second);
 		else if (keyValuePair.first == "velocityOffset")
-			spawnerSettings.velocityDimensions = ParseVector(keyValuePair.second);
+			spawnerSettings.velocityOffset = ParseVector(keyValuePair.second);
 		else if (keyValuePair.first == "accelerationShape")
 		{
 			if (keyValuePair.second == "sphere")
@@ -99,7 +99,7 @@ void ParticleEmitter::LoadParticleSettings(char * particlePath)
 		else if (keyValuePair.first == "accelerationDimensions")
 			spawnerSettings.accelerationDimensions = ParseVector(keyValuePair.second);
 		else if (keyValuePair.first == "accelerationOffset")
-			spawnerSettings.accelerationDimensions = ParseVector(keyValuePair.second);
+			spawnerSettings.accelerationOffset = ParseVector(keyValuePair.second);
 	}
 	materialFile.close();
 }
@@ -137,11 +137,17 @@ glm::vec3 ParticleEmitter::ParseVector(std::string line)
 
 void ParticleEmitter::Update(float gameTime)
 {
+	timeUntilSpawn -= gameTime;
 	//add new particles
-	for (unsigned int i = 0; i < spawnerSettings.particlesPerSpawn; ++i)
+	if (timeUntilSpawn <= 0)
 	{
-		int unusedParticle = FirstUnusedParticle();
-		RespawnParticle(&particles[unusedParticle]);
+		timeUntilSpawn = 1 / spawnerSettings.spawnsPerSecond;
+		for (unsigned int i = 0; i < spawnerSettings.particlesPerSpawn; ++i)
+		{
+			int unusedParticle = FirstUnusedParticle();
+			RespawnParticle(&particles[unusedParticle]);
+		}
+
 	}
 	
 	//update all particles
@@ -208,11 +214,12 @@ void ParticleEmitter::RespawnParticle(Particle * particle)
 	//float rColor = 0.5f + ((rand() % 100) / 100.0f);
 
 	//Randomly positioned inside the area of the shape (rect/sphere)
-	particle->Position = -componentParent->GetTranslation() + 
+	particle->Position = -componentParent->GetTranslation() +
 		(glm::sphericalRand(glm::length(spawnerSettings.spawnerDimensions)) * spawnerSettings.spawnerDimensions) +
-		spawnerSettings.spawnerOffset * glm::vec3(0);
+		spawnerSettings.spawnerOffset;
 	//particle->Color = glm::vec4(rColor, rColor, rColor, 1.0f);
-	particle->Life = 1.0f;
+	particle->Life = glm::linearRand(spawnerSettings.minLifeTime, spawnerSettings.maxLifeTime);
 	//TODO: Load velocity values from file
-	particle->Velocity = glm::vec3(0, 0, 0) * 2.1f;
+	particle->Velocity = (glm::sphericalRand(glm::length(spawnerSettings.velocityDimensions)) * spawnerSettings.velocityDimensions) +
+		spawnerSettings.velocityOffset;
 }

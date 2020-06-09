@@ -1,15 +1,15 @@
 material : Resources/Materials/ParticleMat.mat
-spawnsPerSecond : 1
-particlesPerSpawn : 2
+spawnsPerSecond : 8
+particlesPerSpawn : 90
 minLifeTime : 2
 maxLifeTime : 3
-maxParticles : 500
+maxParticles : 1200
 spawnerShape : sphere
-spawnerDimensions : 2,33,1
-spawnerOffset : 0,1,0
+spawnerDimensions : 0.6,0.6,0.6
+spawnerOffset : 0,0.2,0
 velocityShape : sphere
-velocityDimensions : 0,0.5,0
-velocityOffset : 0,0.5,0
+velocityDimensions : 0.2,0.5,0
+velocityOffset : 0,-0.3,0
 accelerationShape: rectangle
 accelerationDimensions : 0,1,0
 accelerationOffset : 0,-1,0
