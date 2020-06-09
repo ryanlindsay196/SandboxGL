@@ -9,6 +9,7 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform vec2 offset;
 uniform vec4 color;
+uniform vec2 size;
 
 void main()
 {
@@ -16,5 +17,5 @@ void main()
 	TexCoords = vertex.zw;
 	ParticleColor = color;
 	//gl_Position = projection * vec4((vertex.xy * scale) + offset, 1.0);
-	gl_Position = projection * view * position * vec4((vertex.xy * scale), 0.0 , 1.0);
+	gl_Position = projection * view * position * vec4((vertex.xy * size), 0.0 , 1.0);
 }

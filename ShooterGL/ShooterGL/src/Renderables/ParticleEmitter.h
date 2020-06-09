@@ -9,7 +9,8 @@ class ShaderManager;
 struct Particle {
 	glm::vec3 Position, Velocity, Acceleration;
 	glm::vec4 Color;
-	float Life;
+	glm::vec3 Size;
+	float Life, StartLife;
 
 	Particle()
 		:Position(0.0f), Velocity(1.0f), Color(1.0f), Life(1.0f) {}
@@ -33,6 +34,8 @@ struct SpawnerSettings
 	SpawnerShape accelerationShape;
 	glm::vec3 accelerationDimensions;
 	glm::vec3 accelerationOffset;
+	glm::vec3 startSize;
+	glm::vec3 endSize;
 };
 
 class ParticleEmitter : public WorldComponent

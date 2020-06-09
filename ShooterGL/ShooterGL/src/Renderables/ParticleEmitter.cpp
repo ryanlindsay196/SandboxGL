@@ -100,6 +100,10 @@ void ParticleEmitter::LoadParticleSettings(char * particlePath)
 			spawnerSettings.accelerationDimensions = ParseVector(keyValuePair.second);
 		else if (keyValuePair.first == "accelerationOffset")
 			spawnerSettings.accelerationOffset = ParseVector(keyValuePair.second);
+		else if (keyValuePair.first == "startSize")
+			spawnerSettings.startSize = ParseVector(keyValuePair.second);
+		else if (keyValuePair.first == "endSize")
+			spawnerSettings.endSize = ParseVector(keyValuePair.second);
 	}
 	materialFile.close();
 }
@@ -156,9 +160,12 @@ void ParticleEmitter::Update(float gameTime)
 		Particle &p = particles[i];
 		p.Life -= gameTime; // reduce life
 		if (p.Life > 0.0f)
-		{ // particle is alife, thus update
+		{ // particle is alive, thus update
 			p.Position -= p.Velocity * gameTime;
 			p.Color.a -= gameTime * 2.5f;
+			p.Velocity -= p.Acceleration * gameTime;
+			p.Size = (spawnerSettings.startSize * (p.Life / p.StartLife)) +
+				(spawnerSettings.endSize * (1.f-(p.Life / p.StartLife)));
 		}
 	}
 }
@@ -176,7 +183,7 @@ void ParticleEmitter::Render()
 			m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), particle.Position));
 			//m_shader->SetShaderUniform_vec3((char*)"offset", particle.Position.x, particle.Position.y, particle.Position.z);
 			m_shader->SetShaderUniform_vec4((char*)"color", particle.Color.r, particle.Color.g, particle.Color.b, particle.Color.a);
-			m_shader->SetShaderUniform_vec4((char*)"color", 0, 1, 1, 1);
+			m_shader->SetShaderUniform_vec2((char*)"size", particle.Size.x, particle.Size.y);
 			m_shader->BindTextures();
 			glBindVertexArray(VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -219,7 +226,13 @@ void ParticleEmitter::RespawnParticle(Particle * particle)
 		spawnerSettings.spawnerOffset;
 	//particle->Color = glm::vec4(rColor, rColor, rColor, 1.0f);
 	particle->Life = glm::linearRand(spawnerSettings.minLifeTime, spawnerSettings.maxLifeTime);
-	//TODO: Load velocity values from file
+
 	particle->Velocity = (glm::sphericalRand(glm::length(spawnerSettings.velocityDimensions)) * spawnerSettings.velocityDimensions) +
 		spawnerSettings.velocityOffset;
+
+
+	particle->Acceleration = (glm::sphericalRand(glm::length(spawnerSettings.accelerationDimensions)) * spawnerSettings.accelerationDimensions) +
+		spawnerSettings.accelerationOffset;
+
+	particle->StartLife = particle->Life;
 }
