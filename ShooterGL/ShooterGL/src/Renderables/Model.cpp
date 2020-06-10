@@ -303,7 +303,50 @@ void Model::Render()
 	//}
 	////Drawing code (in render loop)
 	//glUseProgram(shader->GetShaderProgram());
-	
+	glm::vec3 pointLightPositions[] = {
+	glm::vec3(-1.7f,  0.2f,  2.0f),
+	glm::vec3(2.3f, -3.3f, -4.0f),
+	glm::vec3(-4.0f,  2.0f, -12.0f),
+	glm::vec3(0.0f,  0.0f, -3.0f)
+	};
+
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].constant", 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.direction", -0.2f, -1.0f, -0.3f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.ambient", 0.05f, 0.05f, 0.05f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.specular", 0.5f, 0.5f, 0.5f);
+	// point light 1
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[0].position", pointLightPositions[0]);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].constant", 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].linear", 0.09);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].quadratic", 0.032);
+	// point light 2
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[1].position", pointLightPositions[1]);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[1].constant", 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[1].linear", 0.09);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[1].quadratic", 0.032);
+	// point light 3
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[2].position", pointLightPositions[2]);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[2].constant", 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[2].linear", 0.09);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[2].quadratic", 0.032);
+	// point light 4
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[3].position", pointLightPositions[3]);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+	m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].constant", 1.0f);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].linear", 0.09);
+	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].quadratic", 0.032);
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
 		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
