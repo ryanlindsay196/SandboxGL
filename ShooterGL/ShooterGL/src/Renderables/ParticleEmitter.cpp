@@ -9,7 +9,6 @@
 #include <sstream>
 #include <algorithm>
 #include <gtc/random.hpp>
-#include <array>
 //TODO: potentially remove pragma warning disable : 4996
 #pragma warning (disable : 4996)
 
@@ -24,21 +23,20 @@ void ParticleEmitter::Initialize(ObjectManager * objectManager, char* particlePa
 	1.0f, 1.0f, 1.0f, 1.0f,
 	1.0f, 0.0f, 1.0f, 0.0f
 	};
-	m_objectManager = objectManager;
-	LoadParticleSettings(particlePath);
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glBindVertexArray(VAO);
 	//fill mesh buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad) * spawnerSettings.maxParticles, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
 	//set mesh attributes
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleVertex), (const void*)offsetof(ParticleVertex, position));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glBindVertexArray(0);
 
+	m_objectManager = objectManager;
+	LoadParticleSettings(particlePath);
 	//create the correct amount of particle instances
 	for (unsigned int i = 0; i < spawnerSettings.maxParticles; ++i)
 	{
@@ -170,51 +168,6 @@ void ParticleEmitter::Update(float gameTime)
 				(spawnerSettings.endSize * (1.f-(p.Life / p.StartLife)));
 		}
 	}
-
-	//set dynamic vertex buffer
-	float particle_quad[] = {
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f
-	};
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(particle_quad), particle_quad);
-}
-
-static std::array<ParticleVertex, 6> CreateQuad(float x, float y)
-{
-	float size = 1.0f;
-
-	ParticleVertex v0;
-	v0.position.x = x;
-	v0.position.y = y + size;
-	v0.texCoords = { 0.0f, 1.0f };
-
-	ParticleVertex v1;
-	v1.position = { x + size, y };
-	v1.texCoords = { 1.0f, 0.0f };
-
-	ParticleVertex v2;
-	v2.position = { x, y };
-	v2.texCoords = { 0.0f, 0.0f };
-
-	ParticleVertex v3;
-	v3.position = { x, y + size};
-	v3.texCoords = { 0.0f, 1.0f };
-
-	ParticleVertex v4;
-	v4.position = { x + size, y + size};
-	v4.texCoords = { 1.0f, 1.0f };
-
-	ParticleVertex v5;
-	v5.position = { x + size, y };
-	v5.texCoords = { 1.0f, 0.0f };
-
-	return { v0, v1, v2, v3, v4, v5 };
 }
 
 void ParticleEmitter::Render()

@@ -16,12 +16,6 @@ struct Particle {
 		:Position(0.0f), Velocity(1.0f), Color(1.0f), Life(1.0f) {}
 };
 
-struct ParticleVertex
-{
-	glm::vec2 position;
-	glm::vec2 texCoords;
-};
-
 enum SpawnerShape { sphere, rectangle };
 
 struct SpawnerSettings
