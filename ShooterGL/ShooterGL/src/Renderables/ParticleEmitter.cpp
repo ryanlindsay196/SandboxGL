@@ -15,7 +15,7 @@
 
 void ParticleEmitter::Initialize(ObjectManager * objectManager, char* particlePath)
 {
-	float particle_quad[] = {
+	/*float particle_quad[] = {
 	0.0f, 1.0f, 0.0f, 1.0f,
 	1.0f, 0.0f, 1.0f, 0.0f,
 	0.0f, 0.0f, 0.0f, 0.0f,
@@ -23,7 +23,7 @@ void ParticleEmitter::Initialize(ObjectManager * objectManager, char* particlePa
 	0.0f, 1.0f, 0.0f, 1.0f,
 	1.0f, 1.0f, 1.0f, 1.0f,
 	1.0f, 0.0f, 1.0f, 0.0f
-	};
+	};*/
 	m_objectManager = objectManager;
 	LoadParticleSettings(particlePath);
 
@@ -33,7 +33,7 @@ void ParticleEmitter::Initialize(ObjectManager * objectManager, char* particlePa
 	//fill mesh buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad) * spawnerSettings.maxParticles, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(ParticleVertex) * spawnerSettings.maxParticles * 6, nullptr, GL_DYNAMIC_DRAW);
 	//set mesh attributes
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleVertex), (const void*)offsetof(ParticleVertex, position));
@@ -141,6 +141,39 @@ glm::vec3 ParticleEmitter::ParseVector(std::string line)
 	return glm::vec3(x, y, z);
 }
 
+static std::array<ParticleVertex, 6> CreateQuad(float x, float y)
+{
+	float size = 1.0f;
+
+	ParticleVertex v0;
+	v0.position.x = x;
+	v0.position.y = y + size;
+	v0.texCoords = { 0.0f, 1.0f };
+
+	ParticleVertex v1;
+	v1.position = { x + size, y };
+	v1.texCoords = { 1.0f, 0.0f };
+
+	ParticleVertex v2;
+	v2.position = { x, y };
+	v2.texCoords = { 0.0f, 0.0f };
+
+	ParticleVertex v3;
+	v3.position = { x, y + size };
+	v3.texCoords = { 0.0f, 1.0f };
+
+	ParticleVertex v4;
+	v4.position = { x + size, y + size };
+	v4.texCoords = { 1.0f, 1.0f };
+
+	ParticleVertex v5;
+	v5.position = { x + size, y };
+	v5.texCoords = { 1.0f, 0.0f };
+
+	return { v0, v1, v2, v3, v4, v5 };
+}
+
+
 void ParticleEmitter::Update(float gameTime)
 {
 	timeUntilSpawn -= gameTime;
@@ -172,71 +205,55 @@ void ParticleEmitter::Update(float gameTime)
 	}
 
 	//set dynamic vertex buffer
-	float particle_quad[] = {
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f
-	};
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(particle_quad), particle_quad);
-}
-
-static std::array<ParticleVertex, 6> CreateQuad(float x, float y)
-{
-	float size = 1.0f;
-
-	ParticleVertex v0;
-	v0.position.x = x;
-	v0.position.y = y + size;
-	v0.texCoords = { 0.0f, 1.0f };
-
-	ParticleVertex v1;
-	v1.position = { x + size, y };
-	v1.texCoords = { 1.0f, 0.0f };
-
-	ParticleVertex v2;
-	v2.position = { x, y };
-	v2.texCoords = { 0.0f, 0.0f };
-
-	ParticleVertex v3;
-	v3.position = { x, y + size};
-	v3.texCoords = { 0.0f, 1.0f };
-
-	ParticleVertex v4;
-	v4.position = { x + size, y + size};
-	v4.texCoords = { 1.0f, 1.0f };
-
-	ParticleVertex v5;
-	v5.position = { x + size, y };
-	v5.texCoords = { 1.0f, 0.0f };
-
-	return { v0, v1, v2, v3, v4, v5 };
+	//float particle_quad[] = {
+	//	0.0f, 1.0f, 0.0f, 1.0f,
+	//	1.0f, 0.0f, 1.0f, 0.0f,
+	//	0.0f, 0.0f, 0.0f, 0.0f,
+	//
+	//	0.0f, 1.0f, 0.0f, 1.0f,
+	//	1.0f, 1.0f, 1.0f, 1.0f,
+	//	1.0f, 0.0f, 1.0f, 0.0f
+	//};
 }
 
 void ParticleEmitter::Render()
 {
+	//m_shader->UseShader();
+	//m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
+	//m_shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	m_shader->UseShader();
-	m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
-	m_shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
-	for (Particle particle : particles)
-	{
-		if (particle.Life > 0.0f)
-		{
-			m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), particle.Position));
-			//m_shader->SetShaderUniform_vec3((char*)"offset", particle.Position.x, particle.Position.y, particle.Position.z);
-			m_shader->SetShaderUniform_vec4((char*)"color", particle.Color.r, particle.Color.g, particle.Color.b, particle.Color.a);
-			m_shader->SetShaderUniform_vec2((char*)"size", particle.Size.x, particle.Size.y);
-			m_shader->BindTextures();
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
-		}
-	}
+
+	uint32_t indices[] = {
+		0, 1, 2, 2, 3, 0,
+		4, 5, 6, 6, 7, 4
+	};
+	auto q0 = CreateQuad(particles[0].Position.x, particles[0].Position.y);
+	auto q1 = CreateQuad(particles[1].Position.x, particles[1].Position.y);
+	auto q2 = CreateQuad(particles[2].Position.x, particles[2].Position.y);
+
+	ParticleVertex vertices[6 * 3/*maximum particles*/];
+	memcpy(vertices, q0.data(), q0.size() * sizeof(ParticleVertex));
+	memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(ParticleVertex));
+	memcpy(vertices + q0.size() * 2, q2.data(), q2.size() * sizeof(ParticleVertex));
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 24);
+	glBindVertexArray(0);
+	//for (Particle particle : particles)
+	//{
+	//	if (particle.Life > 0.0f)
+	//	{
+	//		m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), particle.Position));
+	//		m_shader->SetShaderUniform_vec4((char*)"color", particle.Color.r, particle.Color.g, particle.Color.b, particle.Color.a);
+	//		m_shader->SetShaderUniform_vec2((char*)"size", particle.Size.x, particle.Size.y);
+	//		m_shader->BindTextures();
+	//		glBindVertexArray(VAO);
+	//		glDrawArrays(GL_TRIANGLES, 0, 6);
+	//		glBindVertexArray(0);
+	//	}
+	//}
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
