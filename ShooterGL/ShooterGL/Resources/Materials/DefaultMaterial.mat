@@ -12,5 +12,5 @@ vec3
 }
 float
 {
-	mat.shininess : 1
+	mat.shininess : 0.1
 }
