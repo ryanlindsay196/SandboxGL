@@ -36,12 +36,12 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	//lightManager->AddLight(glm::vec3())
 
 	//TODO: Instantiate entities using entity properties loaded from each individual entity file
-	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr, window);
+	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
 	cameraManager->CreateCamera(entityManager->GetEntity(0));
-	entityManager->GetEntity(0)->AddComponent(controllerManager->CreateController(entityManager->GetEntity(0), window));
+	entityManager->GetEntity(0)->AddComponent(controllerManager->CreateController(entityManager->GetEntity(0)));
 	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
 	
-	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr, window);
+	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
 	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(.1f, .1f, .1f));
 	entityManager->GetEntity(1)->AddComponent(lightManager->AddLight(glm::vec3(0), glm::vec3(1, 0, 0), 0.f, glm::vec3(1)));
 	entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));

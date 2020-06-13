@@ -12,7 +12,7 @@
 //TODO: potentially remove pragma warning disable : 4996
 #pragma warning (disable : 4996)
 
-void EntityManager::Initialize(ObjectManager * in_objectManager, std::string scenePath, GLFWwindow* newWindow)
+void EntityManager::Initialize(ObjectManager * in_objectManager, std::string scenePath)
 {
 	//TODO: Loop through all files in the entities folder to load entity properties
 	objectManager = in_objectManager;
@@ -51,7 +51,7 @@ void EntityManager::Initialize(ObjectManager * in_objectManager, std::string sce
 				else if(propertyPair.first == "Scale")
 					newScale = ParseVector(propertyPair.second);
 			}
-			InstantiateEntity(*propsToLoad, newPosition, newRotationAxis, newRotationAngle, newScale, nullptr, newWindow);
+			InstantiateEntity(*propsToLoad, newPosition, newRotationAxis, newRotationAngle, newScale, nullptr);
 		}
 	}
 	//InstantiateEntity(EntityProperties());
@@ -173,13 +173,13 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 }
 
 //TODO: Make private and use the entity properties for properties, and load all entities from the scene file
-void EntityManager::InstantiateEntity(EntityProperties entityProperties, glm::vec3 startPos, glm::vec3 startRotationAxis, float rotationAngle, glm::vec3 startScale, Entity* parent, GLFWwindow* newWindow)
+void EntityManager::InstantiateEntity(EntityProperties entityProperties, glm::vec3 startPos, glm::vec3 startRotationAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
 	//TODO: Instantiate entity based on entity properties unordered map
 	entities.push_back(new Entity());
 	entities[entities.size() - 1]->Instantiate(startPos, startRotationAxis, rotationAngle, startScale, parent);
 	objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]);
-	entities[entities.size() - 1]->AddComponent(objectManager->controllerManager->CreateController(entities[entities.size() - 1], newWindow));
+	entities[entities.size() - 1]->AddComponent(objectManager->controllerManager->CreateController(entities[entities.size() - 1]));
 }
 
 void EntityManager::Update(float gameTime)
