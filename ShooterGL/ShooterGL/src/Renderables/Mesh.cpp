@@ -29,7 +29,7 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 		SetShaders(materialPath);
 		//shader->Initialize(textureManager, (char*)"", (char*)"", materialPath);
 	else
-		shader->Initialize(textureManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", materialPath);
+		shader->Initialize(objectManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", materialPath);
 	// now that we have all the required data, set the vertex buffers and its attribute pointers.
 	SetupMesh();
 }

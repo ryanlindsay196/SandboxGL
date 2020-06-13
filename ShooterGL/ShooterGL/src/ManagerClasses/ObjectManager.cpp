@@ -26,19 +26,22 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	controllerManager = new ControllerManager();
 	lightManager = new LightManager();
 	shaderManager = new ShaderManager();
-	entityManager->Initialize(this);
+	entityManager->Initialize(this, "Resources/Scenes/Test.scene");
 	modelManager->Initialize(this);
 	cameraManager->Initialize(this);
 	lightManager->Initialize();
-	//shaderManager->Initialize();//this function doesn't exist yet
 	controllerManager->Initialize(window);
+	//shaderManager->Initialize();//this function doesn't exist yet
+
+	//lightManager->AddLight(glm::vec3())
+
 	//TODO: Instantiate entities using entity properties loaded from each individual entity file
-	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
+	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr, window);
 	cameraManager->CreateCamera(entityManager->GetEntity(0));
-	entityManager->GetEntity(0)->AddComponent(controllerManager->CreateController(entityManager->GetEntity(0)));
+	entityManager->GetEntity(0)->AddComponent(controllerManager->CreateController(entityManager->GetEntity(0), window));
 	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
 	
-	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
+	entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr, window);
 	modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(.1f, .1f, .1f));
 	entityManager->GetEntity(1)->AddComponent(lightManager->AddLight(glm::vec3(0), glm::vec3(1, 0, 0), 0.f, glm::vec3(1)));
 	entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));

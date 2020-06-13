@@ -8,13 +8,13 @@ Entity::~Entity()
 {
 }
 
-void Entity::Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Entity * newParent)
+void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, Entity * newParent)
 {
 	SetTranslation(position);
 	SetRotation(rotation);
 	SetScale(scale);
 	transform = glm::mat4(1);
-	//transform = glm::rotate(transform, 0.4f, glm::vec3(1, 0, 0));
+	transform = glm::rotate(transform, rotationAngle, rotation);
 	transform = glm::scale(transform, scale);
 	transform = glm::translate(transform, position);
 	if(newParent != nullptr)

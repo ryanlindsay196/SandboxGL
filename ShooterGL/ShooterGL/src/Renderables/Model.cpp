@@ -5,6 +5,7 @@
 #include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/CameraManager.h"
+#include "ManagerClasses/LightManager.h"
 #include "Mesh.h"
 #include "matrix.hpp"
 #include <iostream>
@@ -309,7 +310,6 @@ void Model::Render()
 	glm::vec3(-4.0f,  2.0f, -12.0f),
 	glm::vec3(0.0f,  0.0f, -3.0f)
 	};
-
 	m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].constant", 1.0f);
 	m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.direction", -0.2f, -1.0f, -0.3f);
 	m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.ambient", 0.05f, 0.05f, 0.05f);

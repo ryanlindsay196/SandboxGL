@@ -37,7 +37,7 @@ struct PointLight {
 	vec3 diffuse;
 	vec3 specular;
 };
-#define NR_POINT_LIGHTS 4
+#define NR_POINT_LIGHTS X
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 uniform sampler2D albedoMap;
@@ -85,7 +85,7 @@ void main()
 	vec3 norm = normalize(fs_in.Normal);
 	vec3 viewDir = normalize(viewPos - fs_in.FragPos);
 
-	vec3 result;
+	vec3 result = vec3(0,0,0);
 	for(int i = 0; i < NR_POINT_LIGHTS; i++)
 		result += CalcPointLight(pointLights[i], norm, fs_in.FragPos, viewDir);
 

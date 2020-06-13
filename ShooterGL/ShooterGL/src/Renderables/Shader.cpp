@@ -6,13 +6,16 @@
 #include <algorithm>
 #include "Texture.h"
 #include "ManagerClasses/TextureManager.h"
+#include "ManagerClasses/ObjectManager.h"
+#include "ManagerClasses/LightManager.h"
 #include <gtc/type_ptr.hpp>
 //TODO: potentially remove pragma warning disable : 4996
 #pragma warning (disable : 4996)
 
-void Shader::Initialize(TextureManager * in_textureManager, char* vertexPath, char* fragmentPath, char* materialPath)
+void Shader::Initialize(ObjectManager * in_objectManager, char* vertexPath, char* fragmentPath, char* materialPath)
 {
-	textureManager = in_textureManager;
+	textureManager = in_objectManager->textureManager;
+	m_objectManager = in_objectManager;
 	shaderProgram = glCreateProgram();
 
 	if (materialPath)
@@ -237,6 +240,7 @@ void Shader::SetVertexShader(char* vertexPath)
 		vShaderFile.open(vertexPath);
 		std::stringstream vShaderStream;
 		vShaderStream << vShaderFile.rdbuf();
+
 		std::string vString = vShaderStream.str();
 		vertexShaderSource = (char*)vString.c_str();
 		std::cout << "Vertex shader successfully read" << std::endl;
@@ -276,6 +280,18 @@ void Shader::SetFragmentShader(char* fragmentPath)
 		fShaderFile.open(fragmentPath);
 		std::stringstream fShaderStream;
 		fShaderStream << fShaderFile.rdbuf();
+
+
+		std::string line;
+		while (getline(fShaderStream, line))
+		{
+			if (line == "#define NR_POINT_LIGHTS X")
+			{
+				line = "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
+			}
+			std::cout << line;
+		}
+
 		std::string fString = fShaderStream.str();
 		fragmentShaderSource = (char*)fString.c_str();
 		std::cout << "Fragment shader succesfully read" << std::endl;

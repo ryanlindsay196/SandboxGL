@@ -309,6 +309,11 @@
     <None Include="Resources\Materials\ParticleMat.mat" />
     <None Include="Resources\Materials\DefaultMaterial.mat" />
     <None Include="Resources\ParticleSystems\ParticleDefault.part" />
+    <None Include="Resources\Scenes\Test.scene" />
+    <None Include="Resources\Prefabs\Player.prefab" />
+    <None Include="Resources\ProjectData\Tags.meta" />
+    <None Include="Resources\Prefabs\Test.prefab" />
+    <None Include="Resources\Prefabs\Test2.prefab" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\Assimp\lib\assimp-vc140-mt.lib" />

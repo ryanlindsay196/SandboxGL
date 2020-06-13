@@ -1,0 +1,25 @@
+Components
+{
+	Model
+	{
+		Path : Resources/Models/guitar_backpack/Rock_low.FBX
+		Position : 0,0,0
+		Rotation : 0,0,0
+		Scale : 0.1,0.1,0.1
+		Material : Resources/Materials/DefaultMaterial.mat
+	}
+	ParticleSystem
+	{
+		Path : Resources/ParticleSystems/ParticleDefault.part
+	}
+	Light : Point
+	{
+		Ambient : 0.3,0.3,0.3
+		Specular : 0.2,0.2,0.2
+		Diffuse : 0.6,0.6,0.6
+
+		Position : 0,0,0
+		Rotation : 0,0,0
+		Scale : 1,1,1
+	}
+}

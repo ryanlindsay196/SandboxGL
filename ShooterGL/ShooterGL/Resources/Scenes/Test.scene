@@ -1,0 +1,21 @@
+PREFAB : Resources/Prefabs/Player.prefab
+{
+	Position : 0,-2,0
+	RotationAxis : 0,1,0
+	RotationAngle : 20
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/Test.prefab
+{
+	Position : 0,0,0
+	RotationAxis : 0,1,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/Test2.prefab
+{
+	Position : 2,0,0
+	RotationAxis : 0,1,0
+	Scale : 1,1,1
+}

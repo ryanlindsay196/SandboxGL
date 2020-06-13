@@ -9,7 +9,7 @@ Shader* ShaderManager::LoadNewShader(std::string materialPath, ObjectManager* in
 	if (shader == shaders.end())
 	{
 		Shader* newShader = new Shader();
-		newShader->Initialize(in_objectManager->textureManager, (char*)"", (char*)"", (char*)materialPath.c_str());
+		newShader->Initialize(in_objectManager, (char*)"", (char*)"", (char*)materialPath.c_str());
 
 		std::pair<std::string, Shader*> newShaderEntry(materialPath, newShader);
 		shaders.insert(newShaderEntry);

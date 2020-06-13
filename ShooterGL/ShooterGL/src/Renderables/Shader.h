@@ -3,11 +3,12 @@
 #include <glm.hpp>
 class Texture;
 class TextureManager;
+class ObjectManager;
 
 class Shader
 {
 public:
-	void Initialize(TextureManager * in_textureManager, char* vertexPath, char* fragmentPath, char* materialPath);
+	void Initialize(ObjectManager * in_objectManager, char* vertexPath, char* fragmentPath, char* materialPath);
 	void LoadMaterial(char* materialPath);
 	std::pair<std::string, std::string> GenerateKeyValuePair(std::string line);
 	glm::vec3 ParseMaterialVector(std::string line);
@@ -37,6 +38,7 @@ public:
 
 private:
 	TextureManager* textureManager;
+	ObjectManager* m_objectManager;
 
 	unsigned int vertexShader;
 	char* vertexShaderSource;

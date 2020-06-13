@@ -12,7 +12,7 @@ public:
 	//Entity();
 	~Entity();
 
-	void Instantiate(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Entity* newParent);
+	void Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, Entity* newParent);
 	void Update(float gameTime);
 
 	void SetParent(Entity* newParent);

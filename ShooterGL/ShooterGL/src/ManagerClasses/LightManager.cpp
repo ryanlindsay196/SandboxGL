@@ -17,3 +17,8 @@ Light * LightManager::GetLight(unsigned int i)
 		return m_lights[i];
 	return nullptr;
 }
+
+unsigned int LightManager::TotalLights()
+{
+	return m_lights.size();
+}
