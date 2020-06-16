@@ -281,7 +281,7 @@ void Shader::SetFragmentShader(char* fragmentPath)
 		std::stringstream fShaderStream;
 		fShaderStream << fShaderFile.rdbuf();
 
-
+		std::string tempFShader = "";
 		std::string line;
 		while (getline(fShaderStream, line))
 		{
@@ -289,11 +289,16 @@ void Shader::SetFragmentShader(char* fragmentPath)
 			{
 				line = "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
 			}
-			std::cout << line;
+			tempFShader += line + "\n";
 		}
 
 		std::string fString = fShaderStream.str();
-		fragmentShaderSource = (char*)fString.c_str();
+		std::string lightsString = "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
+		fString.replace(fString.begin() + fString.find_first_of("#"), fString.begin() + fString.find_first_of("#") + 25, lightsString.c_str());
+		//fString.replace(fString.begin() + fString.find_first_of("#define"), 25, "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights()));
+		//fString.replace(fString.begin(), 5, "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
+		fragmentShaderSource = (char*)tempFShader.c_str();
+		//std::cout << fragmentShaderSource;
 		std::cout << "Fragment shader succesfully read" << std::endl;
 
 		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);

@@ -45,6 +45,14 @@ Model* ModelManager::LoadModel(char * modelPath, char * texturePath, glm::vec3 p
 	return LoadModel(modelPath, positionOffset, rotationAxis, rotationAngle, scaleOffset);
 }
 
+void ModelManager::LoadShaders()
+{
+	for (Model* model : models)
+	{
+		model->LoadShaders();
+	}
+}
+
 void ModelManager::UpdateModels(float gameTime)
 {
 	for (Model* model : models)

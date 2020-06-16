@@ -24,14 +24,17 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 
 	this->vertices = vertices;
 	this->indices = indices;
-
-	if (materialPath)
-		SetShaders(materialPath);
-		//shader->Initialize(textureManager, (char*)"", (char*)"", materialPath);
-	else
-		shader->Initialize(objectManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", materialPath);
+	m_materialPath = materialPath;
 	// now that we have all the required data, set the vertex buffers and its attribute pointers.
 	SetupMesh();
+}
+
+void Mesh::LoadShaders()
+{
+	if (m_materialPath != "")
+		SetShaders((char*)m_materialPath.c_str());
+	else
+		shader->Initialize(m_objectManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", (char*)m_materialPath.c_str());
 }
 
 void Mesh::SetDefaultShaders()

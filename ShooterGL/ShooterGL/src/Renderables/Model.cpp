@@ -260,6 +260,14 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 	return Mesh(m_objectManager, vertices, indices, materialPath, this);
 }
 
+void Model::LoadShaders()
+{
+	for (Mesh mesh : m_meshes)
+	{
+		mesh.LoadShaders();
+	}
+}
+
 unsigned int Model::GetLoadedMeshesCount()
 {
 	return m_meshes.size();

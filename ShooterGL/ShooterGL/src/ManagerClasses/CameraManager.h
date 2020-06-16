@@ -11,7 +11,7 @@ private:
 	std::vector<Camera> cameras;
 public:
 	void Initialize(ObjectManager* objectManager);
-	Camera& CreateCamera(Entity* newParent);
+	Camera* CreateCamera(Entity* newParent);
 	Camera* GetCamera(int i);
 	void Update();
 };

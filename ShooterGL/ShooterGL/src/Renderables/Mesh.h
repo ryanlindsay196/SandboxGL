@@ -27,6 +27,7 @@ public:
 	Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
 
 	//void ReadMaterial(char* materialPath);
+	void LoadShaders();
 	void SetDefaultShaders();
 	void SetShaders(char* materialPath);
 	Shader* GetShader();
@@ -40,4 +41,5 @@ private:
 	unsigned int VBO, EBO;
 	TextureManager* textureManager;
 	ObjectManager* m_objectManager;
+	std::string m_materialPath;
 };

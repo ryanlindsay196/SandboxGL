@@ -12,12 +12,18 @@
 //TODO: potentially remove pragma warning disable : 4996
 #pragma warning (disable : 4996)
 
-void EntityManager::Initialize(ObjectManager * in_objectManager, std::string scenePath)
+void EntityManager::Initialize(ObjectManager * in_objectManager)
 {
 	//TODO: Loop through all files in the entities folder to load entity properties
 	objectManager = in_objectManager;
+	//InstantiateEntity(EntityProperties());
+	//InstantiateEntity(EntityProperties());
+	//InstantiateEntity(EntityProperties());
+	//InstantiateEntity(EntityProperties());
+}
 
-
+void EntityManager::LoadScene(std::string scenePath)
+{
 	std::ifstream sceneFile(scenePath);
 	std::string line;
 	while (getline(sceneFile, line))
@@ -48,16 +54,13 @@ void EntityManager::Initialize(ObjectManager * in_objectManager, std::string sce
 					newRotationAxis = ParseVector(propertyPair.second);
 				else if (propertyPair.first == "RotationAngle")
 					newRotationAngle = strtof(propertyPair.second.c_str(), nullptr);
-				else if(propertyPair.first == "Scale")
+				else if (propertyPair.first == "Scale")
 					newScale = ParseVector(propertyPair.second);
 			}
-			InstantiateEntity(*propsToLoad, newPosition, newRotationAxis, newRotationAngle, newScale, nullptr);
+			InstantiateEntity(propsToLoad, newPosition, newRotationAxis, newRotationAngle, newScale, nullptr);
 		}
 	}
-	//InstantiateEntity(EntityProperties());
-	//InstantiateEntity(EntityProperties());
-	//InstantiateEntity(EntityProperties());
-	//InstantiateEntity(EntityProperties());
+
 }
 
 
@@ -173,13 +176,33 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 }
 
 //TODO: Make private and use the entity properties for properties, and load all entities from the scene file
-void EntityManager::InstantiateEntity(EntityProperties entityProperties, glm::vec3 startPos, glm::vec3 startRotationAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
+void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startRotationAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
 	//TODO: Instantiate entity based on entity properties unordered map
 	entities.push_back(new Entity());
 	entities[entities.size() - 1]->Instantiate(startPos, startRotationAxis, rotationAngle, startScale, parent);
-	objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]);
-	entities[entities.size() - 1]->AddComponent(objectManager->controllerManager->CreateController(entities[entities.size() - 1]));
+
+	for (unsigned int i = 0; i < entityProperties->componentNames.size(); i++)
+	{
+		if (entityProperties->componentNames[i] == "Camera")
+		{
+			entities[entities.size() - 1]->AddComponent((Camera*)objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]));
+		}
+		else if (entityProperties->componentNames[i] == "Model")
+		{
+
+		}
+		else if (entityProperties->componentNames[i] == "ParticleSystem")
+		{
+
+		}
+		else if (entityProperties->componentNames[i] == "Light : Point")
+		{
+
+		}
+	}
+	//objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]);
+	//entities[entities.size() - 1]->AddComponent(objectManager->controllerManager->CreateController(entities[entities.size() - 1]));
 }
 
 void EntityManager::Update(float gameTime)

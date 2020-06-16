@@ -23,6 +23,7 @@ public:
 	Model* LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
 	Model* LoadModel(char* modelPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
 	Model* LoadModel(char* modelPath, char* texturePath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
+	void LoadShaders();
 
 	void UpdateModels(float gameTime);
 
