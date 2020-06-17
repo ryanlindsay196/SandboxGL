@@ -20,7 +20,7 @@ public:
 	~Model();
 
 	void Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath);
-	void LoadModel(std::string modelPath);
+	void LoadModel(std::string modelPath, std::string materialPath);
 	void ProcessNode(aiNode* node, const aiScene* scene, std::string materialPath);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, char* materialPath);
 	//vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);

@@ -3,9 +3,10 @@ Components
 	Model
 	{
 		Path : Resources/Models/guitar_backpack/Rock_low.FBX
-		Position : 0,0,0
-		Rotation : 0,0,0
-		Scale : 1,1,1
+		PositionOffset : 0,0,0
+		RotationAxis : 0,0,0
+		RotationAngle : 0
+		ScaleOffset : 1,1,1
 		Material : Resources/Materials/DefaultMaterial.mat
 	}
 }

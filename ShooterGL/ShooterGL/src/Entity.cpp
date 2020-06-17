@@ -14,7 +14,7 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotat
 	SetRotation(rotation);
 	SetScale(scale);
 	transform = glm::mat4(1);
-	transform = glm::rotate(transform, rotationAngle, rotation);
+	transform = glm::rotate(transform, rotationAngle, rotationAxis);
 	transform = glm::scale(transform, scale);
 	transform = glm::translate(transform, position);
 	if(newParent != nullptr)

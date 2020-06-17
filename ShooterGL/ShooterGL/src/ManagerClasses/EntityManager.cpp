@@ -2,6 +2,8 @@
 #include "ObjectManager.h"
 #include "CameraManager.h"
 #include "ControllerManager.h"
+#include "ModelManager.h"
+#include "LightManager.h"
 
 #include "GLFW/glfw3.h"
 
@@ -116,10 +118,12 @@ EntityManager::EntityProperties* EntityManager::LoadPrefab(std::string prefabPat
 					line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 					line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
 					if (line != "}" && line != "{")
-						entityPropertiesToUse->componentNames.push_back(line);
-					else if(line == "{")
 					{
 						entityPropertiesToUse->componentProperties.push_back(std::vector<std::string>());
+						entityPropertiesToUse->componentNames.push_back(line);
+					}
+					else if(line == "{")
+					{
 						while (getline(prefabFile, line))
 						{//Load component properties
 							line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
@@ -186,19 +190,25 @@ void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::v
 	{
 		if (entityProperties->componentNames[i] == "Camera")
 		{
-			entities[entities.size() - 1]->AddComponent((Camera*)objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]));
+			entities[entities.size() - 1]->AddComponent(objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]));
 		}
 		else if (entityProperties->componentNames[i] == "Model")
 		{
-
+			ModelData modelTransform = ReadModelData(entityProperties->componentProperties[i]);
+			entities[entities.size() - 1]->AddComponent(objectManager->modelManager->LoadModel((char*)modelTransform.modelPath.c_str(), modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale));
 		}
 		else if (entityProperties->componentNames[i] == "ParticleSystem")
 		{
 
 		}
-		else if (entityProperties->componentNames[i] == "Light : Point")
+		else if (entityProperties->componentNames[i] == "Controller")
 		{
-
+			entities[entities.size() - 1]->AddComponent(objectManager->controllerManager->CreateController(nullptr));
+		}
+		else if (entityProperties->componentNames[i] == "Light:Point")
+		{
+			PointLightData pointLightData = ReadPointLightData(entityProperties->componentProperties[i]);
+			entities[entities.size() - 1]->AddComponent(objectManager->lightManager->AddLight(pointLightData.position, pointLightData.rotationAxis, pointLightData.rotationAngle, pointLightData.scale, pointLightData.ambient, pointLightData.specular, pointLightData.diffuse));
 		}
 	}
 	//objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]);
@@ -218,4 +228,85 @@ Entity* EntityManager::GetEntity(int i)
 	if ((unsigned int)i < entities.size())
 		return entities[i];
 	return nullptr;
+}
+
+EntityManager::ModelData EntityManager::ReadModelData(std::vector<std::string> transformDataString)
+{
+	ModelData modelData = ModelData();
+
+
+	for (int j = 0; j < transformDataString.size(); j++)
+	{
+		transformDataString[j].erase(std::remove(transformDataString[j].begin(), transformDataString[j].end(), '\t'), transformDataString[j].end());
+		transformDataString[j].erase(std::remove(transformDataString[j].begin(), transformDataString[j].end(), ' '), transformDataString[j].end());
+		std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(transformDataString[j], ":");
+		if (keyValuePair.first == "Path")
+		{
+			modelData.modelPath = keyValuePair.second;
+		}
+		else if (keyValuePair.first == "PositionOffset")
+		{
+			modelData.position = ParseVector(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "RotationAxis")
+		{
+			modelData.rotationAxis = ParseVector(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "RotationAngle")
+		{
+			modelData.rotationAngle = strtof((char*)keyValuePair.second.c_str(), nullptr);
+		}
+		else if (keyValuePair.first == "ScaleOffset")
+		{
+			modelData.scale = ParseVector(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "Material")
+		{
+			modelData.materialPath = keyValuePair.second;
+		}
+	}
+	return modelData;
+}
+
+EntityManager::PointLightData EntityManager::ReadPointLightData(std::vector<std::string> dataString)
+{
+	PointLightData pointLightData = PointLightData();
+	for (int j = 0; j < dataString.size(); j++)
+	{
+		if (dataString[j] == "")
+			continue;
+		dataString[j].erase(std::remove(dataString[j].begin(), dataString[j].end(), '\t'), dataString[j].end());
+		dataString[j].erase(std::remove(dataString[j].begin(), dataString[j].end(), ' '), dataString[j].end());
+		std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(dataString[j], ":");
+		if (keyValuePair.first == "Ambient")
+		{
+			pointLightData.ambient = ParseVector(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "Specular")
+		{
+			pointLightData.specular = ParseVector(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "Diffuse")
+		{
+			pointLightData.diffuse = ParseVector(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "Position")
+		{
+			pointLightData.position = ParseVector(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "RotationAxis")
+		{
+			pointLightData.rotationAxis = ParseVector(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "RotationAngle")
+		{
+			pointLightData.rotationAngle = strtof(keyValuePair.second.c_str(), nullptr);
+		}
+		else if (keyValuePair.first == "Scale")
+		{
+			pointLightData.scale = ParseVector(keyValuePair.second);
+		}
+	}
+
+	return pointLightData;
 }

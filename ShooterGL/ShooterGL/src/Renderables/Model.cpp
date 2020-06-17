@@ -114,7 +114,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 #pragma endregion
-	LoadModel(modelPath);
+	LoadModel(modelPath, materialPath);
 
 	offsetTransform = glm::mat4(1);
 	positionOffset = glm::mat4(1);
@@ -132,7 +132,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 		offsetTransform *= componentParent->GetTransform();
 }
 
-void Model::LoadModel(std::string modelPath)
+void Model::LoadModel(std::string modelPath, std::string materialPath)
 {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
@@ -147,7 +147,7 @@ void Model::LoadModel(std::string modelPath)
 	directory = modelPath.substr(0, modelPath.find_last_of('/'));
 	
 	//process ASSIMP's root node recursively
-	ProcessNode(scene->mRootNode, scene, "Resources/Materials/DefaultMaterial.mat");
+	ProcessNode(scene->mRootNode, scene, materialPath);
 }
 
 void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materialPath)
@@ -262,9 +262,10 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 
 void Model::LoadShaders()
 {
-	for (Mesh mesh : m_meshes)
+	for (int i = 0; i < m_meshes.size(); i++)
+	//for (Mesh mesh : m_meshes)
 	{
-		mesh.LoadShaders();
+		m_meshes[i].LoadShaders();
 	}
 }
 

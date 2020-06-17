@@ -21,6 +21,28 @@ public://TODO: Implement
 		////children
 		//std::vector<std::string> childEntities;
 	};
+
+	struct ModelData
+	{
+		std::string modelPath;
+		std::string materialPath;
+		glm::vec3 position;
+		glm::vec3 rotationAxis;
+		glm::vec3 scale;
+		float rotationAngle;
+	};
+
+	struct PointLightData
+	{
+		glm::vec3 ambient;
+		glm::vec3 specular;
+		glm::vec3 diffuse;
+		
+		glm::vec3 position;
+		glm::vec3 rotationAxis;
+		float rotationAngle;
+		glm::vec3 scale;
+	};
 private://TODO: Implement
 	//The string is the file path of the entity
 	std::unordered_map<std::string, EntityProperties*> entityPropertiesMap;
@@ -41,4 +63,7 @@ public:
 	void Update(float gameTime);
 
 	Entity* GetEntity(int i);
+
+	ModelData ReadModelData(std::vector<std::string> transformDataString);
+	PointLightData ReadPointLightData(std::vector<std::string> dataString);
 };
