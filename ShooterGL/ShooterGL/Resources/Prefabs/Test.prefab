@@ -4,7 +4,7 @@ Components
 	{
 		Path : Resources/Models/guitar_backpack/Rock_low.FBX
 		PositionOffset : 0,0,0
-		RotationAxis : 1,0,0
+		EulerAngles : 1,0,0
 		RotationAngle : 90
 		ScaleOffset : 1,1,1
 		Material : Resources/Materials/DefaultMaterial.mat

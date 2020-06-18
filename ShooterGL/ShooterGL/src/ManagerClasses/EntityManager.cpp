@@ -40,7 +40,7 @@ void EntityManager::LoadScene(std::string scenePath)
 		{
 			EntityProperties* propsToLoad = LoadPrefab(keyValuePair.second);
 			glm::vec3 newPosition;
-			glm::vec3 newRotationAxis;
+			glm::vec3 newEulerAngles;
 			float newRotationAngle = 0.0f;
 			glm::vec3 newScale;
 			while (getline(sceneFile, line))
@@ -52,14 +52,14 @@ void EntityManager::LoadScene(std::string scenePath)
 					break;
 				else if (propertyPair.first == "Position")
 					newPosition = ParseVector(propertyPair.second);
-				else if (propertyPair.first == "RotationAxis")
-					newRotationAxis = ParseVector(propertyPair.second);
+				else if (propertyPair.first == "EulerAngles")
+					newEulerAngles = ParseVector(propertyPair.second);
 				else if (propertyPair.first == "RotationAngle")
 					newRotationAngle = strtof(propertyPair.second.c_str(), nullptr);
 				else if (propertyPair.first == "Scale")
 					newScale = ParseVector(propertyPair.second);
 			}
-			InstantiateEntity(propsToLoad, newPosition, newRotationAxis, newRotationAngle, newScale, nullptr);
+			InstantiateEntity(propsToLoad, newPosition, newEulerAngles, newRotationAngle, newScale, nullptr);
 		}
 	}
 
@@ -180,11 +180,11 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 }
 
 //TODO: Make private and use the entity properties for properties, and load all entities from the scene file
-void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startRotationAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
+void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startEulerAngles, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
 	//TODO: Instantiate entity based on entity properties unordered map
 	entities.push_back(new Entity());
-	entities[entities.size() - 1]->Instantiate(startPos, startRotationAxis, rotationAngle, startScale, parent);
+	entities[entities.size() - 1]->Instantiate(startPos, startEulerAngles, rotationAngle, startScale, parent);
 
 	for (unsigned int i = 0; i < entityProperties->componentNames.size(); i++)
 	{
@@ -248,7 +248,7 @@ EntityManager::ModelData EntityManager::ReadModelData(std::vector<std::string> t
 		{
 			modelData.position = ParseVector(keyValuePair.second);
 		}
-		else if (keyValuePair.first == "RotationAxis")
+		else if (keyValuePair.first == "EulerAngles")
 		{
 			modelData.rotationAxis = ParseVector(keyValuePair.second);
 		}
@@ -294,7 +294,7 @@ EntityManager::PointLightData EntityManager::ReadPointLightData(std::vector<std:
 		{
 			pointLightData.position = ParseVector(keyValuePair.second);
 		}
-		else if (keyValuePair.first == "RotationAxis")
+		else if (keyValuePair.first == "EulerAngles")
 		{
 			pointLightData.rotationAxis = ParseVector(keyValuePair.second);
 		}
