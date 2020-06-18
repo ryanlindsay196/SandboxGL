@@ -95,9 +95,9 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	//for(unsigned int i = 1; i < modelManager->LoadedModelsCount(); i++)
 	//	entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(i));
 #pragma endregion
-	particleEmitter = new ParticleEmitter();
-	particleEmitter->Initialize(this, (char*)"Resources/ParticleSystems/ParticleDefault.part");
-	entityManager->GetEntity(1)->AddComponent(particleEmitter);
+	//particleEmitter = new ParticleEmitter();
+	//particleEmitter->Initialize(this, (char*)"Resources/ParticleSystems/ParticleDefault.part");
+	//entityManager->GetEntity(1)->AddComponent(particleEmitter);
 
 
 	modelManager->LoadShaders();
@@ -128,7 +128,7 @@ void ObjectManager::Update(float gameTime)
 	//modelManager->GetModel(3)->RotateQuaternion(glm::vec3(0, 1, 0), 0.2f);
 	//lightPos += glm::vec3(0, 0, -gameTime);
 
-	particleEmitter->Update(gameTime);
+	//particleEmitter->Update(gameTime);
 }
 
 void ObjectManager::Render()
@@ -154,5 +154,5 @@ void ObjectManager::Render()
 	}
 	modelManager->RenderModels();
 
-	particleEmitter->Render();
+	//particleEmitter->Render();
 }

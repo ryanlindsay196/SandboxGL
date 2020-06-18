@@ -35,6 +35,14 @@ void Controller::Update(float gameTime)
 		componentParent->SetEulerAngles(componentParent->GetEulerAngles() + glm::vec3(yoffset, xoffset, 0));
 		xoffset = 0;
 		yoffset = 0;
+
+		//Controller can't make parent entity look above 89 degrees or below -89 degrees
+		float pitch = componentParent->GetEulerAngles().y;
+		if (pitch > 89.0f)
+			pitch = 89.0f;
+		if (pitch < -89.0f)
+			pitch = -89.0f;
+		componentParent->SetEulerAngles(glm::vec3(componentParent->GetEulerAngles().x, pitch, componentParent->GetEulerAngles().z));
 	}
 }
 

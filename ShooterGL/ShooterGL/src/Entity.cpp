@@ -20,7 +20,15 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotat
 	if(newParent != nullptr)
 		SetParent(newParent);
 
-	yaw = -90.0f;
+
+	glm::quat quat = glm::quat(0, 0, 0, 1);
+	quat = glm::angleAxis(rotationAngle, rotationAxis);
+	glm::vec3 newEulers = glm::eulerAngles(quat);
+	newEulers = rotationAxis;
+	pitch =		(newEulers.x);
+	yaw =		(newEulers.y);
+	roll =		(newEulers.z);
+	//yaw = -90.0f;
 }
 
 void Entity::Update(float gameTime)
@@ -29,10 +37,6 @@ void Entity::Update(float gameTime)
 	//Translate(glm::vec3(0, 0.002f, 0.002f));
 	//Scale(glm::vec3(0.001f));
 	
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));

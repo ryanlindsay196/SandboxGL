@@ -17,6 +17,7 @@ Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vect
 	m_objectManager = objectManager;
 
 	scaleOffset = glm::mat4(1);
+	//TODO: Delete rotationQuat?
 	rotationQuat = glm::quat();
 	positionOffset = glm::mat4(1);
 
