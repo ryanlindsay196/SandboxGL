@@ -52,6 +52,9 @@ int main()
 #pragma endregion
 	float deltaTime = 0.0f; // Time between current frame and last frame
 	float lastFrame = 0.0f; // Time of last frame
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 #pragma region Gameplay Loop
 	while (!glfwWindowShouldClose(window))
 	{
