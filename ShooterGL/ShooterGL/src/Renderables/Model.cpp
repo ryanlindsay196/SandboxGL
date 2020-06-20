@@ -7,6 +7,7 @@
 #include "ManagerClasses/CameraManager.h"
 #include "ManagerClasses/LightManager.h"
 #include "Mesh.h"
+#include "ModelData.h"
 #include "matrix.hpp"
 #include <iostream>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -246,7 +247,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 	//// return a mesh object created from the extracted mesh data
 	//return Mesh(m_objectManager, vertices, indices, materialPath, this);
 	//return Mesh(m_objectManager, std::vector<Vertex>(), std::vector<unsigned int>(), materialPath, this);
-	return Mesh(m_objectManager, scene, mesh, materialPath, this);
+	return Mesh(m_objectManager, scene, mesh, materialPath, this, modelData);
 }
 
 void Model::LoadShaders()

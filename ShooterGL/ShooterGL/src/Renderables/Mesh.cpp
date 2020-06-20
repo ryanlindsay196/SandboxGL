@@ -31,7 +31,7 @@
 //	SetupMesh();
 //}
 
-Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent)
+Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, ModelData* modelData)
 {
 	m_materialPath = materialPath;
 

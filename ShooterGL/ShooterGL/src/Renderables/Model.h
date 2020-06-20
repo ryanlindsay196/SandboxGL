@@ -7,6 +7,7 @@ class Shader;
 class ObjectManager;
 class TextureManager;
 class Mesh;
+class ModelData;
 struct aiMesh;
 struct aiNode;
 struct aiScene;
@@ -38,7 +39,6 @@ private:
 	//unsigned int VBO;//Vertex buffer object
 	//unsigned int VAO;//Vertex array object - stores settings from VBO
 	//unsigned int EBO;//Element buffer object (Index buffer) - stores indices of vertices so we only store each vertex once
-
 	//struct Vertex {
 	//	glm::vec3 Position;
 	//	glm::vec3 Normal;
@@ -50,6 +50,6 @@ private:
 	ObjectManager* m_objectManager;
 	TextureManager* m_textureManager;
 	//Shader* shader;
-	std::vector<Mesh> m_meshes;
+	//std::vector<Mesh> m_meshes;
 };
 

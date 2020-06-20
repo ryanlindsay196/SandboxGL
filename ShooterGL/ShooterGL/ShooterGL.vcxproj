@@ -205,6 +205,7 @@
     <ClInclude Include="src\Controller.h" />
     <ClInclude Include="src\ManagerClasses\LightManager.h" />
     <ClInclude Include="src\ManagerClasses\ShaderManager.h" />
+    <ClInclude Include="src\ModelData.h" />
     <ClInclude Include="src\Renderables\Light.h" />
     <ClInclude Include="src\Renderables\Mesh.h" />
     <ClInclude Include="src\Renderables\Model.h" />

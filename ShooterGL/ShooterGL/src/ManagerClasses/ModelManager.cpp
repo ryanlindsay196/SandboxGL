@@ -1,6 +1,7 @@
 #include "ModelManager.h"
 #include "TextureManager.h"
 #include "ObjectManager.h"
+#include <unordered_map>
 
 ModelManager::ModelManager()
 {
@@ -38,6 +39,7 @@ Model* ModelManager::LoadModel(char * modelPath, std::string materialPath, glm::
 	models.push_back(new Model());
 	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, (char*)materialPath.c_str());
 
+	modelDataMap.
 	return models[models.size() - 1];
 }
 

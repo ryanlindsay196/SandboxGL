@@ -21,13 +21,13 @@ struct Vertex {
 class Mesh : public WorldComponent {
 public:
 	//mesh data
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
+	//std::vector<Vertex> vertices;
+	//std::vector<unsigned int> indices;
 	Shader* shader;
-	unsigned int VAO;
+	//unsigned int VAO;
 
 	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
-	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent);
+	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, ModelData* modelData);
 
 	//void ReadMaterial(char* materialPath);
 	void LoadShaders();
@@ -41,7 +41,7 @@ public:
 	WorldComponent* parentMesh;
 
 private:
-	unsigned int VBO, EBO;
+	//unsigned int VBO, EBO;
 	TextureManager* textureManager;
 	ObjectManager* m_objectManager;
 	std::string m_materialPath;

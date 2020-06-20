@@ -10,6 +10,7 @@ class ModelManager
 {
 private:
 	std::vector<Model*> models;
+	std::unordered_map<std::string, ModelData*> modelDataMap;
 
 	TextureManager* m_textureManager;
 	ObjectManager* m_objectManager;
