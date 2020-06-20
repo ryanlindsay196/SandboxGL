@@ -7,6 +7,8 @@
 #include "../WorldComponent.h"
 
 class ObjectManager;
+struct aiScene;
+struct aiMesh;
 
 struct Vertex {
 	glm::vec3 Position;
@@ -24,7 +26,8 @@ public:
 	Shader* shader;
 	unsigned int VAO;
 
-	Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
+	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
+	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent);
 
 	//void ReadMaterial(char* materialPath);
 	void LoadShaders();

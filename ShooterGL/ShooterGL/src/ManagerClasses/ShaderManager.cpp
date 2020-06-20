@@ -13,8 +13,18 @@ Shader* ShaderManager::LoadNewShader(std::string materialPath, ObjectManager* in
 
 		std::pair<std::string, Shader*> newShaderEntry(materialPath, newShader);
 		shaders.insert(newShaderEntry);
+
+		//std::pair<std::string, int> newShaderInstancesEntry(materialPath, 1);
+		//shaderInstances.insert(newShaderInstancesEntry);
+
 		return newShaderEntry.second;// shaders.find(shaderPath);
 	}
+//	for (auto& x : shaderInstances)
+//	{
+//		if (x.first == materialPath)
+//			x.second++;
+//	}
+	//return (std::pair<std::string, Shader*>)shader.second;
 	for (auto& x : shaders)
 	{//TODO: Replace this with instant lookup
 		if (x.first == materialPath)
