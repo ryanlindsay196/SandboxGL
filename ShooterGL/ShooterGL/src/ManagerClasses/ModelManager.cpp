@@ -1,6 +1,7 @@
 #include "ModelManager.h"
 #include "TextureManager.h"
 #include "ObjectManager.h"
+#include "ModelData.h"
 #include <unordered_map>
 
 ModelManager::ModelManager()
@@ -39,8 +40,30 @@ Model* ModelManager::LoadModel(char * modelPath, std::string materialPath, glm::
 	models.push_back(new Model());
 	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, (char*)materialPath.c_str());
 
-	modelDataMap.
+	//modelDataMap.
 	return models[models.size() - 1];
+}
+
+ModelData* ModelManager::LoadModelData(std::string hashID)
+{
+	auto modelData = modelDataMap.find(hashID);
+	if (modelData == modelDataMap.end())
+	{
+		ModelData* newModelData = new ModelData();
+		//newShader->Initialize(in_objectManager, (char*)"", (char*)"", (char*)materialPath.c_str());
+
+		std::pair<std::string, ModelData*> newModelDataEntry(hashID, newModelData);
+		modelDataMap.insert(newModelDataEntry);
+
+		return newModelDataEntry.second;// shaders.find(shaderPath);
+	}
+	for (auto& x : modelDataMap)
+	{//TODO: Replace this with instant lookup
+		if (x.first == hashID)
+			return x.second;
+	}
+	return nullptr;
+
 }
 
 void ModelManager::LoadShaders()

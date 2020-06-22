@@ -9,36 +9,17 @@
 #include <assimp/scene.h>
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
+#include "ModelData.h"
 
-//Mesh::Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char * materialPath, WorldComponent* newParent)
-//{
-//	parentMesh = newParent;
-//	yaw = -90;
-//	textureManager = objectManager->textureManager;
-//	m_objectManager = objectManager;
-//
-//	scaleOffset = glm::mat4(1);
-//	//TODO: Delete rotationQuat?
-//	rotationQuat = glm::quat();
-//	positionOffset = glm::mat4(1);
-//
-//	offsetTransform = glm::mat4(1);
-//
-//	this->vertices = vertices;
-//	this->indices = indices;
-//	m_materialPath = materialPath;
-//	// now that we have all the required data, set the vertex buffers and its attribute pointers.
-//	SetupMesh();
-//}
-
-Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, ModelData* modelData)
+Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, ModelData* modelData, MeshData* meshData)
 {
 	m_materialPath = materialPath;
-
+	m_modelData = modelData;
 	parentMesh = newParent;
 	yaw = -90;
 	textureManager = objectManager->textureManager;
 	m_objectManager = objectManager;
+	m_meshData = meshData;
 
 	scaleOffset = glm::mat4(1);
 	//TODO: Delete rotationQuat?
@@ -46,7 +27,8 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 	positionOffset = glm::mat4(1);
 
 	offsetTransform = glm::mat4(1);
-
+	if (meshData->vertices.size() > 0)
+		return;
 	// walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -84,7 +66,7 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 		vector.y = mesh->mBitangents[i].y;
 		vector.z = mesh->mBitangents[i].z;
 		vertex.Bitangent = vector;
-		vertices.push_back(vertex);
+		meshData->vertices.push_back(vertex);
 	}
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -92,7 +74,7 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 		aiFace face = mesh->mFaces[i];
 		// retrieve all indices of the face and store them in the indices vector
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
-			indices.push_back(face.mIndices[j]);
+			meshData->indices.push_back(face.mIndices[j]);
 	}
 	// process materials
 	//aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -160,26 +142,26 @@ void Mesh::Draw()
 
 	shader->UseShader();
 	shader->BindTextures();
-	glBindVertexArray(VAO);
+	glBindVertexArray(m_modelData->VAO);
 	//glDrawArrays(GL_TRIANGLES, 0, indices.size());
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_meshData->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
 void Mesh::SetupMesh()
 {
 	// create buffers/arrays
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	glGenVertexArrays(1, &m_modelData->VAO);
+	glGenBuffers(1, &m_modelData->VBO);
+	glGenBuffers(1, &m_modelData->EBO);
 
-	glBindVertexArray(VAO);
+	glBindVertexArray(m_modelData->VAO);
 	// load data into vertex buffers
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, m_modelData->VBO);
+	glBufferData(GL_ARRAY_BUFFER, m_meshData->vertices.size() * sizeof(Vertex), &m_meshData->vertices[0], GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_modelData->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_meshData->indices.size() * sizeof(unsigned int), &m_meshData->indices[0], GL_STATIC_DRAW);
 
 	// set the vertex attribute pointers
 	//TODO: modify vertex attribute pointers based on material/shader?

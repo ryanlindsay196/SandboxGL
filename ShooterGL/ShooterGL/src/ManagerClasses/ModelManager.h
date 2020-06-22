@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Renderables/Model.h"
+#include <unordered_map>
 
 class TextureManager;
 class ObjectManager;
@@ -23,6 +24,7 @@ public:
 
 	Model* LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
 	Model* LoadModel(char* modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
+	ModelData* LoadModelData(std::string hashID);
 	void LoadShaders();
 
 	void UpdateModels(float gameTime);

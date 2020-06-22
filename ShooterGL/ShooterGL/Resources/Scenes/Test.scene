@@ -14,6 +14,14 @@ PREFAB : Resources/Prefabs/Test.prefab
 	Scale : 1,1,1
 }
 
+PREFAB : Resources/Prefabs/Test.prefab
+{
+	Position : -4,-2,-2
+	EulerAngles : 0,0,0
+	RotationAngle : 3.14
+	Scale : 1,1,1
+}
+
 PREFAB : Resources/Prefabs/Test2.prefab
 {
 	Position : 0,0,2

@@ -7,6 +7,8 @@
 #include "../WorldComponent.h"
 
 class ObjectManager;
+class ModelData;
+class MeshData;
 struct aiScene;
 struct aiMesh;
 
@@ -27,7 +29,7 @@ public:
 	//unsigned int VAO;
 
 	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
-	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, ModelData* modelData);
+	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, ModelData* modelData, MeshData* meshData);
 
 	//void ReadMaterial(char* materialPath);
 	void LoadShaders();
@@ -45,4 +47,6 @@ private:
 	TextureManager* textureManager;
 	ObjectManager* m_objectManager;
 	std::string m_materialPath;
+	ModelData* m_modelData;
+	MeshData* m_meshData;
 };

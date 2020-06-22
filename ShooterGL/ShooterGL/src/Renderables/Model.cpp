@@ -3,9 +3,9 @@
 #include <glad/glad.h>
 #include "ManagerClasses/TextureManager.h"
 #include "ManagerClasses/ObjectManager.h"
-#include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/CameraManager.h"
 #include "ManagerClasses/LightManager.h"
+#include "ManagerClasses/ModelManager.h"
 #include "Mesh.h"
 #include "ModelData.h"
 #include "matrix.hpp"
@@ -23,8 +23,8 @@ Model::Model()
 
 Model::~Model()
 {
-	for (unsigned int i = 0; i < m_meshes.size(); i++)
-		delete(&m_meshes[i]);
+	//for (unsigned int i = 0; i < m_meshes.size(); i++)
+	//	delete(&m_meshes[i]);
 	//glDeleteVertexArrays(1, &VAO);
 	//glDeleteBuffers(1, &VBO);
 }
@@ -115,6 +115,9 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 #pragma endregion
+
+	m_modelData = objectManager->modelManager->LoadModelData(modelPath);
+
 	LoadModel(modelPath, materialPath);
 
 	offsetTransform = glm::mat4(1);
@@ -247,7 +250,9 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 	//// return a mesh object created from the extracted mesh data
 	//return Mesh(m_objectManager, vertices, indices, materialPath, this);
 	//return Mesh(m_objectManager, std::vector<Vertex>(), std::vector<unsigned int>(), materialPath, this);
-	return Mesh(m_objectManager, scene, mesh, materialPath, this, modelData);
+	if (m_meshes.size() == m_modelData->m_meshData.size())
+		m_modelData->m_meshData.push_back(MeshData());
+	return Mesh(m_objectManager, scene, mesh, materialPath, this, m_modelData, &m_modelData->m_meshData[m_meshes.size()]);
 }
 
 void Model::LoadShaders()
@@ -278,11 +283,11 @@ void Model::Update(float gameTime)
 	//offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
 	//offsetTransform = glm::translate(offsetTransform, positionOffset);
 	WorldComponent::Update(gameTime);
-	for (Mesh mesh : m_meshes)
-	{
-		//mesh.Update(gameTime);
-		//mesh.SetTransform(componentParent->GetTransform());
-	}
+	//for (Mesh mesh : m_meshes)
+	//{
+	//	//mesh.Update(gameTime);
+	//	//mesh.SetTransform(componentParent->GetTransform());
+	//}
 }
 
 void Model::Render()

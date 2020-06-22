@@ -49,7 +49,8 @@ private:
 
 	ObjectManager* m_objectManager;
 	TextureManager* m_textureManager;
+	ModelData* m_modelData;
 	//Shader* shader;
-	//std::vector<Mesh> m_meshes;
+	std::vector<Mesh> m_meshes;
 };
 
