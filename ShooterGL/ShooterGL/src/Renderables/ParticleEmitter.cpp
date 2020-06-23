@@ -162,7 +162,7 @@ void ParticleEmitter::Update(float gameTime)
 		if (p.Life > 0.0f)
 		{ // particle is alive, thus update
 			p.Position -= p.Velocity * gameTime;
-			p.Color.a -= gameTime * 2.5f;
+			//p.Color.a -= gameTime * 2.5f;
 			p.Velocity -= p.Acceleration * gameTime;
 			p.Size = (spawnerSettings.startSize * (p.Life / p.StartLife)) +
 				(spawnerSettings.endSize * (1.f-(p.Life / p.StartLife)));
@@ -225,6 +225,7 @@ void ParticleEmitter::RespawnParticle(Particle * particle)
 	particle->Position = -componentParent->GetTranslation() +
 		(glm::sphericalRand(glm::length(spawnerSettings.spawnerDimensions)) * spawnerSettings.spawnerDimensions) +
 		spawnerSettings.spawnerOffset;
+	//particle->Position = -componentParent->GetTranslation();
 	//particle->Color = glm::vec4(rColor, rColor, rColor, 1.0f);
 	particle->Life = glm::linearRand(spawnerSettings.minLifeTime, spawnerSettings.maxLifeTime);
 
