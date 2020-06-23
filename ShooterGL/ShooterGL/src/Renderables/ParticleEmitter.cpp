@@ -172,6 +172,7 @@ void ParticleEmitter::Update(float gameTime)
 
 void ParticleEmitter::Render()
 {
+	glCullFace(GL_FRONT);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	m_shader->UseShader();
 	m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
@@ -192,6 +193,7 @@ void ParticleEmitter::Render()
 		}
 	}
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glCullFace(GL_BACK);
 }
 
 unsigned int ParticleEmitter::FirstUnusedParticle()

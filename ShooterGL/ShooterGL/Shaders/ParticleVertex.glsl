@@ -16,6 +16,8 @@ void main()
 	vec4(vertex.xy * size, 0.0, 0.0);
 
 	gl_Position = newPosition;
+	//gl_Position = position * view * projection;
+	//gl_Position = projection * view * position * vec4(vertex.xy, 0.0, 1.0);
 	//gl_Position = vec4(vertex.xy * size, -20.0, 1.0);
 	//gl_Position = vec4(gl_InstanceID, 0, 0, 0);
 }
