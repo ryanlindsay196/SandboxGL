@@ -4,6 +4,7 @@
 #include "ControllerManager.h"
 #include "ModelManager.h"
 #include "LightManager.h"
+#include "Renderables/ParticleEmitter.h"
 
 #include "GLFW/glfw3.h"
 
@@ -179,10 +180,8 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 	return nullptr;
 }
 
-//TODO: Make private and use the entity properties for properties, and load all entities from the scene file
 void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startEulerAngles, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
-	//TODO: Instantiate entity based on entity properties unordered map
 	entities.push_back(new Entity());
 	entities[entities.size() - 1]->Instantiate(startPos, startEulerAngles, rotationAngle, startScale, parent);
 
@@ -199,7 +198,10 @@ void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::v
 		}
 		else if (entityProperties->componentNames[i] == "ParticleSystem")
 		{
-
+			ParticleEmitter* newParticleEmitter = new ParticleEmitter();
+			std::pair<std::string, std::string> particleKeyValue = GenerateKeyValuePair(entityProperties->componentProperties[i][0], ":");
+			newParticleEmitter->Initialize(objectManager, (char*)particleKeyValue.second.c_str());
+			entities[entities.size() - 1]->AddComponent(newParticleEmitter);
 		}
 		else if (entityProperties->componentNames[i] == "Controller")
 		{
@@ -220,6 +222,14 @@ void EntityManager::Update(float gameTime)
 	for (Entity* entity : entities)
 	{
 		entity->Update(gameTime);
+	}
+}
+
+void EntityManager::Render()
+{
+	for (Entity* e : entities)
+	{
+		e->Render();
 	}
 }
 

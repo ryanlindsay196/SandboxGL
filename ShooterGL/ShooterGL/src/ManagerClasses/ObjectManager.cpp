@@ -11,6 +11,7 @@
 #include "LightManager.h"
 #include "ShaderManager.h"
 
+//TODO: Remove this
 #include "../Renderables/ParticleEmitter.h"
 
 #include <iostream>
@@ -98,37 +99,17 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	//particleEmitter = new ParticleEmitter();
 	//particleEmitter->Initialize(this, (char*)"Resources/ParticleSystems/ParticleDefault.part");
 	//entityManager->GetEntity(1)->AddComponent(particleEmitter);
-
+	//tempEmitter->Initialize(this, (char*)"Resources/PartycleSystems/DefaultParticle.part");
+	//entityManager->GetEntity(3)->AddComponent(tempEmitter);
 
 	modelManager->LoadShaders();
 }
 
 void ObjectManager::Update(float gameTime)
 {
-	//TODO: make entities in the entityManager private;
-	//entityManager->GetEntity(1)->SetEulerAngles(entityManager->GetEntity(1)->GetEulerAngles() + glm::vec3(0, 1, 0));
-	//cameraManager->GetCamera(0)->Rotate(glm::vec3(1, 0, 0), 0.02f);
-	//cameraManager->GetCamera(0)->Translate(glm::vec3(0, 0, -0.011f));
-	//entityManager->GetEntity(0)->Rotate(glm::vec3(1, 0, 0));
-	//modelManager->GetModel(0)->r
-	//modelManager->GetModel
-	//entityManager->GetEntity(1)->Translate(glm::vec3(0.f, 0.f, -0.001f));
-	//entityManager->GetEntity(0)->Translate(glm::vec3(0.f, 0.001f, 0.f));
-
-	entityManager->GetEntity(1)->SetTranslation(glm::vec3(7 * (float)sin((float)glfwGetTime()), 0, 7 * (float)cos((float)glfwGetTime())));
-	entityManager->GetEntity(1)->SetTranslation(glm::vec3(4.f, 0.f, 0.f));
-	//glm::vec3 newPos = -entityManager->GetEntity(0)->GetTranslation() - entityManager->GetEntity(0)->GetDirection();
-	//entityManager->GetEntity(1)->SetTranslation(newPos);
-	//entityManager->GetEntity(1)->SetTranslation(entityManager->GetEntity(0)->GetTranslation() + (entityManager->GetEntity(0)->GetDirection() * glm::vec3(-3)));
 	modelManager->UpdateModels(gameTime);
 	entityManager->Update(gameTime);
 	cameraManager->Update();
-
-	//entityManager->entities[1]->SetEulerAngles(glm::vec3(0, 1, 0) + entityManager->entities[1]->GetEulerAngles());
-	//modelManager->GetModel(3)->RotateQuaternion(glm::vec3(0, 1, 0), 0.2f);
-	//lightPos += glm::vec3(0, 0, -gameTime);
-
-	//particleEmitter->Update(gameTime);
 }
 
 void ObjectManager::Render()
@@ -152,7 +133,6 @@ void ObjectManager::Render()
 			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"viewPos", cameraManager->GetCamera(0)->componentParent->GetTranslationReference());
 		}
 	}
-	modelManager->RenderModels();
-
-	//particleEmitter->Render();
+	//modelManager->RenderModels();
+	entityManager->Render();
 }

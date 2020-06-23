@@ -24,10 +24,9 @@ public:
 	LightManager* lightManager;
 	ShaderManager* shaderManager;
 
-	//TODO: Remove this
-	ParticleEmitter* particleEmitter;
-
 	void Initialize(GLFWwindow* window);
 	void Update(float gameTime);
 	void Render();
+
+	//ParticleEmitter* tempEmitter;
 };

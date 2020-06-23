@@ -181,8 +181,9 @@ void ParticleEmitter::Render()
 		if (particle.Life > 0.0f)
 		{
 			m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), particle.Position));
+			m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), glm::vec3(0)));
 			//m_shader->SetShaderUniform_vec3((char*)"offset", particle.Position.x, particle.Position.y, particle.Position.z);
-			m_shader->SetShaderUniform_vec4((char*)"color", particle.Color.r, particle.Color.g, particle.Color.b, particle.Color.a);
+			//m_shader->SetShaderUniform_vec4((char*)"color", particle.Color.r, particle.Color.g, particle.Color.b, particle.Color.a);
 			m_shader->SetShaderUniform_vec2((char*)"size", particle.Size.x, particle.Size.y);
 			m_shader->BindTextures();
 			glBindVertexArray(VAO);

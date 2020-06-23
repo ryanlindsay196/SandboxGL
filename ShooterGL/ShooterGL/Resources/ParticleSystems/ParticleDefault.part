@@ -13,5 +13,5 @@ velocityOffset : 0,-0.3,0
 accelerationShape: rectangle
 accelerationDimensions : 0,0.2,0
 accelerationOffset : 0,0.2,0
-startSize : 0.5,0.5,1
+startSize : 4.5,4.5,1
 endSize: 0,0,0

@@ -36,7 +36,7 @@ public:
 	void SetDefaultShaders();
 	void SetShaders(char* materialPath);
 	Shader* GetShader();
-	void Draw();
+	void Render();
 	void SetupMesh();
 	virtual void Update(float gameTime) override;
 

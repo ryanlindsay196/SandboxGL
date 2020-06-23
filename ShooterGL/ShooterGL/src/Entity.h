@@ -14,6 +14,7 @@ public:
 
 	void Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, Entity* newParent);
 	void Update(float gameTime);
+	void Render();
 
 	void SetParent(Entity* newParent);
 	void AddComponent(Component* newComponent);

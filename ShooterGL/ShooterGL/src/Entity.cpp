@@ -59,6 +59,14 @@ void Entity::Update(float gameTime)
 
 }
 
+void Entity::Render()
+{
+	for (Component* component : components)
+	{
+		component->Render();
+	}
+}
+
 void Entity::SetParent(Entity * newParent)
 {
 	parent = newParent;

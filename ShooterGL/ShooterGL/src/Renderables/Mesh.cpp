@@ -125,7 +125,7 @@ Shader * Mesh::GetShader()
 }
 
 //TODO: Change name to Render()
-void Mesh::Draw()
+void Mesh::Render()
 {
 	//if (parentMesh->componentParent != nullptr)
 	//	offsetTransform = parentMesh->componentParent->GetTransform();

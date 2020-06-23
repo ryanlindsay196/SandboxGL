@@ -28,7 +28,7 @@ void Controller::Update(float gameTime)
 	if (glfwGetKey(window, GLFW_KEY_D))
 		moveDirection += glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
 
-	Move(moveDirection, 0.03f);
+	Move(moveDirection, 3.f * gameTime);
 
 	if (xoffset != 0 || yoffset != 0)
 	{

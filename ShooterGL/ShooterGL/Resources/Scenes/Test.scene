@@ -8,7 +8,7 @@ PREFAB : Resources/Prefabs/Player.prefab
 
 PREFAB : Resources/Prefabs/Test.prefab
 {
-	Position : 0,0,0
+	Position : 2,0,0
 	EulerAngles : 0,0,0
 	RotationAngle : 3.14
 	Scale : 1,1,1
@@ -24,7 +24,7 @@ PREFAB : Resources/Prefabs/Test.prefab
 
 PREFAB : Resources/Prefabs/Test2.prefab
 {
-	Position : 0,0,2
+	Position : 0,-1,0
 	EulerAngles : 0,1,0
 	Scale : 1,1,1
 }
