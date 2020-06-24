@@ -317,6 +317,7 @@
     <None Include="Resources\ProjectData\Tags.meta" />
     <None Include="Resources\Prefabs\Test.prefab" />
     <None Include="Resources\Prefabs\Test2.prefab" />
+    <None Include="Resources\Materials\BackPackMaterial.mat" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\Assimp\lib\assimp-vc140-mt.lib" />

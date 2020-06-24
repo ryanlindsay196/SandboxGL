@@ -119,6 +119,11 @@ void Mesh::SetShaders(char* materialPath)
 	shader = m_objectManager->shaderManager->LoadNewShader(materialPath, m_objectManager);
 }
 
+void Mesh::AttachMeshData(MeshData * meshData)
+{
+	m_meshData = meshData;
+}
+
 Shader * Mesh::GetShader()
 {
 	return shader;
@@ -143,17 +148,17 @@ void Mesh::Render()
 	shader->UseShader();
 	shader->BindTextures();
 	glBindVertexArray(m_modelData->VAO);
-	//glDrawArrays(GL_TRIANGLES, 0, indices.size());
-	glDrawElements(GL_TRIANGLES, m_meshData->indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_TRIANGLES, 0, m_meshData->indices.size());
+	//glDrawElements(GL_TRIANGLES, m_meshData->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
 void Mesh::SetupMesh()
 {
 	// create buffers/arrays
-	glGenVertexArrays(1, &m_modelData->VAO);
-	glGenBuffers(1, &m_modelData->VBO);
-	glGenBuffers(1, &m_modelData->EBO);
+	//glGenVertexArrays(1, &m_modelData->VAO);
+	//glGenBuffers(1, &m_modelData->VBO);
+	//glGenBuffers(1, &m_modelData->EBO);
 
 	glBindVertexArray(m_modelData->VAO);
 	// load data into vertex buffers

@@ -1,0 +1,16 @@
+&&VertexShader Shaders/VertexDefault.glsl
+&&FragmentShader Shaders/FragmentDefault.glsl
+<ATTACH AND LINK SHADER>
+textures
+{
+	albedoMap : Resources/Textures/Rick.jpg
+	normalMap : Resources/Textures/Rick.jpg
+	specularMap : Resources/Textures/Rick.jpg
+}
+vec3
+{
+}
+float
+{
+	mat.shininess : 0.1
+}

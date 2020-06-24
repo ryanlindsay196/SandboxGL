@@ -35,6 +35,7 @@ public:
 	void LoadShaders();
 	void SetDefaultShaders();
 	void SetShaders(char* materialPath);
+	void AttachMeshData(MeshData* meshData);
 	Shader* GetShader();
 	void Render();
 	void SetupMesh();

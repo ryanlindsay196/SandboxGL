@@ -34,91 +34,20 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	//yaw = -90;
 	m_textureManager = objectManager->textureManager;
 	m_objectManager = objectManager;
-#pragma region To REMOVE?
-
-
-	//float vertices[] = {
-	//	//Front
-	//	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, -1.0f,
-	//	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f, -1.0f,
-	//	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, -1.0f,
-	//	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, -1.0f,
-	//	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,
-	//	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, -1.0f,
-	//	//Back
-	//	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f,
-	//	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f,
-	//	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f,
-	//	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f,
-	//	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f,
-	//	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f,
-	//	//Left
-	//	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f,
-	//	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f,
-	//	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f,
-	//	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f,
-	//	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f,
-	//	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f,
-	//	//Right
-	//	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f,
-	//	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f,
-	//	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f,
-	//	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f,
-	//	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f,
-	//	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f,
-	//	//Bottom
-	//	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f, 0.0f,
-	//	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, -1.0f, 0.0f,
-	//	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, -1.0f, 0.0f,
-	//	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, -1.0f, 0.0f,
-	//	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, -1.0f, 0.0f,
-	//	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, -1.0f, 0.0f,
-	//	//Top
-	//	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 0.0f,
-	//	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f, 0.0f,
-	//	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 0.0f,
-	//	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 0.0f,
-	//	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 0.0f,
-	//	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 0.0f
-	//};
-	//unsigned int indices[] = {  // note that we start from 0!
-	//	0 * 1, 2 * 1, 3 * 1,   // first triangle		tr/bl/tl
-	//	0 * 1, 2 * 1, 1 * 1    // second triangle
-	//};
-	//
-	//
-	//glGenBuffers(1, &VBO);//
-	//
-	//glGenVertexArrays(1, &VAO);//
-	////Initialization code (done once (unless your object frequently changes))
-	////a. bind vertex array object
-	//glBindVertexArray(VAO);//
-	////2. copy our vertices array in a buffer for OpenGL to use
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	////3. then set our vertex attributes pointers
-	////glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	////glEnableVertexAttribArray(0);
-	////glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	////glEnableVertexAttribArray(1);
-	////glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	////glEnableVertexAttribArray(2);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(5 * sizeof(float)));
-	//glEnableVertexAttribArray(2);
-	//
-	//glGenBuffers(1, &EBO);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-#pragma endregion
 
 	m_modelData = objectManager->modelManager->LoadModelData(modelPath);
 
+	// create buffers/arrays
+	glGenVertexArrays(1, &m_modelData->VAO);
+	glGenBuffers(1, &m_modelData->VBO);
+	glGenBuffers(1, &m_modelData->EBO);
+
 	LoadModel(modelPath, materialPath);
+
+	for (int i = 0; i < m_meshes.size(); i++)
+	{
+		m_meshes[i].AttachMeshData(&m_modelData->m_meshData[i]);
+	}
 
 	offsetTransform = glm::mat4(1);
 	positionOffset = glm::mat4(1);
@@ -252,7 +181,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 	//return Mesh(m_objectManager, std::vector<Vertex>(), std::vector<unsigned int>(), materialPath, this);
 	if (m_meshes.size() == m_modelData->m_meshData.size())
 		m_modelData->m_meshData.push_back(MeshData());
-	return Mesh(m_objectManager, scene, mesh, materialPath, this, m_modelData, &m_modelData->m_meshData[m_meshes.size()]);
+	return Mesh(m_objectManager, scene, mesh, materialPath, this, m_modelData, &(m_modelData->m_meshData[m_meshes.size()]));
 }
 
 void Model::LoadShaders()
