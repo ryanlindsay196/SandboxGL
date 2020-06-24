@@ -38,9 +38,9 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	m_modelData = objectManager->modelManager->LoadModelData(modelPath);
 
 	// create buffers/arrays
-	glGenVertexArrays(1, &m_modelData->VAO);
-	glGenBuffers(1, &m_modelData->VBO);
-	glGenBuffers(1, &m_modelData->EBO);
+	//glGenVertexArrays(1, &m_modelData->VAO);
+	//glGenBuffers(1, &m_modelData->VBO);
+	//glGenBuffers(1, &m_modelData->EBO);
 
 	LoadModel(modelPath, materialPath);
 

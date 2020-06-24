@@ -5,6 +5,7 @@
 class MeshData
 {
 public:
+	unsigned int VAO, EBO, VBO;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 };
@@ -12,7 +13,7 @@ public:
 class ModelData
 {
 public:
-	unsigned int VAO, EBO, VBO;
+	//unsigned int VAO, EBO, VBO;
 	std::vector<MeshData> m_meshData;
 };
 

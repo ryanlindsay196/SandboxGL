@@ -147,7 +147,7 @@ void Mesh::Render()
 
 	shader->UseShader();
 	shader->BindTextures();
-	glBindVertexArray(m_modelData->VAO);
+	glBindVertexArray(m_meshData->VAO);
 	glDrawArrays(GL_TRIANGLES, 0, m_meshData->indices.size());
 	//glDrawElements(GL_TRIANGLES, m_meshData->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -156,16 +156,16 @@ void Mesh::Render()
 void Mesh::SetupMesh()
 {
 	// create buffers/arrays
-	//glGenVertexArrays(1, &m_modelData->VAO);
-	//glGenBuffers(1, &m_modelData->VBO);
-	//glGenBuffers(1, &m_modelData->EBO);
+	glGenVertexArrays(1, &m_meshData->VAO);
+	glGenBuffers(1, &m_meshData->VBO);
+	glGenBuffers(1, &m_meshData->EBO);
 
-	glBindVertexArray(m_modelData->VAO);
+	glBindVertexArray(m_meshData->VAO);
 	// load data into vertex buffers
-	glBindBuffer(GL_ARRAY_BUFFER, m_modelData->VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, m_meshData->VBO);
 	glBufferData(GL_ARRAY_BUFFER, m_meshData->vertices.size() * sizeof(Vertex), &m_meshData->vertices[0], GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_modelData->EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshData->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_meshData->indices.size() * sizeof(unsigned int), &m_meshData->indices[0], GL_STATIC_DRAW);
 
 	// set the vertex attribute pointers
