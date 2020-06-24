@@ -3,8 +3,8 @@
 <ATTACH AND LINK SHADER>
 textures
 {
-	albedoMap : Resources/Textures/Rick.jpg
-	normalMap : Resources/Textures/Rick.jpg
+	albedoMap : Resources/Textures/1001_albedo.jpg
+	normalMap : Resources/Textures/1001_albedo.jpg
 	specularMap : Resources/Textures/Rick.jpg
 }
 vec3

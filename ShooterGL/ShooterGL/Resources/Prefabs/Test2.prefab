@@ -4,9 +4,9 @@ Components
 	{
 		Path : Resources/Models/guitar_backpack/survival_backpack_2.fbx
 		PositionOffset : 0,0,6
-		EulerAngles : 2,0,0
+		EulerAngles : 0,0,0
 		RotationAngle : 90
-		ScaleOffset : 0.1,0.1,0.1
+		ScaleOffset : 0.01,0.01,0.01
 		Material : Resources/Materials/BackPackMaterial.mat
 	}
 	ParticleSystem

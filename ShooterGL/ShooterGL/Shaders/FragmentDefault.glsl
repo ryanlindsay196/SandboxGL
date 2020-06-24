@@ -90,6 +90,7 @@ void main()
 		result += CalcPointLight(pointLights[i], norm, fs_in.FragPos, viewDir);
 
 	FragColor = vec4(result, 1.0);
+	FragColor = texture(albedoMap, fs_in.TexCoord.xy);
 }
 
 vec3 CalcPointLight(PointLight pointLight, vec3 normal, vec3 fragPos, vec3 viewDir)
