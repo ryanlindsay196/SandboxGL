@@ -147,8 +147,7 @@ void Mesh::Render()
 	shader->UseShader();
 	shader->BindTextures();
 	glBindVertexArray(m_meshData->VAO);
-	glDrawArrays(GL_TRIANGLES, 0, m_meshData->indices.size());
-	//glDrawElements(GL_TRIANGLES, m_meshData->indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_meshData->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 

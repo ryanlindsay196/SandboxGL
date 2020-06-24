@@ -2,7 +2,7 @@ Components
 {
 	Model
 	{
-		Path : Resources/Models/guitar_backpack/arms.fbx
+		Path : Resources/Models/guitar_backpack/survival_backpack_2.fbx
 		PositionOffset : 0,0,6
 		EulerAngles : 2,0,0
 		RotationAngle : 90
