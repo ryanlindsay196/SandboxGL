@@ -240,6 +240,7 @@
     <None Include="Resources\Prefabs\Test2.prefab" />
     <None Include="Resources\ProjectData\Tags.meta" />
     <None Include="Resources\Scenes\Test.scene" />
+    <None Include="Resources\Scenes\Test2.scene" />
     <None Include="Shaders\FragmentDefault.glsl" />
     <None Include="Shaders\ParticleFragment.glsl" />
     <None Include="Shaders\ParticleVertex.glsl" />

@@ -11,10 +11,10 @@
 #include "gtx/quaternion.hpp"
 #include "ModelData.h"
 
-Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, ModelData* modelData, MeshData* meshData)
+Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData)
 {
 	m_materialPath = materialPath;
-	m_modelData = modelData;
+	//m_modelData = modelData;
 	parentMesh = newParent;
 	yaw = -90;
 	textureManager = objectManager->textureManager;
@@ -143,7 +143,6 @@ void Mesh::Render()
 	//RotateQuaternion(glm::vec3(1, 1, 1), 0.2f);
 	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->componentParent->GetTransform());
 	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(1));
-
 
 	shader->UseShader();
 	shader->BindTextures();

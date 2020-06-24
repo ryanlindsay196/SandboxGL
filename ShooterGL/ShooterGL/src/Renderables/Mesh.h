@@ -29,7 +29,7 @@ public:
 	//unsigned int VAO;
 
 	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
-	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, ModelData* modelData, MeshData* meshData);
+	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData);
 
 	//void ReadMaterial(char* materialPath);
 	void LoadShaders();

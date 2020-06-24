@@ -37,11 +37,6 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 
 	m_modelData = objectManager->modelManager->LoadModelData(modelPath);
 
-	// create buffers/arrays
-	//glGenVertexArrays(1, &m_modelData->VAO);
-	//glGenBuffers(1, &m_modelData->VBO);
-	//glGenBuffers(1, &m_modelData->EBO);
-
 	LoadModel(modelPath, materialPath);
 
 	for (int i = 0; i < m_meshes.size(); i++)
@@ -181,7 +176,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 	//return Mesh(m_objectManager, std::vector<Vertex>(), std::vector<unsigned int>(), materialPath, this);
 	if (m_meshes.size() == m_modelData->m_meshData.size())
 		m_modelData->m_meshData.push_back(MeshData());
-	return Mesh(m_objectManager, scene, mesh, materialPath, this, m_modelData, &(m_modelData->m_meshData[m_meshes.size()]));
+	return Mesh(m_objectManager, scene, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]));
 }
 
 void Model::LoadShaders()
