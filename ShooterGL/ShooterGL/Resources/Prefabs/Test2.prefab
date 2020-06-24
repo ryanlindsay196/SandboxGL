@@ -3,10 +3,10 @@ Components
 	Model
 	{
 		Path : Resources/Models/guitar_backpack/arms.fbx
-		PositionOffset : 0,0,-2
-		EulerAngles : 1,0,0
+		PositionOffset : 0,0,6
+		EulerAngles : 2,0,0
 		RotationAngle : 90
-		ScaleOffset : 0.01,0.01,0.01
+		ScaleOffset : 0.1,0.1,0.1
 		Material : Resources/Materials/BackPackMaterial.mat
 	}
 	ParticleSystem
