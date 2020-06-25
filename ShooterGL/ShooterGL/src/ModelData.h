@@ -8,6 +8,7 @@ public:
 	unsigned int VAO, EBO, VBO;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
+	glm::mat4 meshTransform;
 };
 
 class ModelData

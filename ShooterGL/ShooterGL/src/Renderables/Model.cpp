@@ -43,6 +43,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 		{
 			//if (m_meshes.size() < m_modelData->m_meshData.size())
 			m_meshes.push_back(Mesh(objectManager, materialPath, this, &m_modelData->m_meshData[i]));
+			m_meshes[m_meshes.size() - 1].SetTransform(m_modelData->m_meshData[i].meshTransform);
 		}
 	}
 	else
@@ -99,6 +100,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 				node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
 				node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 		));
+		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 	}
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
