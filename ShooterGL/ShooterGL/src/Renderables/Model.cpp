@@ -37,12 +37,18 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 
 	m_modelData = objectManager->modelManager->LoadModelData(modelPath);
 
-	LoadModel(modelPath, materialPath);
-
-	for (int i = 0; i < m_meshes.size(); i++)
+	if(m_modelData->m_meshData.size() != 0)
 	{
-		m_meshes[i].AttachMeshData(&m_modelData->m_meshData[i]);
+		for (int i = 0; i < m_modelData->m_meshData.size(); i++)
+		{
+			//if (m_meshes.size() < m_modelData->m_meshData.size())
+			m_meshes.push_back(Mesh(objectManager, materialPath, this, &m_modelData->m_meshData[i]));
+		}
 	}
+	else
+		LoadModel(modelPath, materialPath);
+	for(unsigned int i = 0; i < m_meshes.size(); i++)
+		m_meshes[i].AttachMeshData(&m_modelData->m_meshData[i]);
 
 	offsetTransform = glm::mat4(1);
 	positionOffset = glm::mat4(1);

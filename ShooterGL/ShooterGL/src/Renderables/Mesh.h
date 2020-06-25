@@ -30,6 +30,7 @@ public:
 
 	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
 	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData);
+	Mesh(ObjectManager* objectManager, char* materialPath, WorldComponent* newParent, MeshData* meshData);
 
 	//void ReadMaterial(char* materialPath);
 	void LoadShaders();
@@ -48,6 +49,5 @@ private:
 	TextureManager* textureManager;
 	ObjectManager* m_objectManager;
 	std::string m_materialPath;
-	ModelData* m_modelData;
 	MeshData* m_meshData;
 };

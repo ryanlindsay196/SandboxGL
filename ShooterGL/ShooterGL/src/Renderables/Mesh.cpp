@@ -101,6 +101,27 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 	SetupMesh();
 }
 
+Mesh::Mesh(ObjectManager * objectManager, char * materialPath, WorldComponent * newParent, MeshData * meshData)
+{
+	m_materialPath = materialPath;
+	//m_modelData = modelData;
+	parentMesh = newParent;
+	yaw = -90;
+	textureManager = objectManager->textureManager;
+	m_objectManager = objectManager;
+	m_meshData = meshData;
+
+	scaleOffset = glm::mat4(1);
+	//TODO: Delete rotationQuat?
+	rotationQuat = glm::quat();
+	positionOffset = glm::mat4(1);
+
+	offsetTransform = glm::mat4(1);
+	if (meshData->vertices.size() > 0)
+		return;
+
+}
+
 void Mesh::LoadShaders()
 {
 	if (m_materialPath != "")
