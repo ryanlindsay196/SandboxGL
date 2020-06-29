@@ -4,7 +4,7 @@
 textures
 {
 	albedoMap : Resources/Textures/1001_albedo.jpg
-	normalMap : Resources/Textures/1001_albedo.jpg
+	normalMap : Resources/Textures/Resume.jpg
 	specularMap : Resources/Textures/Rick.jpg
 }
 vec3

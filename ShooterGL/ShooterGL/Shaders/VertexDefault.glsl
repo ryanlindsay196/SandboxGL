@@ -4,6 +4,8 @@ layout (location = 1) in vec3 aNormal;
 layout (location = 2 ) in vec2 aTexCoord;
 layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
+layout (location = 5) in ivec4 BoneIDs;
+layout (location = 6) in vec4 Weights;
 
 out VS_OUT {
 	vec3 Color;
@@ -17,6 +19,8 @@ out VS_OUT {
 	vec3 TangentFragPos;
 } vs_out;
 
+uniform mat4 gBones[100];
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -26,6 +30,11 @@ uniform vec3 viewPos;
 
 void main()
 {
+	mat4 BoneTransform = gBones[BoneIDs[0]] * Weights[0];
+	BoneTransform += gBones[BoneIDs[1]] * Weights[1];
+	BoneTransform += gBones[BoneIDs[2]] * Weights[2];
+	BoneTransform += gBones[BoneIDs[3]] * Weights[3];
+
 	vs_out.FragPos = vec3(model * vec4(aPos, 1.0));
 	vs_out.Color = vec3(1, 1, 1);
 	vs_out.TexCoord = aTexCoord;
@@ -48,4 +57,5 @@ void main()
 	vs_out.TangentFragPos = TBN * vs_out.FragPos;
 
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
+	gl_Position = projection * view * BoneTransform * model * vec4(aPos, 1.0);
 }

@@ -11,6 +11,10 @@
 #include "gtx/quaternion.hpp"
 #include "ModelData.h"
 
+#define ARRAYSIZE(a) \
+  ((sizeof(a) / sizeof(*(a))) / \
+  static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+
 Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData)
 {
 	m_materialPath = materialPath;
@@ -27,6 +31,7 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 	positionOffset = glm::mat4(1);
 
 	offsetTransform = glm::mat4(1);
+
 	if (meshData->vertices.size() > 0)
 		return;
 	// walk through each of the mesh's vertices
@@ -97,6 +102,50 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 	// 4. height maps
 	//std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+
+	unsigned int numBones = 0;
+	for (unsigned int i = 0; i < mesh->mNumBones; i++)
+	{
+		unsigned int BoneIndex = 0;
+		std::string BoneName(mesh->mBones[i]->mName.data);
+
+		if (boneMap.find(BoneName) == boneMap.end())
+		{
+			BoneIndex = numBones;
+			numBones++;
+			BoneData bd;
+			std::pair<std::string, BoneData> boneMapEntry = std::pair<std::string, BoneData>(BoneName, bd);
+			boneMap[BoneName].boneID = BoneIndex;
+			boneMap.insert(boneMapEntry);
+		}
+		else
+			BoneIndex = boneMap[BoneName].boneID;
+
+		boneMap[BoneName].boneID = BoneIndex;
+		boneMap[BoneName].SetTransform(glm::mat4(
+			mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
+			mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
+			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
+			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
+		));
+
+		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+		{
+			//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
+			unsigned int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
+			float Weight = mesh->mBones[i]->mWeights[j].mWeight;
+
+			for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
+			{
+				if (meshData->vertices[j].WeightValue[k] == 0)
+				{
+					meshData->vertices[j].WeightValue[k] = Weight;
+					meshData->vertices[j].BoneID[k] = BoneIndex;
+					//Bones[VertexID].AddBoneData(BoneIndex, Weight);
+				}
+			}
+		}
+	}
 
 	SetupMesh();
 }
@@ -204,6 +253,12 @@ void Mesh::SetupMesh()
 	// vertex bitangent
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+	// vertex boneID
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BoneID));
+	// vertex bone weights
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, WeightValue));
 
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);

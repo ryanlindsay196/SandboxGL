@@ -4,6 +4,7 @@
 #include "glm.hpp"
 #include "Shader.h"
 #include "Texture.h"
+#include <unordered_map>
 #include "../WorldComponent.h"
 
 class ObjectManager;
@@ -12,12 +13,20 @@ class MeshData;
 struct aiScene;
 struct aiMesh;
 
+class BoneData : public WorldComponent
+{
+public:
+	unsigned int boneID;
+};
+
 struct Vertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
 	glm::vec3 Tangent;
 	glm::vec3 Bitangent;
+	float BoneID[4];
+	float WeightValue[4];
 };
 
 class Mesh : public WorldComponent {
@@ -50,4 +59,6 @@ private:
 	ObjectManager* m_objectManager;
 	std::string m_materialPath;
 	MeshData* m_meshData;
+
+	std::unordered_map<std::string, BoneData> boneMap;
 };
