@@ -319,6 +319,7 @@
     <None Include="Resources\Prefabs\Test2.prefab" />
     <None Include="Resources\Materials\BackPackMaterial.mat" />
     <None Include="Resources\Scenes\Test2.scene" />
+    <None Include="Resources\Prefabs\spoonza.prefab" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\Assimp\lib\assimp-vc140-mt.lib" />

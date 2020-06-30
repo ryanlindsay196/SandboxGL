@@ -230,9 +230,12 @@ void Mesh::Render()
 	//RotateQuaternion(glm::vec3(1, 1, 1), 0.2f);
 	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->componentParent->GetTransform());
 	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(1));
+
 	unsigned int boneIndex = 0;
 	for (auto it : boneMap)
 	{
+		//if (boneIndex == 1)
+			it.second.SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(rand(), 0.1f, 0)));
 		std::string boneUniform = "gBones[" + std::to_string(boneIndex) + "]";
 		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), it.second.GetOffsetTransform());
 		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
@@ -280,7 +283,7 @@ void Mesh::SetupMesh()
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 	// vertex boneID
 	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BoneID));
+	glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, BoneID));
 	// vertex bone weights
 	glEnableVertexAttribArray(6);
 	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, WeightValue));

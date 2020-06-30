@@ -6,7 +6,7 @@ Components
 		PositionOffset : 0,0,6
 		EulerAngles : 0,0,0
 		RotationAngle : 90
-		ScaleOffset : 0.01,0.01,0.01
+		ScaleOffset : 0.05,0.05,0.05
 		Material : Resources/Materials/BackPackMaterial.mat
 	}
 	ParticleSystem

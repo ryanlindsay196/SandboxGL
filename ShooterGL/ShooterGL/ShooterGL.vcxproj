@@ -236,6 +236,7 @@
     <None Include="Resources\Materials\ParticleMat.mat" />
     <None Include="Resources\ParticleSystems\ParticleDefault.part" />
     <None Include="Resources\Prefabs\Player.prefab" />
+    <None Include="Resources\Prefabs\spoonza.prefab" />
     <None Include="Resources\Prefabs\Test.prefab" />
     <None Include="Resources\Prefabs\Test2.prefab" />
     <None Include="Resources\ProjectData\Tags.meta" />

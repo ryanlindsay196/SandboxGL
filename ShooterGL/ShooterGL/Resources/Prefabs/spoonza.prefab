@@ -1,0 +1,11 @@
+Components
+{
+	Model
+	{
+		Path : Resources/Models/guitar_backpack/sponza.obj
+		PositionOffset : 0,0,6
+		EulerAngles : 0,0,0
+		RotationAngle : 90
+		ScaleOffset : 0.005,0.005,0.005
+		Material : Resources/Materials/BackPackMaterial.mat
+	}

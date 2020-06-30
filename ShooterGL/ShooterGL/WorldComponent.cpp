@@ -34,7 +34,7 @@ void WorldComponent::Update(float gameTime)
 
 	if (componentParent != nullptr)
 	{
-		//offsetTransform *= componentParent->GetTransform();
+		offsetTransform *= componentParent->GetTransform();
 	}
 }
 

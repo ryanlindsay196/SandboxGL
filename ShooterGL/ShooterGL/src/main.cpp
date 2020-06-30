@@ -58,6 +58,12 @@ int main()
 #pragma region Gameplay Loop
 	while (!glfwWindowShouldClose(window))
 	{
+		//unsigned int err;
+		//while ((err = glGetError()) != GL_NO_ERROR)
+		//{
+		//	std::cout << err << std::endl;
+		//}
+
 		processInput(window);
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;

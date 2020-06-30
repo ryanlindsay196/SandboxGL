@@ -122,17 +122,17 @@ void ObjectManager::Render()
 
 	//entityManager->entities[0]->SetTranslation(entityManager->entities[1]->GetTranslation());
 
-	for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
-	{
-		for (unsigned int j = 0; j < modelManager->GetModel(i)->GetLoadedMeshesCount(); j++)
-		{
-			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.position", lightManager->GetLight(0)->componentParent->GetTranslationReference());
-			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.ambient", lightManager->GetLight(0)->GetAmbientReference());
-			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.diffuse", lightManager->GetLight(0)->GetDiffuseReference());
-			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.specular", lightManager->GetLight(0)->GetSpecularReference());
-			modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"viewPos", cameraManager->GetCamera(0)->componentParent->GetTranslationReference());
-		}
-	}
+	//for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
+	//{
+	//	for (unsigned int j = 0; j < modelManager->GetModel(i)->GetLoadedMeshesCount(); j++)
+	//	{
+	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.position", lightManager->GetLight(0)->componentParent->GetTranslationReference());
+	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.ambient", lightManager->GetLight(0)->GetAmbientReference());
+	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.diffuse", lightManager->GetLight(0)->GetDiffuseReference());
+	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.specular", lightManager->GetLight(0)->GetSpecularReference());
+	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"viewPos", cameraManager->GetCamera(0)->componentParent->GetTranslationReference());
+	//	}
+	//}
 	//modelManager->RenderModels();
 	entityManager->Render();
 }

@@ -30,10 +30,10 @@ uniform vec3 viewPos;
 
 void main()
 {
-	mat4 BoneTransform = gBones[BoneIDs[0]] * Weights[0];
-	BoneTransform += gBones[BoneIDs[1]] * Weights[1];
-	BoneTransform += gBones[BoneIDs[2]] * Weights[2];
-	BoneTransform += gBones[BoneIDs[3]] * Weights[3];
+	mat4 BoneTransform = gBones[BoneIDs.x] * Weights.x;
+	BoneTransform += gBones[BoneIDs.y] * Weights.y;
+	BoneTransform += gBones[BoneIDs.z] * Weights.z;
+	BoneTransform += gBones[BoneIDs.w] * Weights.w;
 
 	vs_out.FragPos = vec3(model * vec4(aPos, 1.0));
 	vs_out.Color = vec3(1, 1, 1);
@@ -57,8 +57,7 @@ void main()
 	vs_out.TangentFragPos = TBN * vs_out.FragPos;
 
 
-	//vec4 v = BoneTransform * vec4(aPos, 1);
-	//gl_Position = projection * view * model * vec4(v.xyz, 1);
-	//gl_Position = projection * view * model * vec4(aPos, 1.0);
+	gl_Position = projection * view * BoneTransform * model * vec4(aPos, 1.0);
+	gl_Position = projection * view * model * vec4(aPos, 1.0);
 	gl_Position = projection * view * model * BoneTransform * vec4(aPos, 1.0);
 }
