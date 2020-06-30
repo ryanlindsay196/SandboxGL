@@ -71,7 +71,16 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 		vector.y = mesh->mBitangents[i].y;
 		vector.z = mesh->mBitangents[i].z;
 		vertex.Bitangent = vector;
+
+		for (unsigned int k = 0; k < ARRAYSIZE(vertex.WeightValue); k++)
+		{
+			vertex.WeightValue[k] = 0;
+			vertex.BoneID[k] = 0;
+		}
 		meshData->vertices.push_back(vertex);
+
+
+
 	}
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -81,6 +90,7 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
 			meshData->indices.push_back(face.mIndices[j]);
 	}
+
 	// process materials
 	//aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
@@ -121,6 +131,7 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 		else
 			BoneIndex = boneMap[BoneName].boneID;
 
+		//TODO: Move this into the if statement above?
 		boneMap[BoneName].boneID = BoneIndex;
 		boneMap[BoneName].SetTransform(glm::mat4(
 			mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
@@ -128,6 +139,12 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
 			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
 		));
+		//boneMap[BoneName].SetTransform(glm::mat4(
+		//	mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.a4,
+		//	mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.b4,
+		//	mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.c4,
+		//	mesh->mBones[i]->mOffsetMatrix.d1, mesh->mBones[i]->mOffsetMatrix.d2, mesh->mBones[i]->mOffsetMatrix.d3, mesh->mBones[i]->mOffsetMatrix.d4
+		//));
 
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 		{
@@ -213,6 +230,14 @@ void Mesh::Render()
 	//RotateQuaternion(glm::vec3(1, 1, 1), 0.2f);
 	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->componentParent->GetTransform());
 	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(1));
+	unsigned int boneIndex = 0;
+	for (auto it : boneMap)
+	{
+		std::string boneUniform = "gBones[" + std::to_string(boneIndex) + "]";
+		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), it.second.GetOffsetTransform());
+		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
+		boneIndex++;
+	}
 
 	shader->UseShader();
 	shader->BindTextures();

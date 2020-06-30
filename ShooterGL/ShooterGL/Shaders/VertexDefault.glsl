@@ -56,6 +56,9 @@ void main()
 	vs_out.TangentViewPos = TBN * viewPos;
 	vs_out.TangentFragPos = TBN * vs_out.FragPos;
 
-	gl_Position = projection * view * model * vec4(aPos, 1.0);
-	gl_Position = projection * view * BoneTransform * model * vec4(aPos, 1.0);
+
+	//vec4 v = BoneTransform * vec4(aPos, 1);
+	//gl_Position = projection * view * model * vec4(v.xyz, 1);
+	//gl_Position = projection * view * model * vec4(aPos, 1.0);
+	gl_Position = projection * view * model * BoneTransform * vec4(aPos, 1.0);
 }
