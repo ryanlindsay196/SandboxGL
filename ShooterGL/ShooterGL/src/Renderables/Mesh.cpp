@@ -152,6 +152,7 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 				{
 					meshData->vertices[j].WeightValue[k] = Weight;
 					meshData->vertices[j].BoneID[k] = BoneIndex;
+					break;
 					//Bones[VertexID].AddBoneData(BoneIndex, Weight);
 				}
 			}
@@ -228,8 +229,8 @@ void Mesh::Render()
 	//unsigned int boneIndex = 0;
 	for (auto it : boneMap)
 	{
-		//if (it.second.boneID == 1)
-		//	it.second.SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0, 100.1f * it.second.boneID, 0)));
+		if (it.second.boneID == rand() % 41)
+			it.second.SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0, 1.1f * it.second.boneID * ((rand() % 40) - 20), 0)));
 		//std::string boneUniform = "gBones[" + std::to_string(boneIndex) + "]";
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), it.second.GetOffsetTransform());
