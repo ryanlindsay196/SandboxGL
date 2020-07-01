@@ -139,12 +139,6 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
 			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
 		));
-		//boneMap[BoneName].SetTransform(glm::mat4(
-		//	mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.a4,
-		//	mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.b4,
-		//	mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.c4,
-		//	mesh->mBones[i]->mOffsetMatrix.d1, mesh->mBones[i]->mOffsetMatrix.d2, mesh->mBones[i]->mOffsetMatrix.d3, mesh->mBones[i]->mOffsetMatrix.d4
-		//));
 
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 		{
@@ -230,16 +224,16 @@ void Mesh::Render()
 	//RotateQuaternion(glm::vec3(1, 1, 1), 0.2f);
 	//shader->SetShaderUniform_mat4fv((char*)"model", parentMesh->componentParent->GetTransform());
 	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(1));
-
-	unsigned int boneIndex = 0;
+	//positionOffset = glm::translate(positionOffset, glm::vec3(1, 1, 1));
+	//unsigned int boneIndex = 0;
 	for (auto it : boneMap)
 	{
-		//if (boneIndex == 1)
-			it.second.SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(rand(), 0.1f, 0)));
-		std::string boneUniform = "gBones[" + std::to_string(boneIndex) + "]";
+		//if (it.second.boneID == 1)
+		//	it.second.SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0, 100.1f * it.second.boneID, 0)));
+		//std::string boneUniform = "gBones[" + std::to_string(boneIndex) + "]";
+		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), it.second.GetOffsetTransform());
-		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
-		boneIndex++;
+		//boneIndex++;
 	}
 
 	shader->UseShader();
@@ -284,9 +278,10 @@ void Mesh::SetupMesh()
 	// vertex boneID
 	glEnableVertexAttribArray(5);
 	glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, BoneID));
+	//glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BoneID));
 	// vertex bone weights
 	glEnableVertexAttribArray(6);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, WeightValue));
+	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, WeightValue));
 
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
