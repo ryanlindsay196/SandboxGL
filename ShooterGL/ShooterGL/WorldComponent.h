@@ -14,10 +14,12 @@ protected:
 	float yaw, pitch, roll;
 	void SetEulerAngles(glm::vec3 newEulers);
 public:
+	virtual void Initialize();
 	virtual void Update(float gameTime) override;
 
 	bool isActive;
 	inline glm::mat4 GetOffsetTransform() { return offsetTransform; }
+	void CalculateTransform();
 
 	void SetTransform(glm::mat4 newTransform);
 	void Translate(glm::vec3 translateBy);

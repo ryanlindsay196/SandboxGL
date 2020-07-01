@@ -15,7 +15,7 @@
   ((sizeof(a) / sizeof(*(a))) / \
   static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
 
-Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData)
+Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node)
 {
 	m_materialPath = materialPath;
 	//m_modelData = modelData;
@@ -133,6 +133,7 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 
 		//TODO: Move this into the if statement above?
 		boneMap[BoneName].boneID = BoneIndex;
+		boneMap[BoneName].Initialize();
 		boneMap[BoneName].SetTransform(glm::mat4(
 			mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
 			mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
@@ -148,10 +149,10 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 
 			for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
 			{
-				if (meshData->vertices[j].WeightValue[k] == 0)
-				{
-					meshData->vertices[j].WeightValue[k] = Weight;
-					meshData->vertices[j].BoneID[k] = BoneIndex;
+				if (meshData->vertices[VertexID].WeightValue[k] == 0)
+				{					   
+					meshData->vertices[VertexID].WeightValue[k] = Weight;
+					meshData->vertices[VertexID].BoneID[k] = BoneIndex;
 					break;
 					//Bones[VertexID].AddBoneData(BoneIndex, Weight);
 				}
@@ -229,11 +230,14 @@ void Mesh::Render()
 	//unsigned int boneIndex = 0;
 	for (auto it : boneMap)
 	{
+		//if (it.second.boneID == 1)
+		//	it.second.Translate(glm::vec3(0, 100, 0));
+		boneMap[it.first].CalculateTransform();
 		if (it.second.boneID == rand() % 41)
-			it.second.SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0, 1.1f * it.second.boneID * ((rand() % 40) - 20), 0)));
+			boneMap[it.first].SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0, 1.1f * it.second.boneID * ((rand() % 40) - 20) / 5, 0)));
 		//std::string boneUniform = "gBones[" + std::to_string(boneIndex) + "]";
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
-		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), it.second.GetOffsetTransform());
+		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
 		//boneIndex++;
 	}
 
@@ -291,4 +295,8 @@ void Mesh::SetupMesh()
 void Mesh::Update(float gameTime)
 {
 	//SetTransform(parentMesh->componentParent->GetTransform());
+	for (auto it : boneMap)
+	{
+		it.second.Update(gameTime);
+	}
 }

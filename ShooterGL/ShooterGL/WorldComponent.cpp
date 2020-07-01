@@ -4,6 +4,13 @@
 #include "gtx/quaternion.hpp"
 
 
+void WorldComponent::Initialize()
+{
+	positionOffset = glm::mat4(1);
+	rotationQuat = glm::quat();
+	scaleOffset = glm::mat4(1);
+}
+
 void WorldComponent::Update(float gameTime)
 {
 	SetEulerAngles(Rotation());
@@ -30,6 +37,11 @@ void WorldComponent::Update(float gameTime)
 	//RotateQuaternion(glm::vec3(0, 0, 0.1), 0.02);
 	//Translate(glm::vec3(0, 0.0000001, 0));
 
+	CalculateTransform();
+}
+
+void WorldComponent::CalculateTransform()
+{
 	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
 
 	if (componentParent != nullptr)

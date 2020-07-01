@@ -11,6 +11,7 @@ class ObjectManager;
 class ModelData;
 class MeshData;
 struct aiScene;
+struct aiNode;
 struct aiMesh;
 
 class BoneData : public WorldComponent
@@ -38,9 +39,9 @@ public:
 	//unsigned int VAO;
 
 	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
-	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData);
+	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData, const aiNode* node);
 	Mesh(ObjectManager* objectManager, char* materialPath, WorldComponent* newParent, MeshData* meshData);
-
+	
 	//void ReadMaterial(char* materialPath);
 	void LoadShaders();
 	void SetDefaultShaders();

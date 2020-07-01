@@ -93,7 +93,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the node object only contains indices to index the actual objects in the scene.
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		m_meshes.push_back(ProcessMesh(mesh, scene, (char*)materialPath.c_str()));
+		m_meshes.push_back(ProcessMesh(mesh, scene, (char*)materialPath.c_str(), node));
 		m_meshes[m_meshes.size() - 1].SetTransform(
 			glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
 				node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
@@ -109,11 +109,11 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 	}
 }
 
-Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath)
+Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath, const aiNode* node)
 {
 	if (m_meshes.size() == m_modelData->m_meshData.size())
 		m_modelData->m_meshData.push_back(MeshData());
-	return Mesh(m_objectManager, scene, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]));
+	return Mesh(m_objectManager, scene, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node);
 }
 
 void Model::LoadShaders()
@@ -143,11 +143,11 @@ void Model::Update(float gameTime)
 	//offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
 	//offsetTransform = glm::translate(offsetTransform, positionOffset);
 	WorldComponent::Update(gameTime);
-	//for (Mesh mesh : m_meshes)
-	//{
-	//	//mesh.Update(gameTime);
-	//	//mesh.SetTransform(componentParent->GetTransform());
-	//}
+	for (Mesh mesh : m_meshes)
+	{
+		mesh.Update(gameTime);
+		//mesh.SetTransform(componentParent->GetTransform());
+	}
 }
 
 void Model::Render()
