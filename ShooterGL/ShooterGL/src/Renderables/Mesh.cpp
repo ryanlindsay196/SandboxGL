@@ -159,6 +159,7 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 			}
 		}
 	}
+	//boneMap["Bip001 R Clavicle"].componentParent = boneMap["Bop001 R Clavicle"];
 
 	SetupMesh();
 }
@@ -228,14 +229,20 @@ void Mesh::Render()
 	//shader->SetShaderUniform_mat4fv((char*)"model", glm::mat4(1));
 	//positionOffset = glm::translate(positionOffset, glm::vec3(1, 1, 1));
 	//unsigned int boneIndex = 0;
+	//TODO: Potentially move to load function?
+	if (boneMap.size() == 0)
+		shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1));
+
 	for (auto it : boneMap)
 	{
 		//if (it.second.boneID == 1)
 		//	it.second.Translate(glm::vec3(0, 100, 0));
 		boneMap[it.first].CalculateTransform();
-		if (it.second.boneID == rand() % 41)
-			boneMap[it.first].SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0, 1.1f * it.second.boneID * ((rand() % 40) - 20) / 5, 0)));
-		//std::string boneUniform = "gBones[" + std::to_string(boneIndex) + "]";
+		if (it.first == "Bip001 R Forearm")
+		//if (it.second.boneID == 31)
+		//	boneMap[it.first].SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0.1f, -0.01f * it.second.boneID, 0)));
+			boneMap[it.first].SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0, 1.1f * it.second.boneID, 0)));
+		//boneMap["Bip001 R ForeArm"].SetTransform(boneMap["Bip001 R UpperArm"].GetOffsetTransform());
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
 		//boneIndex++;
