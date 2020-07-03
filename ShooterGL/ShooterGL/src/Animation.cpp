@@ -1,5 +1,8 @@
 #include "Animation.h"
 #include "assimp/scene.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "gtx/quaternion.hpp"
+#include "gtc/quaternion.hpp"
 //#include "assimp/vector3.h"
 //#include "assimp/anim.h"
 
@@ -7,10 +10,10 @@ void Animation::Initialize()
 {
 }
 
-void Animation::CalculateInterpolatedPosition(aiVector3D& out, float animationTime, const aiNodeAnim * nodeAnim)
+void Animation::CalculateInterpolatedPosition(glm::vec3& out, float animationTime, const aiNodeAnim * nodeAnim)
 {
 	if (nodeAnim->mNumPositionKeys == 1) {
-		out = nodeAnim->mPositionKeys[0].mValue;
+		out = glm::vec3(nodeAnim->mPositionKeys[0].mValue.x, nodeAnim->mPositionKeys[0].mValue.y, nodeAnim->mPositionKeys[0].mValue.z);
 		return;
 	}
 
@@ -20,17 +23,17 @@ void Animation::CalculateInterpolatedPosition(aiVector3D& out, float animationTi
 	float DeltaTime = (float)(nodeAnim->mPositionKeys[NextPositionIndex].mTime - nodeAnim->mPositionKeys[PositionIndex].mTime);
 	float Factor = (animationTime - (float)nodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
 	assert(Factor >= 0.0f && Factor <= 1.0f);
-	const aiVector3D& Start = nodeAnim->mPositionKeys[PositionIndex].mValue;
-	const aiVector3D& End = nodeAnim->mPositionKeys[NextPositionIndex].mValue;
-	aiVector3D Delta = End - Start;
+	const glm::vec3& Start = glm::vec3(nodeAnim->mPositionKeys[PositionIndex].mValue.x, nodeAnim->mPositionKeys[PositionIndex].mValue.y, nodeAnim->mPositionKeys[PositionIndex].mValue.z);
+	const glm::vec3& End = glm::vec3(nodeAnim->mPositionKeys[NextPositionIndex].mValue.x, nodeAnim->mPositionKeys[NextPositionIndex].mValue.y, nodeAnim->mPositionKeys[NextPositionIndex].mValue.z);
+	glm::vec3 Delta = End - Start;
 	out = Start + Factor * Delta;
 }
 
-void Animation::CalculateInterpolatedRotation(aiQuaternion & out, float animationTime, const aiNodeAnim * nodeAnim)
+void Animation::CalculateInterpolatedRotation(glm::quat& out, float animationTime, const aiNodeAnim * nodeAnim)
 {
 	// we need at least two values to interpolate...
 	if (nodeAnim->mNumRotationKeys == 1) {
-		out = nodeAnim->mRotationKeys[0].mValue;
+		out = glm::quat(nodeAnim->mRotationKeys[0].mValue.x, nodeAnim->mRotationKeys[0].mValue.y, nodeAnim->mRotationKeys[0].mValue.z, nodeAnim->mRotationKeys[0].mValue.w);
 		return;
 	}
 
@@ -40,16 +43,17 @@ void Animation::CalculateInterpolatedRotation(aiQuaternion & out, float animatio
 	float DeltaTime = (float)(nodeAnim->mRotationKeys[NextRotationIndex].mTime - nodeAnim->mRotationKeys[RotationIndex].mTime);
 	float Factor = (animationTime - (float)nodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
 	assert(Factor >= 0.0f && Factor <= 1.0f);
-	const aiQuaternion& StartRotationQ = nodeAnim->mRotationKeys[RotationIndex].mValue;
-	const aiQuaternion& EndRotationQ = nodeAnim->mRotationKeys[NextRotationIndex].mValue;
-	aiQuaternion::Interpolate(out, StartRotationQ, EndRotationQ, Factor);
-	out = out.Normalize();
+	const glm::quat& StartRotationQ = glm::quat(nodeAnim->mRotationKeys[RotationIndex].mValue.x, nodeAnim->mRotationKeys[RotationIndex].mValue.y, nodeAnim->mRotationKeys[RotationIndex].mValue.z, nodeAnim->mRotationKeys[RotationIndex].mValue.w);
+	const glm::quat& EndRotationQ = glm::quat(nodeAnim->mRotationKeys[NextRotationIndex].mValue.x, nodeAnim->mRotationKeys[NextRotationIndex].mValue.y, nodeAnim->mRotationKeys[NextRotationIndex].mValue.z, nodeAnim->mRotationKeys[NextRotationIndex].mValue.w);
+	out = mix(StartRotationQ, EndRotationQ, Factor);
+	//out = out.Normalize();
+	out = normalize(out);
 }
 
-void Animation::CalculateIntorpolatedScaling(aiVector3D& out, float animationTime, const aiNodeAnim * nodeAnim)
+void Animation::CalculateIntorpolatedScaling(glm::vec3& out, float animationTime, const aiNodeAnim * nodeAnim)
 {
 	if (nodeAnim->mNumScalingKeys == 1) {
-		out = nodeAnim->mScalingKeys[0].mValue;
+		out = glm::vec3(nodeAnim->mScalingKeys[0].mValue.x, nodeAnim->mScalingKeys[0].mValue.y, nodeAnim->mScalingKeys[0].mValue.z);
 		return;
 	}
 
@@ -59,9 +63,9 @@ void Animation::CalculateIntorpolatedScaling(aiVector3D& out, float animationTim
 	float DeltaTime = (float)(nodeAnim->mScalingKeys[NextScalingIndex].mTime - nodeAnim->mScalingKeys[ScalingIndex].mTime);
 	float Factor = (animationTime - (float)nodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
 	assert(Factor >= 0.0f && Factor <= 1.0f);
-	const aiVector3D& Start = nodeAnim->mScalingKeys[ScalingIndex].mValue;
-	const aiVector3D& End = nodeAnim->mScalingKeys[NextScalingIndex].mValue;
-	aiVector3D Delta = End - Start;
+	const glm::vec3& Start = glm::vec3(nodeAnim->mScalingKeys[ScalingIndex].mValue.x, nodeAnim->mScalingKeys[ScalingIndex].mValue.y, nodeAnim->mScalingKeys[ScalingIndex].mValue.z);
+	const glm::vec3& End = glm::vec3(nodeAnim->mScalingKeys[NextScalingIndex].mValue.x, nodeAnim->mScalingKeys[NextScalingIndex].mValue.y, nodeAnim->mScalingKeys[NextScalingIndex].mValue.z);
+	glm::vec3 Delta = End - Start;
 	out = Start + Factor * Delta;
 }
 
