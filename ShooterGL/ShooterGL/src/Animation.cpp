@@ -1,5 +1,7 @@
 #include "Animation.h"
 #include "assimp/scene.h"
+//#include "assimp/vector3.h"
+//#include "assimp/anim.h"
 
 void Animation::Initialize()
 {
@@ -61,5 +63,47 @@ void Animation::CalculateIntorpolatedScaling(aiVector3D& out, float animationTim
 	const aiVector3D& End = nodeAnim->mScalingKeys[NextScalingIndex].mValue;
 	aiVector3D Delta = End - Start;
 	out = Start + Factor * Delta;
+}
 
+unsigned int Animation::FindPosition(float animationTime, const aiNodeAnim * nodeAnim)
+{
+	for (unsigned int i = 0; i < nodeAnim->mNumPositionKeys - 1; i++) {
+		if (animationTime < (float)nodeAnim->mPositionKeys[i + 1].mTime) {
+			return i;
+		}
+	}
+
+	assert(0);
+
+	return 0;
+}
+
+unsigned int Animation::FindRotation(float animationTime, const aiNodeAnim * nodeAnim)
+{
+	assert(nodeAnim->mNumRotationKeys > 0);
+
+	for (unsigned int i = 0; i < nodeAnim->mNumRotationKeys - 1; i++) {
+		if (animationTime < (float)nodeAnim->mRotationKeys[i + 1].mTime) {
+			return i;
+		}
+	}
+
+	assert(0);
+
+	return 0;
+}
+
+unsigned int Animation::FindScaling(float animationTime, const aiNodeAnim * nodeAnim)
+{
+	assert(nodeAnim->mNumScalingKeys > 0);
+
+	for (unsigned int i = 0; i < nodeAnim->mNumScalingKeys - 1; i++) {
+		if (animationTime < (float)nodeAnim->mScalingKeys[i + 1].mTime) {
+			return i;
+		}
+	}
+
+	assert(0);
+
+	return 0;
 }

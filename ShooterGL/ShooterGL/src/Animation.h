@@ -5,8 +5,8 @@
 
 struct aiNode;
 struct aiNodeAnim;
-struct aiQuaternion;
-struct aiVector3D;
+class aiQuaternion;
+class aiVector3D;
 
 class Animation
 {
@@ -19,6 +19,8 @@ public:
 	void CalculateInterpolatedRotation(aiQuaternion& out, float animationTime, const aiNodeAnim* nodeAnim);
 	void CalculateIntorpolatedScaling(aiVector3D& out, float animationTime, const aiNodeAnim* nodeAnim);
 
+	unsigned int FindPosition(float animationTime, const aiNodeAnim* nodeAnim);
 	unsigned int FindRotation(float animationTime, const aiNodeAnim* nodeAnim);
+	unsigned int FindScaling(float animationTime, const aiNodeAnim* nodeAnim);
 	void ReadNodeHierarchy(float animationTime, const aiNode* node, const glm::mat4& ParentTransform);
 };
