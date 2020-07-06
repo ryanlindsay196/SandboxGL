@@ -18,6 +18,7 @@ class BoneData : public WorldComponent
 {
 public:
 	unsigned int boneID;
+	glm::mat4 finalTransformation;
 };
 
 struct Vertex {

@@ -3,11 +3,84 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 #include "gtc/quaternion.hpp"
+#include "Renderables/Mesh.h"
 //#include "assimp/vector3.h"
 //#include "assimp/anim.h"
 
-void Animation::Initialize()
+void Animation::Initialize(aiScene* scene)
 {
+	m_GlobalInverseTransform = glm::mat4(
+		scene->mRootNode->mTransformation.a1, scene->mRootNode->mTransformation.b1, scene->mRootNode->mTransformation.c1, scene->mRootNode->mTransformation.d1,
+		scene->mRootNode->mTransformation.a2, scene->mRootNode->mTransformation.b2, scene->mRootNode->mTransformation.c2, scene->mRootNode->mTransformation.d2,
+		scene->mRootNode->mTransformation.a3, scene->mRootNode->mTransformation.b3, scene->mRootNode->mTransformation.c3, scene->mRootNode->mTransformation.d3,
+		scene->mRootNode->mTransformation.a4, scene->mRootNode->mTransformation.b4, scene->mRootNode->mTransformation.c4, scene->mRootNode->mTransformation.d4);
+}
+
+void Animation::ReadNodeHierarchy(aiScene* scene, float animationTime, const aiNode * node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
+{
+	std::string NodeName(node->mName.data);
+
+	const aiAnimation* pAnimation = scene->mAnimations[0];
+
+	glm::mat4 NodeTransformation = glm::mat4(
+		node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
+		node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
+		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
+		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
+	);
+
+	const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
+
+	if (pNodeAnim) {
+		// Interpolate scaling and generate scaling transformation matrix
+		glm::vec3 Scaling;
+		CalculateIntorpolatedScaling(Scaling, animationTime, pNodeAnim);
+		glm::mat4 ScalingM;
+		//ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
+		ScalingM = glm::scale(glm::mat4(1), glm::vec3(Scaling.x, Scaling.y, Scaling.z));
+		// Interpolate rotation and generate rotation transformation matrix
+		glm::quat RotationQ;
+		CalculateInterpolatedRotation(RotationQ, animationTime, pNodeAnim);
+		glm::mat4 RotationM = glm::mat4(glm::toMat4(RotationQ));
+
+		// Interpolate translation and generate translation transformation matrix
+		glm::vec3 Translation;
+		CalculateInterpolatedPosition(Translation, animationTime, pNodeAnim);
+		glm::mat4 TranslationM;
+		//TranslationM.InitTranslationTransform(Translation.x, Translation.y, Translation.z);
+		TranslationM = glm::translate(glm::mat4(1), glm::vec3(Translation.x, Translation.y, Translation.z));
+
+		// Combine the above transformations
+		NodeTransformation = TranslationM * RotationM * ScalingM;
+	}
+
+	glm::mat4 GlobalTransformation = parentTransform * NodeTransformation;
+
+	if (boneMap.find(NodeName) != boneMap.end()) {
+		//unsigned int BoneIndex = boneMap[NodeName];
+		//boneMap[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation *
+		//	m_BoneInfo[BoneIndex].BoneOffset;
+		//unsigned int BoneIndex = boneMap[NodeName];
+			boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation *
+			boneMap[NodeName].GetOffsetTransform();
+	}
+
+	for (unsigned int i = 0; i < node->mNumChildren; i++) {
+		ReadNodeHierarchy(scene, animationTime, node->mChildren[i], GlobalTransformation, boneMap);
+	}
+}
+
+const aiNodeAnim* Animation::FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName)
+{
+	for (unsigned int i = 0; i < pAnimation->mNumChannels; i++) {
+		const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
+
+		if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
+			return pNodeAnim;
+		}
+	}
+
+	return NULL;
 }
 
 void Animation::CalculateInterpolatedPosition(glm::vec3& out, float animationTime, const aiNodeAnim * nodeAnim)
