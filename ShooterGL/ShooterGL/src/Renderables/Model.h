@@ -52,5 +52,6 @@ private:
 	ModelData* m_modelData;
 	//Shader* shader;
 	std::vector<Mesh> m_meshes;
+	aiNode* rootNode;
 };
 

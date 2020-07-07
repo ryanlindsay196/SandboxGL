@@ -7,20 +7,22 @@
 //#include "assimp/vector3.h"
 //#include "assimp/anim.h"
 
-void Animation::Initialize(aiScene* scene)
+void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 {
 	m_GlobalInverseTransform = glm::mat4(
 		scene->mRootNode->mTransformation.a1, scene->mRootNode->mTransformation.b1, scene->mRootNode->mTransformation.c1, scene->mRootNode->mTransformation.d1,
 		scene->mRootNode->mTransformation.a2, scene->mRootNode->mTransformation.b2, scene->mRootNode->mTransformation.c2, scene->mRootNode->mTransformation.d2,
 		scene->mRootNode->mTransformation.a3, scene->mRootNode->mTransformation.b3, scene->mRootNode->mTransformation.c3, scene->mRootNode->mTransformation.d3,
 		scene->mRootNode->mTransformation.a4, scene->mRootNode->mTransformation.b4, scene->mRootNode->mTransformation.c4, scene->mRootNode->mTransformation.d4);
+
+	m_GlobalInverseTransform = glm::inverse(m_GlobalInverseTransform);
+	animation = scene->mAnimations[animationIndex];
 }
 
-void Animation::ReadNodeHierarchy(aiScene* scene, float animationTime, const aiNode * node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
+void Animation::ReadNodeHierarchy(float animationTime, const aiNode * node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
 {
 	std::string NodeName(node->mName.data);
-
-	const aiAnimation* pAnimation = scene->mAnimations[0];
+	//Remove aiXXX classes from this function
 
 	glm::mat4 NodeTransformation = glm::mat4(
 		node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
@@ -29,7 +31,7 @@ void Animation::ReadNodeHierarchy(aiScene* scene, float animationTime, const aiN
 		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 	);
 
-	const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
+	const aiNodeAnim* pNodeAnim = FindNodeAnim(animation, NodeName);
 
 	if (pNodeAnim) {
 		// Interpolate scaling and generate scaling transformation matrix
@@ -61,12 +63,12 @@ void Animation::ReadNodeHierarchy(aiScene* scene, float animationTime, const aiN
 		//boneMap[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation *
 		//	m_BoneInfo[BoneIndex].BoneOffset;
 		//unsigned int BoneIndex = boneMap[NodeName];
-			boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation *
+		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation *
 			boneMap[NodeName].GetOffsetTransform();
 	}
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++) {
-		ReadNodeHierarchy(scene, animationTime, node->mChildren[i], GlobalTransformation, boneMap);
+		ReadNodeHierarchy(animationTime, node->mChildren[i], GlobalTransformation, boneMap);
 	}
 }
 

@@ -39,7 +39,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 
 	if(m_modelData->m_meshData.size() != 0)
 	{
-		for (int i = 0; i < m_modelData->m_meshData.size(); i++)
+		for (unsigned int i = 0; i < m_modelData->m_meshData.size(); i++)
 		{
 			//if (m_meshes.size() < m_modelData->m_meshData.size())
 			m_meshes.push_back(Mesh(objectManager, materialPath, this, &m_modelData->m_meshData[i]));
@@ -118,7 +118,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath
 
 void Model::LoadShaders()
 {
-	for (int i = 0; i < m_meshes.size(); i++)
+	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
 		m_meshes[i].LoadShaders();
 	}

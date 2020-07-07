@@ -10,6 +10,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 #include "ModelData.h"
+//#include "Animation.h"
 
 #define ARRAYSIZE(a) \
   ((sizeof(a) / sizeof(*(a))) / \
@@ -17,6 +18,8 @@
 
 Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node)
 {
+	animationIndex = 0;
+	rootNode = aiScene->mRootNode;
 	m_materialPath = materialPath;
 	//m_modelData = modelData;
 	parentMesh = newParent;
@@ -31,6 +34,15 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 	positionOffset = glm::mat4(1);
 
 	offsetTransform = glm::mat4(1);
+
+	for(unsigned int i = 0; i < aiScene->mNumAnimations; i++)
+	{
+		Animation newAnim = Animation();
+		newAnim.Initialize(aiScene, i);
+		//std::pair<std::string, Animation> newAnimPair(aiScene->mAnimations[i]->mName.C_Str(), newAnim);
+		//animationMap.insert(newAnimPair);
+		animations.push_back(newAnim);
+	}
 
 	if (meshData->vertices.size() > 0)
 		return;
@@ -220,19 +232,16 @@ void Mesh::Render()
 	if (boneMap.size() == 0)
 		shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1));
 
+	//animationMap[x].ReadNodeHierarchy();
+	if(animations.size() > 0)
+		animations[animationIndex].ReadNodeHierarchy(0.2f, rootNode, offsetTransform, boneMap);
+	
 	for (auto it : boneMap)
 	{
-		//if (it.second.boneID == 1)
-		//	it.second.Translate(glm::vec3(0, 100, 0));
 		boneMap[it.first].CalculateTransform();
-		if (it.first == "Bip001 R Forearm")
-		//if (it.second.boneID == 31)
-		//	boneMap[it.first].SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0.1f, -0.01f * it.second.boneID, 0)));
-			boneMap[it.first].SetTransform(glm::translate(it.second.GetOffsetTransform(), glm::vec3(0, 1.1f * it.second.boneID, 0)));
-		//boneMap["Bip001 R ForeArm"].SetTransform(boneMap["Bip001 R UpperArm"].GetOffsetTransform());
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
-		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
-		//boneIndex++;
+		//shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
+		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
 	}
 
 	shader->UseShader();

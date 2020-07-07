@@ -6,10 +6,12 @@
 #include "Texture.h"
 #include <unordered_map>
 #include "../WorldComponent.h"
+#include "Animation.h"
 
 class ObjectManager;
 class ModelData;
 class MeshData;
+class Animation;
 struct aiScene;
 struct aiNode;
 struct aiMesh;
@@ -61,6 +63,11 @@ private:
 	ObjectManager* m_objectManager;
 	std::string m_materialPath;
 	MeshData* m_meshData;
+
+	aiNode* rootNode;
+
+	std::vector<Animation> animations;
+	unsigned int animationIndex;
 
 	std::unordered_map<std::string, BoneData> boneMap;
 };

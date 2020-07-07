@@ -17,10 +17,11 @@ class Animation
 private:
 	std::vector<glm::mat4> rotationKeyFrames, transformKeyFrames, scaleKeyFrames;
 	glm::mat4 m_GlobalInverseTransform;
+	aiAnimation* animation;
 public:
-	void Initialize(aiScene* scene);
+	void Initialize(const aiScene * scene, unsigned int animationIndex);
 
-	void ReadNodeHierarchy(aiScene* scene, float animationTime, const aiNode* node, const glm::mat4& parentTransform, std::unordered_map<std::string, BoneData> & boneMap);
+	void ReadNodeHierarchy(float animationTime, const aiNode* node, const glm::mat4& parentTransform, std::unordered_map<std::string, BoneData> & boneMap);
 	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
 
 	void CalculateInterpolatedPosition(glm::vec3& out, float animationTime, const aiNodeAnim* nodeAnim);
