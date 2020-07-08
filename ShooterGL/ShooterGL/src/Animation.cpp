@@ -4,6 +4,7 @@
 #include "gtx/quaternion.hpp"
 #include "gtc/quaternion.hpp"
 #include "Renderables/Mesh.h"
+#include "Renderables/Model.h"
 //#include "assimp/vector3.h"
 //#include "assimp/anim.h"
 
@@ -33,31 +34,26 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 			boneKeyMap[boneKey.first].rotationKeyFrames.push_back(
 				glm::quat(animation->mChannels[i]->mRotationKeys[j].mValue.x, animation->mChannels[i]->mRotationKeys[j].mValue.y, animation->mChannels[i]->mRotationKeys[j].mValue.z, animation->mChannels[i]->mRotationKeys[j].mValue.w)
 			);
-			boneKeyMap[boneKey.first].rotationKeyTimes.push_back(animation->mChannels[i]->mPositionKeys[j].mTime);
+			boneKeyMap[boneKey.first].rotationKeyTimes.push_back(animation->mChannels[i]->mRotationKeys[j].mTime);
 		}
 		for (unsigned int j = 0; j < animation->mChannels[i]->mNumScalingKeys; j++)
 		{
 			boneKeyMap[boneKey.first].scaleKeyFrames.push_back(
 				glm::vec3(animation->mChannels[i]->mScalingKeys[j].mValue.x, animation->mChannels[i]->mScalingKeys[j].mValue.y, animation->mChannels[i]->mScalingKeys[j].mValue.z)
 			);
-			boneKeyMap[boneKey.first].scaleKeyTimes.push_back(animation->mChannels[i]->mPositionKeys[j].mTime);
+			boneKeyMap[boneKey.first].scaleKeyTimes.push_back(animation->mChannels[i]->mScalingKeys[j].mTime);
 		}
 	}
 	//for(unsigned int i = 0; i < scene->mNumAnimations; i++)
 	//	animation->mChannels = new aiNodeAnim(**scene->mAnimations[animationIndex]->mChannels);
 }
 
-void Animation::ReadNodeHierarchy(float animationTime, const aiNode * node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
+void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
 {
-	std::string NodeName(node->mName.data);
+	std::string NodeName(node->name);
 	//TODO: Remove aiXXX classes from this function
 
-	glm::mat4 NodeTransformation = glm::mat4(
-		node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
-		node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
-		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
-		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
-	);
+	glm::mat4 NodeTransformation = node->transform;
 
 	//const aiNodeAnim* pNodeAnim = FindNodeAnim(animation, NodeName);
 
@@ -98,8 +94,8 @@ void Animation::ReadNodeHierarchy(float animationTime, const aiNode * node, cons
 			boneMap[NodeName].GetOffsetTransform();
 	}
 
-	for (unsigned int i = 0; i < node->mNumChildren; i++) {
-		ReadNodeHierarchy(animationTime, node->mChildren[i], GlobalTransformation, boneMap);
+	for (unsigned int i = 0; i < node->children.size(); i++) {
+		ReadNodeHierarchy(animationTime, &node->children[i], GlobalTransformation, boneMap);
 	}
 }
 

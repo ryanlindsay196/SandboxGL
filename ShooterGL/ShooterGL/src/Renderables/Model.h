@@ -12,6 +12,14 @@ struct aiMesh;
 struct aiNode;
 struct aiScene;
 
+struct Node
+{
+	glm::mat4 transform;
+	std::vector<Node> children;
+	Node* parent;
+	std::string name;
+};
+
 class Model : public WorldComponent
 {
 public:
@@ -22,7 +30,7 @@ public:
 
 	void Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath);
 	void LoadModel(std::string modelPath, std::string materialPath);
-	void ProcessNode(aiNode* node, const aiScene* scene, std::string materialPath);
+	void ProcessNode(aiNode* node, const aiScene* scene, std::string materialPath, Node* currentNode, Node* parentNode);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, char* materialPath, const aiNode* node);
 	//vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 	
@@ -52,6 +60,6 @@ private:
 	ModelData* m_modelData;
 	//Shader* shader;
 	std::vector<Mesh> m_meshes;
-	aiNode* rootNode;
+	Node rootNode;
 };
 

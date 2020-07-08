@@ -80,13 +80,21 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 	
 	//retrieve the directory path of the filepath
 	directory = modelPath.substr(0, modelPath.find_last_of('/'));
-	
+
 	//process ASSIMP's root node recursively
-	ProcessNode(scene->mRootNode, scene, materialPath);
+	ProcessNode(scene->mRootNode, scene, materialPath, &rootNode, nullptr);
 }
 
-void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materialPath)
+void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materialPath, Node* currentNode, Node* parentNode)
 {
+	currentNode->name = node->mName.C_Str();
+	currentNode->transform = glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
+		node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
+		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
+		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
+	);
+	currentNode->parent = parentNode;
+
 	//process each mesh located at the current node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
@@ -105,7 +113,8 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		ProcessNode(node->mChildren[i], scene, (char*)materialPath.c_str());
+		currentNode->children.push_back(Node());
+		ProcessNode(node->mChildren[i], scene, (char*)materialPath.c_str(), &currentNode->children[i], currentNode);
 	}
 }
 
@@ -224,6 +233,6 @@ void Model::Render()
 			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * m_meshes[i].GetOffsetTransform());
 			//m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", glm::translate(glm::scale(m_meshes[i].GetOffsetTransform(), glm::vec3(0.02f, 0.02f, 0.02f)), glm::vec3(20, i * 20, 0)));
 		}
-		m_meshes[i].Render();
+		m_meshes[i].Render(&rootNode);
 	}
 }

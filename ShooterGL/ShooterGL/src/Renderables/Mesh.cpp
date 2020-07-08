@@ -19,7 +19,7 @@
 Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node)
 {
 	animationIndex = 0;
-	rootNode = new aiNode(*aiScene->mRootNode);
+	//rootNode = new aiNode(*aiScene->mRootNode);
 
 	//AddNode(rootNode, aiScene);
 
@@ -234,15 +234,15 @@ Shader * Mesh::GetShader()
 }
 
 //TODO: Change name to Render()
-void Mesh::Render()
+void Mesh::Render(Node* rootNode)
 {
 	//TODO: Potentially move to load function?
 	if (boneMap.size() == 0)
 		shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1));
 
 	//animationMap[x].ReadNodeHierarchy();
-	if(animations.size() > 0)
-		animations[animationIndex].ReadNodeHierarchy(0.2f, rootNode, offsetTransform, boneMap);
+	//if(animations.size() > 0)
+	//	animations[animationIndex].ReadNodeHierarchy(0.2f, rootNode, offsetTransform, boneMap);
 	
 	for (auto it : boneMap)
 	{

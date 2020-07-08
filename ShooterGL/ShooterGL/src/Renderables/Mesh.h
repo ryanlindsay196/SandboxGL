@@ -15,6 +15,7 @@ class Animation;
 struct aiScene;
 struct aiNode;
 struct aiMesh;
+struct Node;
 
 class BoneData : public WorldComponent
 {
@@ -52,7 +53,7 @@ public:
 	void SetShaders(char* materialPath);
 	void AttachMeshData(MeshData* meshData);
 	Shader* GetShader();
-	void Render();
+	void Render(Node* rootNode);
 	void SetupMesh();
 	virtual void Update(float gameTime) override;
 
@@ -66,7 +67,7 @@ private:
 	MeshData* m_meshData;
 
 #include "Animation.h"
-	aiNode* rootNode;
+	//aiNode* rootNode;
 
 	std::vector<Animation> animations;
 	unsigned int animationIndex;
