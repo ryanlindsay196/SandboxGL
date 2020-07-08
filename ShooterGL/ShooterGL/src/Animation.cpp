@@ -16,13 +16,41 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 		scene->mRootNode->mTransformation.a4, scene->mRootNode->mTransformation.b4, scene->mRootNode->mTransformation.c4, scene->mRootNode->mTransformation.d4);
 
 	m_GlobalInverseTransform = glm::inverse(m_GlobalInverseTransform);
-	animation = scene->mAnimations[animationIndex];
+	animation = new aiAnimation(*scene->mAnimations[animationIndex]);
+	for (unsigned int i = 0; i < animation->mNumChannels; i++)
+	{
+		std::pair<std::string, BoneKeyFrames> boneKey(animation->mChannels[i]->mNodeName.C_Str(), BoneKeyFrames());
+		boneKeyMap.insert(boneKey);
+		for (unsigned int j = 0; j < animation->mChannels[i]->mNumPositionKeys; j++)
+		{
+			boneKeyMap[boneKey.first].transformKeyFrames.push_back(
+				glm::vec3(animation->mChannels[i]->mPositionKeys[j].mValue.x, animation->mChannels[i]->mPositionKeys[j].mValue.y, animation->mChannels[i]->mPositionKeys[j].mValue.z)
+			);
+			boneKeyMap[boneKey.first].transformKeyTimes.push_back(animation->mChannels[i]->mPositionKeys[j].mTime);
+		}
+		for (unsigned int j = 0; j < animation->mChannels[i]->mNumRotationKeys; j++)
+		{
+			boneKeyMap[boneKey.first].rotationKeyFrames.push_back(
+				glm::quat(animation->mChannels[i]->mRotationKeys[j].mValue.x, animation->mChannels[i]->mRotationKeys[j].mValue.y, animation->mChannels[i]->mRotationKeys[j].mValue.z, animation->mChannels[i]->mRotationKeys[j].mValue.w)
+			);
+			boneKeyMap[boneKey.first].rotationKeyTimes.push_back(animation->mChannels[i]->mPositionKeys[j].mTime);
+		}
+		for (unsigned int j = 0; j < animation->mChannels[i]->mNumScalingKeys; j++)
+		{
+			boneKeyMap[boneKey.first].scaleKeyFrames.push_back(
+				glm::vec3(animation->mChannels[i]->mScalingKeys[j].mValue.x, animation->mChannels[i]->mScalingKeys[j].mValue.y, animation->mChannels[i]->mScalingKeys[j].mValue.z)
+			);
+			boneKeyMap[boneKey.first].scaleKeyTimes.push_back(animation->mChannels[i]->mPositionKeys[j].mTime);
+		}
+	}
+	//for(unsigned int i = 0; i < scene->mNumAnimations; i++)
+	//	animation->mChannels = new aiNodeAnim(**scene->mAnimations[animationIndex]->mChannels);
 }
 
 void Animation::ReadNodeHierarchy(float animationTime, const aiNode * node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
 {
 	std::string NodeName(node->mName.data);
-	//Remove aiXXX classes from this function
+	//TODO: Remove aiXXX classes from this function
 
 	glm::mat4 NodeTransformation = glm::mat4(
 		node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
@@ -31,9 +59,12 @@ void Animation::ReadNodeHierarchy(float animationTime, const aiNode * node, cons
 		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 	);
 
-	const aiNodeAnim* pNodeAnim = FindNodeAnim(animation, NodeName);
+	//const aiNodeAnim* pNodeAnim = FindNodeAnim(animation, NodeName);
 
-	if (pNodeAnim) {
+	const BoneKeyFrames* pBoneKeyFrame = FindNodeBone(boneKeyMap, NodeName);
+
+	//if (pNodeAnim) {
+	if(pBoneKeyFrame) {
 		// Interpolate scaling and generate scaling transformation matrix
 		glm::vec3 Scaling;
 		CalculateIntorpolatedScaling(Scaling, animationTime, pNodeAnim);

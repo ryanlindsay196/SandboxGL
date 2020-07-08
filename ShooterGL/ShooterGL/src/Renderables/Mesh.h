@@ -45,6 +45,7 @@ public:
 	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData, const aiNode* node);
 	Mesh(ObjectManager* objectManager, char* materialPath, WorldComponent* newParent, MeshData* meshData);
 	
+	void AddNode(aiNode* node, const aiScene* scene, aiNode* oldNode);
 	//void ReadMaterial(char* materialPath);
 	void LoadShaders();
 	void SetDefaultShaders();
@@ -64,6 +65,7 @@ private:
 	std::string m_materialPath;
 	MeshData* m_meshData;
 
+#include "Animation.h"
 	aiNode* rootNode;
 
 	std::vector<Animation> animations;

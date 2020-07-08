@@ -19,7 +19,10 @@
 Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node)
 {
 	animationIndex = 0;
-	rootNode = aiScene->mRootNode;
+	rootNode = new aiNode(*aiScene->mRootNode);
+
+	//AddNode(rootNode, aiScene);
+
 	m_materialPath = materialPath;
 	//m_modelData = modelData;
 	parentMesh = newParent;
@@ -195,6 +198,11 @@ Mesh::Mesh(ObjectManager * objectManager, char * materialPath, WorldComponent * 
 	if (meshData->vertices.size() > 0)
 		return;
 
+}
+
+void Mesh::AddNode(aiNode * node, const aiScene* scene, aiNode* oldNode)
+{
+	//node->addChildren()
 }
 
 void Mesh::LoadShaders()
