@@ -240,9 +240,8 @@ void Mesh::Render(Node* rootNode)
 	if (boneMap.size() == 0)
 		shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1));
 
-	//animationMap[x].ReadNodeHierarchy();
-	//if(animations.size() > 0)
-	//	animations[animationIndex].ReadNodeHierarchy(0.2f, rootNode, offsetTransform, boneMap);
+	if(animations.size() > 0)
+		animations[animationIndex].ReadNodeHierarchy(0.2f, rootNode, offsetTransform, boneMap);
 	
 	for (auto it : boneMap)
 	{

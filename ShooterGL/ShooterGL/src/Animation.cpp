@@ -86,11 +86,9 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 	glm::mat4 GlobalTransformation = parentTransform * NodeTransformation;
 
 	if (boneMap.find(NodeName) != boneMap.end()) {
-		//unsigned int BoneIndex = boneMap[NodeName];
-		//boneMap[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation *
-		//	m_BoneInfo[BoneIndex].BoneOffset;
-		//unsigned int BoneIndex = boneMap[NodeName];
-		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation *
+		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation *
+		//	boneMap[NodeName].GetOffsetTransform();
+		boneMap[NodeName].finalTransformation = GlobalTransformation *
 			boneMap[NodeName].GetOffsetTransform();
 	}
 
