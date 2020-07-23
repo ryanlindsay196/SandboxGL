@@ -245,7 +245,7 @@ EntityManager::ModelData EntityManager::ReadModelData(std::vector<std::string> t
 	ModelData modelData = ModelData();
 
 
-	for (int j = 0; j < transformDataString.size(); j++)
+	for (unsigned int j = 0; j < transformDataString.size(); j++)
 	{
 		transformDataString[j].erase(std::remove(transformDataString[j].begin(), transformDataString[j].end(), '\t'), transformDataString[j].end());
 		transformDataString[j].erase(std::remove(transformDataString[j].begin(), transformDataString[j].end(), ' '), transformDataString[j].end());
@@ -281,7 +281,7 @@ EntityManager::ModelData EntityManager::ReadModelData(std::vector<std::string> t
 EntityManager::PointLightData EntityManager::ReadPointLightData(std::vector<std::string> dataString)
 {
 	PointLightData pointLightData = PointLightData();
-	for (int j = 0; j < dataString.size(); j++)
+	for (unsigned int j = 0; j < dataString.size(); j++)
 	{
 		if (dataString[j] == "")
 			continue;

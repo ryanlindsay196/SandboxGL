@@ -17,13 +17,6 @@ struct aiNode;
 struct aiMesh;
 struct Node;
 
-class BoneData : public WorldComponent
-{
-public:
-	unsigned int boneID;
-	glm::mat4 finalTransformation;
-};
-
 struct Vertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
@@ -43,7 +36,7 @@ public:
 	//unsigned int VAO;
 
 	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
-	Mesh(ObjectManager* objectManager, const aiScene * aiScene, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData, const aiNode* node);
+	Mesh(ObjectManager* objectManager, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData, const aiNode* node);
 	Mesh(ObjectManager* objectManager, char* materialPath, WorldComponent* newParent, MeshData* meshData);
 	
 	void AddNode(aiNode* node, const aiScene* scene, aiNode* oldNode);
@@ -65,12 +58,4 @@ private:
 	ObjectManager* m_objectManager;
 	std::string m_materialPath;
 	MeshData* m_meshData;
-
-#include "Animation.h"
-	//aiNode* rootNode;
-
-	std::vector<Animation> animations;
-	unsigned int animationIndex;
-
-	std::unordered_map<std::string, BoneData> boneMap;
 };

@@ -9,12 +9,20 @@
 #include "Mesh.h"
 #include "ModelData.h"
 #include "matrix.hpp"
+#include "Animation.h"
 #include <iostream>
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
+//TODO: Delete
+float tempAnimTime = 0;
+
+#define ARRAYSIZE(a) \
+  ((sizeof(a) / sizeof(*(a))) / \
+  static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
 
 Model::Model()
 {
@@ -31,6 +39,7 @@ Model::~Model()
 
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath)
 {
+	animationIndex = 0;
 	//yaw = -90;
 	m_textureManager = objectManager->textureManager;
 	m_objectManager = objectManager;
@@ -83,6 +92,15 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 
 	//process ASSIMP's root node recursively
 	ProcessNode(scene->mRootNode, scene, materialPath, &rootNode, nullptr);
+
+	for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+	{
+		Animation newAnim = Animation();
+		newAnim.Initialize(scene, i);
+		//std::pair<std::string, Animation> newAnimPair(aiScene->mAnimations[i]->mName.C_Str(), newAnim);
+		//animationMap.insert(newAnimPair);
+		animations.push_back(newAnim);
+	}
 }
 
 void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materialPath, Node* currentNode, Node* parentNode)
@@ -101,7 +119,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the node object only contains indices to index the actual objects in the scene.
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		m_meshes.push_back(ProcessMesh(mesh, scene, (char*)materialPath.c_str(), node));
+		m_meshes.push_back(ProcessMesh(mesh, (char*)materialPath.c_str(), node));
 		m_meshes[m_meshes.size() - 1].SetTransform(
 			glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
 				node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
@@ -109,6 +127,54 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 				node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 		));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
+
+		unsigned int numBones = 0;
+		for (unsigned int i = 0; i < mesh->mNumBones; i++)
+		{
+			unsigned int BoneIndex = 0;
+			std::string BoneName(mesh->mBones[i]->mName.data);
+
+			if (boneMap.find(BoneName) == boneMap.end())
+			{
+				BoneIndex = numBones;
+				numBones++;
+				BoneData bd;
+				std::pair<std::string, BoneData> boneMapEntry = std::pair<std::string, BoneData>(BoneName, bd);
+				boneMap[BoneName].boneID = BoneIndex;
+				boneMap.insert(boneMapEntry);
+			}
+			else
+				BoneIndex = boneMap[BoneName].boneID;
+
+			//TODO: Move this into the if statement above?
+			boneMap[BoneName].boneID = BoneIndex;
+			boneMap[BoneName].Initialize();
+			boneMap[BoneName].SetTransform(glm::mat4(
+				mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
+				mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
+				mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
+				mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
+			));
+
+			for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+			{
+				//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
+				unsigned int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
+				float Weight = mesh->mBones[i]->mWeights[j].mWeight;
+
+				for (unsigned int k = 0; k < ARRAYSIZE(m_modelData->m_meshData[m_meshes.size()].vertices[j].WeightValue); k++)
+				//for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
+				{
+					if (m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].WeightValue[k] == 0)
+					{
+						m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].WeightValue[k] = Weight;
+						m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].BoneID[k] = BoneIndex;
+						break;
+						//Bones[VertexID].AddBoneData(BoneIndex, Weight);
+					}
+				}
+			}
+		}
 	}
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -118,11 +184,11 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 	}
 }
 
-Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene, char* materialPath, const aiNode* node)
+Mesh Model::ProcessMesh(aiMesh * mesh, char* materialPath, const aiNode* node)
 {
 	if (m_meshes.size() == m_modelData->m_meshData.size())
 		m_modelData->m_meshData.push_back(MeshData());
-	return Mesh(m_objectManager, scene, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node);
+	return Mesh(m_objectManager, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node);
 }
 
 void Model::LoadShaders()
@@ -152,6 +218,13 @@ void Model::Update(float gameTime)
 	//offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
 	//offsetTransform = glm::translate(offsetTransform, positionOffset);
 	WorldComponent::Update(gameTime);
+
+	//SetTransform(parentMesh->componentParent->GetTransform());
+	for (auto it : boneMap)
+	{
+		it.second.Update(gameTime);
+	}
+
 	for (Mesh mesh : m_meshes)
 	{
 		mesh.Update(gameTime);
@@ -220,6 +293,27 @@ void Model::Render()
 	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].constant", 1.0f);
 	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].linear", 0.09);
 	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].quadratic", 0.032);
+
+	//boneMap["Bip001 R UpperArm"].Translate(glm::vec3(100, 0, 0));
+	//boneMap["Bip001 R UpperArm"].CalculateTransform();
+
+
+		//TODO: Potentially move to load function?
+	if (boneMap.size() == 0)
+		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1));
+
+	if (animations.size() > 0)
+		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
+		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, glm::mat4(1), boneMap);
+	tempAnimTime += 0.1f;
+	for (auto it : boneMap)
+	{
+		boneMap[it.first].CalculateTransform();
+		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
+		//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
+		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
+	}
+
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
 		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);

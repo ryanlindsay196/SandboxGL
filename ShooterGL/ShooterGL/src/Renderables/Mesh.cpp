@@ -12,13 +12,8 @@
 #include "ModelData.h"
 //#include "Animation.h"
 
-#define ARRAYSIZE(a) \
-  ((sizeof(a) / sizeof(*(a))) / \
-  static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
-
-Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node)
+Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node)
 {
-	animationIndex = 0;
 	//rootNode = new aiNode(*aiScene->mRootNode);
 
 	//AddNode(rootNode, aiScene);
@@ -37,15 +32,6 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 	positionOffset = glm::mat4(1);
 
 	offsetTransform = glm::mat4(1);
-
-	for(unsigned int i = 0; i < aiScene->mNumAnimations; i++)
-	{
-		Animation newAnim = Animation();
-		newAnim.Initialize(aiScene, i);
-		//std::pair<std::string, Animation> newAnimPair(aiScene->mAnimations[i]->mName.C_Str(), newAnim);
-		//animationMap.insert(newAnimPair);
-		animations.push_back(newAnim);
-	}
 
 	if (meshData->vertices.size() > 0)
 		return;
@@ -128,52 +114,6 @@ Mesh::Mesh(ObjectManager * objectManager, const aiScene * aiScene, aiMesh* mesh,
 	//std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	unsigned int numBones = 0;
-	for (unsigned int i = 0; i < mesh->mNumBones; i++)
-	{
-		unsigned int BoneIndex = 0;
-		std::string BoneName(mesh->mBones[i]->mName.data);
-
-		if (boneMap.find(BoneName) == boneMap.end())
-		{
-			BoneIndex = numBones;
-			numBones++;
-			BoneData bd;
-			std::pair<std::string, BoneData> boneMapEntry = std::pair<std::string, BoneData>(BoneName, bd);
-			boneMap[BoneName].boneID = BoneIndex;
-			boneMap.insert(boneMapEntry);
-		}
-		else
-			BoneIndex = boneMap[BoneName].boneID;
-
-		//TODO: Move this into the if statement above?
-		boneMap[BoneName].boneID = BoneIndex;
-		boneMap[BoneName].Initialize();
-		boneMap[BoneName].SetTransform(glm::mat4(
-			mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
-			mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
-			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
-			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
-		));
-
-		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
-		{
-			//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
-			unsigned int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
-			float Weight = mesh->mBones[i]->mWeights[j].mWeight;
-
-			for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
-			{
-				if (meshData->vertices[VertexID].WeightValue[k] == 0)
-				{					   
-					meshData->vertices[VertexID].WeightValue[k] = Weight;
-					meshData->vertices[VertexID].BoneID[k] = BoneIndex;
-					break;
-					//Bones[VertexID].AddBoneData(BoneIndex, Weight);
-				}
-			}
-		}
-	}
 	//boneMap["Bip001 R Clavicle"].componentParent = boneMap["Bop001 R Clavicle"];
 
 	SetupMesh();
@@ -236,21 +176,6 @@ Shader * Mesh::GetShader()
 //TODO: Change name to Render()
 void Mesh::Render(Node* rootNode)
 {
-	//TODO: Potentially move to load function?
-	if (boneMap.size() == 0)
-		shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1));
-
-	if(animations.size() > 0)
-		animations[animationIndex].ReadNodeHierarchy(0.2f, rootNode, offsetTransform, boneMap);
-	
-	for (auto it : boneMap)
-	{
-		boneMap[it.first].CalculateTransform();
-		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
-		//shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
-		shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
-	}
-
 	shader->UseShader();
 	shader->BindTextures();
 	glBindVertexArray(m_meshData->VAO);
@@ -304,9 +229,5 @@ void Mesh::SetupMesh()
 
 void Mesh::Update(float gameTime)
 {
-	//SetTransform(parentMesh->componentParent->GetTransform());
-	for (auto it : boneMap)
-	{
-		it.second.Update(gameTime);
-	}
+
 }
