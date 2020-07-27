@@ -46,7 +46,7 @@ public:
 	void SetShaders(char* materialPath);
 	void AttachMeshData(MeshData* meshData);
 	Shader* GetShader();
-	void Render(Node* rootNode);
+	void Render();
 	void SetupMesh();
 	virtual void Update(float gameTime) override;
 

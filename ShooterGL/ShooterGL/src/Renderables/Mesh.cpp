@@ -173,8 +173,7 @@ Shader * Mesh::GetShader()
 	return shader;
 }
 
-//TODO: Change name to Render()
-void Mesh::Render(Node* rootNode)
+void Mesh::Render()
 {
 	shader->UseShader();
 	shader->BindTextures();

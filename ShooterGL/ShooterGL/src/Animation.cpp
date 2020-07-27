@@ -87,7 +87,6 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 	if (boneMap.find(NodeName) != boneMap.end()) {
 		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * parentTransform * boneMap[NodeName].GetOffsetTransform();
-		
 #pragma region TODO: DELETE?
 		//boneMap[NodeName].finalTransformation = GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * node->parent->transform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
