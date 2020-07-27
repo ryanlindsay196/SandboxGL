@@ -66,7 +66,6 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 		glm::vec3 Scaling;
 		CalculateIntorpolatedScaling(Scaling, animationTime, NodeName);
 		glm::mat4 ScalingM;
-		//ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
 		ScalingM = glm::scale(glm::mat4(1), glm::vec3(Scaling.x, Scaling.y, Scaling.z));
 		// Interpolate rotation and generate rotation transformation matrix
 		glm::quat RotationQ;
@@ -77,18 +76,10 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 		glm::vec3 Translation;
 		CalculateInterpolatedPosition(Translation, animationTime, NodeName);
 		glm::mat4 TranslationM;
-		//TranslationM.InitTranslationTransform(Translation.x, Translation.y, Translation.z);
 		TranslationM = glm::translate(glm::mat4(1), glm::vec3(Translation.x, Translation.y, Translation.z));
 
 		// Combine the above transformations
 		NodeTransformation = TranslationM * RotationM * ScalingM;
-
-		//std::cout << NodeName << std::endl;
-		//std::cout << RotationM[0][0] << ", " << RotationM[0][1] << ", " << RotationM[0][2] << ", " << RotationM[0][3] << std::endl <<
-		//	RotationM[1][0] << ", " << RotationM[1][1] << ", " << RotationM[1][2] << ", " << RotationM[1][3] << std::endl <<
-		//	RotationM[2][0] << ", " << RotationM[2][1] << ", " << RotationM[2][2] << ", " << RotationM[2][3] << std::endl <<
-		//	RotationM[3][0] << ", " << RotationM[3][1] << ", " << RotationM[3][2] << ", " << RotationM[3][3] << std::endl << std::endl;
-
 	}
 
 	glm::mat4 GlobalTransformation = parentTransform * NodeTransformation;
@@ -143,14 +134,11 @@ void Animation::CalculateInterpolatedPosition(glm::vec3& out, float animationTim
 	if (boneKeyMap[nodeName].transformKeyTimes[boneKeyMap[nodeName].transformKeyTimes.size() - 1] < animationTime)
 		animationTime = boneKeyMap[nodeName].transformKeyTimes[boneKeyMap[nodeName].transformKeyTimes.size() - 1] - 0.0001f;
 
-	//unsigned int PositionIndex = FindPosition(animationTime, nodeAnim);
 	unsigned int PositionIndex = FindPosition(animationTime, nodeName);
 	unsigned int NextPositionIndex = (PositionIndex + 1);
-	//assert(NextPositionIndex < nodeAnim->mNumPositionKeys);
 	assert(NextPositionIndex < boneKeyMap[nodeName].transformKeyTimes.size());
-	//float DeltaTime = (float)(nodeAnim->mPositionKeys[NextPositionIndex].mTime - nodeAnim->mPositionKeys[PositionIndex].mTime);
 	float DeltaTime = (float)(boneKeyMap[nodeName].transformKeyTimes[NextPositionIndex] - boneKeyMap[nodeName].transformKeyTimes[PositionIndex]);
-	//float Factor = (animationTime - (float)nodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
+	
 	float Factor = (animationTime - boneKeyMap[nodeName].transformKeyTimes[PositionIndex]) / DeltaTime;
 	assert(Factor >= 0.0f && Factor <= 1.0f);
 	const glm::vec3& Start = glm::vec3(boneKeyMap[nodeName].transformKeyFrames[PositionIndex].x, boneKeyMap[nodeName].transformKeyFrames[PositionIndex].y, boneKeyMap[nodeName].transformKeyFrames[PositionIndex].z);
@@ -207,9 +195,10 @@ void Animation::CalculateIntorpolatedScaling(glm::vec3& out, float animationTime
 }
 
 unsigned int Animation::FindPosition(float animationTime, std::string nodeName)
-{
-	for (unsigned int i = 0; i < boneKeyMap[nodeName].transformKeyTimes.size() - 1; i++) {
-		if (animationTime < boneKeyMap[nodeName].transformKeyTimes[i + 1]) {
+	{
+	for (unsigned int i = boneKeyMap[nodeName].lastPositionKeyFrame; i < boneKeyMap[nodeName].transformKeyTimes.size() - 1; i += sgn(animationTime - boneKeyMap[nodeName].transformKeyTimes[boneKeyMap[nodeName].lastPositionKeyFrame])) {
+		if (animationTime < boneKeyMap[nodeName].transformKeyTimes[i + 1] && animationTime >= boneKeyMap[nodeName].transformKeyTimes[i]) {
+			boneKeyMap[nodeName].lastPositionKeyFrame = i;
 			return i;
 		}
 	}
@@ -224,8 +213,9 @@ unsigned int Animation::FindRotation(float animationTime, const std::string node
 {
 	assert(boneKeyMap[nodeName].rotationKeyFrames.size() > 0);
 
-	for (unsigned int i = 0; i < boneKeyMap[nodeName].rotationKeyFrames.size() - 1; i++) {
-		if (animationTime < boneKeyMap[nodeName].rotationKeyTimes[i + 1]) {
+	for (unsigned int i = boneKeyMap[nodeName].lastRotationKeyFrame; i < boneKeyMap[nodeName].rotationKeyFrames.size() - 1; i+= sgn(animationTime - boneKeyMap[nodeName].rotationKeyTimes[boneKeyMap[nodeName].lastRotationKeyFrame])) {
+		if (animationTime < boneKeyMap[nodeName].rotationKeyTimes[i + 1] && animationTime >= boneKeyMap[nodeName].rotationKeyTimes[i]) {
+			boneKeyMap[nodeName].lastRotationKeyFrame = i;
 			return i;
 		}
 	}
@@ -240,8 +230,9 @@ unsigned int Animation::FindScaling(float animationTime, const std::string nodeN
 {
 	assert(boneKeyMap[nodeName].scaleKeyFrames.size() > 0);
 
-	for (unsigned int i = 0; i < boneKeyMap[nodeName].scaleKeyFrames.size() - 1; i++) {
-		if (animationTime < boneKeyMap[nodeName].scaleKeyTimes[i + 1]) {
+	for (unsigned int i = boneKeyMap[nodeName].lastScaleKeyFrame; i < boneKeyMap[nodeName].scaleKeyFrames.size() - 1; i += sgn(animationTime - boneKeyMap[nodeName].scaleKeyTimes[boneKeyMap[nodeName].lastScaleKeyFrame])) {
+		if (animationTime < boneKeyMap[nodeName].scaleKeyTimes[i + 1] && animationTime >= boneKeyMap[nodeName].scaleKeyTimes[i]) {
+			boneKeyMap[nodeName].lastScaleKeyFrame = i;
 			return i;
 		}
 	}

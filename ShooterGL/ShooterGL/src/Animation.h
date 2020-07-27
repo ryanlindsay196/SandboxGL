@@ -17,6 +17,8 @@ struct BoneKeyFrames
 	std::vector<glm::vec3> transformKeyFrames, scaleKeyFrames;
 	std::vector<glm::quat> rotationKeyFrames;
 	std::vector<float> transformKeyTimes, scaleKeyTimes, rotationKeyTimes;
+
+	unsigned int lastPositionKeyFrame, lastRotationKeyFrame, lastScaleKeyFrame;
 };
 
 class Animation
@@ -25,9 +27,11 @@ private:
 	glm::mat4 m_GlobalInverseTransform;
 	aiAnimation* animation;
 	std::unordered_map<std::string, BoneKeyFrames> boneKeyMap;
-
-	unsigned int lastPositionKeyFrame, lastRotationKeyFrame, lastScaleKeyFrame;
 public:
+	template <typename T> int sgn(T val) {
+		return (T(0) < val) - (val < T(0));
+	}
+
 	void Initialize(const aiScene * scene, unsigned int animationIndex);
 
 	void ReadNodeHierarchy(float animationTime, Node* node, const glm::mat4& parentTransform, std::unordered_map<std::string, BoneData> & boneMap);

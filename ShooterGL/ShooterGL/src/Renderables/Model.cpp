@@ -304,22 +304,28 @@ void Model::Render()
 
 	if (animations.size() > 0)
 		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
-		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, glm::mat4(1), boneMap);
-	tempAnimTime += 1.f;
+		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, glm::mat4(1), boneMap);
+		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, rootNode.transform, boneMap);
+	tempAnimTime += 0.1f;
 	if (tempAnimTime > 40)
 		tempAnimTime = 0;
+
+	boneMap["Bip001 L Clavacle"].finalTransformation = glm::translate(glm::mat4(1), glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(2));
+	
+	//boneMap["Bip001 R Clavacle"].finalTransformation = glm::scale(glm::mat4(2), glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(2));
+	//boneMap["Bip001 R Clavacle"].finalTransformation = glm::rotate(boneMap["Bip001 R Clavacle"].finalTransformation, tempAnimTime,glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(200));
 	for (auto it : boneMap)
 	{
 		boneMap[it.first].CalculateTransform();
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
-		//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
-		//if(it.first == "Bip001 Spine")
-		if(it.second.boneID == 0)
-			m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
-			//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::rotate(boneMap[it.first].GetOffsetTransform(), tempAnimTime, glm::vec3(0,1,0)));
-		else
-			m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
+		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
+		//if(it.first == "Bip001 R Clavicle")
+		//if(it.second.boneID == 0)
+			//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
+		//	//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::rotate(boneMap[it.first].GetOffsetTransform(), tempAnimTime, glm::vec3(0,1,0)));
+		//else
+		//	m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
 	}
 
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
