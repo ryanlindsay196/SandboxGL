@@ -94,7 +94,10 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 	glm::mat4 GlobalTransformation = parentTransform * NodeTransformation;
 	//GlobalTransformation = glm::translate(GlobalTransformation, glm::vec3(10, 10, 10));
 	if (boneMap.find(NodeName) != boneMap.end()) {
-		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
+		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
+		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * parentTransform * boneMap[NodeName].GetOffsetTransform();
+		
+#pragma region TODO: DELETE?
 		//boneMap[NodeName].finalTransformation = GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * node->parent->transform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * boneMap[NodeName].GetOffsetTransform();
@@ -102,12 +105,15 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 		//boneMap[NodeName].finalTransformation = boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = NodeTransformation;
 		//boneMap[NodeName].finalTransformation = GlobalTransformation;
-		boneMap[NodeName].finalTransformation = glm::scale(glm::mat4(1), glm::vec3(1,1,0.2));
+		//boneMap[NodeName].finalTransformation = glm::scale(glm::mat4(1), glm::vec3(1,1,0.2));
+#pragma endregion
 	}
 
 
 	for (unsigned int i = 0; i < node->children.size(); i++) {
-		ReadNodeHierarchy(animationTime, &node->children[i], GlobalTransformation, boneMap);
+		//ReadNodeHierarchy(animationTime, &node->children[i], GlobalTransformation, boneMap);
+		ReadNodeHierarchy(animationTime, &node->children[i], NodeTransformation, boneMap);
+		//ReadNodeHierarchy(animationTime, &node->children[i], boneMap[NodeName].finalTransformation, boneMap);
 	}
 }
 
@@ -207,6 +213,7 @@ unsigned int Animation::FindPosition(float animationTime, std::string nodeName)
 			return i;
 		}
 	}
+	return boneKeyMap[nodeName].transformKeyFrames.size() - 2;
 
 	assert(0);
 
@@ -222,6 +229,7 @@ unsigned int Animation::FindRotation(float animationTime, const std::string node
 			return i;
 		}
 	}
+	return boneKeyMap[nodeName].rotationKeyFrames.size() - 2;
 
 	assert(0);
 

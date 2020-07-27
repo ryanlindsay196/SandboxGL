@@ -17,8 +17,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-//TODO: Delete
-float tempAnimTime = 0;
 
 #define ARRAYSIZE(a) \
   ((sizeof(a) / sizeof(*(a))) / \
@@ -111,6 +109,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
 		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 	);
+	//currentNode->transform = glm::mat4(1);
 	currentNode->parent = parentNode;
 
 	//process each mesh located at the current node
@@ -120,12 +119,13 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		m_meshes.push_back(ProcessMesh(mesh, (char*)materialPath.c_str(), node));
-		m_meshes[m_meshes.size() - 1].SetTransform(
-			glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
-				node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
-				node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
-				node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
-		));
+		//m_meshes[m_meshes.size() - 1].SetTransform(
+		//	glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
+		//		node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
+		//		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
+		//		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
+		//));
+		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 
 		unsigned int numBones = 0;
@@ -305,13 +305,21 @@ void Model::Render()
 	if (animations.size() > 0)
 		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
 		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, glm::mat4(1), boneMap);
-	tempAnimTime += 0.1f;
+	tempAnimTime += 1.f;
+	if (tempAnimTime > 40)
+		tempAnimTime = 0;
 	for (auto it : boneMap)
 	{
 		boneMap[it.first].CalculateTransform();
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
-		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
+		//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
+		//if(it.first == "Bip001 Spine")
+		if(it.second.boneID == 0)
+			m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
+			//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::rotate(boneMap[it.first].GetOffsetTransform(), tempAnimTime, glm::vec3(0,1,0)));
+		else
+			m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
 	}
 
 	for (unsigned int i = 0; i < m_meshes.size(); i++)

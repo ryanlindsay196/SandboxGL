@@ -64,5 +64,9 @@ private:
 	unsigned int animationIndex;
 
 	std::unordered_map<std::string, BoneData> boneMap;
+
+
+	//TODO: Delete
+	float tempAnimTime = 0;
 };
 

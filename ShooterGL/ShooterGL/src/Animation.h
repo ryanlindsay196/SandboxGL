@@ -25,6 +25,8 @@ private:
 	glm::mat4 m_GlobalInverseTransform;
 	aiAnimation* animation;
 	std::unordered_map<std::string, BoneKeyFrames> boneKeyMap;
+
+	unsigned int lastPositionKeyFrame, lastRotationKeyFrame, lastScaleKeyFrame;
 public:
 	void Initialize(const aiScene * scene, unsigned int animationIndex);
 
