@@ -16,11 +16,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
-
-#define ARRAYSIZE(a) \
-  ((sizeof(a) / sizeof(*(a))) / \
-  static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+#include "AnimationDataStructures.h"
 
 Model::Model()
 {
@@ -88,8 +84,10 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 	//retrieve the directory path of the filepath
 	directory = modelPath.substr(0, modelPath.find_last_of('/'));
 
+	if (!rootNode)
+		rootNode = new Node();
 	//process ASSIMP's root node recursively
-	ProcessNode(scene->mRootNode, scene, materialPath, &rootNode, nullptr);
+	ProcessNode(scene->mRootNode, scene, materialPath, rootNode, nullptr);
 
 	for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 	{
@@ -128,53 +126,53 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 
-		unsigned int numBones = 0;
-		for (unsigned int i = 0; i < mesh->mNumBones; i++)
-		{
-			unsigned int BoneIndex = 0;
-			std::string BoneName(mesh->mBones[i]->mName.data);
-
-			if (boneMap.find(BoneName) == boneMap.end())
-			{
-				BoneIndex = numBones;
-				numBones++;
-				BoneData bd;
-				std::pair<std::string, BoneData> boneMapEntry = std::pair<std::string, BoneData>(BoneName, bd);
-				boneMap[BoneName].boneID = BoneIndex;
-				boneMap.insert(boneMapEntry);
-			}
-			else
-				BoneIndex = boneMap[BoneName].boneID;
-
-			//TODO: Move this into the if statement above?
-			boneMap[BoneName].boneID = BoneIndex;
-			boneMap[BoneName].Initialize();
-			boneMap[BoneName].SetTransform(glm::mat4(
-				mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
-				mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
-				mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
-				mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
-			));
-
-			for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
-			{
-				//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
-				unsigned int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
-				float Weight = mesh->mBones[i]->mWeights[j].mWeight;
-
-				for (unsigned int k = 0; k < ARRAYSIZE(m_modelData->m_meshData[m_meshes.size()].vertices[j].WeightValue); k++)
-				//for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
-				{
-					if (m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].WeightValue[k] == 0)
-					{
-						m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].WeightValue[k] = Weight;
-						m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].BoneID[k] = BoneIndex;
-						break;
-						//Bones[VertexID].AddBoneData(BoneIndex, Weight);
-					}
-				}
-			}
-		}
+		//unsigned int numBones = 0;
+		//for (unsigned int i = 0; i < mesh->mNumBones; i++)
+		//{
+		//	unsigned int BoneIndex = 0;
+		//	std::string BoneName(mesh->mBones[i]->mName.data);
+		//
+		//	if (boneMap.find(BoneName) == boneMap.end())
+		//	{
+		//		BoneIndex = numBones;
+		//		numBones++;
+		//		BoneData bd;
+		//		std::pair<std::string, BoneData> boneMapEntry = std::pair<std::string, BoneData>(BoneName, bd);
+		//		boneMap[BoneName].boneID = BoneIndex;
+		//		boneMap.insert(boneMapEntry);
+		//	}
+		//	else
+		//		BoneIndex = boneMap[BoneName].boneID;
+		//
+		//	//TODO: Move this into the if statement above?
+		//	boneMap[BoneName].boneID = BoneIndex;
+		//	boneMap[BoneName].Initialize();
+		//	boneMap[BoneName].SetTransform(glm::mat4(
+		//		mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
+		//		mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
+		//		mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
+		//		mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
+		//	));
+		//
+		//	//for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
+		//	//{
+		//	//	//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
+		//	//	unsigned int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
+		//	//	float Weight = mesh->mBones[i]->mWeights[j].mWeight;
+		//	//
+		//	//	for (unsigned int k = 0; k < ARRAYSIZE(m_modelData->m_meshData[m_meshes.size()].vertices[j].WeightValue); k++)
+		//	//	//for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
+		//	//	{
+		//	//		if (m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].WeightValue[k] == 0)
+		//	//		{
+		//	//			m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].WeightValue[k] = Weight;
+		//	//			m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].BoneID[k] = BoneIndex;
+		//	//			break;
+		//	//			//Bones[VertexID].AddBoneData(BoneIndex, Weight);
+		//	//		}
+		//	//	}
+		//	//}
+		//}
 	}
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -188,7 +186,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, char* materialPath, const aiNode* node)
 {
 	if (m_meshes.size() == m_modelData->m_meshData.size())
 		m_modelData->m_meshData.push_back(MeshData());
-	return Mesh(m_objectManager, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node);
+	return Mesh(m_objectManager, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node, boneMap);
 }
 
 void Model::LoadShaders()
@@ -305,12 +303,13 @@ void Model::Render()
 	if (animations.size() > 0)
 		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
 		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, glm::mat4(1), boneMap);
-		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, rootNode.transform, boneMap);
+		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, rootNode->transform, boneMap);
 	tempAnimTime += 0.1f;
 	if (tempAnimTime > 40)
 		tempAnimTime = 0;
 
 	//boneMap["Bip001 L Clavacle"].finalTransformation = glm::translate(glm::mat4(1), glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(2));
+	//boneMap["Bip001 R Clavacle"].finalTransformation = (glm::translate(glm::mat4(1), glm::vec3(1, sinf(tempAnimTime / 2), cosf(tempAnimTime))));
 	
 	//boneMap["Bip001 R Clavacle"].finalTransformation = glm::scale(glm::mat4(2), glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(2));
 	//boneMap["Bip001 R Clavacle"].finalTransformation = glm::rotate(boneMap["Bip001 R Clavacle"].finalTransformation, tempAnimTime,glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(200));

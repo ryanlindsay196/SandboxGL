@@ -198,6 +198,7 @@
     <ClInclude Include="Dependencies\GLM\include\detail\type_vec4.hpp" />
     <ClInclude Include="Dependencies\stb_image.h" />
     <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\AnimationDataStructures.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\Entity.h" />

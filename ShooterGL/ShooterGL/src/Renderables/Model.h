@@ -14,20 +14,8 @@ struct aiMesh;
 struct aiNode;
 struct aiScene;
 
-class BoneData : public WorldComponent
-{
-public:
-	unsigned int boneID;
-	glm::mat4 finalTransformation;
-};
-
-struct Node
-{
-	glm::mat4 transform;
-	std::vector<Node> children;
-	Node* parent;
-	std::string name;
-};
+struct Node;
+class BoneData;
 
 class Model : public WorldComponent
 {
@@ -58,7 +46,7 @@ private:
 	ModelData* m_modelData;
 	//Shader* shader;
 	std::vector<Mesh> m_meshes;
-	Node rootNode;
+	Node* rootNode;
 
 	std::vector<Animation> animations;
 	unsigned int animationIndex;

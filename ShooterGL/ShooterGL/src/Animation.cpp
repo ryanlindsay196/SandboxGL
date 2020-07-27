@@ -5,6 +5,7 @@
 #include "gtc/quaternion.hpp"
 #include "Renderables/Mesh.h"
 #include "Renderables/Model.h"
+#include "AnimationDataStructures.h"
 //#include "assimp/vector3.h"
 //#include "assimp/anim.h"
 
