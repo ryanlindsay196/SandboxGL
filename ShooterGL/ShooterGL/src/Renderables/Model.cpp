@@ -220,16 +220,16 @@ void Model::Update(float gameTime)
 	WorldComponent::Update(gameTime);
 
 	//SetTransform(parentMesh->componentParent->GetTransform());
-	for (auto it : boneMap)
-	{
-		it.second.Update(gameTime);
-	}
-
-	for (Mesh mesh : m_meshes)
-	{
-		mesh.Update(gameTime);
-		//mesh.SetTransform(componentParent->GetTransform());
-	}
+	//for (auto it : boneMap)
+	//{
+	//	it.second.Update(gameTime);
+	//}
+	//
+	//for (Mesh mesh : m_meshes)
+	//{
+	//	mesh.Update(gameTime);
+	//	//mesh.SetTransform(componentParent->GetTransform());
+	//}
 }
 
 void Model::Render()
