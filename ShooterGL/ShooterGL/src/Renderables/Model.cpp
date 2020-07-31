@@ -107,6 +107,12 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
 		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 	);
+
+	//currentNode->transform = glm::mat4(node->mTransformation.a1, node->mTransformation.a2, node->mTransformation.a3, node->mTransformation.a4,
+	//	node->mTransformation.b1, node->mTransformation.b2, node->mTransformation.b3, node->mTransformation.b4,
+	//	node->mTransformation.c1, node->mTransformation.c2, node->mTransformation.c3, node->mTransformation.c4,
+	//	node->mTransformation.d1, node->mTransformation.d2, node->mTransformation.d3, node->mTransformation.d4
+	//);
 	//currentNode->transform = glm::mat4(1);
 	currentNode->parent = parentNode;
 
@@ -126,53 +132,6 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 
-		//unsigned int numBones = 0;
-		//for (unsigned int i = 0; i < mesh->mNumBones; i++)
-		//{
-		//	unsigned int BoneIndex = 0;
-		//	std::string BoneName(mesh->mBones[i]->mName.data);
-		//
-		//	if (boneMap.find(BoneName) == boneMap.end())
-		//	{
-		//		BoneIndex = numBones;
-		//		numBones++;
-		//		BoneData bd;
-		//		std::pair<std::string, BoneData> boneMapEntry = std::pair<std::string, BoneData>(BoneName, bd);
-		//		boneMap[BoneName].boneID = BoneIndex;
-		//		boneMap.insert(boneMapEntry);
-		//	}
-		//	else
-		//		BoneIndex = boneMap[BoneName].boneID;
-		//
-		//	//TODO: Move this into the if statement above?
-		//	boneMap[BoneName].boneID = BoneIndex;
-		//	boneMap[BoneName].Initialize();
-		//	boneMap[BoneName].SetTransform(glm::mat4(
-		//		mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
-		//		mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
-		//		mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
-		//		mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
-		//	));
-		//
-		//	//for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
-		//	//{
-		//	//	//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
-		//	//	unsigned int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
-		//	//	float Weight = mesh->mBones[i]->mWeights[j].mWeight;
-		//	//
-		//	//	for (unsigned int k = 0; k < ARRAYSIZE(m_modelData->m_meshData[m_meshes.size()].vertices[j].WeightValue); k++)
-		//	//	//for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
-		//	//	{
-		//	//		if (m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].WeightValue[k] == 0)
-		//	//		{
-		//	//			m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].WeightValue[k] = Weight;
-		//	//			m_modelData->m_meshData[m_meshes.size() - 1].vertices[VertexID].BoneID[k] = BoneIndex;
-		//	//			break;
-		//	//			//Bones[VertexID].AddBoneData(BoneIndex, Weight);
-		//	//		}
-		//	//	}
-		//	//}
-		//}
 	}
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -298,7 +257,7 @@ void Model::Render()
 
 		//TODO: Potentially move to load function?
 	if (boneMap.size() == 0)
-		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1));
+		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1), GL_FALSE);
 
 	if (animations.size() > 0)
 		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
@@ -318,7 +277,7 @@ void Model::Render()
 		boneMap[it.first].CalculateTransform();
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform());
-		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation);
+		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation, GL_FALSE);
 		//if(it.first == "Bip001 R Clavicle")
 		//if(it.second.boneID == 0)
 			//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
@@ -329,15 +288,15 @@ void Model::Render()
 
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
 	{
-		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
-		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
+		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix, GL_FALSE);
+		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
 		if (componentParent != nullptr)
 		{
-			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * m_meshes[i].GetOffsetTransform());
+			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * m_meshes[i].GetOffsetTransform(), GL_FALSE);
 		}
 		else
 		{
-			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * m_meshes[i].GetOffsetTransform());
+			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * m_meshes[i].GetOffsetTransform(), GL_FALSE);
 			//m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", glm::translate(glm::scale(m_meshes[i].GetOffsetTransform(), glm::vec3(0.02f, 0.02f, 0.02f)), glm::vec3(20, i * 20, 0)));
 		}
 		m_meshes[i].Render();

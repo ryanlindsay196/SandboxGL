@@ -18,7 +18,7 @@ public:
 	virtual void Update(float gameTime) override;
 
 	bool isActive;
-	inline glm::mat4 GetOffsetTransform() { return offsetTransform; }
+	glm::mat4 GetOffsetTransform();
 	void CalculateTransform();
 
 	void SetTransform(glm::mat4 newTransform);

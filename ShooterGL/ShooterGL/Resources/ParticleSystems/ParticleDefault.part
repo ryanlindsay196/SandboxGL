@@ -1,5 +1,5 @@
 material : Resources/Materials/ParticleMat.mat
-spawnsPerSecond : 12
+spawnsPerSecond : 0
 particlesPerSpawn : 20
 minLifeTime : 2
 maxLifeTime : 3

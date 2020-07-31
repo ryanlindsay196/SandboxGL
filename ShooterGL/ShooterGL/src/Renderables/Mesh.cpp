@@ -51,10 +51,15 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 		vector.z = mesh->mVertices[i].z;
 		vertex.Position = vector;
 		// normals
-		vector.x = mesh->mNormals[i].x;
-		vector.y = mesh->mNormals[i].y;
-		vector.z = mesh->mNormals[i].z;
-		vertex.Normal = vector;
+		if (mesh->mNormals != NULL)
+		{
+			vector.x = mesh->mNormals[i].x;
+			vector.y = mesh->mNormals[i].y;
+			vector.z = mesh->mNormals[i].z;
+			vertex.Normal = vector;
+		}
+		else
+			vertex.Normal = glm::vec3(0, 0, 0);
 		// texture coordinates
 		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
 		{
@@ -68,16 +73,25 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 		else
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 		// tangent
-		vector.x = mesh->mTangents[i].x;
-		vector.y = mesh->mTangents[i].y;
-		vector.z = mesh->mTangents[i].z;
-		vertex.Tangent = vector;
+		if (mesh->mTangents)
+		{
+			vector.x = mesh->mTangents[i].x;
+			vector.y = mesh->mTangents[i].y;
+			vector.z = mesh->mTangents[i].z;
+			vertex.Tangent = vector;
+		}
+		else
+			vertex.Tangent = glm::vec3(0, 0, 0);
 		// bitangent
-		vector.x = mesh->mBitangents[i].x;
-		vector.y = mesh->mBitangents[i].y;
-		vector.z = mesh->mBitangents[i].z;
-		vertex.Bitangent = vector;
-
+		if (mesh->mBitangents)
+		{
+			vector.x = mesh->mBitangents[i].x;
+			vector.y = mesh->mBitangents[i].y;
+			vector.z = mesh->mBitangents[i].z;
+			vertex.Bitangent = vector;
+		}
+		else
+			vertex.Bitangent = glm::vec3(0, 0, 0);
 		for (unsigned int k = 0; k < ARRAYSIZE(vertex.WeightValue); k++)
 		{
 			vertex.WeightValue[k] = 0;
@@ -147,7 +161,8 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
 			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
 		));
-
+		//boneMap[BoneName].SetTransform(glm::mat4(1));
+		//boneMap[BoneName].SetTransform(glm::transpose(boneMap[BoneName].GetOffsetTransform()));
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 		{
 			//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
@@ -155,14 +170,12 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			float Weight = mesh->mBones[i]->mWeights[j].mWeight;
 		
 			for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
-			//for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
 			{
 				if (meshData->vertices[VertexID].WeightValue[k] == 0)
 				{
 					meshData->vertices[VertexID].WeightValue[k] = Weight;
 					meshData->vertices[VertexID].BoneID[k] = BoneIndex;
 					break;
-					//Bones[VertexID].AddBoneData(BoneIndex, Weight);
 				}
 			}
 		}

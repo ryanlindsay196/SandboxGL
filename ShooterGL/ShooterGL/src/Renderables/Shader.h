@@ -5,6 +5,8 @@ class Texture;
 class TextureManager;
 class ObjectManager;
 
+typedef unsigned char GLboolean;
+
 class Shader
 {
 public:
@@ -34,7 +36,7 @@ public:
 	void SetShaderUniform_veci3(char* uniformName, int x, int y, int z);
 	void SetShaderUniform_veci4(char* uniformName, int x, int y, int z, int w);
 
-	void SetShaderUniform_mat4fv(char* uniformName, glm::mat4 matrix);
+	void SetShaderUniform_mat4fv(char* uniformName, glm::mat4 matrix, GLboolean toTranspose);
 
 private:
 	TextureManager* textureManager;

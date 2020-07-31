@@ -175,13 +175,13 @@ void ParticleEmitter::Render()
 	glCullFace(GL_FRONT);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	m_shader->UseShader();
-	m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix);
-	m_shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix);
+	m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
+	m_shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix, GL_FALSE);
 	for (Particle particle : particles)
 	{
 		if (particle.Life > 0.0f)
 		{
-			m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), particle.Position));
+			m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), particle.Position), GL_FALSE);
 			//m_shader->SetShaderUniform_mat4fv((char*)"position", glm::translate(glm::mat4(1), glm::vec3(0)));
 			//m_shader->SetShaderUniform_vec3((char*)"offset", particle.Position.x, particle.Position.y, particle.Position.z);
 			//m_shader->SetShaderUniform_vec4((char*)"color", particle.Color.r, particle.Color.g, particle.Color.b, particle.Color.a);

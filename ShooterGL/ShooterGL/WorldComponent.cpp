@@ -7,7 +7,7 @@
 void WorldComponent::Initialize()
 {
 	positionOffset = glm::mat4(1);
-	rotationQuat = glm::quat();
+	rotationQuat = glm::quat(0,0,0,1);
 	scaleOffset = glm::mat4(1);
 }
 
@@ -38,6 +38,11 @@ void WorldComponent::Update(float gameTime)
 	//Translate(glm::vec3(0, 0.0000001, 0));
 
 	CalculateTransform();
+}
+
+glm::mat4 WorldComponent::GetOffsetTransform()
+{
+	return offsetTransform;
 }
 
 void WorldComponent::CalculateTransform()

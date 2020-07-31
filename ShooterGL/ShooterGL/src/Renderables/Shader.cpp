@@ -402,9 +402,9 @@ void Shader::SetShaderUniform_veci4(char * uniformName, int x, int y, int z, int
 	glUniform4i(uniformLocation, x, y, z, w);
 }
 
-void Shader::SetShaderUniform_mat4fv(char * uniformName, glm::mat4 matrix)
+void Shader::SetShaderUniform_mat4fv(char * uniformName, glm::mat4 matrix, GLboolean toTranspose)
 {
 	glUseProgram(shaderProgram);
 	unsigned int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
-	glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix4fv(uniformLocation, 1, toTranspose, glm::value_ptr(matrix));
 }
