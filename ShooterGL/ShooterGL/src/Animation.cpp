@@ -81,17 +81,21 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 	//	NodeTransformation = RotationM * ScalingM;
 	}
 	//if (boneMap.find(NodeName) != boneMap.end())
-	NodeTransformation = glm::mat4(1);
-	glm::mat4 GlobalTransformation = parentTransform;
+	//NodeTransformation = glm::mat4(1);
 	
-	//if (NodeName == "Bip001 R Clavicle")
-	if(boneMap.find(NodeName) != boneMap.end())
-		NodeTransformation = (glm::translate(NodeTransformation, glm::vec3(animationTime, 0, 0)));
+	if (NodeName == "Bip001 L Hand")// || NodeName == "Bip001 L Finger31")
+		//if(boneMap.find(NodeName) != boneMap.end())
+	{
+	}
+	//else
+	//	NodeTransformation = glm::mat4(1);
+		//NodeTransformation = (glm::translate(NodeTransformation, glm::vec3(animationTime, 0, 0)));
+	glm::mat4 GlobalTransformation = parentTransform * NodeTransformation;
+	//GlobalTransformation = glm::mat4(1);
 	
-	GlobalTransformation = parentTransform * NodeTransformation;
 	if (boneMap.find(NodeName) != boneMap.end()) {
 		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
-		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * parentTransform * NodeTransformation * boneMap[NodeName].GetOffsetTransform();
+		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * parentTransform * NodeTransformation * boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = glm::mat4(1);
 			//boneMap[NodeName].finalTransformation = glm::rotate(glm::mat4(1), animationTime, glm::vec3(0, 0, 1));

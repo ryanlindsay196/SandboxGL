@@ -51,6 +51,8 @@ private:
 	std::vector<Animation> animations;
 	unsigned int animationIndex;
 
+	unsigned int totalBones;
+
 	std::unordered_map<std::string, BoneData> boneMap;
 
 

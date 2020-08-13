@@ -17,7 +17,7 @@
   ((sizeof(a) / sizeof(*(a))) / \
   static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
 
-Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap)
+Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones)
 {
 	//rootNode = new aiNode(*aiScene->mRootNode);
 
@@ -134,7 +134,7 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 	//textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 
-	unsigned int numBones = 0;
+	//unsigned int numBones = 0;
 	for (unsigned int i = 0; i < mesh->mNumBones; i++)
 	{
 		unsigned int BoneIndex = 0;
