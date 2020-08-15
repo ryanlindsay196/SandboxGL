@@ -6,8 +6,6 @@
 #include "Renderables/Mesh.h"
 #include "Renderables/Model.h"
 #include "AnimationDataStructures.h"
-//#include "assimp/vector3.h"
-//#include "assimp/anim.h"
 
 void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 {
@@ -72,54 +70,37 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 		TranslationM = glm::translate(glm::mat4(1), glm::vec3(Translation.x, Translation.y, Translation.z));
 		// Combine the above transformations
 		NodeTransformation = TranslationM * RotationM * ScalingM;
-		NodeTransformation = RotationM * ScalingM;
-		NodeTransformation = ScalingM;
-	}
 
-	if (NodeName == "Bip001 R Forearm")
+		//TODO: DELETE
+		NodeTransformation = RotationM * ScalingM;
+		//TODO: DELETE
+		if (NodeName != "Bip001 R Forearm")
+			NodeTransformation = ScalingM;
+	}
+	//TODO: DELETE
+	//if (NodeName == "Bip001 R Forearm")
 		//NodeTransformation = glm::translate(NodeTransformation, glm::vec3(0, 0, animationTime * 4));
-		NodeTransformation = glm::rotate(NodeTransformation, animationTime, glm::vec3(0, 1, 0));
+		//NodeTransformation = glm::rotate(NodeTransformation, animationTime, glm::vec3(0, 1, 0));
+		//boneMap[NodeName].SetTransform(glm::rotate(boneMap[NodeName].GetOffsetTransform(), animationTime, glm::vec3(0, 1, 0)));
 		//NodeTransformation = glm::scale(NodeTransformation, glm::vec3(0, animationTime, 0));
 		//boneMap[NodeName].SetTransform(glm::rotate(boneMap[NodeName].GetOffsetTransform(), (float)(animationTime * M_PI / 2), glm::vec3(0, 1, 0)));
 	//else if (NodeName == "Bone001" || NodeName == "Bone002" || NodeName == "Bone003" || NodeName == "Bone004" || NodeName == "Dummy001" || NodeName == "Bip001 L Hand" || NodeName == "Bip001 R Hand")
 	//	NodeTransformation = glm::scale(NodeTransformation, glm::vec3(0,0,0));
 	glm::mat4 GlobalTransformation = parentTransform * NodeTransformation;
 
-	//GlobalTransformation = glm::mat4(1);
-	
 	if (boneMap.find(NodeName) != boneMap.end()) {
-		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
-		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * NodeTransformation * boneMap[NodeName].GetOffsetTransform();
-		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * parentTransform * NodeTransformation * boneMap[NodeName].GetOffsetTransform();
-		//boneMap[NodeName].finalTransformation = boneMap[NodeName].GetOffsetTransform();
-		//boneMap[NodeName].finalTransformation = glm::mat4(1);
-			//boneMap[NodeName].finalTransformation = glm::rotate(glm::mat4(1), animationTime, glm::vec3(0, 0, 1));
-			//boneMap[NodeName].finalTransformation = glm::scale(boneMap[NodeName].GetOffsetTransform(), glm::vec3(animationTime / 20, 1, 1));
-		//boneMap[NodeName].finalTransformation = parentTransform;
+		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();// *glm::rotate(glm::mat4(1), animationTime, glm::vec3(0, 1, 0));
+		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * node->transform;// *glm::rotate(glm::mat4(1), animationTime, glm::vec3(0, 1, 0));
+		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * boneMap[NodeName].GetOffsetTransform() * NodeTransformation;
+		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * glm::rotate(glm::mat4(1), animationTime, glm::vec3(0, 1, 0)) * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
 	}
 
 
 	for (unsigned int i = 0; i < node->children.size(); i++) {
 		ReadNodeHierarchy(animationTime, &node->children[i], GlobalTransformation, boneMap);
-		//ReadNodeHierarchy(animationTime, &node->children[i], glm::mat4(1), boneMap);
-		//ReadNodeHierarchy(animationTime, &node->children[i], NodeTransformation, boneMap);
-		//ReadNodeHierarchy(animationTime, &node->children[i], boneMap[NodeName].GetOffsetTransform(), boneMap);
 		//ReadNodeHierarchy(animationTime, &node->children[i], boneMap[NodeName].finalTransformation, boneMap);
 	}
 }
-
-//const aiNodeAnim* Animation::FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName)
-//{
-//	for (unsigned int i = 0; i < pAnimation->mNumChannels; i++) {
-//		const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
-//
-//		if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
-//			return pNodeAnim;
-//		}
-//	}
-//
-//	return NULL;
-//}
 
 void Animation::CalculateInterpolatedPosition(glm::vec3& out, float animationTime, const std::string nodeName)
 {

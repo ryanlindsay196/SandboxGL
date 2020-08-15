@@ -162,6 +162,8 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
 		));
 		//boneMap[BoneName].SetTransform(glm::transpose(boneMap[BoneName].GetOffsetTransform()));
+		//boneMap[BoneName].SetTransform(glm::translate(boneMap[BoneName].GetOffsetTransform(), glm::vec3(3,0,0)));
+		//boneMap[BoneName].SetTransform(glm::mat4(0));
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 		{
 			//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;

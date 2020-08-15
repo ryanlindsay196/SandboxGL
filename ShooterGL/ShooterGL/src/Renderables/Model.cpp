@@ -129,7 +129,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
 		//		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 		//));
-		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
+		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 
 	}
@@ -261,8 +261,8 @@ void Model::Render()
 
 	if (animations.size() > 0)
 		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
-		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, glm::mat4(1), boneMap);
-		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, rootNode->transform, boneMap);
+		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, glm::mat4(1), boneMap);
+		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, rootNode->transform, boneMap);
 	tempAnimTime += 0.1f;
 	if (tempAnimTime > 40)
 		tempAnimTime = 0;
