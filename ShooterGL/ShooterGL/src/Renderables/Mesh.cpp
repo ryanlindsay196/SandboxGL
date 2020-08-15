@@ -95,7 +95,7 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 		for (unsigned int k = 0; k < ARRAYSIZE(vertex.WeightValue); k++)
 		{
 			vertex.WeightValue[k] = 0;
-			vertex.BoneID[k] = 0;
+			vertex.BoneID[k] = -1;
 		}
 		meshData->vertices.push_back(vertex);
 
@@ -145,12 +145,12 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			BoneIndex = numBones;
 			numBones++;
 			BoneData bd;
+			bd.boneID = BoneIndex;
 			std::pair<std::string, BoneData> boneMapEntry = std::pair<std::string, BoneData>(BoneName, bd);
-			boneMap[BoneName].boneID = BoneIndex;
 			boneMap.insert(boneMapEntry);
 		}
-		else
-			BoneIndex = boneMap[BoneName].boneID;
+		//else
+		//	BoneIndex = boneMap[BoneName].boneID;
 
 		//TODO: Move this into the if statement above?
 		boneMap[BoneName].boneID = BoneIndex;
@@ -161,14 +161,15 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
 			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
 		));
-		//boneMap[BoneName].SetTransform(glm::mat4(1));
 		//boneMap[BoneName].SetTransform(glm::transpose(boneMap[BoneName].GetOffsetTransform()));
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 		{
 			//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
 			unsigned int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
 			float Weight = mesh->mBones[i]->mWeights[j].mWeight;
-		
+			//if (VertexID == 578)
+			//	printf((char*)"TODO: DELETE\n");
+			//TODO: fix this
 			for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
 			{
 				if (meshData->vertices[VertexID].WeightValue[k] == 0)
@@ -178,6 +179,13 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 					break;
 				}
 			}
+
+			//if ((meshData->vertices[j].BoneID[0] == 0 && meshData->vertices[j].WeightValue[0] < 0.96f) || 
+			//	(meshData->vertices[j].BoneID[1] == 0 && meshData->vertices[j].WeightValue[1] < 0.96f) || 
+			//	(meshData->vertices[j].BoneID[2] == 0 && meshData->vertices[j].WeightValue[2] < 0.96f) || 
+			//	(meshData->vertices[j].BoneID[3] == 0 && meshData->vertices[j].WeightValue[3] < 0.96f))
+			//		printf((char*)"TODO: DELETE\n");
+			//assert(meshData->vertices[j].WeightValue[0] + meshData->vertices[j].WeightValue[1] + meshData->vertices[j].WeightValue[2] + meshData->vertices[j].WeightValue[3] <= 1.00000136);
 		}
 	}
 

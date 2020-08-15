@@ -53,16 +53,13 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 	//TODO: Remove aiXXX classes from this function
 	glm::mat4 NodeTransformation = node->transform;
 
-	auto pBoneKeyFrame = boneKeyMap.find(NodeName);//FindNodeBone(boneKeyMap, NodeName);
-	//const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
-	//if (pNodeAnim) {
+	auto pBoneKeyFrame = boneKeyMap.find(NodeName);
 	if(pBoneKeyFrame != boneKeyMap.end()) {
 		// Interpolate scaling and generate scaling transformation matrix
 		glm::vec3 Scaling;
 		CalculateIntorpolatedScaling(Scaling, animationTime, NodeName);
 		glm::mat4 ScalingM;
 		ScalingM = glm::scale(glm::mat4(1), glm::vec3(Scaling.x, Scaling.y, Scaling.z));
-		//ScalingM = InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
 		// Interpolate rotation and generate rotation transformation matrix
 		glm::quat RotationQ;
 		CalculateInterpolatedRotation(RotationQ, animationTime, NodeName);
@@ -73,28 +70,26 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 		CalculateInterpolatedPosition(Translation, animationTime, NodeName);
 		glm::mat4 TranslationM;
 		TranslationM = glm::translate(glm::mat4(1), glm::vec3(Translation.x, Translation.y, Translation.z));
-		//TranslationM = InitTranslationTransform(Translation.x, Translation.y, Translation.z);
 		// Combine the above transformations
 		NodeTransformation = TranslationM * RotationM * ScalingM;
-		//NodeTransformation = ScalingM;
-	//if (NodeName == "Bip001 R UpperArm")
-	//	NodeTransformation = RotationM * ScalingM;
+		NodeTransformation = RotationM * ScalingM;
+		NodeTransformation = ScalingM;
 	}
-	//if (boneMap.find(NodeName) != boneMap.end())
-	//NodeTransformation = glm::mat4(1);
-	
-	if (NodeName == "Bip001 L Hand")// || NodeName == "Bip001 L Finger31")
-		//if(boneMap.find(NodeName) != boneMap.end())
-	{
-	}
-	//else
-	//	NodeTransformation = glm::mat4(1);
-		//NodeTransformation = (glm::translate(NodeTransformation, glm::vec3(animationTime, 0, 0)));
+
+	if (NodeName == "Bip001 R Forearm")
+		//NodeTransformation = glm::translate(NodeTransformation, glm::vec3(0, 0, animationTime * 4));
+		NodeTransformation = glm::rotate(NodeTransformation, animationTime, glm::vec3(0, 1, 0));
+		//NodeTransformation = glm::scale(NodeTransformation, glm::vec3(0, animationTime, 0));
+		//boneMap[NodeName].SetTransform(glm::rotate(boneMap[NodeName].GetOffsetTransform(), (float)(animationTime * M_PI / 2), glm::vec3(0, 1, 0)));
+	//else if (NodeName == "Bone001" || NodeName == "Bone002" || NodeName == "Bone003" || NodeName == "Bone004" || NodeName == "Dummy001" || NodeName == "Bip001 L Hand" || NodeName == "Bip001 R Hand")
+	//	NodeTransformation = glm::scale(NodeTransformation, glm::vec3(0,0,0));
 	glm::mat4 GlobalTransformation = parentTransform * NodeTransformation;
+
 	//GlobalTransformation = glm::mat4(1);
 	
 	if (boneMap.find(NodeName) != boneMap.end()) {
 		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
+		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * NodeTransformation * boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * parentTransform * NodeTransformation * boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = boneMap[NodeName].GetOffsetTransform();
 		//boneMap[NodeName].finalTransformation = glm::mat4(1);
@@ -106,24 +101,25 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 
 	for (unsigned int i = 0; i < node->children.size(); i++) {
 		ReadNodeHierarchy(animationTime, &node->children[i], GlobalTransformation, boneMap);
+		//ReadNodeHierarchy(animationTime, &node->children[i], glm::mat4(1), boneMap);
 		//ReadNodeHierarchy(animationTime, &node->children[i], NodeTransformation, boneMap);
 		//ReadNodeHierarchy(animationTime, &node->children[i], boneMap[NodeName].GetOffsetTransform(), boneMap);
 		//ReadNodeHierarchy(animationTime, &node->children[i], boneMap[NodeName].finalTransformation, boneMap);
 	}
 }
 
-const aiNodeAnim* Animation::FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName)
-{
-	for (unsigned int i = 0; i < pAnimation->mNumChannels; i++) {
-		const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
-
-		if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
-			return pNodeAnim;
-		}
-	}
-
-	return NULL;
-}
+//const aiNodeAnim* Animation::FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName)
+//{
+//	for (unsigned int i = 0; i < pAnimation->mNumChannels; i++) {
+//		const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
+//
+//		if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
+//			return pNodeAnim;
+//		}
+//	}
+//
+//	return NULL;
+//}
 
 void Animation::CalculateInterpolatedPosition(glm::vec3& out, float animationTime, const std::string nodeName)
 {
