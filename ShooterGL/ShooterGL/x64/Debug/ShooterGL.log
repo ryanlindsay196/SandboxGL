@@ -1,42 +1,81 @@
 ﻿  glad.c
   stb_image.cpp
+  Animation.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(29): warning C4244: 'argument': conversion from 'double' to 'const _Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(36): warning C4244: 'argument': conversion from 'double' to 'const _Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(43): warning C4244: 'argument': conversion from 'double' to 'const _Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(182): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(199): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(216): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
   Camera.cpp
   Component.cpp
   Controller.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(62): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(64): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(65): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(67): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(69): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(70): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Entity.cpp
   main.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\main.cpp(59): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   CameraManager.cpp
   ControllerManager.cpp
   EntityManager.cpp
+  LightManager.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\lightmanager.cpp(23): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
   ObjectManager.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\objectmanager.cpp(91): warning C4018: '<': signed/unsigned mismatch
+  ShaderManager.cpp
+  Light.cpp
   Mesh.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\mesh.cpp(22): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\mesh.cpp(61): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\mesh.cpp(18): warning C4005: 'ARRAYSIZE': macro redefinition
+  c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\winnt.h(1334): note: see previous definition of 'ARRAYSIZE'
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\mesh.cpp(257): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   Model.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\importer.hpp(83): warning C4099: 'aiScene': type name first seen using 'class' now seen using 'struct'
-  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\model.h(12): note: see declaration of 'aiScene'
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\mesh.h(497): warning C4099: 'aiMesh': type name first seen using 'class' now seen using 'struct'
-  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\mesh.h(496): note: see declaration of 'aiMesh'
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\scene.h(79): warning C4099: 'aiNode': type name first seen using 'class' now seen using 'struct'
-  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\scene.h(78): note: see declaration of 'aiNode'
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\scene.h(241): warning C4099: 'aiScene': type name first seen using 'class' now seen using 'struct'
-  c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\assimp\include\assimp\scene.h(240): note: see declaration of 'aiScene'
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\model.cpp(161): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
   ModelManager.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\modelmanager.cpp(65): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\modelmanager.cpp(98): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+  ParticleEmitter.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\particleemitter.cpp(63): warning C4244: '=': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\particleemitter.cpp(69): warning C4244: '=': conversion from 'float' to 'unsigned int', possible loss of data
   Shader.cpp
   Texture.cpp
+  Generating Code...
+  Compiling...
   TextureManager.cpp
   WorldComponent.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\worldcomponent.cpp(90): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\worldcomponent.cpp(95): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\worldcomponent.cpp(97): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\worldcomponent.cpp(102): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
   Generating Code...
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\model.cpp(266): warning C4715: 'Model::ProcessMesh': not all control paths return a value
 Controller.obj : error LNK2019: unresolved external symbol glfwGetKey referenced in function "public: virtual void __cdecl Controller::Update(float)" (?Update@Controller@@UEAAXM@Z)
 main.obj : error LNK2001: unresolved external symbol glfwGetKey
 Controller.obj : error LNK2019: unresolved external symbol glfwSetCursorPosCallback referenced in function "public: void __cdecl Controller::Initialize(struct GLFWwindow *)" (?Initialize@Controller@@QEAAXPEAUGLFWwindow@@@Z)
@@ -53,10 +92,14 @@ main.obj : error LNK2019: unresolved external symbol glfwGetTime referenced in f
 main.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function main
 main.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function main
 main.obj : error LNK2019: unresolved external symbol glfwGetProcAddress referenced in function main
-Model.obj : error LNK2019: unresolved external symbol "public: class aiScene const * __cdecl Assimp::Importer::ReadFile(char const *,unsigned int)" (?ReadFile@Importer@Assimp@@QEAAPEBVaiScene@@PEBDI@Z) referenced in function "public: class aiScene const * __cdecl Assimp::Importer::ReadFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?ReadFile@Importer@Assimp@@QEAAPEBVaiScene@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+Model.obj : error LNK2019: unresolved external symbol "public: __cdecl Assimp::Importer::Importer(void)" (??0Importer@Assimp@@QEAA@XZ) referenced in function "public: void __cdecl Model::LoadModel(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?LoadModel@Model@@QEAAXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z)
+Model.obj : error LNK2019: unresolved external symbol "public: __cdecl Assimp::Importer::~Importer(void)" (??1Importer@Assimp@@QEAA@XZ) referenced in function "public: void __cdecl Model::LoadModel(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?LoadModel@Model@@QEAAXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z)
+Model.obj : error LNK2019: unresolved external symbol "public: struct aiScene const * __cdecl Assimp::Importer::ReadFile(char const *,unsigned int)" (?ReadFile@Importer@Assimp@@QEAAPEBUaiScene@@PEBDI@Z) referenced in function "public: struct aiScene const * __cdecl Assimp::Importer::ReadFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?ReadFile@Importer@Assimp@@QEAAPEBUaiScene@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+Model.obj : error LNK2019: unresolved external symbol "public: char const * __cdecl Assimp::Importer::GetErrorString(void)const " (?GetErrorString@Importer@Assimp@@QEBAPEBDXZ) referenced in function "public: void __cdecl Model::LoadModel(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?LoadModel@Model@@QEAAXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z)
 C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\GLFW\lib-vc2017\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
 C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\GLEW\lib\Release\Win32\glew32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
 C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\GLEW\lib\Release\Win32\glew32s.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
 C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\SOIL2\lib\soil2.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
 C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\SOIL2\lib\soil2-debug.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
-C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\x64\Debug\ShooterGL.exe : fatal error LNK1120: 16 unresolved externals
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\Assimp\lib\assimp-vc140-mt.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\x64\Debug\ShooterGL.exe : fatal error LNK1120: 19 unresolved externals

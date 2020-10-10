@@ -20,7 +20,7 @@
 Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones)
 {
 	//rootNode = new aiNode(*aiScene->mRootNode);
-
+	meshData->vertices.reserve(mesh->mNumVertices);
 	//AddNode(rootNode, aiScene);
 
 	m_materialPath = materialPath;
