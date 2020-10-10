@@ -6,6 +6,13 @@ class Shader;
 class ObjectManager;
 class ShaderManager;
 
+struct Force
+{
+	glm::vec3 Position;
+	float strength;
+	float range;
+};
+
 struct Particle {
 	glm::vec3 Position, Velocity, Acceleration;
 	glm::vec4 Color;
@@ -36,6 +43,7 @@ struct SpawnerSettings
 	glm::vec3 accelerationOffset;
 	glm::vec3 startSize;
 	glm::vec3 endSize;
+	std::vector<Force> forces;
 };
 
 class ParticleEmitter : public WorldComponent

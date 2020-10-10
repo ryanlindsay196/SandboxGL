@@ -1,5 +1,5 @@
 material : Resources/Materials/ParticleMat.mat
-spawnsPerSecond : 0
+spawnsPerSecond : 20
 particlesPerSpawn : 20
 minLifeTime : 2
 maxLifeTime : 3
@@ -15,3 +15,15 @@ accelerationDimensions : 0,0.2,0
 accelerationOffset : 0,0.2,0
 startSize : 0.5,0.5,1
 endSize: 0,0,0
+force
+{
+	position: 0,7,0
+	strength: -0.01
+	range: 200
+}
+force
+{
+	position: 0,2,0
+	strength: 0.04
+	range: 200
+}

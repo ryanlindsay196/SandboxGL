@@ -169,9 +169,7 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
 			unsigned int VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
 			float Weight = mesh->mBones[i]->mWeights[j].mWeight;
-			//if (VertexID == 578)
-			//	printf((char*)"TODO: DELETE\n");
-			//TODO: fix this
+
 			for (unsigned int k = 0; k < ARRAYSIZE(meshData->vertices[j].WeightValue); k++)
 			{
 				if (meshData->vertices[VertexID].WeightValue[k] == 0)
@@ -181,13 +179,6 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 					break;
 				}
 			}
-
-			//if ((meshData->vertices[j].BoneID[0] == 0 && meshData->vertices[j].WeightValue[0] < 0.96f) || 
-			//	(meshData->vertices[j].BoneID[1] == 0 && meshData->vertices[j].WeightValue[1] < 0.96f) || 
-			//	(meshData->vertices[j].BoneID[2] == 0 && meshData->vertices[j].WeightValue[2] < 0.96f) || 
-			//	(meshData->vertices[j].BoneID[3] == 0 && meshData->vertices[j].WeightValue[3] < 0.96f))
-			//		printf((char*)"TODO: DELETE\n");
-			//assert(meshData->vertices[j].WeightValue[0] + meshData->vertices[j].WeightValue[1] + meshData->vertices[j].WeightValue[2] + meshData->vertices[j].WeightValue[3] <= 1.00000136);
 		}
 	}
 

@@ -104,6 +104,22 @@ void ParticleEmitter::LoadParticleSettings(char * particlePath)
 			spawnerSettings.startSize = ParseVector(keyValuePair.second);
 		else if (keyValuePair.first == "endSize")
 			spawnerSettings.endSize = ParseVector(keyValuePair.second);
+		else if (keyValuePair.first == "force")
+		{
+			spawnerSettings.forces.push_back(Force());
+			while (getline(materialFile, line) && line != "}")
+			{
+				line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+				line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line, ":");
+				if (keyValuePair.first == "position")
+					spawnerSettings.forces[spawnerSettings.forces.size() - 1].Position = ParseVector(keyValuePair.second);
+				else if (keyValuePair.first == "strength")
+					spawnerSettings.forces[spawnerSettings.forces.size() - 1].strength = strtof(keyValuePair.second.c_str(), nullptr);
+				else if (keyValuePair.first == "range")
+					spawnerSettings.forces[spawnerSettings.forces.size() - 1].range = strtof(keyValuePair.second.c_str(), nullptr);
+			}
+		}
 	}
 	materialFile.close();
 }
@@ -166,6 +182,13 @@ void ParticleEmitter::Update(float gameTime)
 			p.Velocity -= p.Acceleration * gameTime;
 			p.Size = (spawnerSettings.startSize * (p.Life / p.StartLife)) +
 				(spawnerSettings.endSize * (1.f-(p.Life / p.StartLife)));
+			for (int j = 0; j < spawnerSettings.forces.size(); j++)
+			{
+				//TODO: Add official gravity formula
+				float distanceToForce = glm::distance(p.Position, spawnerSettings.forces[j].Position);
+				if(distanceToForce < spawnerSettings.forces[j].range)
+					p.Velocity += (p.Position - spawnerSettings.forces[j].Position) * (spawnerSettings.forces[j].strength) / (distanceToForce);
+			}
 		}
 	}
 }

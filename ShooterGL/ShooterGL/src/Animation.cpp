@@ -98,7 +98,7 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 
 	for (unsigned int i = 0; i < node->children.size(); i++) {
 		ReadNodeHierarchy(animationTime, &node->children[i], GlobalTransformation, boneMap);
-		//ReadNodeHierarchy(animationTime, &node->children[i], boneMap[NodeName].finalTransformation, boneMap);
+		//ReadNodeHierarchy(animationTime, &node->children[i], boneMap[NodeName].GetOffsetTransform(), boneMap);
 	}
 }
 
