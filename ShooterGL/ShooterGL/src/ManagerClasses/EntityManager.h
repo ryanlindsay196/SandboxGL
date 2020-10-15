@@ -34,10 +34,8 @@ public://TODO: Implement
 		glm::vec3 scale;
 		float rotationAngle;
 
-		ModelData ReadModelData(std::vector<std::string>& transformDataString)
+		void ReadModelData(std::vector<std::string>& transformDataString)
 		{
-			ModelData modelData = ModelData();
-
 
 			for (unsigned int j = 0; j < transformDataString.size(); j++)
 			{
@@ -46,30 +44,29 @@ public://TODO: Implement
 				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(transformDataString[j], ":");
 				if (keyValuePair.first == "Path")
 				{
-					modelData.modelPath = keyValuePair.second;
+					modelPath = keyValuePair.second;
 				}
 				else if (keyValuePair.first == "PositionOffset")
 				{
-					modelData.position = ParseVector(keyValuePair.second);
+					position = ParseVector(keyValuePair.second);
 				}
 				else if (keyValuePair.first == "EulerAngles")
 				{
-					modelData.rotationAxis = ParseVector(keyValuePair.second);
+					rotationAxis = ParseVector(keyValuePair.second);
 				}
 				else if (keyValuePair.first == "RotationAngle")
 				{
-					modelData.rotationAngle = strtof((char*)keyValuePair.second.c_str(), nullptr);
+					rotationAngle = strtof((char*)keyValuePair.second.c_str(), nullptr);
 				}
 				else if (keyValuePair.first == "ScaleOffset")
 				{
-					modelData.scale = ParseVector(keyValuePair.second);
+					scale = ParseVector(keyValuePair.second);
 				}
 				else if (keyValuePair.first == "Material")
 				{
-					modelData.materialPath = keyValuePair.second;
+					materialPath = keyValuePair.second;
 				}
 			}
-			return modelData;
 		}
 	};
 
