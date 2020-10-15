@@ -32,16 +32,17 @@ void PhysicsManager::Initialize(glm::vec3 regionBounds, glm::vec3 regionCount)
 
 void PhysicsManager::FixedUpdate(float gameTime)
 {
-	RemoveNodesFromRegions(gameTime);
+	UpdatePhysicsRegions_RemoveNodes(gameTime);
 	for (int i = 0; i < rigidBodies.size(); i++)
 	{
-		CheckForRegionsToAdd(rigidBodies[i], gameTime);
+		UpdatePhysicsRegions_AddNodes(rigidBodies[i], gameTime);
 		rigidBodies[i]->FixedUpdate(gameTime);
 		CheckCollisions(9);
 	}
 }
 
-void PhysicsManager::CheckForRegionsToAdd(RigidBody * rb, float gameTime)
+//Loop through all regions. Add nodes to a region if they entered the region this frame
+void PhysicsManager::UpdatePhysicsRegions_AddNodes(RigidBody * rb, float gameTime)
 {
 	glm::vec3 physicsRegionToAdd = (rb->componentParent->GetTranslation() + rb->GetPositionOffset()) / physicsRegionBounds;
 	//Make sure the physics region to add to is an integer and not a float
@@ -71,9 +72,16 @@ void PhysicsManager::CheckForRegionsToAdd(RigidBody * rb, float gameTime)
 	}
 }
 
-void PhysicsManager::AddRigidBody(RigidBody * rb, float gameTime)
+//When adding a rigidbody to a scene (during loading or instantiation)
+void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
 {
 	rigidBodies.push_back(rb);
+
+	if(rigidBodies.size() == 1)
+		rigidBodies[0]->SetVelocity(glm::vec3(-1, 0, 0));
+	else if(rigidBodies.size() == 2)
+		rigidBodies[1]->SetVelocity(glm::vec3(1, 0, 0));
+
 	glm::vec3 physicsRegionToAdd = (rb->componentParent->GetTranslation() + rb->GetPositionOffset()) / physicsRegionBounds;
 	//Make sure the physics region to add to is an integer and not a float
 	physicsRegionToAdd = glm::vec3(floorf(physicsRegionToAdd.x), floorf(physicsRegionToAdd.y), floorf(physicsRegionToAdd.z));
@@ -81,14 +89,13 @@ void PhysicsManager::AddRigidBody(RigidBody * rb, float gameTime)
 	glm::vec3 physicsRegionRangeToCheck;
 	//Loop through all potential physics region to add the current rigidbody to.
 	//Each for statement checks that the physics region indices are inside the bounds of physicsRegions
-	//I add a rigidbody to a physics region if it just entered (current position is not overlapping region, but position + velocity is overlapping region)
 	for (physicsRegionRangeToCheck.x = std::max((int)physicsRegionToAdd.x - 1, 0); physicsRegionRangeToCheck.x <= std::min((int)physicsRegionToAdd.x + 1, (int)physicsRegions.size() - 1); physicsRegionRangeToCheck.x++)
 	{
 		for (physicsRegionRangeToCheck.y = std::max((int)physicsRegionToAdd.y - 1, 0); physicsRegionRangeToCheck.y <= std::min((int)physicsRegionToAdd.y + 1, (int)physicsRegions[physicsRegionRangeToCheck.x].size() - 1); physicsRegionRangeToCheck.y++)
 		{
 			for (physicsRegionRangeToCheck.z = std::max((int)physicsRegionToAdd.z - 1, 0); physicsRegionRangeToCheck.z <= std::min((int)physicsRegionToAdd.z + 1, (int)physicsRegions[physicsRegionRangeToCheck.x][physicsRegionRangeToCheck.y].size() - 1); physicsRegionRangeToCheck.z++)
 			{
-				//If rigidbody is just entering a new physics region (position + velocity is inside the region, but position is not)
+				//If rigidbody is in the physics region
 				if (RigidBodyInRegion(rb, physicsRegionRangeToCheck, false, gameTime))
 				{
 					//add it to the region
@@ -109,7 +116,7 @@ void PhysicsManager::AddRigidBodyToRegion(RigidBody * rb, glm::vec3 region)
 }
 
 //Loops through all regions. If a node is no longer in a particular region, remove the node from the region.
-void PhysicsManager::RemoveNodesFromRegions(float gameTime)
+void PhysicsManager::UpdatePhysicsRegions_RemoveNodes(float gameTime)
 {
 	glm::vec3 regionIDs;
 	RigidBodyNode* prevRBNode = nullptr;
@@ -156,16 +163,66 @@ void PhysicsManager::RemoveNodesFromRegions(float gameTime)
 //Check what collisions are present and handle whatever happens to collided objects
 void PhysicsManager::CheckCollisions(int iterations)
 {
-	for (int i = 0; i < physicsRegions.size(); i++)
+	for(int currentIteration = 0; currentIteration < iterations; currentIteration++)
 	{
-		for (int j = 0; j < physicsRegions[i].size(); j++)
+		for (int i = 0; i < physicsRegions.size(); i++)
 		{
-			for (int k = 0; k < physicsRegions[i][j].size(); k++)
+			for (int j = 0; j < physicsRegions[i].size(); j++)
 			{
-
+				for (int k = 0; k < physicsRegions[i][j].size(); k++)
+				{
+					if (physicsRegions[i][j][k].startNode == nullptr)
+						continue;
+					RigidBodyNode* rbNode1 = physicsRegions[i][j][k].startNode;
+					RigidBodyNode* rbNode2 = physicsRegions[i][j][k].startNode->nextNode;
+					if (rbNode2 == nullptr)
+						continue;
+					while (rbNode1->nextNode != nullptr)
+					{
+						if (rbNode1 != rbNode2)
+						{
+							//TODO: Check the collision
+							if(IsColliding(rbNode1->rigidBody->CalculateProjections(), rbNode2->rigidBody->CalculateProjections()))
+							{
+								std::cout << "RigidBody " << rbNode1->rigidBody << " has collided with " << rbNode2->rigidBody << "!" << std::endl;
+								rbNode1->rigidBody->SetVelocity(glm::vec3(0,1,0));
+								rbNode2->rigidBody->SetVelocity(glm::vec3(0,-1,0));
+							}
+						}
+						rbNode2 = rbNode2->nextNode;
+						//if node2 has reached the end, increment node1 and loop again
+						if (rbNode2 == nullptr)
+						{
+							rbNode1 = rbNode1->nextNode;
+							rbNode2 = rbNode1->nextNode;
+						}
+					}
+				}
 			}
 		}
 	}
+}
+
+//Check for collisions using vector projections on the x, y, and z axes.
+bool PhysicsManager::IsColliding(RigidBody::RigidBodyProjections rbProjections1, RigidBody::RigidBodyProjections rbProjections2)
+{
+	//TODO: This works with box colliders, but not sphere colliders. Fix that.
+	//if ((rbProjections1.xVec3Projections[0] < rbProjections2.xVec3Projections[0] || rbProjections1.xVec3Projections[0] > rbProjections2.xVec3Projections[1]) &&
+	//	(rbProjections1.xVec3Projections[1] < rbProjections2.xVec3Projections[0] || rbProjections1.xVec3Projections[1] > rbProjections2.xVec3Projections[1]))
+	//{
+	//	if ((rbProjections2.xVec3Projections[0] < rbProjections1.xVec3Projections[0] || rbProjections2.xVec3Projections[0] > rbProjections1.xVec3Projections[1]) &&
+	//		(rbProjections2.xVec3Projections[1] < rbProjections1.xVec3Projections[0] || rbProjections2.xVec3Projections[1] > rbProjections1.xVec3Projections[1]))
+	//	{
+	//		return false;
+	//	}
+	//}
+	if (rbProjections1.xVec3Projections[0] > rbProjections2.xVec3Projections[1] || rbProjections2.xVec3Projections[0] > rbProjections1.xVec3Projections[1])
+		return false;
+	if (rbProjections1.yVec3Projections[0] > rbProjections2.yVec3Projections[1] || rbProjections2.yVec3Projections[0] > rbProjections1.yVec3Projections[1])
+		return false;
+	if (rbProjections1.zVec3Projections[0] > rbProjections2.zVec3Projections[1] || rbProjections2.zVec3Projections[0] > rbProjections1.zVec3Projections[1])
+		return false;
+	return true;
 }
 
 bool PhysicsManager::RigidBodyInRegion(RigidBody * rb, glm::vec3 regionIDs, bool addRB_Velocity, float gameTime)

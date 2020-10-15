@@ -53,8 +53,6 @@ private:
 public:
 	void Initialize(ObjectManager* objectManager, char* particlePath);
 	void LoadParticleSettings(char* particlePath);
-	std::pair<std::string, std::string> GenerateKeyValuePair(std::string line, std::string delimiter);
-	glm::vec3 ParseVector(std::string line);
 	virtual void Update(float gameTime) override;
 	void Render();
 

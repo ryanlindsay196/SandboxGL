@@ -1,7 +1,5 @@
 #include "RigidBody.h"
-
-//TODO: potentially remove pragma warning disable : 4996
-#pragma warning (disable : 4996)
+#include "FileReader.h"
 
 RigidBody::RigidBody()
 {
@@ -46,6 +44,10 @@ void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties)
 		{
 			scale = ParseVector(keyValuePair.second);
 		}
+		else if (keyValuePair.first == "UseGravity")
+		{
+			useGravity = std::stoi(keyValuePair.second.c_str());
+		}
 	}
 }
 
@@ -56,41 +58,12 @@ void RigidBody::Update(float gameTime)
 
 void RigidBody::FixedUpdate(float gameTime)
 {
-	velocity.y += 10 * gameTime;
-	velocity.y = std::min(10.f, velocity.y);
+	if (useGravity)
+	{
+		velocity.y += 10 * gameTime;
+		velocity.y = std::min(10.f, velocity.y);
+	}
 	componentParent->Translate(positionConstraints * velocity * gameTime);
-}
-
-
-glm::vec3 RigidBody::ParseVector(std::string line)
-{
-	if (line.find(",") == line.npos)
-		return glm::vec3(strtof((char*)line.c_str(), nullptr));
-
-	float x, y, z;
-	std::string xLine, yLine, zLine;
-	xLine = yLine = zLine = line;
-
-	xLine = strtok((char*)xLine.c_str(), ",");
-
-	yLine = yLine.substr(yLine.find_first_of(",") + 1);
-	yLine = strtok((char*)yLine.c_str(), ",");
-
-	zLine = zLine.substr(zLine.find_last_of(",") + 1);
-	//zLine = strtok((char*)zLine.c_str(), ",");
-
-	x = strtof((char*)xLine.c_str(), nullptr);
-	y = strtof((char*)yLine.c_str(), nullptr);
-	z = strtof((char*)zLine.c_str(), nullptr);
-	return glm::vec3(x, y, z);
-}
-
-std::pair<std::string, std::string> RigidBody::GenerateKeyValuePair(std::string line, std::string delimiter)
-{
-	std::pair<std::string, std::string> newKeyValuePair;
-	newKeyValuePair.second = line.substr(line.find_first_of(":") + 1);
-	newKeyValuePair.first = strtok((char*)line.c_str(), delimiter.c_str());
-	return newKeyValuePair;
 }
 
 RigidBody::ColliderType RigidBody::GetColliderType()
@@ -111,4 +84,26 @@ glm::vec3 RigidBody::GetScale()
 glm::vec3 RigidBody::GetVelocity()
 {
 	return velocity;
+}
+
+void RigidBody::SetVelocity(glm::vec3 newVelocity)
+{
+	velocity = newVelocity;
+}
+
+//Calculates and returns the projections of this rigidbody on the x, y, and z axes.
+RigidBody::RigidBodyProjections RigidBody::CalculateProjections()
+{
+	RigidBodyProjections projections = RigidBodyProjections();
+
+	glm::vec3 rigidBodyCenter = componentParent->GetTranslation() + positionOffset;
+
+	projections.xVec3Projections[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(1, 0, 0)), glm::vec3(1, 0, 0));
+	projections.xVec3Projections[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(1, 0, 0)), glm::vec3(1, 0, 0));
+	projections.yVec3Projections[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(0, 1, 0)), glm::vec3(0, 1, 0));
+	projections.yVec3Projections[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(0, 1, 0)), glm::vec3(0, 1, 0));
+	projections.zVec3Projections[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(0, 0, 1)), glm::vec3(0, 0, 1));
+	projections.zVec3Projections[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(0, 0, 1)), glm::vec3(0, 0, 1));
+
+	return projections;
 }

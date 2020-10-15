@@ -29,15 +29,15 @@ private:
 	std::vector<std::vector<std::vector<PhysicsRegion>>> physicsRegions;
 
 	//Moves through all regions, removing rigidbodies that leave a region
-	void RemoveNodesFromRegions(float gameTime);
+	void UpdatePhysicsRegions_RemoveNodes(float gameTime);
+
+	//Moves through all retions, adding rigidbodies that enter a region
+	void UpdatePhysicsRegions_AddNodes(RigidBody* rb, float gameTime);
 
 
 	void CheckCollisions(int iterations);
+	bool IsColliding(RigidBody::RigidBodyProjections rbProjections1, RigidBody::RigidBodyProjections rbProjections2);
 
-	//Adds the rigidbody to the beginning of a region
-	//void AddToRegion(RigidBody& rb, float gameTime);
-	//define this
-	//void RemoveFromRegion(RigidBody rb, glm::vec3 regionIDs, float gameTime);
 	//checks if a rigidbody is inside a particular region
 	bool RigidBodyInRegion(RigidBody* rb, glm::vec3 regionIDs, bool addRB_Velocity, float gameTime);
 public:
@@ -46,9 +46,7 @@ public:
 	void Initialize(glm::vec3 regionBounds, glm::vec3 regionCount);
 	void FixedUpdate(float gameTime);
 
-	void CheckForRegionsToAdd(RigidBody* rb, float gameTime);
-
-	void AddRigidBody(RigidBody* rb, float gameTime);
+	void InitializeRigidBody(RigidBody* rb, float gameTime);
 	void AddRigidBodyToRegion(RigidBody* rb, glm::vec3 region);
 };
 

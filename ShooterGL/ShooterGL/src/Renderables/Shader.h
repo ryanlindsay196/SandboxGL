@@ -12,8 +12,6 @@ class Shader
 public:
 	void Initialize(ObjectManager * in_objectManager, char* vertexPath, char* fragmentPath, char* materialPath);
 	void LoadMaterial(char* materialPath);
-	std::pair<std::string, std::string> GenerateKeyValuePair(std::string line);
-	glm::vec3 ParseMaterialVector(std::string line);
 	void AddNewTexture(char* texturePath, char* textureUniform);
 	void ClearTextures();
 	void BindTextures();

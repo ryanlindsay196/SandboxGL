@@ -9,6 +9,8 @@
 #include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/LightManager.h"
 #include <gtc/type_ptr.hpp>
+#include "FileReader.h"
+
 //TODO: potentially remove pragma warning disable : 4996
 #pragma warning (disable : 4996)
 
@@ -134,9 +136,9 @@ void Shader::LoadMaterial(char * materialPath)
 					continue;
 				else if (line == "}")
 					break;
-				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line);
+				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line, ":");
 
-				glm::vec3 newVector = ParseMaterialVector(keyValuePair.second);
+				glm::vec3 newVector = ParseVector(keyValuePair.second);
 				SetShaderUniform_vec3((char*)keyValuePair.first.c_str(), newVector);
 			}
 		}
@@ -152,54 +154,14 @@ void Shader::LoadMaterial(char * materialPath)
 					continue;
 				else if (line == "}")
 					break;
-				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line);
+				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line, ":");
 
 				SetShaderUniform_vec1((char*)keyValuePair.first.c_str(), strtof(keyValuePair.second.c_str(), nullptr));
 			}
 		}
 	}
-
-	//SetShaderUniform_vec1("mat.ambient");
-
-	//if (VertexPath == (char*)"")
-	//	VertexPath = (char*)"Resources/Shaders/VertexDefault.glsl";
-	//if (FragmentPath == (char*)"")
-	//	FragmentPath = (char*)"Resources/Shaders/FragmentDefault.glsl";
-
 	materialFile.close();
 }
-
-std::pair<std::string, std::string> Shader::GenerateKeyValuePair(std::string line)
-{
-	std::pair<std::string, std::string> newKeyValuePair;
-	newKeyValuePair.second = line.substr(line.find_first_of(":") + 1);
-	newKeyValuePair.first = strtok((char*)line.c_str(), ":");
-	return newKeyValuePair;
-}
-
-glm::vec3 Shader::ParseMaterialVector(std::string line)
-{
-	if(line.find(",") == line.npos)
-		return glm::vec3(strtof((char*)line.c_str(), nullptr));
-
-	float x, y, z;
-	std::string xLine, yLine, zLine;
-	xLine = yLine = zLine = line;
-
-	xLine = strtok((char*)xLine.c_str(), ",");
-	
-	yLine = yLine.substr(yLine.find_first_of(",") + 1);
-	yLine = strtok((char*)yLine.c_str(), ",");
-
-	zLine = zLine.substr(zLine.find_last_of(",") + 1);
-	//zLine = strtok((char*)zLine.c_str(), ",");
-
-	x = strtof((char*)xLine.c_str(), nullptr);
-	y = strtof((char*)yLine.c_str(), nullptr);
-	z = strtof((char*)zLine.c_str(), nullptr);
-	return glm::vec3(x, y, z);
-}
-
 
 void Shader::AddNewTexture(char * texturePath, char* textureUniform)
 {
