@@ -10,6 +10,7 @@
 #include "ControllerManager.h"
 #include "LightManager.h"
 #include "ShaderManager.h"
+#include "PhysicsManager.h"
 
 //TODO: Remove this
 #include "../Renderables/ParticleEmitter.h"
@@ -20,6 +21,10 @@ void ObjectManager::Initialize(GLFWwindow* window)
 {
 	//lightPos = glm::vec3(2, 1, 10);
 
+	//TODO: Load fixedUpdateTime and other variables (To Be Determined) from a project settings file
+	//Set to 30 fps
+	fixedUpdateMaxTime = 2.f / 60.f;
+
 	entityManager = new EntityManager();
 	modelManager = new ModelManager();
 	textureManager = new TextureManager();
@@ -27,6 +32,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	controllerManager = new ControllerManager();
 	lightManager = new LightManager();
 	shaderManager = new ShaderManager();
+	physicsManager = new PhysicsManager();
 	
 	lightManager->Initialize();
 	
@@ -51,6 +57,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	//entityManager->GetEntity(1)->AddComponent(lightManager->AddLight(glm::vec3(0), glm::vec3(1, 0, 0), 0.f, glm::vec3(1)));
 	//entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));
 	
+	physicsManager->Initialize(glm::vec3(24, 24, 24), glm::vec3(5, 5, 5));
 	entityManager->LoadScene("Resources/Scenes/Test2.scene");
 	
 	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.2f, 1.2f, 1.2f));
@@ -107,8 +114,14 @@ void ObjectManager::Initialize(GLFWwindow* window)
 
 void ObjectManager::Update(float gameTime)
 {
+	fixedUpdateTimer += gameTime;
 	modelManager->UpdateModels(gameTime);
 	entityManager->Update(gameTime);
+	if (fixedUpdateTimer >= fixedUpdateMaxTime)
+	{
+		physicsManager->FixedUpdate(fixedUpdateTimer);
+		fixedUpdateTimer = 0;
+	}
 	cameraManager->Update();
 }
 

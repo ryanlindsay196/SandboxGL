@@ -55,6 +55,7 @@ int main()
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	bool firstFrame = true;
 #pragma region Gameplay Loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -66,7 +67,8 @@ int main()
 
 		processInput(window);
 		float currentFrame = (float)glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
+		deltaTime = !firstFrame * (currentFrame - lastFrame);
+		firstFrame = false;
 		glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		objectManager->Update(deltaTime);

@@ -25,10 +25,11 @@ Shader* ShaderManager::LoadNewShader(std::string materialPath, ObjectManager* in
 //			x.second++;
 //	}
 	//return (std::pair<std::string, Shader*>)shader.second;
-	for (auto& x : shaders)
-	{//TODO: Replace this with instant lookup
-		if (x.first == materialPath)
-			return x.second;
-	}
+	//for (auto& x : shaders)
+	//{//TODO: Replace this with instant lookup
+	//	if (x.first == materialPath)
+	//		return x.second;
+	//}
+	return shaders[materialPath];
 	return nullptr;
 }

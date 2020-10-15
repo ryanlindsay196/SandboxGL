@@ -131,6 +131,8 @@
   <ItemGroup>
     <ClCompile Include="Dependencies\Glad\src\glad.c" />
     <ClCompile Include="Dependencies\stb_image.cpp" />
+    <ClCompile Include="src\ManagerClasses\PhysicsManager.cpp" />
+    <ClCompile Include="src\RigidBody.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Component.cpp" />
@@ -151,7 +153,7 @@
     <ClCompile Include="src\Renderables\Shader.cpp" />
     <ClCompile Include="src\Renderables\Texture.cpp" />
     <ClCompile Include="src\ManagerClasses\TextureManager.cpp" />
-    <ClCompile Include="WorldComponent.cpp" />
+    <ClCompile Include="src\WorldComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\Assimp\include\assimp\ai_assert.h" />
@@ -197,6 +199,8 @@
     <ClInclude Include="Dependencies\Assimp\include\assimp\version.h" />
     <ClInclude Include="Dependencies\GLM\include\detail\type_vec4.hpp" />
     <ClInclude Include="Dependencies\stb_image.h" />
+    <ClInclude Include="src\ManagerClasses\PhysicsManager.h" />
+    <ClInclude Include="src\RigidBody.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationDataStructures.h" />
     <ClInclude Include="src\Camera.h" />
@@ -218,7 +222,7 @@
     <ClInclude Include="src\Renderables\Shader.h" />
     <ClInclude Include="src\Renderables\Texture.h" />
     <ClInclude Include="src\ManagerClasses\TextureManager.h" />
-    <ClInclude Include="WorldComponent.h" />
+    <ClInclude Include="src\WorldComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dependencies\Assimp\include\assimp\color4.inl" />
@@ -238,6 +242,8 @@
     <None Include="Resources\Materials\DefaultMaterial.mat" />
     <None Include="Resources\Materials\ParticleMat.mat" />
     <None Include="Resources\ParticleSystems\ParticleDefault.part" />
+    <None Include="Resources\Prefabs\Floor.prefab" />
+    <None Include="Resources\Prefabs\Obelisk.prefab" />
     <None Include="Resources\Prefabs\Player.prefab" />
     <None Include="Resources\Prefabs\spoonza.prefab" />
     <None Include="Resources\Prefabs\Test.prefab" />

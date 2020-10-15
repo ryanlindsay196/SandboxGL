@@ -40,6 +40,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 
 	m_modelData = objectManager->modelManager->LoadModelData(modelPath);
 
+	//If model's vertex data was already loaded in another model
 	if(m_modelData->m_meshData.size() != 0)
 	{
 		for (unsigned int i = 0; i < m_modelData->m_meshData.size(); i++)
@@ -49,6 +50,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 			m_meshes[m_meshes.size() - 1].SetTransform(m_modelData->m_meshData[i].meshTransform);
 		}
 	}
+	//If this is the first time loading a model
 	else
 		LoadModel(modelPath, materialPath);
 	for(unsigned int i = 0; i < m_meshes.size(); i++)

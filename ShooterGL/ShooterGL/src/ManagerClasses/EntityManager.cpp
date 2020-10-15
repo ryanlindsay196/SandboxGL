@@ -17,12 +17,7 @@
 
 void EntityManager::Initialize(ObjectManager * in_objectManager)
 {
-	//TODO: Loop through all files in the entities folder to load entity properties
 	objectManager = in_objectManager;
-	//InstantiateEntity(EntityProperties());
-	//InstantiateEntity(EntityProperties());
-	//InstantiateEntity(EntityProperties());
-	//InstantiateEntity(EntityProperties());
 }
 
 void EntityManager::LoadScene(std::string scenePath)
@@ -93,7 +88,7 @@ glm::vec3 EntityManager::ParseVector(std::string line)
 std::pair<std::string, std::string> EntityManager::GenerateKeyValuePair(std::string line, std::string delimiter)
 {
 	std::pair<std::string, std::string> newKeyValuePair;
-	newKeyValuePair.second = line.substr(line.find_first_of(":") + 1);
+	newKeyValuePair.second = line.substr(line.find_first_of(delimiter) + 1);
 	newKeyValuePair.first = strtok((char*)line.c_str(), delimiter.c_str());
 	return newKeyValuePair;
 }
@@ -110,7 +105,6 @@ EntityManager::EntityProperties* EntityManager::LoadPrefab(std::string prefabPat
 		while (getline(prefabFile, line))
 		{
 			std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line, ":");
-			//TODO: Read through prefab file and update entity properties based on what's in the prefab
 			if (line == "Components")
 			{
 				getline(prefabFile, line);//This skips the "{" after the Components property
@@ -172,12 +166,7 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 		entityPropertiesMap.insert(newEntityPropsPair);
 		return newEntityPropsPair.second;// shaders.find(shaderPath);
 	}
-	for (auto& x : entityPropertiesMap)
-	{//TODO: Replace this with instant lookup
-		if (x.first == prefabPath)
-			return x.second;
-	}
-	return nullptr;
+	return entityPropertiesMap[prefabPath];
 }
 
 void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startEulerAngles, float rotationAngle, glm::vec3 startScale, Entity* parent)
@@ -212,9 +201,15 @@ void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::v
 			PointLightData pointLightData = ReadPointLightData(entityProperties->componentProperties[i]);
 			entities[entities.size() - 1]->AddComponent(objectManager->lightManager->AddLight(pointLightData.position, pointLightData.rotationAxis, pointLightData.rotationAngle, pointLightData.scale, pointLightData.ambient, pointLightData.specular, pointLightData.diffuse));
 		}
+		else if (entityProperties->componentNames[i] == "RigidBody")
+		{
+			RigidBody* newRigidBody = new RigidBody();
+			newRigidBody->Initialize(entityProperties->componentProperties[i]);
+			entities[entities.size() - 1]->AddComponent(newRigidBody);
+			newRigidBody->componentParent = entities[entities.size() - 1];
+			objectManager->physicsManager->AddRigidBody(newRigidBody, 0.f);
+		}
 	}
-	//objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]);
-	//entities[entities.size() - 1]->AddComponent(objectManager->controllerManager->CreateController(entities[entities.size() - 1]));
 }
 
 void EntityManager::Update(float gameTime)

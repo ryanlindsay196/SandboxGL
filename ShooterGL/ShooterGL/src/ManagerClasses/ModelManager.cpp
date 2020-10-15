@@ -24,7 +24,7 @@ void ModelManager::Initialize(ObjectManager * objectManager)
 
 Model* ModelManager::LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
 {//TODO: Delete cause this is depreciated
-	LoadModel((char*)"Resources/Models/guitar_backpack/Rock_Low.fbx", (char*)"Resources/Materials/DefaultMaterial.mat", positionOffset, rotationAxis, rotationAngle, scaleOffset);
+	//LoadModel((char*)"Resources/Models/guitar_backpack/Rock_Low.fbx", (char*)"Resources/Materials/DefaultMaterial.mat", positionOffset, rotationAxis, rotationAngle, scaleOffset);
 	//models.push_back(new Model());
 	//models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/arms.fbx", (char*)"");
 	//models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, (char*)"Resources/Models/guitar_backpack/Survival_BackPack_2.fbx", (char*)"");
@@ -57,13 +57,12 @@ ModelData* ModelManager::LoadModelData(std::string hashID)
 
 		return newModelDataEntry.second;// shaders.find(shaderPath);
 	}
-	for (auto& x : modelDataMap)
-	{//TODO: Replace this with instant lookup
-		if (x.first == hashID)
-			return x.second;
-	}
-	return nullptr;
-
+	//for (auto& x : modelDataMap)
+	//{//TODO: Replace this with instant lookup
+	//	if (x.first == hashID)
+	//		return x.second;
+	//}
+	return modelDataMap[hashID];
 }
 
 void ModelManager::LoadShaders()

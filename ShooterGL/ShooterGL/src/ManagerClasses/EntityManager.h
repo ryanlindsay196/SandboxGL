@@ -2,6 +2,8 @@
 #include <unordered_map>
 #include "Entity.h"
 #include <vector>
+#include "../RigidBody.h"
+#include "PhysicsManager.h"
 
 class ObjectManager;
 

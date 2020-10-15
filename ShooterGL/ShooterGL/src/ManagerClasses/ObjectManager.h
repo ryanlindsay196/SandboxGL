@@ -7,6 +7,7 @@ class CameraManager;
 class ControllerManager;
 class LightManager;
 class ShaderManager;
+class PhysicsManager;
 //TODO: Remove this
 class ParticleEmitter;
 
@@ -23,10 +24,13 @@ public:
 	ControllerManager* controllerManager;
 	LightManager* lightManager;
 	ShaderManager* shaderManager;
+	PhysicsManager* physicsManager;
 
 	void Initialize(GLFWwindow* window);
 	void Update(float gameTime);
 	void Render();
 
 	//ParticleEmitter* tempEmitter;
+private:
+	float fixedUpdateTimer, fixedUpdateMaxTime;
 };
