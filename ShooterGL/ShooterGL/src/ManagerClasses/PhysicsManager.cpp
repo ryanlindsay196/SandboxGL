@@ -160,7 +160,7 @@ void PhysicsManager::CheckCollisions(int iterations)
 	{
 		for (int j = 0; j < physicsRegions[i].size(); j++)
 		{
-			for (int k = 0; j < physicsRegions[i][j].size(); k++)
+			for (int k = 0; k < physicsRegions[i][j].size(); k++)
 			{
 
 			}
