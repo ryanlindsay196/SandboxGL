@@ -13,12 +13,18 @@ class EntityManager
 private:
 	ObjectManager* objectManager;
 public://TODO: Implement
+
+	struct EntityData
+	{
+		std::string componentName;
+		std::vector<std::string> componentProperties;
+	};
+
 	struct EntityProperties
 	{
 		bool isDataLoaded = false;
 		//components
-		std::vector<std::string> componentNames;
-		std::vector<std::vector<std::string>> componentProperties;
+		std::vector<EntityData> entityData;
 		//tags
 		std::vector<std::string> tags;
 		////children
@@ -34,14 +40,16 @@ public://TODO: Implement
 		glm::vec3 scale;
 		float rotationAngle;
 
-		void ReadModelData(std::vector<std::string>& transformDataString)
+		void ReadModelData(std::vector<std::string> transformDataString)
 		{
 
-			for (unsigned int j = 0; j < transformDataString.size(); j++)
+			for (std::string data : transformDataString)
 			{
-				transformDataString[j].erase(std::remove(transformDataString[j].begin(), transformDataString[j].end(), '\t'), transformDataString[j].end());
-				transformDataString[j].erase(std::remove(transformDataString[j].begin(), transformDataString[j].end(), ' '), transformDataString[j].end());
-				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(transformDataString[j], ":");
+				data.erase(std::remove(data.begin(), data.end(), '\t'), data.end());
+				data.erase(std::remove(data.begin(), data.end(), ' '), data.end());
+				if (data == "")
+					continue;
+				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(data, ":");
 				if (keyValuePair.first == "Path")
 				{
 					modelPath = keyValuePair.second;
