@@ -21,7 +21,7 @@ PREFAB : Resources/Prefabs/Obelisk.prefab
 }
 
 
-PREFAB : Resources/Prefabs/Arms.prefab
+PREFAB : Resources/Prefabs/Test2.prefab
 {
 	Position : 0,0,0
 	EulerAngles : 0,0,0
