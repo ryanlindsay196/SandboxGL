@@ -37,7 +37,7 @@ void PhysicsManager::FixedUpdate(float gameTime)
 	{
 		UpdatePhysicsRegions_AddNodes(rigidBodies[i], gameTime);
 		rigidBodies[i]->FixedUpdate(gameTime);
-		CheckCollisions(9);
+		CheckCollisions(8);
 	}
 }
 
@@ -225,11 +225,11 @@ bool PhysicsManager::IsColliding(RigidBody::RigidBodyProjections rbProjections1,
 	//		return false;
 	//	}
 	//}
-	if (rbProjections1.xVec3Projections[0] > rbProjections2.xVec3Projections[1] || rbProjections2.xVec3Projections[0] > rbProjections1.xVec3Projections[1])
+	if (rbProjections1.x[0] > rbProjections2.x[1] || rbProjections2.x[0] > rbProjections1.x[1])
 		return false;
-	if (rbProjections1.yVec3Projections[0] > rbProjections2.yVec3Projections[1] || rbProjections2.yVec3Projections[0] > rbProjections1.yVec3Projections[1])
+	if (rbProjections1.y[0] > rbProjections2.y[1] || rbProjections2.y[0] > rbProjections1.y[1])
 		return false;
-	if (rbProjections1.zVec3Projections[0] > rbProjections2.zVec3Projections[1] || rbProjections2.zVec3Projections[0] > rbProjections1.zVec3Projections[1])
+	if (rbProjections1.z[0] > rbProjections2.z[1] || rbProjections2.z[0] > rbProjections1.z[1])
 		return false;
 	return true;
 }

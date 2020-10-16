@@ -34,9 +34,9 @@ public:
 	//The projections of the bounds of a rigidbody on the x, y, and z axes.
 	struct RigidBodyProjections
 	{
-		float xVec3Projections[2];
-		float yVec3Projections[2];
-		float zVec3Projections[2];
+		float x[2];
+		float y[2];
+		float z[2];
 	};
 	RigidBodyProjections CalculateProjections();
 };

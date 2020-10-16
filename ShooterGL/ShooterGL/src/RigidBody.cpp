@@ -95,7 +95,7 @@ float RigidBody::GetMass()
 
 void RigidBody::StoreVelocity(glm::vec3 velocityToAdd)
 {
-	storedVelocity += velocityToAdd;
+	storedVelocity += 2.f * velocityToAdd;
 }
 
 void RigidBody::SetVelocity(glm::vec3 newVelocity)
@@ -110,12 +110,12 @@ RigidBody::RigidBodyProjections RigidBody::CalculateProjections()
 
 	glm::vec3 rigidBodyCenter = componentParent->GetTranslation() + positionOffset;
 
-	projections.xVec3Projections[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(1, 0, 0)), glm::vec3(1, 0, 0));
-	projections.xVec3Projections[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(1, 0, 0)), glm::vec3(1, 0, 0));
-	projections.yVec3Projections[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(0, 1, 0)), glm::vec3(0, 1, 0));
-	projections.yVec3Projections[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(0, 1, 0)), glm::vec3(0, 1, 0));
-	projections.zVec3Projections[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(0, 0, 1)), glm::vec3(0, 0, 1));
-	projections.zVec3Projections[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(0, 0, 1)), glm::vec3(0, 0, 1));
+	projections.x[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(1, 0, 0)), glm::vec3(1, 0, 0)) + velocity.x + storedVelocity.x;
+	projections.x[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(1, 0, 0)), glm::vec3(1, 0, 0)) + velocity.x + storedVelocity.x;
+	projections.y[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(0, 1, 0)), glm::vec3(0, 1, 0)) + velocity.y + storedVelocity.y;
+	projections.y[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(0, 1, 0)), glm::vec3(0, 1, 0)) + velocity.y + storedVelocity.y;
+	projections.z[0] = glm::dot(rigidBodyCenter - (scale * glm::vec3(0, 0, 1)), glm::vec3(0, 0, 1)) + velocity.z + storedVelocity.z;
+	projections.z[1] = glm::dot(rigidBodyCenter + (scale * glm::vec3(0, 0, 1)), glm::vec3(0, 0, 1)) + velocity.z + storedVelocity.z;
 
 	return projections;
 }
