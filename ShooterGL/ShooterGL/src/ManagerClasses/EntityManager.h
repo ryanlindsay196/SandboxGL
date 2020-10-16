@@ -144,7 +144,7 @@ public:
 
 	void Initialize(ObjectManager* in_objectManager);
 	void LoadScene(std::string scenePath);
-	EntityProperties* LoadPrefab(std::string prefabPath);
+	EntityProperties* LoadEntityFromFile(std::string prefabPath);
 	EntityProperties* LoadProperties(std::string prefabPath);
 	//LoadEntitiesFromSceneFile(char* entityName);//Instantiate entities from loaded entity properties
 	//Scene file has prefab ids, and transform data;

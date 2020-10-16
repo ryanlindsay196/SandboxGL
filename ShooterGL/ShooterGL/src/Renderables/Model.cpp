@@ -289,19 +289,20 @@ void Model::Render()
 		//	m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
 	}
 
-	for (unsigned int i = 0; i < m_meshes.size(); i++)
+	//for (unsigned int i = 0; i < m_meshes.size(); i++)
+	for (Mesh mesh : m_meshes)
 	{
-		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix, GL_FALSE);
-		m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
+		mesh.shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix, GL_FALSE);
+		mesh.shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
 		if (componentParent != nullptr)
 		{
-			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * m_meshes[i].GetOffsetTransform(), GL_FALSE);
+			mesh.shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * mesh.GetOffsetTransform(), GL_FALSE);
 		}
 		else
 		{
-			m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * m_meshes[i].GetOffsetTransform(), GL_FALSE);
+			mesh.shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * mesh.GetOffsetTransform(), GL_FALSE);
 			//m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", glm::translate(glm::scale(m_meshes[i].GetOffsetTransform(), glm::vec3(0.02f, 0.02f, 0.02f)), glm::vec3(20, i * 20, 0)));
 		}
-		m_meshes[i].Render();
+		mesh.Render();
 	}
 }

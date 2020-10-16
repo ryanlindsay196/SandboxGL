@@ -31,7 +31,7 @@ void EntityManager::LoadScene(std::string scenePath)
 
 		if (keyValuePair.first == "PREFAB")
 		{
-			EntityProperties* propsToLoad = LoadPrefab(keyValuePair.second);
+			EntityProperties* propsToLoad = LoadEntityFromFile(keyValuePair.second);
 			glm::vec3 newPosition;
 			glm::vec3 newEulerAngles;
 			float newRotationAngle = 0.0f;
@@ -58,7 +58,8 @@ void EntityManager::LoadScene(std::string scenePath)
 
 }
 
-EntityManager::EntityProperties* EntityManager::LoadPrefab(std::string prefabPath)
+//Loads entity properties from a prefab file
+EntityManager::EntityProperties* EntityManager::LoadEntityFromFile(std::string prefabPath)
 {
 	std::ifstream prefabFile(prefabPath);
 	std::string line;
@@ -80,6 +81,7 @@ EntityManager::EntityProperties* EntityManager::LoadPrefab(std::string prefabPat
 					//If we've encountered a new property for the current entity
 					if (line != "}" && line != "{")
 					{
+						//Add a new set of entityData
 						entityPropertiesToUse->entityData.push_back(EntityData());
 						entityPropertiesToUse->entityData[entityPropertiesToUse->entityData.size() - 1].componentProperties.push_back(std::string());
 						entityPropertiesToUse->entityData[entityPropertiesToUse->entityData.size() - 1].componentName = line;
@@ -136,6 +138,7 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 	return entityPropertiesMap[prefabPath];
 }
 
+//Add an entity into the scene
 void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startEulerAngles, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
 	Entity* entity = new Entity();
@@ -146,38 +149,42 @@ void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::v
 	{
 		if (entityData.componentName == "Camera")
 		{
-			entities[entities.size() - 1]->AddComponent(objectManager->cameraManager->CreateCamera(entities[entities.size() - 1]));
+			entity->AddComponent(objectManager->cameraManager->CreateCamera(entity));
 		}
 		else if (entityData.componentName == "Model")
 		{
 			ModelData modelTransform = ModelData();
 			modelTransform.ReadModelData(entityData.componentProperties);
-			entities[entities.size() - 1]->AddComponent(objectManager->modelManager->LoadModel((char*)modelTransform.modelPath.c_str(), modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale));
+			entity->AddComponent(objectManager->modelManager->LoadModel((char*)modelTransform.modelPath.c_str(), modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale));
 		}
 		else if (entityData.componentName == "ParticleSystem")
 		{
 			ParticleEmitter* newParticleEmitter = new ParticleEmitter();
 			std::pair<std::string, std::string> particleKeyValue = GenerateKeyValuePair(entityData.componentProperties[0], ":");
 			newParticleEmitter->Initialize(objectManager, (char*)particleKeyValue.second.c_str());
-			entities[entities.size() - 1]->AddComponent(newParticleEmitter);
+			entity->AddComponent(newParticleEmitter);
 		}
 		else if (entityData.componentName == "Controller")
 		{
-			entities[entities.size() - 1]->AddComponent(objectManager->controllerManager->CreateController(nullptr));
+			entity->AddComponent(objectManager->controllerManager->CreateController(nullptr));
 		}
 		else if (entityData.componentName == "Light:Point")
 		{
 			PointLightData pointLightData = PointLightData();
 			pointLightData.ReadPointLightData(entityData.componentProperties);
-			entities[entities.size() - 1]->AddComponent(objectManager->lightManager->AddLight(pointLightData.position, pointLightData.rotationAxis, pointLightData.rotationAngle, pointLightData.scale, pointLightData.ambient, pointLightData.specular, pointLightData.diffuse));
+			entity->AddComponent(objectManager->lightManager->AddLight(pointLightData.position, pointLightData.rotationAxis, pointLightData.rotationAngle, pointLightData.scale, pointLightData.ambient, pointLightData.specular, pointLightData.diffuse));
 		}
 		else if (entityData.componentName == "RigidBody")
 		{
 			RigidBody* newRigidBody = new RigidBody();
 			newRigidBody->Initialize(entityData.componentProperties);
-			entities[entities.size() - 1]->AddComponent(newRigidBody);
-			newRigidBody->componentParent = entities[entities.size() - 1];
+			entity->AddComponent(newRigidBody);
+			newRigidBody->componentParent = entity;
 			objectManager->physicsManager->InitializeRigidBody(newRigidBody, 0.f);
+		}
+		else
+		{
+			std::cout << "EntityManager::InstantiateEntity(...)::Component " << entityData.componentName << " is not supported." << std::endl;
 		}
 	}
 }
