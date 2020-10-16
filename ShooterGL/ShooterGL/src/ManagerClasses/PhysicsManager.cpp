@@ -77,6 +77,7 @@ void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
 {
 	rigidBodies.push_back(rb);
 
+	//TODO: Remove
 	if(rigidBodies.size() == 1)
 		rigidBodies[0]->SetVelocity(glm::vec3(-1, 0, 0));
 	else if(rigidBodies.size() == 2)
@@ -185,8 +186,16 @@ void PhysicsManager::CheckCollisions(int iterations)
 							if(IsColliding(rbNode1->rigidBody->CalculateProjections(), rbNode2->rigidBody->CalculateProjections()))
 							{
 								std::cout << "RigidBody " << rbNode1->rigidBody << " has collided with " << rbNode2->rigidBody << "!" << std::endl;
-								rbNode1->rigidBody->SetVelocity(glm::vec3(0,1,0));
-								rbNode2->rigidBody->SetVelocity(glm::vec3(0,-1,0));
+								//rbNode1->rigidBody->SetVelocity(glm::vec3(0,1,0));
+								//rbNode2->rigidBody->SetVelocity(glm::vec3(0,-1,0));
+								
+								glm::vec3 velocity1 = rbNode1->rigidBody->GetVelocity();
+								glm::vec3 velocity2 = rbNode2->rigidBody->GetVelocity();
+								float mass1 = rbNode1->rigidBody->GetMass();
+								float mass2 = rbNode2->rigidBody->GetMass();
+
+								rbNode1->rigidBody->StoreVelocity((velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2 * mass2 * velocity2) / (mass2 + mass1)));
+								rbNode2->rigidBody->StoreVelocity(((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1)));
 							}
 						}
 						rbNode2 = rbNode2->nextNode;

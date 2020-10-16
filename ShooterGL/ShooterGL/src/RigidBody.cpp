@@ -58,11 +58,13 @@ void RigidBody::Update(float gameTime)
 
 void RigidBody::FixedUpdate(float gameTime)
 {
-	if (useGravity)
-	{
-		velocity.y += 10 * gameTime;
-		velocity.y = std::min(10.f, velocity.y);
-	}
+	//if (useGravity)
+	//{
+	//	velocity.y += 10 * gameTime;
+	//	velocity.y = std::min(10.f, velocity.y);
+	//}
+	velocity += storedVelocity;
+	storedVelocity = glm::vec3(0);
 	componentParent->Translate(positionConstraints * velocity * gameTime);
 }
 
@@ -84,6 +86,16 @@ glm::vec3 RigidBody::GetScale()
 glm::vec3 RigidBody::GetVelocity()
 {
 	return velocity;
+}
+
+float RigidBody::GetMass()
+{
+	return mass;
+}
+
+void RigidBody::StoreVelocity(glm::vec3 velocityToAdd)
+{
+	storedVelocity += velocityToAdd;
 }
 
 void RigidBody::SetVelocity(glm::vec3 newVelocity)

@@ -19,3 +19,11 @@ PREFAB : Resources/Prefabs/Obelisk.prefab
 	EulerAngles : 0,0,0
 	Scale : 1,1,1
 }
+
+
+PREFAB : Resources/Prefabs/Arms.prefab
+{
+	Position : 0,0,0
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}

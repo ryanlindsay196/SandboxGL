@@ -10,7 +10,7 @@ private:
 	//TODO: Make fixedUpdateTime a globally set variable. Maybe set it in a ProjectSettings file?
 	//float fixedUpdateTime, fixedUpdateTimer;
 	float mass;
-	glm::vec3 velocity;
+	glm::vec3 velocity, storedVelocity;
 	glm::vec3 positionConstraints, rotationConstraints;
 	glm::vec3 positionOffset, scale;
 	bool useGravity;
@@ -26,6 +26,8 @@ public:
 	glm::vec3 GetPositionOffset();
 	glm::vec3 GetScale();
 	glm::vec3 GetVelocity();
+	float GetMass();
+	void StoreVelocity(glm::vec3 velocityToAdd);
 
 	void SetVelocity(glm::vec3 newVelocity);
 
