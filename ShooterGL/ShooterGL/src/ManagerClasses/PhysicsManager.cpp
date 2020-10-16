@@ -79,8 +79,8 @@ void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
 
 	//TODO: Remove
 	if(rigidBodies.size() == 1)
-		rigidBodies[0]->SetVelocity(glm::vec3(-1, 0, 0));
-	else if(rigidBodies.size() == 2)
+		rigidBodies[0]->SetVelocity(glm::vec3(-0.4, 0, 0));
+	if(rigidBodies.size() == 2)
 		rigidBodies[1]->SetVelocity(glm::vec3(1, 0, 0));
 
 	glm::vec3 physicsRegionToAdd = (rb->componentParent->GetTranslation() + rb->GetPositionOffset()) / physicsRegionBounds;
@@ -166,34 +166,40 @@ void PhysicsManager::CheckCollisions(int iterations)
 {
 	for(int currentIteration = 0; currentIteration < iterations; currentIteration++)
 	{
-		for (int i = 0; i < physicsRegions.size(); i++)
+		//for (int i = 0; i < physicsRegions.size(); i++)
+		for (std::vector<std::vector<PhysicsRegion>> physicsRegionI : physicsRegions)
 		{
-			for (int j = 0; j < physicsRegions[i].size(); j++)
+			for (std::vector<PhysicsRegion> physicsRegionIJ : physicsRegionI)
 			{
-				for (int k = 0; k < physicsRegions[i][j].size(); k++)
+				for (PhysicsRegion physicsRegion : physicsRegionIJ)
 				{
-					if (physicsRegions[i][j][k].startNode == nullptr)
+					if (physicsRegion.startNode == nullptr)
 						continue;
-					RigidBodyNode* rbNode1 = physicsRegions[i][j][k].startNode;
-					RigidBodyNode* rbNode2 = physicsRegions[i][j][k].startNode->nextNode;
+					RigidBodyNode* rbNode1 = physicsRegion.startNode;
+					RigidBodyNode* rbNode2 = physicsRegion.startNode->nextNode;
 					if (rbNode2 == nullptr)
 						continue;
 					while (rbNode1->nextNode != nullptr)
 					{
 						if (rbNode1 != rbNode2)
 						{
-							//TODO: Check the collision
-							if(IsColliding(rbNode1->rigidBody->CalculateProjections(), rbNode2->rigidBody->CalculateProjections()))
+							//Check the collision
+							if(IsColliding(rbNode1->rigidBody->CalculateProjections(true, true), rbNode2->rigidBody->CalculateProjections(true, true)))
 							{
+								glm::vec3 rbPos1 = rbNode1->rigidBody->componentParent->GetTranslation() + rbNode1->rigidBody->GetPositionOffset();
+								glm::vec3 rbPos2 = rbNode2->rigidBody->componentParent->GetTranslation() + rbNode2->rigidBody->GetPositionOffset();
+								//glm::vec3 rbPosDiff = rbPos2 - rbPos1;
+								//float rbDistance = sqrtf(powf(rbPosDiff.x, 2) + powf(rbPosDiff.y, 2) + powf(rbPosDiff.z, 2));
+
 								std::cout << "RigidBody " << rbNode1->rigidBody << " has collided with " << rbNode2->rigidBody << "!" << std::endl;
-								//rbNode1->rigidBody->SetVelocity(glm::vec3(0,1,0));
-								//rbNode2->rigidBody->SetVelocity(glm::vec3(0,-1,0));
-								
+								std::cout << "Distance between rigid bodies is: " << glm::length(rbPos1 - rbPos2) << std::endl;
+
 								glm::vec3 velocity1 = rbNode1->rigidBody->GetVelocity();
 								glm::vec3 velocity2 = rbNode2->rigidBody->GetVelocity();
 								float mass1 = rbNode1->rigidBody->GetMass();
 								float mass2 = rbNode2->rigidBody->GetMass();
 
+								//Store velocity in the storedVelocity variable this frame. storedVelocity is applied to velocity after calculating all collisions
 								rbNode1->rigidBody->StoreVelocity((velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2 * mass2 * velocity2) / (mass2 + mass1)));
 								rbNode2->rigidBody->StoreVelocity(((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1)));
 							}

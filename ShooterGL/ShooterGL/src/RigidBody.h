@@ -38,6 +38,6 @@ public:
 		float y[2];
 		float z[2];
 	};
-	RigidBodyProjections CalculateProjections();
+	RigidBodyProjections CalculateProjections(bool addVelocity, bool addStoredVelocity);
 };
 

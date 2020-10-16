@@ -43,12 +43,8 @@ int main()
 
 	ObjectManager* objectManager = new ObjectManager();
 	objectManager->Initialize(window);
-	//ModelManager* modelManager = new ModelManager();
-	//modelManager->LoadModel();
-	//modelManager->LoadModel();
 	glEnable(GL_DEPTH_TEST);
 
-	//TODO: Scene Loader
 #pragma endregion
 	float deltaTime = 0.0f; // Time between current frame and last frame
 	float lastFrame = 0.0f; // Time of last frame
@@ -59,12 +55,6 @@ int main()
 #pragma region Gameplay Loop
 	while (!glfwWindowShouldClose(window))
 	{
-		//unsigned int err;
-		//while ((err = glGetError()) != GL_NO_ERROR)
-		//{
-		//	std::cout << err << std::endl;
-		//}
-
 		processInput(window);
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = !firstFrame * (currentFrame - lastFrame);
@@ -73,9 +63,6 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		objectManager->Update(deltaTime);
 		objectManager->Render();
-		//objectManager->modelManager->RenderModels();
-		//modelManager->UpdateModels();
-		//modelManager->RenderModels();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 

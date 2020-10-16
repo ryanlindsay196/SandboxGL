@@ -1,6 +1,6 @@
 PREFAB : Resources/Prefabs/Player.prefab
 {
-	Position : -4,0,0
+	Position : -7,0,0
 	EulerAngles : 0,1,0
 	RotationAngle : 0
 	Scale : 1,1,1
@@ -8,14 +8,14 @@ PREFAB : Resources/Prefabs/Player.prefab
 
 PREFAB : Resources/Prefabs/Obelisk.prefab
 {
-	Position : 4,0,0
+	Position : 6,0,0
 	EulerAngles : 0,0,0
 	Scale : 1,1,1
 }
 
 PREFAB : Resources/Prefabs/Obelisk.prefab
 {
-	Position : 0,0,0
+	Position : -2,0.2,0
 	EulerAngles : 0,0,0
 	Scale : 1,1,1
 }
