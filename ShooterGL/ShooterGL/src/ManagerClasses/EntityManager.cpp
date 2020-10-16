@@ -41,6 +41,8 @@ void EntityManager::LoadScene(std::string scenePath)
 				line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 				line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
 				std::pair<std::string, std::string> propertyPair = GenerateKeyValuePair(line, ":");
+				if (line == "{")
+					continue;
 				if (line == "}")
 					break;
 				else if (propertyPair.first == "Position")
@@ -66,6 +68,7 @@ EntityManager::EntityProperties* EntityManager::LoadEntityFromFile(std::string p
 
 	EntityProperties* entityPropertiesToUse = LoadProperties(prefabPath);
 
+	//Fill entityPropertiesToUse if it's not filled
 	if (!entityPropertiesToUse->isDataLoaded)
 	{
 		while (getline(prefabFile, line))
@@ -83,7 +86,7 @@ EntityManager::EntityProperties* EntityManager::LoadEntityFromFile(std::string p
 					{
 						//Add a new set of entityData
 						entityPropertiesToUse->entityData.push_back(EntityData());
-						entityPropertiesToUse->entityData[entityPropertiesToUse->entityData.size() - 1].componentProperties.push_back(std::string());
+						//entityPropertiesToUse->entityData[entityPropertiesToUse->entityData.size() - 1].componentProperties.push_back(std::string());
 						entityPropertiesToUse->entityData[entityPropertiesToUse->entityData.size() - 1].componentName = line;
 					}
 					else if(line == "{")
