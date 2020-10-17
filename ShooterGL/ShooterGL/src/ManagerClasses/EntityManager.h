@@ -7,6 +7,7 @@
 #include "FileReader.h"
 
 class ObjectManager;
+class LightManager;
 
 class EntityManager
 {
@@ -151,7 +152,7 @@ public:
 	void InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startEulerAngles, float rotationAngle, glm::vec3 startScale, Entity* parent);
 
 	void Update(float gameTime);
-	void Render();
+	void Render(LightManager* lightManager);
 
 	Entity* GetEntity(int i);
 

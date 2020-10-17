@@ -29,7 +29,7 @@ public:
 
 	void UpdateModels(float gameTime);
 
-	void RenderModels();
+	void RenderModels(LightManager* lightManager);
 
 	Model* GetModel(int index);
 

@@ -200,11 +200,11 @@ void EntityManager::Update(float gameTime)
 	}
 }
 
-void EntityManager::Render()
+void EntityManager::Render(LightManager* lightManager)
 {
 	for (Entity* e : entities)
 	{
-		e->Render();
+		e->Render(lightManager);
 	}
 }
 

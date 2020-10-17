@@ -249,7 +249,7 @@ void Shader::SetFragmentShader(char* fragmentPath)
 		{
 			if (line == "#define NR_POINT_LIGHTS X")
 			{
-				line = "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
+ 				line = "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
 			}
 			tempFShader += line + "\n";
 		}

@@ -79,11 +79,11 @@ void ModelManager::UpdateModels(float gameTime)
 		model->Update(gameTime);
 }
 
-void ModelManager::RenderModels()
+void ModelManager::RenderModels(LightManager * lightManager)
 {
 	for (int i = 0; i < (int)models.size(); i++)
 	{
-		models[i]->Render();
+		models[i]->Render(lightManager);
 	}
 }
 

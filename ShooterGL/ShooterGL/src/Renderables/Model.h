@@ -13,6 +13,7 @@ class ModelData;
 struct aiMesh;
 struct aiNode;
 struct aiScene;
+class LightManager;
 
 struct Node;
 class BoneData;
@@ -38,7 +39,7 @@ public:
 	Mesh* GetMesh(unsigned int i);
 
 	virtual void Update(float gameTime) override;
-	void Render();
+	void Render(LightManager* lightManager);
 
 private:
 	ObjectManager* m_objectManager;

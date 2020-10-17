@@ -3,7 +3,7 @@
 
 //TODO: find a way to remove this
 #include "Renderables/Model.h"
-
+#include "ManagerClasses/LightManager.h"
 Entity::~Entity()
 {
 }
@@ -59,11 +59,11 @@ void Entity::Update(float gameTime)
 
 }
 
-void Entity::Render()
+void Entity::Render(LightManager* lightManager)
 {
 	for (Component* component : components)
 	{
-		component->Render();
+		component->Render(lightManager);
 	}
 }
 

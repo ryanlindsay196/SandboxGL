@@ -147,5 +147,5 @@ void ObjectManager::Render()
 	//	}
 	//}
 	//modelManager->RenderModels();
-	entityManager->Render();
+	entityManager->Render(lightManager);
 }
