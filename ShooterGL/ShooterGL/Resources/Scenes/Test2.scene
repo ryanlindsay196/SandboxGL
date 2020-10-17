@@ -8,14 +8,21 @@ PREFAB : Resources/Prefabs/Player.prefab
 
 PREFAB : Resources/Prefabs/Obelisk.prefab
 {
-	Position : 6,0,0
+	Position : 12,0,0
 	EulerAngles : 0,0,0
 	Scale : 1,1,1
 }
 
 PREFAB : Resources/Prefabs/Obelisk.prefab
 {
-	Position : -2,0.2,0
+	Position : 0,0.2,0
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/Ball1.prefab
+{
+	Position : 6,0,0
 	EulerAngles : 0,0,0
 	Scale : 1,1,1
 }

@@ -15,6 +15,8 @@ private:
 	glm::vec3 positionOffset, scale;
 	bool useGravity;
 
+	bool isVelocityStored;
+
 	ColliderType colliderType;
 public:
 	RigidBody();

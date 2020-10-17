@@ -63,8 +63,11 @@ void RigidBody::FixedUpdate(float gameTime)
 	//	velocity.y += 10 * gameTime;
 	//	velocity.y = std::min(10.f, velocity.y);
 	//}
-	if(storedVelocity != glm::vec3(0))
+	if (isVelocityStored)
+	{
 		velocity = storedVelocity;
+		isVelocityStored = false;
+	}
 	storedVelocity = glm::vec3(0);
 	componentParent->Translate(positionConstraints * velocity * gameTime);
 }
@@ -96,6 +99,7 @@ float RigidBody::GetMass()
 
 void RigidBody::StoreVelocity(glm::vec3 velocityToAdd)
 {
+	isVelocityStored = true;
 	storedVelocity += velocityToAdd;
 }
 
