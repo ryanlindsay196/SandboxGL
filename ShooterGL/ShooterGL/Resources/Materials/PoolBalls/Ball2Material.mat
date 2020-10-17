@@ -1,0 +1,16 @@
+&&VertexShader Shaders/VertexDefault.glsl
+&&FragmentShader Shaders/FragmentDefault.glsl
+<ATTACH AND LINK SHADER>
+textures
+{
+	albedoMap : Resources/Textures/PoolBalls/poolb2.jpg
+	normalMap : Resources/Textures/PoolBalls/poolb2.jpg
+	specularMap : Resources/Textures/PoolBalls/poolb2.jpg
+}
+vec3
+{
+}
+float
+{
+	mat.shininess : 0.9
+}

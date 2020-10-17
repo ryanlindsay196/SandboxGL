@@ -109,18 +109,18 @@ void RigidBody::SetVelocity(glm::vec3 newVelocity)
 }
 
 //Calculates and returns the projections of this rigidbody on the x, y, and z axes.
-RigidBody::RigidBodyProjections RigidBody::CalculateProjections(bool addVelocity, bool addStoredVelocity)
+RigidBody::RigidBodyProjections RigidBody::CalculateProjections(bool addVelocity, bool addStoredVelocity, float gameTime)
 {
 	RigidBodyProjections projections = RigidBodyProjections();
 
 	glm::vec3 rigidBodyCenter = componentParent->GetTranslation() + positionOffset;
 
-	projections.x[0] = glm::dot(rigidBodyCenter, glm::vec3(1, 0, 0)) + (velocity.x * addVelocity) + (storedVelocity.x * addStoredVelocity) - scale.x;
-	projections.x[1] = glm::dot(rigidBodyCenter, glm::vec3(1, 0, 0)) + (velocity.x * addVelocity) + (storedVelocity.x * addStoredVelocity) + scale.x;
-	projections.y[0] = glm::dot(rigidBodyCenter, glm::vec3(0, 1, 0)) + (velocity.y * addVelocity) + (storedVelocity.y * addStoredVelocity) - scale.y;
-	projections.y[1] = glm::dot(rigidBodyCenter, glm::vec3(0, 1, 0)) + (velocity.y * addVelocity) + (storedVelocity.y * addStoredVelocity) + scale.y;
-	projections.z[0] = glm::dot(rigidBodyCenter, glm::vec3(0, 0, 1)) + (velocity.z * addVelocity) + (storedVelocity.z * addStoredVelocity) - scale.z;
-	projections.z[1] = glm::dot(rigidBodyCenter, glm::vec3(0, 0, 1)) + (velocity.z * addVelocity) + (storedVelocity.z * addStoredVelocity) + scale.z;
+	projections.x[0] = glm::dot(rigidBodyCenter, glm::vec3(1, 0, 0)) + (velocity.x * addVelocity * gameTime) + (storedVelocity.x * addStoredVelocity * gameTime) - scale.x;
+	projections.x[1] = glm::dot(rigidBodyCenter, glm::vec3(1, 0, 0)) + (velocity.x * addVelocity * gameTime) + (storedVelocity.x * addStoredVelocity * gameTime) + scale.x;
+	projections.y[0] = glm::dot(rigidBodyCenter, glm::vec3(0, 1, 0)) + (velocity.y * addVelocity * gameTime) + (storedVelocity.y * addStoredVelocity * gameTime) - scale.y;
+	projections.y[1] = glm::dot(rigidBodyCenter, glm::vec3(0, 1, 0)) + (velocity.y * addVelocity * gameTime) + (storedVelocity.y * addStoredVelocity * gameTime) + scale.y;
+	projections.z[0] = glm::dot(rigidBodyCenter, glm::vec3(0, 0, 1)) + (velocity.z * addVelocity * gameTime) + (storedVelocity.z * addStoredVelocity * gameTime) - scale.z;
+	projections.z[1] = glm::dot(rigidBodyCenter, glm::vec3(0, 0, 1)) + (velocity.z * addVelocity * gameTime) + (storedVelocity.z * addStoredVelocity * gameTime) + scale.z;
 
 	return projections;
 }

@@ -3,8 +3,8 @@
 <ATTACH AND LINK SHADER>
 textures
 {
-	albedoMap : Resources/Textures/1001_albedo.jpg
-	normalMap : Resources/Textures/1001_albedo.jpg
+	albedoMap : Resources/Textures/PoolBalls/poolb3.jpg
+	normalMap : Resources/Textures/PoolBalls/poolb3.jpg
 	specularMap : Resources/Textures/Rick.jpg
 }
 vec3
@@ -12,5 +12,5 @@ vec3
 }
 float
 {
-	mat.shininess : 0.1
+	mat.shininess : 0.9
 }

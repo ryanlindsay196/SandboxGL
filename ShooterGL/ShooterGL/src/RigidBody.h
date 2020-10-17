@@ -7,8 +7,6 @@ class RigidBody : public Component
 public:
 	enum ColliderType { Sphere, Rectangle, Mesh };
 private:
-	//TODO: Make fixedUpdateTime a globally set variable. Maybe set it in a ProjectSettings file?
-	//float fixedUpdateTime, fixedUpdateTimer;
 	float mass;
 	glm::vec3 velocity, storedVelocity;
 	glm::vec3 positionConstraints, rotationConstraints;
@@ -40,6 +38,6 @@ public:
 		float y[2];
 		float z[2];
 	};
-	RigidBodyProjections CalculateProjections(bool addVelocity, bool addStoredVelocity);
+	RigidBodyProjections CalculateProjections(bool addVelocity, bool addStoredVelocity, float gameTime = 1);
 };
 

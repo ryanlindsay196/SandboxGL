@@ -111,12 +111,12 @@ void Shader::LoadMaterial(char * materialPath)
 				//Remove tabs
 				line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 				//Skip "{"
+				//Remove spaces
+				line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
 				if (line == "{")
 					continue;
 				else if (line == "}")
 					break;
-				//Remove spaces
-				line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
 
 				//Get the texture path
 				std::string newTexturePath = line.substr(line.find_first_of(":") + 1);

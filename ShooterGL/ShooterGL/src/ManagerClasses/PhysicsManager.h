@@ -35,7 +35,7 @@ private:
 	void UpdatePhysicsRegions_AddNodes(RigidBody* rb, float gameTime);
 
 
-	void CheckCollisions(int iterations);
+	void CheckCollisions(int iterations, float gameTime);
 	bool IsColliding(RigidBody::RigidBodyProjections rbProjections1, RigidBody::RigidBodyProjections rbProjections2);
 
 	//checks if a rigidbody is inside a particular region

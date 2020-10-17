@@ -37,7 +37,7 @@ void PhysicsManager::FixedUpdate(float gameTime)
 	{
 		UpdatePhysicsRegions_AddNodes(rigidBodies[i], gameTime);
 		rigidBodies[i]->FixedUpdate(gameTime);
-		CheckCollisions(8);
+		CheckCollisions(8, gameTime);
 	}
 }
 
@@ -162,7 +162,7 @@ void PhysicsManager::UpdatePhysicsRegions_RemoveNodes(float gameTime)
 }
 
 //Check what collisions are present and handle whatever happens to collided objects
-void PhysicsManager::CheckCollisions(int iterations)
+void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 {
 	for(int currentIteration = 0; currentIteration < iterations; currentIteration++)
 	{
@@ -184,7 +184,7 @@ void PhysicsManager::CheckCollisions(int iterations)
 						if (rbNode1 != rbNode2)
 						{
 							//Check the collision
-							if(IsColliding(rbNode1->rigidBody->CalculateProjections(true, true), rbNode2->rigidBody->CalculateProjections(true, true)))
+							if(IsColliding(rbNode1->rigidBody->CalculateProjections(true, true, gameTime), rbNode2->rigidBody->CalculateProjections(true, true, gameTime)))
 							{
 								glm::vec3 rbPos1 = rbNode1->rigidBody->componentParent->GetTranslation() + rbNode1->rigidBody->GetPositionOffset();
 								glm::vec3 rbPos2 = rbNode2->rigidBody->componentParent->GetTranslation() + rbNode2->rigidBody->GetPositionOffset();
