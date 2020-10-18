@@ -77,9 +77,16 @@ RigidBody::ColliderType RigidBody::GetColliderType()
 	return colliderType;
 }
 
+//Get's the rigidbody's position in local space (from the componentParent)
 glm::vec3 RigidBody::GetPositionOffset()
 {
 	return positionOffset;
+}
+
+//Get's the rigidbody's position in world space
+glm::vec3 RigidBody::GetPosition()
+{
+	return componentParent->GetTranslation() + positionOffset;
 }
 
 glm::vec3 RigidBody::GetScale()

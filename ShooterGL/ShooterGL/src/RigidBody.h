@@ -24,6 +24,7 @@ public:
 	void FixedUpdate(float gameTime);
 	ColliderType GetColliderType();
 	glm::vec3 GetPositionOffset();
+	glm::vec3 GetPosition();
 	glm::vec3 GetScale();
 	glm::vec3 GetVelocity();
 	float GetMass();

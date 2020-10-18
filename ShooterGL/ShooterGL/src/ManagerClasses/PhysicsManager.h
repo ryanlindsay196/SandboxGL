@@ -36,7 +36,7 @@ private:
 
 
 	void CheckCollisions(int iterations, float gameTime);
-	bool IsColliding(RigidBody::RigidBodyProjections rbProjections1, RigidBody::RigidBodyProjections rbProjections2);
+	bool IsColliding(RigidBodyNode* rbNode1, RigidBodyNode* rbNode2, float gameTime);
 
 	//checks if a rigidbody is inside a particular region
 	bool RigidBodyInRegion(RigidBody* rb, glm::vec3 regionIDs, bool addRB_Velocity, float gameTime);
