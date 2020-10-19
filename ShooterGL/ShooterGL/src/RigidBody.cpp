@@ -104,6 +104,18 @@ float RigidBody::GetMass()
 	return mass;
 }
 
+float RigidBody::GetMomentum()
+{
+	float velocityMagnitude = glm::length(velocity);
+	return mass * velocityMagnitude;
+}
+
+float RigidBody::GetStoredMomentum()
+{
+	float storedVelocityMagnitude = glm::length(storedVelocity);
+	return mass * storedVelocityMagnitude;
+}
+
 void RigidBody::StoreVelocity(glm::vec3 velocityToAdd)
 {
 	isVelocityStored = true;

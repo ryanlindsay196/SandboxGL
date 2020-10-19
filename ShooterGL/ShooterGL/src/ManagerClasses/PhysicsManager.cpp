@@ -32,13 +32,17 @@ void PhysicsManager::Initialize(glm::vec3 regionBounds, glm::vec3 regionCount)
 
 void PhysicsManager::FixedUpdate(float gameTime)
 {
+	//TODO: Remove
+	//float testTotalMomentum = 0;
 	UpdatePhysicsRegions_RemoveNodes(gameTime);
 	for (int i = 0; i < rigidBodies.size(); i++)
 	{
+		//testTotalMomentum += rigidBodies[i]->GetMomentum();
 		UpdatePhysicsRegions_AddNodes(rigidBodies[i], gameTime);
 		rigidBodies[i]->FixedUpdate(gameTime);
-		CheckCollisions(8, gameTime);
+		CheckCollisions(4, gameTime);
 	}
+	//std::cout << testTotalMomentum << std::endl;
 }
 
 //Loop through all regions. Add nodes to a region if they entered the region this frame
@@ -76,12 +80,12 @@ void PhysicsManager::UpdatePhysicsRegions_AddNodes(RigidBody * rb, float gameTim
 void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
 {
 	rigidBodies.push_back(rb);
-
+	rb->tempIndex = rigidBodies.size() - 1;
 	//TODO: Remove
 	if(rigidBodies.size() == 1)
-		rigidBodies[0]->SetVelocity(glm::vec3(-0.4, 0, 0));
-	if(rigidBodies.size() == 2)
-		rigidBodies[1]->SetVelocity(glm::vec3(1, 0, 0));
+		rigidBodies[0]->SetVelocity(glm::vec3(0.9, 0, 0));
+	//if(rigidBodies.size() == 2)
+	//	rigidBodies[1]->SetVelocity(glm::vec3(1, 0, 0));
 
 	glm::vec3 physicsRegionToAdd = (rb->componentParent->GetTranslation() + rb->GetPositionOffset()) / physicsRegionBounds;
 	//Make sure the physics region to add to is an integer and not a float
@@ -191,46 +195,138 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 								//glm::vec3 rbPosDiff = rbPos2 - rbPos1;
 								//float rbDistance = sqrtf(powf(rbPosDiff.x, 2) + powf(rbPosDiff.y, 2) + powf(rbPosDiff.z, 2));
 
-								std::cout << "RigidBody " << rbNode1->rigidBody << " has collided with " << rbNode2->rigidBody << "!" << std::endl;
-								std::cout << "Distance between rigid bodies is: " << glm::length(rbPos1 - rbPos2) << std::endl;
+								std::cout << "RigidBody " << rbNode1->rigidBody->tempIndex << " has collided with " << rbNode2->rigidBody->tempIndex << "!" << std::endl;
+								//std::cout << "Distance between rigid bodies is: " << glm::length(rbPos1 - rbPos2) << std::endl;
 
 								glm::vec3 velocity1 = rbNode1->rigidBody->GetVelocity();
 								glm::vec3 velocity2 = rbNode2->rigidBody->GetVelocity();
 								float mass1 = rbNode1->rigidBody->GetMass();
 								float mass2 = rbNode2->rigidBody->GetMass();
 
-								glm::vec3 velocityToStore1 = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
-								glm::vec3 velocityToStore2 = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
-								velocityToStore1 = ((2 * mass2) / (mass1 + mass2)) *
-									((velocity1 - velocity2, rbPos1 - rbPos2) / (abs(rbPos1 - rbPos2) * abs(rbPos1 - rbPos2))) *
-								(rbPos1 - rbPos2);
-								velocityToStore2 = ((2 * mass1) / (mass1 + mass2)) *
-									((velocity2 - velocity1, rbPos2 - rbPos1) / (abs(rbPos2 - rbPos1) * abs(rbPos2 - rbPos1))) * 
-									(rbPos2 - rbPos1);
+								glm::vec3 normalDirection = glm::normalize(rbPos1 - rbPos2);
+
+								glm::vec3 velocityToStore1 = glm::vec3(0);// = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
+								glm::vec3 velocityToStore2 = glm::vec3(0);// = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
+								
+#pragma region DUD
+
+
+								//velocityToStore1 = ((2 * mass2) / (mass1 + mass2)) *
+								//	((velocity1 - velocity2, rbPos1 - rbPos2) / (abs(rbPos1 - rbPos2) * abs(rbPos1 - rbPos2))) *
+								//(rbPos1 - rbPos2);
+								//velocityToStore2 = ((2 * mass1) / (mass1 + mass2)) *
+								//	((velocity2 - velocity1, rbPos2 - rbPos1) / (abs(rbPos2 - rbPos1) * abs(rbPos2 - rbPos1))) * 
+								//	(rbPos2 - rbPos1);
 
 								//velocityToStore1 = (rbPos1 - rbPos2) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
 								//velocityToStore2 = (rbPos2 - rbPos1) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
 
-								if (isnan(velocityToStore1.x))
-									velocityToStore1.x = 0;
-								if (isnan(velocityToStore1.y))
-									velocityToStore1.y = 0;
-								if (isnan(velocityToStore1.z))
-									velocityToStore1.z = 0;
-								//velocityToStore2 = velocity1 + velocity2 - velocityToStore1;
-								if (isnan(velocityToStore2.x))
-									velocityToStore2.x = 0;
-								if (isnan(velocityToStore2.y))
-									velocityToStore2.y = 0;
-								if (isnan(velocityToStore2.z))
-									velocityToStore2.z = 0;
-								velocityToStore1 = glm::length(velocityToStore1) * glm::normalize(rbPos1 - rbPos2);
-								velocityToStore2 = glm::length(velocityToStore2) * glm::normalize(rbPos2 - rbPos1);
-								velocityToStore1 = velocityToStore1 + velocity1 - velocity2;
+								//if (isnan(velocityToStore1.x))
+								//	velocityToStore1.x = 0;
+								//if (isnan(velocityToStore1.y))
+								//	velocityToStore1.y = 0;
+								//if (isnan(velocityToStore1.z))
+								//	velocityToStore1.z = 0;
+								////velocityToStore2 = velocity1 + velocity2 - velocityToStore1;
+								//if (isnan(velocityToStore2.x))
+								//	velocityToStore2.x = 0;
+								//if (isnan(velocityToStore2.y))
+								//	velocityToStore2.y = 0;
+								//if (isnan(velocityToStore2.z))
+								//	velocityToStore2.z = 0;
+								//velocityToStore1 = glm::length(velocityToStore1) * glm::normalize(rbPos1 - rbPos2);
+								//float v2FinalMagnitude = glm::length(velocityToStore1);
+								//velocityToStore2 = v2FinalMagnitude * glm::normalize(rbPos2 - rbPos1);
+								//velocityToStore1 = velocityToStore2 + velocity2 - velocity1;
+#pragma endregion
+								//velocityToStore1 = (rbNode2->rigidBody->GetMomentum() * mass2 / mass1) * (rbPos1 - rbPos2);
+								//velocityToStore2 = (rbNode1->rigidBody->GetMomentum() * mass1 / mass2) * (rbPos2 - rbPos1);
 
+								//velocityToStore1 = ((velocity1) + glm::normalize(rbPos1 - rbPos2) * glm::dot(glm::normalize(rbPos1 - rbPos2), glm::normalize(velocity1)) * (mass2 / mass1));
+								//velocityToStore2 = ((velocity2) + glm::normalize(rbPos2 - rbPos1) * glm::dot(glm::normalize(rbPos2 - rbPos2), glm::normalize(velocity2)) * (mass1 / mass2));
+
+								velocityToStore1 = velocity1 + (normalDirection * (mass2 / mass1));// * glm::length(velocity2);
+								velocityToStore2 = velocity2 + (-normalDirection * (mass1 / mass2));// * glm::length(velocity2);
+								//velocityToStore1 += velocityToStore2;
+								//velocityToStore1 *= rbNode2->rigidBody->GetMomentum();
+								//velocityToStore2 *= rbNode1->rigidBody->GetMomentum();
+
+								if(velocityToStore1 != glm::vec3(0))
+									velocityToStore1 *= (glm::dot(normalDirection, glm::normalize(velocityToStore1)));
+								if(velocityToStore2 != glm::vec3(0))
+									velocityToStore2 *= (glm::dot(-normalDirection, glm::normalize(velocityToStore2)));
+								
+								//float momentumToStore1 = glm::length(velocityToStore1) * mass1;
+								//float momentumToStore2 = glm::length(velocityToStore2) * mass2;
+								//
+								//float momentum1 = rbNode1->rigidBody->GetMomentum();
+								//float momentum2 = rbNode2->rigidBody->GetMomentum();
+								//
+								//while (momentumToStore1 + momentumToStore2 > momentum1 + momentum2)
+								//{
+								//	velocityToStore1 *= 0.8;
+								//	velocityToStore2 *= 0.8;
+								//
+								//	momentumToStore1 = glm::length(velocityToStore1) * mass1;
+								//	momentumToStore2 = glm::length(velocityToStore2) * mass2;
+								//}
+#pragma region DUD
+
+
+								//velocityToStore1 = velocity1 +
+								//	((2 * mass2) / (mass1 + mass2)) *
+								//	((velocity1 - velocity2, rbPos1 - rbPos2) / (glm::abs(rbPos1 - rbPos2) * glm::abs(rbPos1 - rbPos2))) *
+								//	(rbPos1 - rbPos2);
+								//
+								//velocityToStore2 = velocity2 -
+								//	((2 * mass1) / (mass1 + mass2)) *
+								//	((velocity2 - velocity1, rbPos2 - rbPos1) / (glm::abs(rbPos2 - rbPos1) * glm::abs(rbPos2 - rbPos1))) *
+								//	(rbPos2 - rbPos1);
+
+								//if (isnan(velocityToStore1.x))
+								//	velocityToStore1.x = 0;
+								//if (isnan(velocityToStore1.y))
+								//	velocityToStore1.y = 0;
+								//if (isnan(velocityToStore1.z))
+								//	velocityToStore1.z = 0;
+								//
+								//if (isnan(velocityToStore2.x))
+								//	velocityToStore2.x = 0;
+								//if (isnan(velocityToStore2.y))
+								//	velocityToStore2.y = 0;
+								//if (isnan(velocityToStore2.z))
+								//	velocityToStore2.z = 0;
+
+								//glm::vec3 n = (rbPos1 - rbPos2) / (glm::abs(rbPos1) - glm::abs(rbPos2));
+								//glm::vec3 vRelative = velocity1 - velocity2;
+								//glm::vec3 vNormal = (vRelative*n)*n;
+								//velocityToStore1 = velocity1 - vNormal;
+								//velocityToStore2 = velocity2 + vNormal;
+
+
+#pragma endregion								
+								//
+								//float totalMomentum = momentum1 + momentum2;
+								//float totalMomentumToStore = momentumToStore1 + momentumToStore2;
+								//
+								//assert(totalMomentumToStore <= totalMomentum);
+
+								//assert(abs((glm::length(velocity1) + glm::length(velocity2)) - (glm::length(velocityToStore1) + glm::length(velocityToStore2))) > 0.3f);
 								//Store velocity in the storedVelocity variable this frame. storedVelocity is applied to velocity after calculating all collisions
+
+								//velocityToStore1 = (velocity1 * (mass1 - mass2) + 2 * mass2 * velocity2) / (mass1 + mass2);
+								//velocityToStore2 = (velocity2 * (mass2 - mass1) + 2 * mass1 * velocity1) / (mass1 + mass2);
+
+								velocityToStore1 = velocity1 - (mass1 * glm::dot(velocity1 - velocity2, rbPos1 - rbPos2) / pow(glm::length(rbPos1 - rbPos2), 2)) * (rbPos1 - rbPos2);
+								velocityToStore2 = velocity2 - (mass2 * glm::dot(velocity2 - velocity1, rbPos2 - rbPos1) / pow(glm::length(rbPos2 - rbPos1), 2)) * (rbPos2 - rbPos1);
+
 								rbNode1->rigidBody->StoreVelocity(velocityToStore1);
 								rbNode2->rigidBody->StoreVelocity(velocityToStore2);
+
+								std::cout << "Previous total momentum = " << rbNode1->rigidBody->GetMomentum() + rbNode2->rigidBody->GetMomentum() << std::endl;
+								std::cout << "New total momentum = " << (rbNode1->rigidBody->GetStoredMomentum()) + (rbNode2->rigidBody->GetStoredMomentum()) << std::endl;
+								std::cout << "Change in total momentum: " << ((rbNode1->rigidBody->GetStoredMomentum() + rbNode2->rigidBody->GetStoredMomentum()) - (rbNode1->rigidBody->GetMomentum() + rbNode2->rigidBody->GetMomentum())) << std::endl << std::endl;
+
 							}
 						}
 						rbNode2 = rbNode2->nextNode;

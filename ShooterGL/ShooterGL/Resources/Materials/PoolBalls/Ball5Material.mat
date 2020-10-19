@@ -5,7 +5,7 @@ textures
 {
 	albedoMap : Resources/Textures/PoolBalls/poolb5.jpg
 	normalMap : Resources/Textures/PoolBalls/poolb5.jpg
-	specularMap : Resources/Textures/Rick.jpg
+	specularMap : Resources/Textures/PoolBalls/poolb5.jpg
 }
 vec3
 {

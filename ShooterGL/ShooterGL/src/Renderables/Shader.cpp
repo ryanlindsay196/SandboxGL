@@ -48,24 +48,24 @@ void Shader::Initialize(ObjectManager * in_objectManager, char* vertexPath, char
 	GLchar name[bufSize]; // variable name in GLSL
 	GLsizei length; // name length
 	glGetProgramiv(shaderProgram, GL_ACTIVE_ATTRIBUTES, &count);
-	printf("Active Attributes: %d\n", count);
-
-	for (i = 0; i < count; i++)
-	{
-		glGetActiveAttrib(shaderProgram, (GLuint)i, bufSize, &length, &size, &type, name);
-
-		printf("Attribute #%d Type: %u Name: %s\n", i, type, name);
-	}
-
-	glGetProgramiv(shaderProgram, GL_ACTIVE_UNIFORMS, &count);
-	printf("Active Uniforms: %d\n", count);
-
-	for (i = 0; i < count; i++)
-	{
-		glGetActiveUniform(shaderProgram, (GLuint)i, bufSize, &length, &size, &type, name);
-
-		printf("Uniform #%d Type: %u Name: %s\n", i, type, name);
-	}
+	//printf("Active Attributes: %d\n", count);
+	//
+	//for (i = 0; i < count; i++)
+	//{
+	//	glGetActiveAttrib(shaderProgram, (GLuint)i, bufSize, &length, &size, &type, name);
+	//
+	//	printf("Attribute #%d Type: %u Name: %s\n", i, type, name);
+	//}
+	//
+	//glGetProgramiv(shaderProgram, GL_ACTIVE_UNIFORMS, &count);
+	//printf("Active Uniforms: %d\n", count);
+	//
+	//for (i = 0; i < count; i++)
+	//{
+	//	glGetActiveUniform(shaderProgram, (GLuint)i, bufSize, &length, &size, &type, name);
+	//
+	//	printf("Uniform #%d Type: %u Name: %s\n", i, type, name);
+	//}
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);

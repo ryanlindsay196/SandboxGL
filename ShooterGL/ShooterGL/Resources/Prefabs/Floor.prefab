@@ -11,14 +11,12 @@ Components
 	}
 	RigidBody
 	{
-		PositionConstraints : 0,0,0
+		PositionConstaints : 0,0,0
 		RotationConstraints : 0,0,0
-		Mass : 0
-		ColliderType : 1
-	}
-	Collision : Box
-	{
-		Position : 0,0,0
-		Scale : 1,1,1
+		Mass : 1
+		ColliderType : 0
+		PositionOffset : 10,0,0
+		Scale : 1,100,1
+		UseGravity : 0
 	}
 }

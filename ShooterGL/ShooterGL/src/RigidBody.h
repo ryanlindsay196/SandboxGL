@@ -28,6 +28,8 @@ public:
 	glm::vec3 GetScale();
 	glm::vec3 GetVelocity();
 	float GetMass();
+	float GetMomentum();
+	float GetStoredMomentum();
 	void StoreVelocity(glm::vec3 velocityToAdd);
 
 	void SetVelocity(glm::vec3 newVelocity);
@@ -40,5 +42,9 @@ public:
 		float z[2];
 	};
 	RigidBodyProjections CalculateProjections(bool addVelocity, bool addStoredVelocity, float gameTime = 1);
+
+
+	//TODO: Remove
+	int tempIndex;
 };
 

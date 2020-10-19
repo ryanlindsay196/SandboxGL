@@ -57,7 +57,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	//entityManager->GetEntity(1)->AddComponent(lightManager->AddLight(glm::vec3(0), glm::vec3(1, 0, 0), 0.f, glm::vec3(1)));
 	//entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));
 	
-	physicsManager->Initialize(glm::vec3(24, 24, 24), glm::vec3(5, 5, 5));
+	physicsManager->Initialize(glm::vec3(24, 24, 24), glm::vec3(1, 1, 1));
 	entityManager->LoadScene("Resources/Scenes/Test2.scene");
 	
 	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.2f, 1.2f, 1.2f));
