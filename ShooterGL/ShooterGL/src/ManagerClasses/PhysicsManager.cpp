@@ -33,16 +33,16 @@ void PhysicsManager::Initialize(glm::vec3 regionBounds, glm::vec3 regionCount)
 void PhysicsManager::FixedUpdate(float gameTime)
 {
 	//TODO: Remove
-	//float testTotalMomentum = 0;
+	float testTotalMomentum = 0;
 	UpdatePhysicsRegions_RemoveNodes(gameTime);
 	for (int i = 0; i < rigidBodies.size(); i++)
 	{
-		//testTotalMomentum += rigidBodies[i]->GetMomentum();
+		testTotalMomentum += rigidBodies[i]->GetMomentumFloat();
 		UpdatePhysicsRegions_AddNodes(rigidBodies[i], gameTime);
 		rigidBodies[i]->FixedUpdate(gameTime);
-		CheckCollisions(4, gameTime);
 	}
-	//std::cout << testTotalMomentum << std::endl;
+	CheckCollisions(1, gameTime);
+	std::cout << testTotalMomentum << std::endl;
 }
 
 //Loop through all regions. Add nodes to a region if they entered the region this frame
@@ -247,29 +247,26 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 
 								velocityToStore1 = velocity1 + (normalDirection * (mass2 / mass1));// * glm::length(velocity2);
 								velocityToStore2 = velocity2 + (-normalDirection * (mass1 / mass2));// * glm::length(velocity2);
-								//velocityToStore1 += velocityToStore2;
-								//velocityToStore1 *= rbNode2->rigidBody->GetMomentum();
-								//velocityToStore2 *= rbNode1->rigidBody->GetMomentum();
 
 								if(velocityToStore1 != glm::vec3(0))
 									velocityToStore1 *= (glm::dot(normalDirection, glm::normalize(velocityToStore1)));
 								if(velocityToStore2 != glm::vec3(0))
 									velocityToStore2 *= (glm::dot(-normalDirection, glm::normalize(velocityToStore2)));
 								
-								//float momentumToStore1 = glm::length(velocityToStore1) * mass1;
-								//float momentumToStore2 = glm::length(velocityToStore2) * mass2;
-								//
-								//float momentum1 = rbNode1->rigidBody->GetMomentum();
-								//float momentum2 = rbNode2->rigidBody->GetMomentum();
-								//
-								//while (momentumToStore1 + momentumToStore2 > momentum1 + momentum2)
-								//{
-								//	velocityToStore1 *= 0.8;
-								//	velocityToStore2 *= 0.8;
-								//
-								//	momentumToStore1 = glm::length(velocityToStore1) * mass1;
-								//	momentumToStore2 = glm::length(velocityToStore2) * mass2;
-								//}
+								float momentumToStore1 = glm::length(velocityToStore1) * mass1;
+								float momentumToStore2 = glm::length(velocityToStore2) * mass2;
+								
+								float momentum1 = rbNode1->rigidBody->GetMomentumFloat();
+								float momentum2 = rbNode2->rigidBody->GetMomentumFloat();
+								
+								while (momentumToStore1 + momentumToStore2 > momentum1 + momentum2)
+								{
+									velocityToStore1 *= 0.99;
+									velocityToStore2 *= 0.99;
+								
+									momentumToStore1 = glm::length(velocityToStore1) * mass1;
+									momentumToStore2 = glm::length(velocityToStore2) * mass2;
+								}
 #pragma region DUD
 
 
@@ -317,15 +314,17 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 								//velocityToStore1 = (velocity1 * (mass1 - mass2) + 2 * mass2 * velocity2) / (mass1 + mass2);
 								//velocityToStore2 = (velocity2 * (mass2 - mass1) + 2 * mass1 * velocity1) / (mass1 + mass2);
 
-								velocityToStore1 = velocity1 - (mass1 * glm::dot(velocity1 - velocity2, rbPos1 - rbPos2) / pow(glm::length(rbPos1 - rbPos2), 2)) * (rbPos1 - rbPos2);
-								velocityToStore2 = velocity2 - (mass2 * glm::dot(velocity2 - velocity1, rbPos2 - rbPos1) / pow(glm::length(rbPos2 - rbPos1), 2)) * (rbPos2 - rbPos1);
+								//mass1 = (2 * rbNode2->rigidBody->GetMass()) / (rbNode1->rigidBody->GetMass() + rbNode2->rigidBody->GetMass());
+								//mass2 = (2 * rbNode1->rigidBody->GetMass()) / (rbNode1->rigidBody->GetMass() + rbNode2->rigidBody->GetMass());
+								//velocityToStore1 = velocity1 - (mass1 * glm::dot(rbNode1->rigidBody->GetMomentumVec3() - rbNode2->rigidBody->GetMomentumVec3(), glm::normalize(rbPos1 - rbPos2)) / pow(glm::length(glm::normalize(rbPos1 - rbPos2)), 2)) * glm::normalize(rbPos1 - rbPos2);
+								//velocityToStore2 = velocity2 - (mass2 * glm::dot(rbNode2->rigidBody->GetMomentumVec3() - rbNode1->rigidBody->GetMomentumVec3(), glm::normalize(rbPos2 - rbPos1)) / pow(glm::length(glm::normalize(rbPos2 - rbPos1)), 2)) * glm::normalize(rbPos2 - rbPos1);
 
 								rbNode1->rigidBody->StoreVelocity(velocityToStore1);
 								rbNode2->rigidBody->StoreVelocity(velocityToStore2);
 
-								std::cout << "Previous total momentum = " << rbNode1->rigidBody->GetMomentum() + rbNode2->rigidBody->GetMomentum() << std::endl;
+								std::cout << "Previous total momentum = " << rbNode1->rigidBody->GetMomentumFloat() + rbNode2->rigidBody->GetMomentumFloat() << std::endl;
 								std::cout << "New total momentum = " << (rbNode1->rigidBody->GetStoredMomentum()) + (rbNode2->rigidBody->GetStoredMomentum()) << std::endl;
-								std::cout << "Change in total momentum: " << ((rbNode1->rigidBody->GetStoredMomentum() + rbNode2->rigidBody->GetStoredMomentum()) - (rbNode1->rigidBody->GetMomentum() + rbNode2->rigidBody->GetMomentum())) << std::endl << std::endl;
+								std::cout << "Change in total momentum: " << ((rbNode1->rigidBody->GetStoredMomentum() + rbNode2->rigidBody->GetStoredMomentum()) - (rbNode1->rigidBody->GetMomentumFloat() + rbNode2->rigidBody->GetMomentumFloat())) << std::endl << std::endl;
 
 							}
 						}

@@ -28,7 +28,8 @@ public:
 	glm::vec3 GetScale();
 	glm::vec3 GetVelocity();
 	float GetMass();
-	float GetMomentum();
+	float GetMomentumFloat();
+	glm::vec3 GetMomentumVec3();
 	float GetStoredMomentum();
 	void StoreVelocity(glm::vec3 velocityToAdd);
 

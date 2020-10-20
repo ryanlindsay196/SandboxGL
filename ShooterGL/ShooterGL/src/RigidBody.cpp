@@ -104,10 +104,15 @@ float RigidBody::GetMass()
 	return mass;
 }
 
-float RigidBody::GetMomentum()
+float RigidBody::GetMomentumFloat()
 {
 	float velocityMagnitude = glm::length(velocity);
 	return mass * velocityMagnitude;
+}
+
+glm::vec3 RigidBody::GetMomentumVec3()
+{
+	return mass * velocity;
 }
 
 float RigidBody::GetStoredMomentum()
