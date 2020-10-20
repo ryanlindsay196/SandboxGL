@@ -60,5 +60,5 @@ void Texture::SetTextureParameters(unsigned int textureDimensions, unsigned int 
 
 unsigned int Texture::GetTextureID()
 {
-	return textureID - 1;
+	return 0;// textureID - 1;
 }

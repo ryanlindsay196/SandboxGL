@@ -18,11 +18,11 @@ Texture * TextureManager::LoadNewTexture(std::string texturePath)
 		textures.insert(newTextureEntry);
 		return newTextureEntry.second;// textures.find(texturePath);
 	}
-	//for (auto& x : textures)
-	//{//TODO: Replace this with instant lookup
-	//	if (x.first == texturePath)
-	//		return x.second;
-	//}
+	for (auto& x : textures)
+	{//TODO: Replace this with instant lookup
+		if (x.first == texturePath)
+			return x.second;
+	}
 	return textures[texturePath];
 	return nullptr;
 }

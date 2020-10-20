@@ -176,12 +176,10 @@ void Shader::ClearTextures()
 
 void Shader::BindTextures()
 {
-	for (unsigned int i = 0; i < textures.size(); i++)
-		textures[i]->UseTexture(i);
-
 	//TODO: Get uniform names from material, make hash map using these names and the texture ID
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
+		textures[i]->UseTexture(i);
 		SetShaderUniform_veci1((char*)textureUniforms[i].c_str(), textures[i]->GetTextureID());
 	}
 	
