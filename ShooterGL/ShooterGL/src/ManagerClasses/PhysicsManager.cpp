@@ -195,7 +195,7 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 								//glm::vec3 rbPosDiff = rbPos2 - rbPos1;
 								//float rbDistance = sqrtf(powf(rbPosDiff.x, 2) + powf(rbPosDiff.y, 2) + powf(rbPosDiff.z, 2));
 
-								std::cout << "RigidBody " << rbNode1->rigidBody->tempIndex << " has collided with " << rbNode2->rigidBody->tempIndex << "!" << std::endl;
+								//std::cout << "RigidBody " << rbNode1->rigidBody->tempIndex << " has collided with " << rbNode2->rigidBody->tempIndex << "!" << std::endl;
 								//std::cout << "Distance between rigid bodies is: " << glm::length(rbPos1 - rbPos2) << std::endl;
 
 								glm::vec3 velocity1 = rbNode1->rigidBody->GetVelocity();
@@ -322,9 +322,9 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 								rbNode1->rigidBody->StoreVelocity(velocityToStore1);
 								rbNode2->rigidBody->StoreVelocity(velocityToStore2);
 
-								std::cout << "Previous total momentum = " << rbNode1->rigidBody->GetMomentumFloat() + rbNode2->rigidBody->GetMomentumFloat() << std::endl;
-								std::cout << "New total momentum = " << (rbNode1->rigidBody->GetStoredMomentum()) + (rbNode2->rigidBody->GetStoredMomentum()) << std::endl;
-								std::cout << "Change in total momentum: " << ((rbNode1->rigidBody->GetStoredMomentum() + rbNode2->rigidBody->GetStoredMomentum()) - (rbNode1->rigidBody->GetMomentumFloat() + rbNode2->rigidBody->GetMomentumFloat())) << std::endl << std::endl;
+								//std::cout << "Previous total momentum = " << rbNode1->rigidBody->GetMomentumFloat() + rbNode2->rigidBody->GetMomentumFloat() << std::endl;
+								//std::cout << "New total momentum = " << (rbNode1->rigidBody->GetStoredMomentum()) + (rbNode2->rigidBody->GetStoredMomentum()) << std::endl;
+								//std::cout << "Change in total momentum: " << ((rbNode1->rigidBody->GetStoredMomentum() + rbNode2->rigidBody->GetStoredMomentum()) - (rbNode1->rigidBody->GetMomentumFloat() + rbNode2->rigidBody->GetMomentumFloat())) << std::endl << std::endl;
 
 							}
 						}
