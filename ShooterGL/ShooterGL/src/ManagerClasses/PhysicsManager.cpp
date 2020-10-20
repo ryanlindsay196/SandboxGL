@@ -83,7 +83,7 @@ void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
 	rb->tempIndex = rigidBodies.size() - 1;
 	//TODO: Remove
 	if(rigidBodies.size() == 1)
-		rigidBodies[0]->SetVelocity(glm::vec3(0.9, 0, 0));
+		rigidBodies[0]->SetVelocity(glm::vec3(13.9, 0, 0));
 	//if(rigidBodies.size() == 2)
 	//	rigidBodies[1]->SetVelocity(glm::vec3(1, 0, 0));
 
@@ -218,22 +218,22 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 								//	((velocity2 - velocity1, rbPos2 - rbPos1) / (abs(rbPos2 - rbPos1) * abs(rbPos2 - rbPos1))) * 
 								//	(rbPos2 - rbPos1);
 
-								//velocityToStore1 = (rbPos1 - rbPos2) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
-								//velocityToStore2 = (rbPos2 - rbPos1) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
+								velocityToStore1 = (rbPos1 - rbPos2) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
+								velocityToStore2 = (rbPos2 - rbPos1) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
 
-								//if (isnan(velocityToStore1.x))
-								//	velocityToStore1.x = 0;
-								//if (isnan(velocityToStore1.y))
-								//	velocityToStore1.y = 0;
-								//if (isnan(velocityToStore1.z))
-								//	velocityToStore1.z = 0;
-								////velocityToStore2 = velocity1 + velocity2 - velocityToStore1;
-								//if (isnan(velocityToStore2.x))
-								//	velocityToStore2.x = 0;
-								//if (isnan(velocityToStore2.y))
-								//	velocityToStore2.y = 0;
-								//if (isnan(velocityToStore2.z))
-								//	velocityToStore2.z = 0;
+								if (isnan(velocityToStore1.x))
+									velocityToStore1.x = 0;
+								if (isnan(velocityToStore1.y))
+									velocityToStore1.y = 0;
+								if (isnan(velocityToStore1.z))
+									velocityToStore1.z = 0;
+								//velocityToStore2 = velocity1 + velocity2 - velocityToStore1;
+								if (isnan(velocityToStore2.x))
+									velocityToStore2.x = 0;
+								if (isnan(velocityToStore2.y))
+									velocityToStore2.y = 0;
+								if (isnan(velocityToStore2.z))
+									velocityToStore2.z = 0;
 								//velocityToStore1 = glm::length(velocityToStore1) * glm::normalize(rbPos1 - rbPos2);
 								//float v2FinalMagnitude = glm::length(velocityToStore1);
 								//velocityToStore2 = v2FinalMagnitude * glm::normalize(rbPos2 - rbPos1);
@@ -245,13 +245,13 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 								//velocityToStore1 = ((velocity1) + glm::normalize(rbPos1 - rbPos2) * glm::dot(glm::normalize(rbPos1 - rbPos2), glm::normalize(velocity1)) * (mass2 / mass1));
 								//velocityToStore2 = ((velocity2) + glm::normalize(rbPos2 - rbPos1) * glm::dot(glm::normalize(rbPos2 - rbPos2), glm::normalize(velocity2)) * (mass1 / mass2));
 
-								velocityToStore1 = velocity1 + (normalDirection * (mass2 / mass1));// * glm::length(velocity2);
-								velocityToStore2 = velocity2 + (-normalDirection * (mass1 / mass2));// * glm::length(velocity2);
-
-								if(velocityToStore1 != glm::vec3(0))
-									velocityToStore1 *= (glm::dot(normalDirection, glm::normalize(velocityToStore1)));
-								if(velocityToStore2 != glm::vec3(0))
-									velocityToStore2 *= (glm::dot(-normalDirection, glm::normalize(velocityToStore2)));
+								//velocityToStore1 = velocity1 + (normalDirection * (mass2 / mass1));// * glm::length(velocity2);
+								//velocityToStore2 = velocity2 + (-normalDirection * (mass1 / mass2));// * glm::length(velocity2);
+								//
+								//if(velocityToStore1 != glm::vec3(0))
+								//	velocityToStore1 *= (glm::dot(normalDirection, glm::normalize(velocityToStore1)));
+								//if(velocityToStore2 != glm::vec3(0))
+								//	velocityToStore2 *= (glm::dot(-normalDirection, glm::normalize(velocityToStore2)));
 								
 								float momentumToStore1 = glm::length(velocityToStore1) * mass1;
 								float momentumToStore2 = glm::length(velocityToStore2) * mass2;
@@ -272,14 +272,14 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 
 								//velocityToStore1 = velocity1 +
 								//	((2 * mass2) / (mass1 + mass2)) *
-								//	((velocity1 - velocity2, rbPos1 - rbPos2) / (glm::abs(rbPos1 - rbPos2) * glm::abs(rbPos1 - rbPos2))) *
+								//	((velocity1 - velocity2, rbPos1 - rbPos2) / (glm::length(rbPos1 - rbPos2) * glm::length(rbPos1 - rbPos2))) *
 								//	(rbPos1 - rbPos2);
 								//
-								//velocityToStore2 = velocity2 -
+								//velocityToStore2 = velocity2 +
 								//	((2 * mass1) / (mass1 + mass2)) *
-								//	((velocity2 - velocity1, rbPos2 - rbPos1) / (glm::abs(rbPos2 - rbPos1) * glm::abs(rbPos2 - rbPos1))) *
+								//	((velocity2 - velocity1, rbPos2 - rbPos1) / (glm::length(rbPos2 - rbPos1) * glm::length(rbPos2 - rbPos1))) *
 								//	(rbPos2 - rbPos1);
-
+								//
 								//if (isnan(velocityToStore1.x))
 								//	velocityToStore1.x = 0;
 								//if (isnan(velocityToStore1.y))
