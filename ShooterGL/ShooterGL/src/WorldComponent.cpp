@@ -13,30 +13,12 @@ void WorldComponent::Initialize()
 
 void WorldComponent::Update(float gameTime)
 {
+	//Set yaw, pitch, and roll based on the rotationQuat
 	SetEulerAngles(Rotation());
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	offsetTransform = glm::mat4(1);
-	//if (componentParent != nullptr)
-	//	offsetTransform = componentParent->GetTransform();
-	//else
-	//	offsetTransform = glm::mat4(1);
-	//if (componentParent != nullptr)
-	//{
-	//	//offsetTransform = glm::rotate(offsetTransform, 0.0f, rotationOffset);
-	//	//offsetTransform = glm::scale(offsetTransform, scaleOffset);
-	//	offsetTransform = glm::translate(offsetTransform, componentParent->GetTranslation());
-	//}
-	//offsetTransform = glm::translate(offsetTransform, positionOffset);
-
-	//offsetTransform = glm::scale(offsetTransform, scaleOffset);
-	//transform = glm::rotate(transform, 40.1f, rotation);
-	//offsetTransform = glm::translate(offsetTransform, positionOffset);
-	
-	//RotateQuaternion(glm::vec3(0, 0, 0.1), 0.02);
-	//Translate(glm::vec3(0, 0.0000001, 0));
-
 	CalculateTransform();
 }
 
@@ -49,10 +31,10 @@ void WorldComponent::CalculateTransform()
 {
 	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
 
-	if (componentParent != nullptr)
-	{
-		offsetTransform *= componentParent->GetTransform();
-	}
+	//if (componentParent != nullptr)
+	//{
+	//	offsetTransform = componentParent->GetTransform() * offsetTransform;
+	//}
 }
 
 void WorldComponent::SetTransform(glm::mat4 newTransform)

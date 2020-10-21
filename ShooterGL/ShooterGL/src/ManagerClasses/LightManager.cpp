@@ -4,10 +4,10 @@ void LightManager::Initialize()
 {
 }
 
-Light* LightManager::AddLight(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, glm::vec3 ambient, glm::vec3 specular, glm::vec3 diffuse)
+Light* LightManager::AddLight(std::vector<std::string>& lightProperties)
 {
 	m_lights.push_back(new Light());
-	m_lights[m_lights.size() - 1]->Initialize(ambient, specular, diffuse, position, rotationAxis, rotationAngle, scale);
+	m_lights[m_lights.size() - 1]->Initialize(lightProperties);
 	return m_lights[m_lights.size() - 1];
 }
 

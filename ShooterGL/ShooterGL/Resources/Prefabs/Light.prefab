@@ -1,0 +1,27 @@
+Components
+{
+	Light : Point
+	{
+		Ambient : 0.1,0.1,0.1
+		Specular : 0.9,0.9,0.9
+		Diffuse : 0.4,0.4,0.4
+
+		Constant : 0.2
+		Linear : 0.1
+		Quadratic : 0.01
+
+		Position : 0,0,0
+		EulerAngles : 0,0,0
+		RotationAngle : 0
+		Scale : 1,1,1
+	}
+	Model
+	{
+		Path : Resources/Models/guitar_backpack/Rock_low.FBX
+		PositionOffset : 5,0,0
+		EulerAngles : 0,0,0
+		RotationAngle : 0
+		ScaleOffset : 0.05,0.05,0.05
+		Material : Resources/Materials/BackPackMaterial.mat
+	}
+}

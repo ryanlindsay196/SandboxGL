@@ -12,6 +12,7 @@ protected:
 	glm::mat4 positionOffset, rotationOffset, scaleOffset;
 	glm::vec3 direction;
 	float yaw, pitch, roll;
+private:
 	void SetEulerAngles(glm::vec3 newEulers);
 public:
 	virtual void Initialize();

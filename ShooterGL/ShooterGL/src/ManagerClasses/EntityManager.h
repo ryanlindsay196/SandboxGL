@@ -79,63 +79,19 @@ public://TODO: Implement
 		}
 	};
 
-	struct PointLightData
-	{
-		void ReadPointLightData(std::vector<std::string>& dataString)//, 
-			//std::pair<std::string, std::string>(EntityManager::*GenerateKeyValuePair)(std::string, std::string),
-			//glm::vec3(EntityManager::*ParseVector)(std::string))
-		{
-			for (std::string data : dataString)
-			{
-				if (data == "")
-					continue;
-				data.erase(std::remove(data.begin(), data.end(), '\t'), data.end());
-				data.erase(std::remove(data.begin(), data.end(), ' '), data.end());
-				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(data, ":");
-				if (keyValuePair.first == "Ambient")
-				{
-					ambient = ParseVector(keyValuePair.second);
-				}
-				else if (keyValuePair.first == "Specular")
-				{
-					specular = ParseVector(keyValuePair.second);
-				}
-				else if (keyValuePair.first == "Diffuse")
-				{
-					diffuse = ParseVector(keyValuePair.second);
-				}
-				else if (keyValuePair.first == "Position")
-				{
-					position = ParseVector(keyValuePair.second);
-				}
-				else if (keyValuePair.first == "EulerAngles")
-				{
-					rotationAxis = ParseVector(keyValuePair.second);
-				}
-				else if (keyValuePair.first == "RotationAngle")
-				{
-					rotationAngle = strtof(keyValuePair.second.c_str(), nullptr);
-				}
-				else if (keyValuePair.first == "Scale")
-				{
-					scale = ParseVector(keyValuePair.second);
-				}
-				else
-				{
-					std::cout << "The " << keyValuePair.first << " is not supported in PointLight" << std::endl;
-				}
-			}
-		}
-
-		glm::vec3 ambient;
-		glm::vec3 specular;
-		glm::vec3 diffuse;
-		
-		glm::vec3 position;
-		glm::vec3 rotationAxis;
-		float rotationAngle;
-		glm::vec3 scale;
-	};
+	//TODO: Delete
+	//struct PointLightData
+	//{
+	//
+	//	glm::vec3 ambient;
+	//	glm::vec3 specular;
+	//	glm::vec3 diffuse;
+	//	
+	//	glm::vec3 position;
+	//	glm::vec3 rotationAxis;
+	//	float rotationAngle;
+	//	glm::vec3 scale;
+	//};
 private://TODO: Implement
 	//The string is the file path of the entity
 	std::unordered_map<std::string, EntityProperties*> entityPropertiesMap;

@@ -172,88 +172,24 @@ Mesh * Model::GetMesh(unsigned int i)
 
 void Model::Update(float gameTime)
 {
-	//offsetTransform = glm::mat4(1);
-	//offsetTransform = glm::scale(offsetTransform, initialScaleOffset);
-	//offsetTransform = glm::rotate(offsetTransform, rotationAngle, rotationAxis);
-	//offsetTransform = glm::translate(offsetTransform, positionOffset);
 	WorldComponent::Update(gameTime);
-
-	//SetTransform(parentMesh->componentParent->GetTransform());
-	//for (auto it : boneMap)
-	//{
-	//	it.second.Update(gameTime);
-	//}
-	//
-	//for (Mesh mesh : m_meshes)
-	//{
-	//	mesh.Update(gameTime);
-	//	//mesh.SetTransform(componentParent->GetTransform());
-	//}
 }
 
 void Model::Render(LightManager* lightManager)
 {
 	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
 
-	glm::vec3 pointLightPositions[] = {
-	glm::vec3(-1.7f,  0.2f,  2.0f),
-	glm::vec3(-2.3f, -3.3f, -4.0f),
-	glm::vec3(-4.0f,  2.0f, -12.0f),
-	glm::vec3(0.0f,  0.0f, -3.0f)
-	};
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].constant", 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.direction", -0.2f, -1.0f, -0.3f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.ambient", 0.05f, 0.05f, 0.05f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.diffuse", 0.4f, 0.4f, 0.4f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"dirLight.specular", 0.5f, 0.5f, 0.5f);
-
-	for (int i = 0; i < lightManager->TotalLights(); i++)
+	for (int i = 0; i < 1 && i < lightManager->TotalLights(); i++)
 	{
-		//m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::string((char*)i) + std::string("].position")).c_str(), lightManager->GetLight(i)->componentParent->GetTranslationReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)("pointLights[0].position"), lightManager->GetLight(i)->componentParent->GetTranslationReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)("pointLights[0].ambient"), lightManager->GetLight(i)->componentParent->GetTranslationReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)("pointLights[0].diffuse"), lightManager->GetLight(i)->componentParent->GetTranslationReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)("pointLights[0].specular"), lightManager->GetLight(i)->componentParent->GetTranslationReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)("pointLights[0].constant"), lightManager->GetLight(i)->componentParent->GetTranslationReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)("pointLights[0].linear"), lightManager->GetLight(i)->componentParent->GetTranslationReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)("pointLights[0].quadratic"), lightManager->GetLight(i)->componentParent->GetTranslationReference());
+		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].position")).c_str(), lightManager->GetLight(i)->componentParent->GetTranslationReference());
+		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].ambient")).c_str(), lightManager->GetLight(i)->GetAmbientReference());
+		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].diffuse")).c_str(), lightManager->GetLight(i)->GetDiffuseReference());
+		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].specular")).c_str(), lightManager->GetLight(i)->GetSpecularReference());
+		m_meshes[0].shader->SetShaderUniform_vec1((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].constant")).c_str(), lightManager->GetLight(i)->GetConstantReference());
+		m_meshes[0].shader->SetShaderUniform_vec1((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].linear")).c_str(), lightManager->GetLight(i)->GetLinearReference());
+		m_meshes[0].shader->SetShaderUniform_vec1((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].quadratic")).c_str(), lightManager->GetLight(i)->GetQuadraticReference());
+
 	}
-	//// point light 1
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[0].position", pointLightPositions[0]);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].constant", 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].linear", 0.09);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[0].quadratic", 0.032);
-	//// point light 2
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[1].position", pointLightPositions[1]);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[1].constant", 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[1].linear", 0.09);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[1].quadratic", 0.032);
-	//// point light 3
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[2].position", pointLightPositions[2]);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[2].constant", 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[2].linear", 0.09);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[2].quadratic", 0.032);
-	//// point light 4
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[3].position", pointLightPositions[3]);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-	//m_meshes[0].shader->SetShaderUniform_vec3((char*)"pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].constant", 1.0f);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].linear", 0.09);
-	//m_meshes[0].shader->SetShaderUniform_vec1((char*)"pointLights[3].quadratic", 0.032);
-
-	//boneMap["Bip001 R UpperArm"].Translate(glm::vec3(100, 0, 0));
-	//boneMap["Bip001 R UpperArm"].CalculateTransform();
-
 
 		//TODO: Potentially move to load function?
 	if (boneMap.size() == 0)
@@ -262,32 +198,17 @@ void Model::Render(LightManager* lightManager)
 	if (animations.size() > 0)
 		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
 		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, glm::mat4(1), boneMap);
-		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, rootNode->transform, boneMap);
 	tempAnimTime += 0.1f;
 	if (tempAnimTime > 40)
 		tempAnimTime = 0;
 
-	//boneMap["Bip001 L Clavacle"].finalTransformation = glm::translate(glm::mat4(1), glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(2));
-	//boneMap["Bip001 R Clavacle"].finalTransformation = (glm::translate(glm::mat4(1), glm::vec3(1, sinf(tempAnimTime / 2), cosf(tempAnimTime))));
-	
-	//boneMap["Bip001 R Clavacle"].finalTransformation = glm::scale(glm::mat4(2), glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(2));
-	//boneMap["Bip001 R Clavacle"].finalTransformation = glm::rotate(boneMap["Bip001 R Clavacle"].finalTransformation, tempAnimTime,glm::vec3(sinf(tempAnimTime * 1.5), sinf(tempAnimTime / 2), cosf(tempAnimTime)) * glm::vec3(200));
-	//boneMap["Bip001 R Clavacle"].Translate(glm::vec3(0,0,1));
 	for (auto it : boneMap)
 	{
 		boneMap[it.first].CalculateTransform();
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
-		//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].GetOffsetTransform(), GL_FALSE);
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation, GL_FALSE);
-		//if(it.first == "Bip001 R Clavicle")
-		//if(it.second.boneID == 0)
-			//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
-		//	//m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::rotate(boneMap[it.first].GetOffsetTransform(), tempAnimTime, glm::vec3(0,1,0)));
-		//else
-		//	m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), glm::mat4(1));
 	}
 
-	//for (unsigned int i = 0; i < m_meshes.size(); i++)
 	for (Mesh mesh : m_meshes)
 	{
 		mesh.shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix, GL_FALSE);
@@ -299,7 +220,6 @@ void Model::Render(LightManager* lightManager)
 		else
 		{
 			mesh.shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * mesh.GetOffsetTransform(), GL_FALSE);
-			//m_meshes[i].shader->SetShaderUniform_mat4fv((char*)"model", glm::translate(glm::scale(m_meshes[i].GetOffsetTransform(), glm::vec3(0.02f, 0.02f, 0.02f)), glm::vec3(20, i * 20, 0)));
 		}
 		mesh.Render();
 	}

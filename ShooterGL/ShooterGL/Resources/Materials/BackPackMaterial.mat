@@ -3,7 +3,7 @@
 <ATTACH AND LINK SHADER>
 textures
 {
-	albedoMap : Resources/Textures/1001_albedo.jpg
+	albedoMap : Resources/Textures/Rock_Normal.png
 	normalMap : Resources/Textures/1001_albedo.jpg
 	specularMap : Resources/Textures/Rick.jpg
 }

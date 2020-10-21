@@ -8,11 +8,14 @@ class Light : public WorldComponent
 	//float intensity;
 private:
 	glm::vec3 ambient, specular, diffuse;
-
+	float constant = 0;
+	float linear = 0;
+	float quadratic = 0;
 public:
-	void Initialize(glm::vec3 newAmbient, glm::vec3 newSpecular, glm::vec3 newDiffuse, glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale);
+	void Initialize(std::vector<std::string>& lightProperties);
 	Light();
 	~Light();
+	void ReadPointLightData(std::vector<std::string>& dataString);
 
 	glm::vec3 GetAmbient();
 	glm::vec3 GetSpecular();
@@ -21,6 +24,13 @@ public:
 	glm::vec3& GetAmbientReference();
 	glm::vec3& GetSpecularReference();
 	glm::vec3& GetDiffuseReference();
+
+	float GetConstant();
+	float& GetConstantReference();
+	float GetLinear();
+	float& GetLinearReference();
+	float GetQuadratic();
+	float& GetQuadraticReference();
 
 	void SetAmbient(glm::vec3 newAmbient);
 	void SetSpecular(glm::vec3 newSpecular);
