@@ -18,6 +18,7 @@ public:
 	glm::vec3 GetCameraRight();
 	glm::vec3 GetCameraUp();
 
-	glm::mat4 viewMatrix;
+	glm::mat4 cameraViewMatrix;
+	glm::mat4 cameraTransformationMatrix;
 	glm::mat4 projectionMatrix;
 };

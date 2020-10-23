@@ -2,7 +2,7 @@
 #include "glm.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
-
+#include "../MathHelperFunctions.h"
 
 void WorldComponent::Initialize()
 {
@@ -14,7 +14,7 @@ void WorldComponent::Initialize()
 void WorldComponent::Update(float gameTime)
 {
 	//Set yaw, pitch, and roll based on the rotationQuat
-	SetEulerAngles(Rotation());
+	SetEulerAngles(MathHelperFunctions::Rotation(rotationQuat));
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -39,7 +39,7 @@ void WorldComponent::CalculateTransform()
 
 void WorldComponent::SetTransform(glm::mat4 newTransform)
 {
-	offsetTransform = newTransform;
+	//offsetTransform = newTransform;
 }
 
 void WorldComponent::Translate(glm::vec3 translateBy)
@@ -60,30 +60,6 @@ void WorldComponent::Scale(glm::vec3 scaleBy)
 {
 	//TODO: make this work
 	//scaleOffset += scaleBy;
-}
-
-glm::vec3 WorldComponent::Rotation()
-{
-	glm::vec3 angles;
-
-	// roll (x-axis rotation)
-	double sinr_cosp = +2.0 * (rotationQuat.w * rotationQuat.x + rotationQuat.y * rotationQuat.z);
-	double cosr_cosp = +1.0 - 2.0 * (rotationQuat.x * rotationQuat.x + rotationQuat.y * rotationQuat.y);
-	angles.x = atan2(sinr_cosp, cosr_cosp);
-
-	// pitch (y-axis rotation)
-	double sinp = +2.0 * (rotationQuat.w * rotationQuat.y - rotationQuat.z * rotationQuat.x);
-	if (fabs(sinp) >= 1)
-		angles.y = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
-	else
-		angles.y = asin(sinp);
-
-	// yaw (z-axis rotation)
-	double siny_cosp = +2.0 * (rotationQuat.w * rotationQuat.z + rotationQuat.x * rotationQuat.y);
-	double cosy_cosp = +1.0 - 2.0 * (rotationQuat.y * rotationQuat.y + rotationQuat.z * rotationQuat.z);
-	angles.z = atan2(siny_cosp, cosy_cosp);
-
-	return angles;
 }
 
 void WorldComponent::SetEulerAngles(glm::vec3 newEulers)

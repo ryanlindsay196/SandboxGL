@@ -167,7 +167,7 @@ void ParticleEmitter::Render()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	m_shader->UseShader();
 	m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
-	m_shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix, GL_FALSE);
+	m_shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->cameraViewMatrix, GL_FALSE);
 	for (Particle particle : particles)
 	{
 		if (particle.Life > 0.0f)

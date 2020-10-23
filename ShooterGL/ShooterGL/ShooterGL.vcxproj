@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="Dependencies\Glad\src\glad.c" />
     <ClCompile Include="Dependencies\stb_image.cpp" />
+    <ClCompile Include="MathHelperFunctions.cpp" />
     <ClCompile Include="src\FileReader.cpp" />
     <ClCompile Include="src\ManagerClasses\PhysicsManager.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Dependencies\Assimp\include\assimp\version.h" />
     <ClInclude Include="Dependencies\GLM\include\detail\type_vec4.hpp" />
     <ClInclude Include="Dependencies\stb_image.h" />
+    <ClInclude Include="MathHelperFunctions.h" />
     <ClInclude Include="src\FileReader.h" />
     <ClInclude Include="src\ManagerClasses\PhysicsManager.h" />
     <ClInclude Include="src\RigidBody.h" />

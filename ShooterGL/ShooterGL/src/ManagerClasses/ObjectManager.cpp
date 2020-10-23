@@ -115,7 +115,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 void ObjectManager::Update(float gameTime)
 {
 	fixedUpdateTimer += gameTime;
-	modelManager->UpdateModels(gameTime);
+	//modelManager->UpdateModels(gameTime);
 	entityManager->Update(gameTime);
 	if (fixedUpdateTimer >= fixedUpdateMaxTime)
 	{

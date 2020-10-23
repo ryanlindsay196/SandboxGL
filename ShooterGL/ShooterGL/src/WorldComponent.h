@@ -1,8 +1,6 @@
 #pragma once
 #include "Component.h"
 
-#define M_PI   3.14159265358979323846264338327950288
-
 class WorldComponent : public Component
 {
 protected:
@@ -26,7 +24,6 @@ public:
 	void Translate(glm::vec3 translateBy);
 	void Rotate(glm::vec3 rotateBy);
 	void Scale(glm::vec3 scaleBy);
-	glm::vec3 Rotation();
 
 	void RotateEulerAngles(glm::vec3 newEulers);
 	void RotateQuaternion(glm::vec3 rotationAxis, float angle);

@@ -17,6 +17,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "AnimationDataStructures.h"
+#define M_PI   3.14159265358979323846264338327950288
+
 
 Model::Model()
 {
@@ -68,8 +70,8 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	positionOffset = glm::translate(positionOffset, initialPositionOffset);
 	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
 
-	if (componentParent != nullptr)
-		offsetTransform *= componentParent->GetTransform();
+	//if (componentParent != nullptr)
+	//	offsetTransform *= componentParent->GetTransform();
 }
 
 void Model::LoadModel(std::string modelPath, std::string materialPath)
@@ -109,13 +111,6 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
 		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 	);
-
-	//currentNode->transform = glm::mat4(node->mTransformation.a1, node->mTransformation.a2, node->mTransformation.a3, node->mTransformation.a4,
-	//	node->mTransformation.b1, node->mTransformation.b2, node->mTransformation.b3, node->mTransformation.b4,
-	//	node->mTransformation.c1, node->mTransformation.c2, node->mTransformation.c3, node->mTransformation.c4,
-	//	node->mTransformation.d1, node->mTransformation.d2, node->mTransformation.d3, node->mTransformation.d4
-	//);
-	//currentNode->transform = glm::mat4(1);
 	currentNode->parent = parentNode;
 
 	//process each mesh located at the current node
@@ -125,12 +120,12 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		m_meshes.push_back(ProcessMesh(mesh, (char*)materialPath.c_str(), node));
-		//m_meshes[m_meshes.size() - 1].SetTransform(
-		//	glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
-		//		node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
-		//		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
-		//		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
-		//));
+		m_meshes[m_meshes.size() - 1].SetTransform(
+			glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
+				node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
+				node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
+				node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
+		));
 		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 
@@ -211,7 +206,7 @@ void Model::Render(LightManager* lightManager)
 
 	for (Mesh mesh : m_meshes)
 	{
-		mesh.shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->viewMatrix, GL_FALSE);
+		mesh.shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->cameraViewMatrix, GL_FALSE);
 		mesh.shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
 		if (componentParent != nullptr)
 		{

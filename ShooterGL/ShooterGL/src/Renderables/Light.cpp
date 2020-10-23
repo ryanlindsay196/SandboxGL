@@ -1,16 +1,13 @@
 #include "Light.h"
-//#include "gtc/matrix_transform.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 #include "FileReader.h"
 #include <algorithm>
 #include <iostream>
+#define M_PI   3.14159265358979323846264338327950288
 
 void Light::Initialize(std::vector<std::string>& lightProperties)
 {
-	//ambient = newAmbient;
-	//specular = newSpecular;
-	//diffuse = newDiffuse;
 	offsetTransform = glm::mat4(1);
 	positionOffset = glm::mat4(1);
 	scaleOffset = glm::mat4(1);
