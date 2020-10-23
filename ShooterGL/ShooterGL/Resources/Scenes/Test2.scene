@@ -2,7 +2,7 @@ PREFAB : Resources/Prefabs/Player.prefab
 {
 	Position : -17,0,0
 	EulerAngles : 0,1,0
-	RotationAngle : 0
+	RotationAngle : 180
 	Scale : 1,1,1
 }
 

@@ -19,14 +19,13 @@ void Camera::Update(float gameTime)
 	cameraRight = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), cameraDirection);
 	cameraUp = glm::vec3(0, 1, 0);// glm::cross(cameraDirection, cameraRight);
 
-	cameraTransformationMatrix = glm::lookAt(cameraPos,
-							cameraPos + cameraDirection,
-							cameraUp);
-
+	//cameraTransformationMatrix = glm::lookAt(cameraPos,
+	//						cameraPos + cameraDirection,
+	//						cameraUp);
 	//std::swap(cameraDirection.x, cameraDirection.z);
-
 	//std::swap(cameraPos.x, cameraPos.z);
 	//cameraPos.x *= -1;
+
 	cameraViewMatrix = glm::lookAt(cameraPos,
 							cameraPos + cameraDirection,
 							cameraUp);

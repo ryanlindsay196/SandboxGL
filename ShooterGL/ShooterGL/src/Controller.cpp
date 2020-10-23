@@ -22,6 +22,8 @@ void Controller::AddKeyBinding()
 
 void Controller::Update(float gameTime)
 {
+
+
 	glm::vec3 moveDirection = glm::vec3(0);
 	if (glfwGetKey(window, GLFW_KEY_W))
 		moveDirection -= componentParent->GetDirection();

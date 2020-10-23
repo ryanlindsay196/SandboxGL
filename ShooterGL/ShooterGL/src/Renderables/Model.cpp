@@ -199,6 +199,7 @@ void Model::Render(LightManager* lightManager)
 
 	for (auto it : boneMap)
 	{
+		//TODO: Check if this messes up bone transformations, thus deforming animated meshes
 		boneMap[it.first].CalculateTransform();
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation, GL_FALSE);

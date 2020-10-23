@@ -21,11 +21,11 @@ public:
 	void AddComponent(Component* newComponent);
 
 	void Translate(glm::vec3 translateBy);
-	void Rotate(glm::vec3 rotateBy);
+	void Rotate(glm::vec3 rotationAxis, float rotationAngle);
 	void Scale(glm::vec3 scaleBy);
 
 	void SetTranslation(glm::vec3 newPosition);
-	void SetRotation(glm::vec3 newRotation);
+	//void SetRotation(glm::vec3 newRotation);
 	void SetEulerAngles(glm::vec3 newEuler);
 	void SetScale(glm::vec3 newScale);
 
@@ -37,7 +37,7 @@ public:
 
 	glm::vec3& GetDirectionReference();
 	glm::vec3& GetTranslationReference();
-	glm::vec3& GetRotationReference();
+	//glm::vec3& GetRotationReference();
 	//glm::vec3& GetEulerAnglesReference();
 	glm::vec3& GetScaleReference();
 
@@ -48,7 +48,7 @@ private:
 
 	glm::mat4 transform;
 	glm::vec3 position;
-	glm::vec3 rotation;
+	glm::quat rotationQuat;
 	glm::vec3 scale;
 
 	glm::vec3 direction;

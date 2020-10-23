@@ -4,6 +4,8 @@
 //TODO: find a way to remove this
 #include "Renderables/Model.h"
 #include "ManagerClasses/LightManager.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "gtx/quaternion.hpp"
 Entity::~Entity()
 {
 }
@@ -11,11 +13,11 @@ Entity::~Entity()
 void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, Entity * newParent)
 {
 	SetTranslation(position);
-	SetRotation(rotation);
+	Rotate(rotationAxis, rotationAngle);
 	SetScale(scale);
 	transform = glm::mat4(1);
-	transform = glm::rotate(transform, rotationAngle, rotationAxis);
 	transform = glm::scale(transform, scale);
+	transform = glm::rotate(transform, rotationAngle, rotationAxis);
 	transform = glm::translate(transform, position);
 	if(newParent != nullptr)
 		SetParent(newParent);
@@ -50,7 +52,7 @@ void Entity::Update(float gameTime)
 	//TODO: Look at moving this elsewhere because scale should probably done before rotation
 	transform = glm::scale(transform, scale);
 	//transform = glm::translate(transform, position);
-
+	transform = glm::translate(glm::mat4(1), position) * glm::toMat4(rotationQuat) * glm::scale(glm::mat4(1), scale);
 
 	for (Component* component : components)
 	{
@@ -87,9 +89,9 @@ void Entity::Translate(glm::vec3 translateBy)
 	//glm::translate(position, translateBy);
 }
 
-void Entity::Rotate(glm::vec3 rotateBy)
+void Entity::Rotate(glm::vec3 rotationAxis, float rotationAngle)
 {
-	rotation += rotateBy;
+	rotationQuat *= glm::angleAxis(rotationAngle, rotationAxis);
 	//rotation += glm::vec3(glm::radians(rotateBy.x), glm::radians(rotateBy.y), glm::radians(rotateBy.z));
 
 	//rotation.x = fmod(rotation.x, 300 * 3.14f);
@@ -109,10 +111,10 @@ void Entity::SetTranslation(glm::vec3 newPosition)
 	position = newPosition;
 }
 
-void Entity::SetRotation(glm::vec3 newRotation)
-{
-	rotation = glm::vec3(glm::radians(newRotation.x), glm::radians(newRotation.y), glm::radians(newRotation.z));
-}
+//void Entity::SetRotation(glm::vec3 newRotation)
+//{
+//	rotation = glm::vec3(glm::radians(newRotation.x), glm::radians(newRotation.y), glm::radians(newRotation.z));
+//}
 
 void Entity::SetEulerAngles(glm::vec3 newEuler)
 {
@@ -136,10 +138,10 @@ glm::vec3 Entity::GetTranslation()
 	return position;
 }
 
-glm::vec3 Entity::GetRotation()
-{
-	return rotation;
-}
+//glm::vec3 Entity::GetRotation()
+//{
+//	return rotation;
+//}
 
 glm::vec3 Entity::GetEulerAngles()
 {
@@ -161,10 +163,10 @@ glm::vec3 & Entity::GetTranslationReference()
 	return position;
 }
 
-glm::vec3 & Entity::GetRotationReference()
-{
-	return rotation;
-}
+//glm::vec3 & Entity::GetRotationReference()
+//{
+//	return rotation;
+//}
 
 glm::vec3 & Entity::GetScaleReference()
 {
