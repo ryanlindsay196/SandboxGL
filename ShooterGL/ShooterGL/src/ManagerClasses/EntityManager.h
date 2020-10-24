@@ -105,7 +105,7 @@ public:
 	EntityProperties* LoadProperties(std::string prefabPath);
 	//LoadEntitiesFromSceneFile(char* entityName);//Instantiate entities from loaded entity properties
 	//Scene file has prefab ids, and transform data;
-	void InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startEulerAngles, float rotationAngle, glm::vec3 startScale, Entity* parent);
+	void InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 angleAxis, float rotationAngle, glm::vec3 startScale, Entity* parent);
 
 	void Update(float gameTime);
 	void Render(LightManager* lightManager);

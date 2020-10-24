@@ -142,10 +142,10 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 }
 
 //Add an entity into the scene
-void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 startEulerAngles, float rotationAngle, glm::vec3 startScale, Entity* parent)
+void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 angleAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
 	Entity* entity = new Entity();
-	entity->Instantiate(startPos, startEulerAngles, rotationAngle, startScale, parent);
+	entity->Instantiate(startPos, angleAxis, rotationAngle, startScale, parent);
 	entities.push_back(entity);
 
 	for (EntityData entityData : entityProperties->entityData)

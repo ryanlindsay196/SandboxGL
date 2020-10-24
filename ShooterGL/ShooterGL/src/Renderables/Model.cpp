@@ -126,7 +126,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 				node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
 				node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 		));
-		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
+		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 
 	}
@@ -172,8 +172,7 @@ void Model::Update(float gameTime)
 
 void Model::Render(LightManager* lightManager)
 {
-	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
-
+	//TODO: Check why the first condition (i < 1) is here
 	for (int i = 0; i < 1 && i < lightManager->TotalLights(); i++)
 	{
 		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].position")).c_str(), lightManager->GetLight(i)->componentParent->GetTranslationReference());
@@ -192,7 +191,7 @@ void Model::Render(LightManager* lightManager)
 
 	if (animations.size() > 0)
 		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
-		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, glm::mat4(1), boneMap);
+		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, rootNode->transform, boneMap);
 	tempAnimTime += 0.1f;
 	if (tempAnimTime > 40)
 		tempAnimTime = 0;
@@ -200,7 +199,7 @@ void Model::Render(LightManager* lightManager)
 	for (auto it : boneMap)
 	{
 		//TODO: Check if this messes up bone transformations, thus deforming animated meshes
-		boneMap[it.first].CalculateTransform();
+		//boneMap[it.first].CalculateTransform();
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation, GL_FALSE);
 	}

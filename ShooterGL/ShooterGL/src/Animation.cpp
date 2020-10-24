@@ -31,7 +31,10 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 		for (unsigned int j = 0; j < animation->mChannels[i]->mNumRotationKeys; j++)
 		{
 			boneKeyMap[boneKey.first].rotationKeyFrames.push_back(
-				glm::quat(animation->mChannels[i]->mRotationKeys[j].mValue.x, animation->mChannels[i]->mRotationKeys[j].mValue.y, animation->mChannels[i]->mRotationKeys[j].mValue.z, animation->mChannels[i]->mRotationKeys[j].mValue.w)
+				glm::quat(animation->mChannels[i]->mRotationKeys[j].mValue.z, 
+					animation->mChannels[i]->mRotationKeys[j].mValue.w, 
+					animation->mChannels[i]->mRotationKeys[j].mValue.x, 
+					animation->mChannels[i]->mRotationKeys[j].mValue.y)
 			);
 			boneKeyMap[boneKey.first].rotationKeyTimes.push_back(animation->mChannels[i]->mRotationKeys[j].mTime);
 		}
@@ -48,7 +51,6 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
 {
 	std::string NodeName(node->name);
-	//TODO: Remove aiXXX classes from this function
 	glm::mat4 NodeTransformation = node->transform;
 
 	auto pBoneKeyFrame = boneKeyMap.find(NodeName);
@@ -69,36 +71,22 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 		glm::mat4 TranslationM;
 		TranslationM = glm::translate(glm::mat4(1), glm::vec3(Translation.x, Translation.y, Translation.z));
 		// Combine the above transformations
-		NodeTransformation = TranslationM * RotationM * ScalingM;
+		NodeTransformation = TranslationM * RotationM * ScalingM;		
 
-		//TODO: DELETE
-		NodeTransformation = RotationM * ScalingM;
-		//TODO: DELETE
-		if (NodeName != "Bip001 R Forearm")
-			NodeTransformation = ScalingM;
-	}
 	//TODO: DELETE
-	//if (NodeName == "Bip001 R Forearm")
-		//NodeTransformation = glm::translate(NodeTransformation, glm::vec3(0, 0, animationTime * 4));
-		//NodeTransformation = glm::rotate(NodeTransformation, animationTime, glm::vec3(0, 1, 0));
-		//boneMap[NodeName].SetTransform(glm::rotate(boneMap[NodeName].GetOffsetTransform(), animationTime, glm::vec3(0, 1, 0)));
-		//NodeTransformation = glm::scale(NodeTransformation, glm::vec3(0, animationTime, 0));
-		//boneMap[NodeName].SetTransform(glm::rotate(boneMap[NodeName].GetOffsetTransform(), (float)(animationTime * M_PI / 2), glm::vec3(0, 1, 0)));
-	//else if (NodeName == "Bone001" || NodeName == "Bone002" || NodeName == "Bone003" || NodeName == "Bone004" || NodeName == "Dummy001" || NodeName == "Bip001 L Hand" || NodeName == "Bip001 R Hand")
-	//	NodeTransformation = glm::scale(NodeTransformation, glm::vec3(0,0,0));
+	//if (NodeName == "Bip001 R Forearm" || NodeName == "Bip001 L Forearm")
+	//	NodeTransformation = TranslationM * RotationM * ScalingM;
+
+	}
 	glm::mat4 GlobalTransformation = parentTransform * NodeTransformation;
 
 	if (boneMap.find(NodeName) != boneMap.end()) {
 		boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();// *glm::rotate(glm::mat4(1), animationTime, glm::vec3(0, 1, 0));
-		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * GlobalTransformation * node->transform;// *glm::rotate(glm::mat4(1), animationTime, glm::vec3(0, 1, 0));
-		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * boneMap[NodeName].GetOffsetTransform() * NodeTransformation;
-		//boneMap[NodeName].finalTransformation = m_GlobalInverseTransform * glm::rotate(glm::mat4(1), animationTime, glm::vec3(0, 1, 0)) * GlobalTransformation * boneMap[NodeName].GetOffsetTransform();
 	}
 
 
 	for (unsigned int i = 0; i < node->children.size(); i++) {
 		ReadNodeHierarchy(animationTime, &node->children[i], GlobalTransformation, boneMap);
-		//ReadNodeHierarchy(animationTime, &node->children[i], boneMap[NodeName].GetOffsetTransform(), boneMap);
 	}
 }
 
@@ -145,7 +133,7 @@ void Animation::CalculateInterpolatedRotation(glm::quat& out, float animationTim
 	assert(Factor >= 0.0f && Factor <= 1.0f);
 	const glm::quat& StartRotationQ = glm::quat(boneKeyMap[nodeName].rotationKeyFrames[RotationIndex].x, boneKeyMap[nodeName].rotationKeyFrames[RotationIndex].y, boneKeyMap[nodeName].rotationKeyFrames[RotationIndex].z, boneKeyMap[nodeName].rotationKeyFrames[RotationIndex].w);
 	const glm::quat& EndRotationQ = glm::quat(boneKeyMap[nodeName].rotationKeyFrames[NextRotationIndex].x, boneKeyMap[nodeName].rotationKeyFrames[NextRotationIndex].y, boneKeyMap[nodeName].rotationKeyFrames[NextRotationIndex].z, boneKeyMap[nodeName].rotationKeyFrames[NextRotationIndex].w);
-	out = mix(StartRotationQ, EndRotationQ, Factor);
+	out = glm::slerp(StartRotationQ, EndRotationQ, Factor);
 	out = normalize(out);
 }
 

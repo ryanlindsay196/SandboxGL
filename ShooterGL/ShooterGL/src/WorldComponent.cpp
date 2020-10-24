@@ -20,7 +20,7 @@ void WorldComponent::Update(float gameTime)
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	offsetTransform = glm::mat4(1);
 	CalculateTransform();
-	glm::vec3 position = glm::vec3(positionOffset[3][0], positionOffset[3][1], positionOffset[3][2]);
+	//glm::vec3 position = glm::vec3(positionOffset[3][0], positionOffset[3][1], positionOffset[3][2]);
 }
 
 glm::mat4 WorldComponent::GetOffsetTransform()

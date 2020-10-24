@@ -24,7 +24,7 @@ public:
 	void Rotate(glm::vec3 rotationAxis, float rotationAngle);
 	void Scale(glm::vec3 scaleBy);
 
-	void SetTranslation(glm::vec3 newPosition);
+	void SetPosition(glm::vec3 newPosition);
 	//void SetRotation(glm::vec3 newRotation);
 	void SetEulerAngles(glm::vec3 newEuler);
 	void SetScale(glm::vec3 newScale);

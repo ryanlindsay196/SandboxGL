@@ -11,9 +11,6 @@ public:
 	void Initialize(Entity* newParent);
 	virtual void Update(float gameTime) override;
 
-	void Translate(glm::vec3 moveBy);
-	void Rotate(glm::vec3 rotationAxis, float rotationAngle);
-
 	glm::vec3 GetCameraDirection();
 	glm::vec3 GetCameraRight();
 	glm::vec3 GetCameraUp();
