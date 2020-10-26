@@ -19,12 +19,9 @@
 
 Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones)
 {
-	//rootNode = new aiNode(*aiScene->mRootNode);
 	meshData->vertices.reserve(mesh->mNumVertices);
-	//AddNode(rootNode, aiScene);
 
 	m_materialPath = materialPath;
-	//m_modelData = modelData;
 	parentMesh = newParent;
 	yaw = -90;
 	textureManager = objectManager->textureManager;
@@ -164,7 +161,6 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
 			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
 		));
-		//boneMap[BoneName].SetTransform(glm::transpose(boneMap[BoneName].GetOffsetTransform()));
 		//boneMap[BoneName].SetTransform(glm::translate(boneMap[BoneName].GetOffsetTransform(), glm::vec3(3,0,0)));
 		//boneMap[BoneName].SetTransform(glm::mat4(0));
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)

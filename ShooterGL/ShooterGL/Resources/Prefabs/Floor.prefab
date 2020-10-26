@@ -16,7 +16,7 @@ Components
 		Mass : 1
 		ColliderType : 0
 		PositionOffset : 10,0,0
-		Scale : 1,100,1
+		Scale : 1,100,100
 		UseGravity : 0
 	}
 }

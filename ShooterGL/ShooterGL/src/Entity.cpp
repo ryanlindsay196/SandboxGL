@@ -1,11 +1,15 @@
 #include "Entity.h"
 #include "Component.h"
 
+#include "../MathHelperFunctions.h"
+#include "gtx/euler_angles.hpp"
+
 //TODO: find a way to remove this
 #include "Renderables/Model.h"
 #include "ManagerClasses/LightManager.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
+#define M_PI   3.14159265358979323846264338327950288
 Entity::~Entity()
 {
 }
@@ -22,6 +26,8 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotat
 	pitch =		(newEulers.x);
 	yaw =		(newEulers.y);
 	roll =		(newEulers.z);
+	//SetEulerAngles(newEulers);
+	direction = glm::vec3(direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)), direction.y = sin(glm::radians(pitch)), direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
 
 	transform = glm::translate(glm::mat4(1), position) * glm::toMat4(rotationQuat) * glm::scale(glm::mat4(1), scale);
 }
@@ -72,6 +78,10 @@ void Entity::Translate(glm::vec3 translateBy)
 void Entity::Rotate(glm::vec3 rotationAxis, float rotationAngle)
 {
 	rotationQuat += glm::angleAxis(rotationAngle, rotationAxis);
+	return;
+	glm::vec3 newEulers = MathHelperFunctions::Rotation(rotationQuat);
+
+	SetEulerAngles(newEulers);
 }
 
 void Entity::Scale(glm::vec3 scaleBy)
@@ -95,17 +105,16 @@ void Entity::SetEulerAngles(glm::vec3 newEuler)
 	yaw = newEuler.y;
 	roll = newEuler.z;
 
-	float sx = sin(glm::radians(newEuler.x / 2));
-	float sy = sin(glm::radians(-newEuler.y / 2));
-	float sz = sin(glm::radians(newEuler.z / 2));
-	float cx = cos(glm::radians(newEuler.x / 2));
-	float cy = cos(glm::radians(-newEuler.y / 2));
-	float cz = cos(glm::radians(newEuler.z / 2));
+	rotationQuat = glm::quat(-glm::vec3(glm::radians(newEuler.z), glm::radians(newEuler.y), -glm::radians(newEuler.x)));
+	rotationQuat = glm::quat(
+		glm::vec3(	glm::radians(0.f), 
+					-glm::radians(newEuler.y), 
+					glm::radians(0.f)));
+	rotationQuat =
+		glm::quat(glm::vec3(0.f, -glm::radians(newEuler.y), 0.f)) +
+		glm::quat(glm::vec3(0.f, 0.f, glm::radians(newEuler.x)));
 
-	rotationQuat = glm::quat(cx*cy*cz + sx * sy*sz,
-		sx*cy*cz - cx * sy*sz,
-		cx*sy*cz + sx * cy*sz,
-		cx*cy*sz - sx * sy*cz);
+	rotationQuat = glm::toQuat(glm::orientate3(glm::vec3(glm::radians(-newEuler.z), glm::radians(newEuler.x), glm::radians(-newEuler.y))));
 }
 
 void Entity::SetScale(glm::vec3 newScale)

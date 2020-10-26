@@ -106,13 +106,14 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materialPath, Node* currentNode, Node* parentNode)
 {
 	currentNode->name = node->mName.C_Str();
+
 	currentNode->transform = glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
 		node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
 		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
 		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 	);
-	currentNode->parent = parentNode;
 
+	currentNode->parent = parentNode;
 	//process each mesh located at the current node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
@@ -120,12 +121,8 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		m_meshes.push_back(ProcessMesh(mesh, (char*)materialPath.c_str(), node));
-		m_meshes[m_meshes.size() - 1].SetTransform(
-			glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
-				node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
-				node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
-				node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
-		));
+		//TODO: Remove
+		m_meshes[m_meshes.size() - 1].SetTransform(currentNode->transform);
 		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 
@@ -190,11 +187,11 @@ void Model::Render(LightManager* lightManager)
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1), GL_FALSE);
 
 	if (animations.size() > 0)
-		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, &rootNode, offsetTransform, boneMap);
-		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, rootNode->transform, boneMap);
-	tempAnimTime += 0.1f;
-	if (tempAnimTime > 40)
-		tempAnimTime = 0;
+		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, glm::mat4(1), boneMap);
+		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, rootNode->transform, boneMap);
+	tempAnimTime += 1.f;
+	//if (tempAnimTime > 40)
+	//	tempAnimTime = 0;
 
 	for (auto it : boneMap)
 	{

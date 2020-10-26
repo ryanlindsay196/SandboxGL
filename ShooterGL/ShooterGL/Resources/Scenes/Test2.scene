@@ -2,7 +2,7 @@ PREFAB : Resources/Prefabs/Player.prefab
 {
 	Position : 0,0,4
 	EulerAngles : 0,1,0
-	RotationAngle : 0
+	RotationAngle : 0.4
 	Scale : 1,1,1
 }
 
@@ -122,5 +122,5 @@ PREFAB : Resources/Prefabs/Floor.prefab
 {
 	Position : 9,0,4
 	EulerAngles : 0,0,0
-	Scale : 1,1,1
+	Scale : 2.8,2.8,2.8
 }
