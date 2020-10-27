@@ -31,7 +31,7 @@ public:
 
 	glm::vec3 GetDirection();
 	glm::vec3 GetTranslation();
-	glm::vec3 GetRotation();
+	glm::quat GetRotation();
 	glm::vec3 GetEulerAngles();
 	glm::vec3 GetScale();
 

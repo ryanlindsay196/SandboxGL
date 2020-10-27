@@ -3,6 +3,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 #include "../MathHelperFunctions.h"
+#include "gtx/euler_angles.hpp"
 
 void WorldComponent::Initialize()
 {
@@ -18,9 +19,7 @@ void WorldComponent::Update(float gameTime)
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	offsetTransform = glm::mat4(1);
 	CalculateTransform();
-	//glm::vec3 position = glm::vec3(positionOffset[3][0], positionOffset[3][1], positionOffset[3][2]);
 }
 
 glm::mat4 WorldComponent::GetOffsetTransform()
@@ -68,6 +67,16 @@ void WorldComponent::SetEulerAngles(glm::vec3 newEulers)
 	pitch = newEulers.x;
 	yaw = newEulers.y;
 	roll = newEulers.z;
+
+	//if (componentParent != nullptr)
+	//{
+	//	pitch += componentParent->GetEulerAngles().x;
+	//	yaw += componentParent->GetEulerAngles().y;
+	//	roll += componentParent->GetEulerAngles().z;
+	//}
+	//rotationQuat = componentParent->GetRotation();
+	//rotationQuat = glm::quat(0, 0, 0, 1);
+	//rotationQuat = glm::toQuat(glm::orientate3(glm::vec3(glm::radians(-newEulers.z), glm::radians(newEulers.x), glm::radians(-newEulers.y))));
 }
 
 void WorldComponent::RotateEulerAngles(glm::vec3 newEulers)

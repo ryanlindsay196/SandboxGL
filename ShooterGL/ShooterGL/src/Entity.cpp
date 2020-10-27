@@ -23,19 +23,18 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotat
 		SetParent(newParent);
 
 	glm::vec3 newEulers = glm::eulerAngles(rotationQuat);
-	pitch =		(newEulers.x);
-	yaw =		(newEulers.y);
-	roll =		(newEulers.z);
-	//SetEulerAngles(newEulers);
-	direction = glm::vec3(direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)), direction.y = sin(glm::radians(pitch)), direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
-
+	newEulers.x = glm::degrees(newEulers.x);
+	newEulers.y = glm::degrees(newEulers.y);
+	newEulers.z = glm::degrees(newEulers.z);
+	SetEulerAngles(newEulers);
+	
 	transform = glm::translate(glm::mat4(1), position) * glm::toMat4(rotationQuat) * glm::scale(glm::mat4(1), scale);
 }
 
 void Entity::Update(float gameTime)
 {
 	//Calculate entity direction
-	direction = glm::vec3(direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)), direction.y = sin(glm::radians(pitch)), direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
+	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
 
 	//Calculate transform for this frame
 	transform = glm::translate(glm::mat4(1), position) * glm::toMat4(rotationQuat) * glm::scale(glm::mat4(1), scale);
@@ -78,10 +77,7 @@ void Entity::Translate(glm::vec3 translateBy)
 void Entity::Rotate(glm::vec3 rotationAxis, float rotationAngle)
 {
 	rotationQuat += glm::angleAxis(rotationAngle, rotationAxis);
-	return;
-	glm::vec3 newEulers = MathHelperFunctions::Rotation(rotationQuat);
-
-	SetEulerAngles(newEulers);
+	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
 }
 
 void Entity::Scale(glm::vec3 scaleBy)
@@ -94,25 +90,11 @@ void Entity::SetPosition(glm::vec3 newPosition)
 	position = newPosition;
 }
 
-//void Entity::SetRotation(glm::vec3 newRotation)
-//{
-//	rotation = glm::vec3(glm::radians(newRotation.x), glm::radians(newRotation.y), glm::radians(newRotation.z));
-//}
-
 void Entity::SetEulerAngles(glm::vec3 newEuler)
 {
 	pitch = newEuler.x;
 	yaw = newEuler.y;
 	roll = newEuler.z;
-
-	rotationQuat = glm::quat(-glm::vec3(glm::radians(newEuler.z), glm::radians(newEuler.y), -glm::radians(newEuler.x)));
-	rotationQuat = glm::quat(
-		glm::vec3(	glm::radians(0.f), 
-					-glm::radians(newEuler.y), 
-					glm::radians(0.f)));
-	rotationQuat =
-		glm::quat(glm::vec3(0.f, -glm::radians(newEuler.y), 0.f)) +
-		glm::quat(glm::vec3(0.f, 0.f, glm::radians(newEuler.x)));
 
 	rotationQuat = glm::toQuat(glm::orientate3(glm::vec3(glm::radians(-newEuler.z), glm::radians(newEuler.x), glm::radians(-newEuler.y))));
 }
@@ -130,6 +112,11 @@ glm::vec3 Entity::GetDirection()
 glm::vec3 Entity::GetTranslation()
 {
 	return position;
+}
+
+glm::quat Entity::GetRotation()
+{
+	return rotationQuat;
 }
 
 glm::vec3 Entity::GetEulerAngles()
