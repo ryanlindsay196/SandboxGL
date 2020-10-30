@@ -203,7 +203,7 @@ void Shader::SetVertexShader(char* vertexPath)
 
 		std::string vString = vShaderStream.str();
 		vertexShaderSource = (char*)vString.c_str();
-		std::cout << "Vertex shader successfully read" << std::endl;
+		//std::cout << "Vertex shader successfully read" << std::endl;
 
 		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 		glCompileShader(vertexShader);
@@ -217,8 +217,8 @@ void Shader::SetVertexShader(char* vertexPath)
 			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 			std::cout << "ERROR::VERTEX_SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 		}
-		else
-			std::cout << "Shader compiled successfully" << std::endl;
+		//else
+		//	std::cout << "Shader compiled successfully" << std::endl;
 
 		vShaderFile.close();
 	}
@@ -259,7 +259,7 @@ void Shader::SetFragmentShader(char* fragmentPath)
 		//fString.replace(fString.begin(), 5, "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
 		fragmentShaderSource = (char*)tempFShader.c_str();
 		//std::cout << fragmentShaderSource;
-		std::cout << "Fragment shader succesfully read" << std::endl;
+		//std::cout << "Fragment shader succesfully read" << std::endl;
 
 		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 		glCompileShader(fragmentShader);
@@ -273,8 +273,8 @@ void Shader::SetFragmentShader(char* fragmentPath)
 			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
 			std::cout << "ERROR::FRAGMENT_SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 		}
-		else
-			std::cout << "Shader compiled successfully" << std::endl;
+		//else
+		//	std::cout << "Shader compiled successfully" << std::endl;
 
 		fShaderFile.close();
 	}
