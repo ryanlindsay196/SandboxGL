@@ -50,18 +50,12 @@ ModelData* ModelManager::LoadModelData(std::string hashID)
 	if (modelData == modelDataMap.end())
 	{
 		ModelData* newModelData = new ModelData();
-		//newShader->Initialize(in_objectManager, (char*)"", (char*)"", (char*)materialPath.c_str());
 
 		std::pair<std::string, ModelData*> newModelDataEntry(hashID, newModelData);
 		modelDataMap.insert(newModelDataEntry);
 
-		return newModelDataEntry.second;// shaders.find(shaderPath);
+		return newModelDataEntry.second;
 	}
-	//for (auto& x : modelDataMap)
-	//{//TODO: Replace this with instant lookup
-	//	if (x.first == hashID)
-	//		return x.second;
-	//}
 	return modelDataMap[hashID];
 }
 
@@ -70,20 +64,6 @@ void ModelManager::LoadShaders()
 	for (Model* model : models)
 	{
 		model->LoadShaders();
-	}
-}
-
-void ModelManager::UpdateModels(float gameTime)
-{
-	for (Model* model : models)
-		model->Update(gameTime);
-}
-
-void ModelManager::RenderModels(LightManager * lightManager)
-{
-	for (int i = 0; i < (int)models.size(); i++)
-	{
-		models[i]->Render(lightManager);
 	}
 }
 

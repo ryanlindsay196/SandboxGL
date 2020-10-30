@@ -54,32 +54,6 @@ vec3 CalcPointLight(PointLight pointLight, vec3 normal, vec3 fragPos, vec3 viewD
 
 void main()
 {
-	////ambient
-	////vec3 ambient = mat.ambient;
-	//vec3 ambient = light.ambient * vec3(texture(albedoMap, fs_in.TexCoord.xy).xyz);
-	//
-	////obtain normal from normal map in range [0,1]
-	//vec3 normal = texture(normalMap, fs_in.TexCoord.xy).rgb;
-	////transform normal vector to range [-1, 1]
-	//normal = normalize(normal * 2.0 - 1.0);
-	////normal = normalize(TBN * normal);
-	//
-	////diffuse
-	//vec3 norm = normalize(fs_in.Normal);
-	//vec3 lightDir = -normalize(light.position - fs_in.FragPos);
-	//float diff = max(dot(norm, lightDir), 0.0);
-	//vec3 diffuse = light.diffuse * (diff * vec3(texture(normalMap, fs_in.TexCoord.xy)));
-	//	
-	////specular
-	//vec3 viewDir = normalize(viewPos - fs_in.FragPos);
-	//vec3 reflectDir = reflect(-lightDir, norm);
-	//float spec = pow(max(dot(viewDir, reflectDir), 0.0), mat.shininess * 128);
-	//vec3 specular = light.specular * (spec * mat.specular);
-	//specular = light.specular * (spec * vec3(texture(specularMap, fs_in.TexCoord).xyz));
-	//
-	//FragColor = vec4(vec3(ambient + diffuse + specular), 1.0) * texture(albedoMap, fs_in.TexCoord.xy);
-	////FragColor = vec4(vec3(ambient + diffuse + specular), 1.0);
-
 	vec3 norm = normalize(fs_in.Normal);
 	vec3 viewDir = normalize(viewPos - fs_in.FragPos);
 
@@ -88,7 +62,9 @@ void main()
 		result += CalcPointLight(pointLights[0], norm, fs_in.FragPos, viewDir);
 
 	FragColor = vec4(result, 1.0);
-	//FragColor = texture(albedoMap, fs_in.TexCoord.xy);
+
+	//TODO: Disable
+	FragColor = texture(albedoMap, fs_in.TexCoord.xy);
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)

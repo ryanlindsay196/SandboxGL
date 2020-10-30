@@ -299,70 +299,70 @@ void Shader::UseShader()
 	glUseProgram(shaderProgram);
 }
 
-void Shader::SetShaderUniform_vec1(char * uniformName, float uniformValue)
+void Shader::SetShaderUniform_vec1(const char * uniformName, float uniformValue)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform1f(uniformLocation, (GLfloat)uniformValue);
 }
 
-void Shader::SetShaderUniform_vec2(char * uniformName, float x, float y)
+void Shader::SetShaderUniform_vec2(const char * uniformName, float x, float y)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform2f(uniformLocation, (GLfloat)x, (GLfloat)y);
 }
 
-void Shader::SetShaderUniform_vec3(char * uniformName, float x, float y, float z)
+void Shader::SetShaderUniform_vec3(const char * uniformName, float x, float y, float z)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform3f(uniformLocation, (GLfloat)x, (GLfloat)y, (GLfloat)z);
 }
 
-void Shader::SetShaderUniform_vec3(char * uniformName, glm::vec3 & value)
+void Shader::SetShaderUniform_vec3(const char * uniformName, glm::vec3 & value)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform3fv(uniformLocation, 1, &value[0]);
 }
 
-void Shader::SetShaderUniform_vec4(char * uniformName, float x, float y, float z, float w)
+void Shader::SetShaderUniform_vec4(const char * uniformName, float x, float y, float z, float w)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform4f(uniformLocation, (GLfloat)x, (GLfloat)y, (GLfloat)z, (GLfloat)w);
 }
 
-void Shader::SetShaderUniform_veci1(char * uniformName, int uniformValue)
+void Shader::SetShaderUniform_veci1(const char * uniformName, int uniformValue)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform1i(uniformLocation, uniformValue);
 }
 
-void Shader::SetShaderUniform_veci2(char * uniformName, int x, int y)
+void Shader::SetShaderUniform_veci2(const char * uniformName, int x, int y)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform2i(uniformLocation, x, y);
 }
 
-void Shader::SetShaderUniform_veci3(char * uniformName, int x, int y, int z)
+void Shader::SetShaderUniform_veci3(const char * uniformName, int x, int y, int z)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform3i(uniformLocation, x, y, z);
 }
 
-void Shader::SetShaderUniform_veci4(char * uniformName, int x, int y, int z, int w)
+void Shader::SetShaderUniform_veci4(const char * uniformName, int x, int y, int z, int w)
 {
 	glUseProgram(shaderProgram);
 	int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);
 	glUniform4i(uniformLocation, x, y, z, w);
 }
 
-void Shader::SetShaderUniform_mat4fv(char * uniformName, glm::mat4 matrix, GLboolean toTranspose)
+void Shader::SetShaderUniform_mat4fv(const char * uniformName, glm::mat4 matrix, GLboolean toTranspose)
 {
 	glUseProgram(shaderProgram);
 	unsigned int uniformLocation = glGetUniformLocation(shaderProgram, uniformName);

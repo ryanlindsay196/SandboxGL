@@ -33,16 +33,16 @@ void PhysicsManager::Initialize(glm::vec3 regionBounds, glm::vec3 regionCount)
 void PhysicsManager::FixedUpdate(float gameTime)
 {
 	//TODO: Remove
-	float testTotalMomentum = 0;
+	//float testTotalMomentum = 0;
 	UpdatePhysicsRegions_RemoveNodes(gameTime);
 	for (int i = 0; i < rigidBodies.size(); i++)
 	{
-		testTotalMomentum += rigidBodies[i]->GetMomentumFloat();
+		//testTotalMomentum += rigidBodies[i]->GetMomentumFloat();
 		UpdatePhysicsRegions_AddNodes(rigidBodies[i], gameTime);
 		rigidBodies[i]->FixedUpdate(gameTime);
 	}
 	CheckCollisions(1, gameTime);
-	std::cout << testTotalMomentum << std::endl;
+	//std::cout << testTotalMomentum << std::endl;
 }
 
 //Loop through all regions. Add nodes to a region if they entered the region this frame

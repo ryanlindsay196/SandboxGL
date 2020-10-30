@@ -14,7 +14,7 @@ struct AngleAxis
 class MathHelperFunctions
 {
 public:
-	static glm::vec3 Rotation(glm::quat rotationQuat);
+	static glm::vec3 QuaternionToEulerAngles(glm::quat rotationQuat);
 	static glm::vec3 AngleAxisToEuler(glm::vec3 axis, float angle);
 	static AngleAxis EulerToAngleAxis(glm::vec3 eulers);
 };

@@ -27,10 +27,6 @@ public:
 	ModelData* LoadModelData(std::string hashID);
 	void LoadShaders();
 
-	void UpdateModels(float gameTime);
-
-	void RenderModels(LightManager* lightManager);
-
 	Model* GetModel(int index);
 
 	unsigned int LoadedModelsCount();

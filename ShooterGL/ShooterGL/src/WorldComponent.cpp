@@ -15,7 +15,7 @@ void WorldComponent::Initialize()
 void WorldComponent::Update(float gameTime)
 {
 	//Set yaw, pitch, and roll based on the rotationQuat
-	SetEulerAngles(MathHelperFunctions::Rotation(rotationQuat));
+	SetEulerAngles(MathHelperFunctions::QuaternionToEulerAngles(rotationQuat));
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -30,11 +30,6 @@ glm::mat4 WorldComponent::GetOffsetTransform()
 void WorldComponent::CalculateTransform()
 {
 	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
-
-	//if (componentParent != nullptr)
-	//{
-	//	offsetTransform = componentParent->GetTransform() * offsetTransform;
-	//}
 }
 
 void WorldComponent::SetTransform(glm::mat4 newTransform)
@@ -67,15 +62,6 @@ void WorldComponent::SetEulerAngles(glm::vec3 newEulers)
 	pitch = newEulers.x;
 	yaw = newEulers.y;
 	roll = newEulers.z;
-
-	//if (componentParent != nullptr)
-	//{
-	//	pitch += componentParent->GetEulerAngles().x;
-	//	yaw += componentParent->GetEulerAngles().y;
-	//	roll += componentParent->GetEulerAngles().z;
-	//}
-	//rotationQuat = componentParent->GetRotation();
-	//rotationQuat = glm::quat(0, 0, 0, 1);
 	//rotationQuat = glm::toQuat(glm::orientate3(glm::vec3(glm::radians(-newEulers.z), glm::radians(newEulers.x), glm::radians(-newEulers.y))));
 }
 

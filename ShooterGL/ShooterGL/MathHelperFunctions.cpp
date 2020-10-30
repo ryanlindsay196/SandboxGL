@@ -1,7 +1,7 @@
 #include "MathHelperFunctions.h"
 #include <algorithm>
 
-glm::vec3 MathHelperFunctions::Rotation(glm::quat rotationQuat)
+glm::vec3 MathHelperFunctions::QuaternionToEulerAngles(glm::quat rotationQuat)
 {
 	glm::vec3 angles;
 

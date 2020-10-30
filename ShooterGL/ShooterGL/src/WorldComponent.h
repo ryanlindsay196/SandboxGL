@@ -7,7 +7,7 @@ protected:
 	glm::mat4 offsetTransform;
 
 	glm::quat rotationQuat;
-	glm::mat4 positionOffset, rotationOffset, scaleOffset;
+	glm::mat4 positionOffset, scaleOffset;
 	glm::vec3 direction;
 	float yaw, pitch, roll;
 private:

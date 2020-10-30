@@ -76,7 +76,7 @@ void Entity::Translate(glm::vec3 translateBy)
 
 void Entity::Rotate(glm::vec3 rotationAxis, float rotationAngle)
 {
-	rotationQuat += glm::angleAxis(rotationAngle, rotationAxis);
+	rotationQuat *= glm::angleAxis(rotationAngle, rotationAxis);
 	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
 }
 

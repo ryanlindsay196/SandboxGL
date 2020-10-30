@@ -36,7 +36,6 @@ Model::~Model()
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath)
 {
 	animationIndex = 0;
-	//yaw = -90;
 	m_textureManager = objectManager->textureManager;
 	m_objectManager = objectManager;
 
@@ -90,6 +89,7 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 
 	if (!rootNode)
 		rootNode = new Node();
+	//m_meshes.resize(scene->mNumMeshes);
 	//process ASSIMP's root node recursively
 	ProcessNode(scene->mRootNode, scene, materialPath, rootNode, nullptr);
 
@@ -112,7 +112,13 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
 		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
 	);
-
+	//currentNode->transform = glm::mat4(node->mTransformation.a1, node->mTransformation.a2, node->mTransformation.c3, node->mTransformation.a4,
+	//	node->mTransformation.b1, node->mTransformation.b2, node->mTransformation.b3, node->mTransformation.b4,
+	//	node->mTransformation.c1, node->mTransformation.c2, node->mTransformation.c3, node->mTransformation.c4,
+	//	node->mTransformation.d1, node->mTransformation.d2, node->mTransformation.d3, node->mTransformation.d4
+	//);
+	//if (parentNode != nullptr)
+	//	currentNode->transform = parentNode->transform * currentNode->transform;
 	currentNode->parent = parentNode;
 	//process each mesh located at the current node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -123,7 +129,10 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		m_meshes.push_back(ProcessMesh(mesh, (char*)materialPath.c_str(), node));
 		//TODO: Remove
 		m_meshes[m_meshes.size() - 1].SetTransform(currentNode->transform);
-		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
+		//if(boneMap.find(currentNode->name) != boneMap.end())
+		//	m_meshes[m_meshes.size() - 1].SetTransform(boneMap[currentNode->name].GetOffsetTransform());
+		//m_meshes[m_meshes.size() - 1].SetTransform(currentNode->transform);
+		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 
 	}
@@ -169,16 +178,18 @@ void Model::Update(float gameTime)
 
 void Model::Render(LightManager* lightManager)
 {
+
 	//TODO: Check why the first condition (i < 1) is here
-	for (int i = 0; i < 1 && i < lightManager->TotalLights(); i++)
+	for (unsigned int i = 0; i < 1 && i < lightManager->TotalLights(); i++)
 	{
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].position")).c_str(), lightManager->GetLight(i)->componentParent->GetTranslationReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].ambient")).c_str(), lightManager->GetLight(i)->GetAmbientReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].diffuse")).c_str(), lightManager->GetLight(i)->GetDiffuseReference());
-		m_meshes[0].shader->SetShaderUniform_vec3((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].specular")).c_str(), lightManager->GetLight(i)->GetSpecularReference());
-		m_meshes[0].shader->SetShaderUniform_vec1((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].constant")).c_str(), lightManager->GetLight(i)->GetConstantReference());
-		m_meshes[0].shader->SetShaderUniform_vec1((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].linear")).c_str(), lightManager->GetLight(i)->GetLinearReference());
-		m_meshes[0].shader->SetShaderUniform_vec1((char*)(std::string("pointLights[") + std::to_string(i) + std::string("].quadratic")).c_str(), lightManager->GetLight(i)->GetQuadraticReference());
+		std::string lightShaderHandle = std::string("pointLights[") + std::to_string(i) + std::string("].");
+		m_meshes[0].shader->SetShaderUniform_vec3((std::string(lightShaderHandle + "position")).c_str(), lightManager->GetLight(i)->componentParent->GetTranslationReference());
+		m_meshes[0].shader->SetShaderUniform_vec3((std::string(lightShaderHandle + "ambient")).c_str(), lightManager->GetLight(i)->GetAmbientReference());
+		m_meshes[0].shader->SetShaderUniform_vec3((std::string(lightShaderHandle + "diffuse")).c_str(), lightManager->GetLight(i)->GetDiffuseReference());
+		m_meshes[0].shader->SetShaderUniform_vec3((std::string(lightShaderHandle + "specular")).c_str(), lightManager->GetLight(i)->GetSpecularReference());
+		m_meshes[0].shader->SetShaderUniform_vec1((std::string(lightShaderHandle + "constant")).c_str(), lightManager->GetLight(i)->GetConstantReference());
+		m_meshes[0].shader->SetShaderUniform_vec1((std::string(lightShaderHandle + "linear")).c_str(), lightManager->GetLight(i)->GetLinearReference());
+		m_meshes[0].shader->SetShaderUniform_vec1((std::string(lightShaderHandle + "quadratic")).c_str(), lightManager->GetLight(i)->GetQuadraticReference());
 
 	}
 
@@ -195,8 +206,6 @@ void Model::Render(LightManager* lightManager)
 
 	for (auto it : boneMap)
 	{
-		//TODO: Check if this messes up bone transformations, thus deforming animated meshes
-		//boneMap[it.first].CalculateTransform();
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation, GL_FALSE);
 	}
@@ -207,7 +216,8 @@ void Model::Render(LightManager* lightManager)
 		mesh.shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
 		if (componentParent != nullptr)
 		{
-			mesh.shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * mesh.GetOffsetTransform(), GL_FALSE);
+			mesh.shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * (mesh.GetOffsetTransform()), GL_FALSE);
+			//mesh.shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform, GL_FALSE);
 		}
 		else
 		{

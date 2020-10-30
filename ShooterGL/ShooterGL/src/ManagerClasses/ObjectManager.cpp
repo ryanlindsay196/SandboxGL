@@ -22,7 +22,8 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	//lightPos = glm::vec3(2, 1, 10);
 
 	//TODO: Load fixedUpdateTime and other variables (To Be Determined) from a project settings file
-	//Set to 30 fps
+	//30 fps = 2 / 60
+	//60 fps = 1 / 60
 	fixedUpdateMaxTime = 2.f / 60.f;
 
 	entityManager = new EntityManager();
@@ -36,79 +37,14 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	
 	lightManager->Initialize();
 	
-	//lightManager->AddLight(glm::vec3(0), glm::vec3(0, 1, 1), 2.f, glm::vec3(1));
-	
 	controllerManager->Initialize(window);
 	entityManager->Initialize(this);
 	modelManager->Initialize(this);
 	cameraManager->Initialize(this);
-	//shaderManager->Initialize();//this function doesn't exist yet
 
-	//lightManager->AddLight(glm::vec3())
-
-	//TODO: Instantiate entities using entity properties loaded from each individual entity file
-	//entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 2), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
-	//cameraManager->CreateCamera(entityManager->GetEntity(0));
-	//entityManager->GetEntity(0)->AddComponent(controllerManager->CreateController(entityManager->GetEntity(0)));
-	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.f, 1.f, 1.f));
-	//
-	//entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1, 1, 1), nullptr);
-	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(.1f, .1f, .1f));
-	//entityManager->GetEntity(1)->AddComponent(lightManager->AddLight(glm::vec3(0), glm::vec3(1, 0, 0), 0.f, glm::vec3(1)));
-	//entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));
-	
 	physicsManager->Initialize(glm::vec3(24, 24, 24), glm::vec3(1, 1, 1));
 	entityManager->LoadScene("Resources/Scenes/Test2.scene");
 	
-	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(1.2f, 1.2f, 1.2f));
-	//entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(0));
-
-	//TODO: Make models that are children of an entity rotate with that entity
-	
-	//entityManager->InstantiateEntity(EntityManager::EntityProperties(), glm::vec3(0, -0.f, 0), glm::vec3(1, 0, 0), 0.0f, glm::vec3(15, 1, 1), nullptr);
-	//modelManager->LoadModel(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), 0.0f, glm::vec3(0.f, 0.f, 0.f));
-	//entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(1));
-
-
-	//move model transformations by entity transformations
-#pragma region Load floor
-
-
-	//Makeshift floor
-	//modelManager->LoadModel(glm::vec3(-1, -1, -1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(-1, -1, 0), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(-1, -1, 1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(0, -1, -1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(0, -1, 0), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(0, -1, 1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(1, -1, -1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(1, -1, 0), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(1, -1, 1), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(-1, -1, 2), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(0, -1, 2), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(1, -1, 2), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(-1, -1, 3), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(0, -1, 3), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(1, -1, 3), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(-1, -1, 4), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(0, -1, 4), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(1, -1, 4), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(-1, -1, 5), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(0, -1, 5), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(1, -1, 5), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(-1, -1, 6), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(0, -1, 6), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-	//modelManager->LoadModel(glm::vec3(1, -1, 6), glm::vec3(0, 0, 1), glm::radians(0.0f), glm::vec3(1.f, 1.f, 1.f));
-
-	//for(unsigned int i = 1; i < modelManager->LoadedModelsCount(); i++)
-	//	entityManager->GetEntity(1)->AddComponent(modelManager->GetModel(i));
-#pragma endregion
-	//particleEmitter = new ParticleEmitter();
-	//particleEmitter->Initialize(this, (char*)"Resources/ParticleSystems/ParticleDefault.part");
-	//entityManager->GetEntity(1)->AddComponent(particleEmitter);
-	//tempEmitter->Initialize(this, (char*)"Resources/PartycleSystems/DefaultParticle.part");
-	//entityManager->GetEntity(3)->AddComponent(tempEmitter);
-
 	modelManager->LoadShaders();
 }
 

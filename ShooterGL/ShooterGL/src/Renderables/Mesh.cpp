@@ -23,20 +23,21 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 
 	m_materialPath = materialPath;
 	parentMesh = newParent;
-	yaw = -90;
 	textureManager = objectManager->textureManager;
 	m_objectManager = objectManager;
 	m_meshData = meshData;
 
-	scaleOffset = glm::mat4(1);
-	//TODO: Delete rotationQuat?
-	rotationQuat = glm::quat();
-	positionOffset = glm::mat4(1);
+	//scaleOffset = glm::mat4(1);
+	////TODO: Delete rotationQuat?
+	//rotationQuat = glm::quat();
+	//positionOffset = glm::mat4(1);
+	//
+	//offsetTransform = glm::mat4(1);
 
-	offsetTransform = glm::mat4(1);
-
+	//Handle edge case where mesh already loaded vertices
 	if (meshData->vertices.size() > 0)
 		return;
+
 	// walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -144,16 +145,13 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 		{
 			BoneIndex = numBones;
 			numBones++;
-			BoneData bd;
-			bd.boneID = BoneIndex;
-			std::pair<std::string, BoneData> boneMapEntry = std::pair<std::string, BoneData>(BoneName, bd);
+			std::pair<std::string, BoneData> boneMapEntry(BoneName, BoneData(BoneIndex));
 			boneMap.insert(boneMapEntry);
 		}
 		//else
 		//	BoneIndex = boneMap[BoneName].boneID;
 
 		//TODO: Move this into the if statement above?
-		boneMap[BoneName].boneID = BoneIndex;
 		boneMap[BoneName].Initialize();
 		boneMap[BoneName].SetTransform(glm::mat4(
 			mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
@@ -161,8 +159,7 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
 			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
 		));
-		//boneMap[BoneName].SetTransform(glm::translate(boneMap[BoneName].GetOffsetTransform(), glm::vec3(3,0,0)));
-		//boneMap[BoneName].SetTransform(glm::mat4(0));
+		
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 		{
 			//unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + mesh->mBones[i]->mWeights[j].mVertexId;
@@ -185,6 +182,7 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 	SetupMesh();
 }
 
+//If mesh data has been loaded by another mesh
 Mesh::Mesh(ObjectManager * objectManager, char * materialPath, WorldComponent * newParent, MeshData * meshData)
 {
 	m_materialPath = materialPath;
@@ -204,11 +202,6 @@ Mesh::Mesh(ObjectManager * objectManager, char * materialPath, WorldComponent * 
 	if (meshData->vertices.size() > 0)
 		return;
 
-}
-
-void Mesh::AddNode(aiNode * node, const aiScene* scene, aiNode* oldNode)
-{
-	//node->addChildren()
 }
 
 void Mesh::LoadShaders()
@@ -241,6 +234,7 @@ Shader * Mesh::GetShader()
 
 void Mesh::Render()
 {
+	//CalculateTransform();
 	shader->UseShader();
 	shader->BindTextures();
 	glBindVertexArray(m_meshData->VAO);

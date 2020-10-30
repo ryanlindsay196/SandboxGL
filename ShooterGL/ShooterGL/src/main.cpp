@@ -67,6 +67,7 @@ int main()
 		glfwPollEvents();
 
 		lastFrame = currentFrame;
+		std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
 	}
 #pragma endregion
 

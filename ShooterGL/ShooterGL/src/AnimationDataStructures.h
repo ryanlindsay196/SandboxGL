@@ -5,7 +5,12 @@
 class BoneData : public WorldComponent
 {
 public:
-	unsigned int boneID;
+	BoneData() : boneID(0) {}
+	BoneData(const unsigned int newID) : boneID(newID) {
+	}
+	BoneData(const BoneData& other) : boneID(other.boneID) {
+	}
+	const unsigned int boneID;
 	glm::mat4 finalTransformation;
 };
 
