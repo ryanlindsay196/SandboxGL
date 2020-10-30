@@ -62,8 +62,8 @@ public:
 		return m;
 	}
 
-	unsigned int FindPosition(float animationTime, std::string nodeName);
-	unsigned int FindRotation(float animationTime, const std::string nodeName);
-	unsigned int FindScaling(float animationTime, const std::string nodeName);
+	unsigned int FindPosition(float animationTime, BoneKeyFrames* currentBoneKeyFrames);
+	unsigned int FindRotation(float animationTime, BoneKeyFrames* currentBoneKeyFrames);
+	unsigned int FindScaling(float animationTime, BoneKeyFrames* currentBoneKeyFrames);
 	//void ReadNodeHierarchy(float animationTime, const aiNode* node, const glm::mat4& ParentTransform);
 };
