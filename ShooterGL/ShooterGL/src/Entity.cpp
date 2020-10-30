@@ -17,6 +17,7 @@ Entity::~Entity()
 void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, Entity * newParent)
 {
 	SetPosition(position);
+	rotationQuat = glm::quat(0,0,0,1);
 	Rotate(rotationAxis, rotationAngle);
 	SetScale(scale);
 	if(newParent != nullptr)
