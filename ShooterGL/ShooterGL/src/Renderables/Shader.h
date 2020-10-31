@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <glm.hpp>
+#include <memory>
 class Texture;
 class TextureManager;
 class ObjectManager;
@@ -18,7 +19,7 @@ public:
 	void SetVertexShader(char* vertexPath);
 	void SetFragmentShader(char* fragmentPath);
 
-	std::vector<Texture*> GetTextures();
+	std::vector<std::shared_ptr<Texture>> GetTextures();
 
 	unsigned int GetShaderProgram();
 	void UseShader();
@@ -48,6 +49,6 @@ private:
 
 	unsigned int shaderProgram;
 
-	std::vector<Texture*> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 	std::vector<std::string> textureUniforms;
 };

@@ -38,7 +38,7 @@ void Shader::Initialize(ObjectManager * in_objectManager, char* vertexPath, char
 	}
 	glUseProgram(shaderProgram);
 
-	GLint i;
+	//GLint i;
 	GLint count;
 
 	GLint size; // size of the variable
@@ -284,7 +284,7 @@ void Shader::SetFragmentShader(char* fragmentPath)
 	}
 }
 
-std::vector<Texture*> Shader::GetTextures()
+std::vector<std::shared_ptr<Texture>> Shader::GetTextures()
 {
 	return textures;
 }
