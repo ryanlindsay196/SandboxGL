@@ -27,10 +27,6 @@ Model::Model()
 
 Model::~Model()
 {
-	//for (unsigned int i = 0; i < m_meshes.size(); i++)
-	//	delete(&m_meshes[i]);
-	//glDeleteVertexArrays(1, &VAO);
-	//glDeleteBuffers(1, &VBO);
 }
 
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath)
@@ -69,8 +65,6 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	positionOffset = glm::translate(positionOffset, initialPositionOffset);
 	offsetTransform = positionOffset * glm::toMat4(rotationQuat) * scaleOffset;
 
-	//if (componentParent != nullptr)
-	//	offsetTransform *= componentParent->GetTransform();
 }
 
 void Model::LoadModel(std::string modelPath, std::string materialPath)
@@ -83,9 +77,6 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
 		return;
 	}
-	
-	//retrieve the directory path of the filepath
-	directory = modelPath.substr(0, modelPath.find_last_of('/'));
 
 	if (!rootNode)
 		rootNode = new Node();
@@ -199,11 +190,8 @@ void Model::Render(LightManager* lightManager)
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1), GL_FALSE);
 
 	if (animations.size() > 0)
-		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, glm::mat4(1), boneMap);
+		//animations[animationIndex].ReadNodeHierarchy(rootNode, glm::mat4(1), boneMap);
 		animations[animationIndex].ReadNodeHierarchy(rootNode, rootNode->transform, boneMap);
-	//tempAnimTime += 1.f;
-	//if (tempAnimTime > 40)
-	//	tempAnimTime = 0;
 
 	for (auto it : boneMap)
 	{

@@ -31,17 +31,11 @@ struct Vertex {
 class Mesh : public WorldComponent {
 public:
 	//mesh data
-	//std::vector<Vertex> vertices;
-	//std::vector<unsigned int> indices;
 	std::shared_ptr<Shader> shader;
-	//unsigned int VAO;
 
-	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
 	Mesh(ObjectManager* objectManager, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones);
 	Mesh(ObjectManager* objectManager, char* materialPath, WorldComponent* newParent, MeshData* meshData);
-	
-	//void AddNode(aiNode* node, const aiScene* scene, aiNode* oldNode);
-	//void ReadMaterial(char* materialPath);
+
 	void LoadShaders();
 	void SetDefaultShaders();
 	void SetShaders(char* materialPath);
@@ -54,7 +48,6 @@ public:
 	WorldComponent* parentMesh;
 
 private:
-	//unsigned int VBO, EBO;
 	TextureManager* textureManager;
 	ObjectManager* m_objectManager;
 	std::string m_materialPath;

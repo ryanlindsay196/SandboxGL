@@ -1,6 +1,7 @@
 #pragma once
 #include "../WorldComponent.h"
 #include <unordered_map>
+#include <memory>
 
 class Animation;
 class Shader;
@@ -19,7 +20,7 @@ class BoneData;
 class Model : public WorldComponent
 {
 public:
-	std::string directory;
+	//std::string directory;
 
 	Model();
 	~Model();
@@ -40,7 +41,7 @@ public:
 private:
 	ObjectManager* m_objectManager;
 	TextureManager* m_textureManager;
-	ModelData* m_modelData;
+	std::shared_ptr<ModelData> m_modelData;
 	std::vector<Mesh> m_meshes;
 	Node* rootNode;
 
@@ -50,9 +51,5 @@ private:
 	unsigned int totalBones;
 
 	std::unordered_map<std::string, BoneData> boneMap;
-
-
-	//TODO: Delete
-	float tempAnimTime = 0;
 };
 

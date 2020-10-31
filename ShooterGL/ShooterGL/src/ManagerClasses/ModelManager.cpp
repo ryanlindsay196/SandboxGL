@@ -12,7 +12,6 @@ ModelManager::~ModelManager()
 {
 	for (unsigned int i = 0; i < models.size(); i++)
 		delete models[i];
-	delete(m_textureManager);
 }
 
 void ModelManager::Initialize(ObjectManager * objectManager)
@@ -29,14 +28,14 @@ Model* ModelManager::LoadModel(char * modelPath, std::string materialPath, glm::
 	return models[models.size() - 1];
 }
 
-ModelData* ModelManager::LoadModelData(std::string hashID)
+std::shared_ptr<ModelData> ModelManager::LoadModelData(std::string hashID)
 {
 	auto modelData = modelDataMap.find(hashID);
 	if (modelData == modelDataMap.end())
 	{
-		ModelData* newModelData = new ModelData();
+		std::shared_ptr<ModelData> newModelData = std::make_shared<ModelData>();
 
-		std::pair<std::string, ModelData*> newModelDataEntry(hashID, newModelData);
+		std::pair<std::string, std::shared_ptr<ModelData>> newModelDataEntry(hashID, newModelData);
 		modelDataMap.insert(newModelDataEntry);
 
 		return newModelDataEntry.second;

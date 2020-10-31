@@ -3,6 +3,7 @@
 #include <vector>
 #include "Renderables/Model.h"
 #include <unordered_map>
+#include <memory>
 
 class TextureManager;
 class ObjectManager;
@@ -11,7 +12,7 @@ class ModelManager
 {
 private:
 	std::vector<Model*> models;
-	std::unordered_map<std::string, ModelData*> modelDataMap;
+	std::unordered_map<std::string, std::shared_ptr<ModelData>> modelDataMap;
 
 	TextureManager* m_textureManager;
 	ObjectManager* m_objectManager;
@@ -23,7 +24,7 @@ public:
 	void Initialize(ObjectManager * objectManager);
 
 	Model* LoadModel(char* modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
-	ModelData* LoadModelData(std::string hashID);
+	std::shared_ptr<ModelData> LoadModelData(std::string hashID);
 	void LoadShaders();
 
 	Model* GetModel(int index);
