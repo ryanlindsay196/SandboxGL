@@ -79,31 +79,18 @@ public://TODO: Implement
 		}
 	};
 
-	//TODO: Delete
-	//struct PointLightData
-	//{
-	//
-	//	glm::vec3 ambient;
-	//	glm::vec3 specular;
-	//	glm::vec3 diffuse;
-	//	
-	//	glm::vec3 position;
-	//	glm::vec3 rotationAxis;
-	//	float rotationAngle;
-	//	glm::vec3 scale;
-	//};
-private://TODO: Implement
+private:
 	//The string is the file path of the entity
 	std::unordered_map<std::string, EntityProperties*> entityPropertiesMap;
 	std::vector<Entity*> entities;
 public:
+	//TODO: Implement. This will be a linked list with a pointer to an entityNode. Each entityNode has a pointer to the next entityNode, and an entity
 	std::unordered_map<std::string, Entity*> entitiesByTag;
 
 	void Initialize(ObjectManager* in_objectManager);
 	void LoadScene(std::string scenePath);
 	EntityProperties* LoadEntityFromFile(std::string prefabPath);
 	EntityProperties* LoadProperties(std::string prefabPath);
-	//LoadEntitiesFromSceneFile(char* entityName);//Instantiate entities from loaded entity properties
 	//Scene file has prefab ids, and transform data;
 	void InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 angleAxis, float rotationAngle, glm::vec3 startScale, Entity* parent);
 
@@ -111,7 +98,4 @@ public:
 	void Render(LightManager* lightManager);
 
 	Entity* GetEntity(int i);
-
-	//ModelData ReadModelData(std::vector<std::string> transformDataString);
-	//PointLightData ReadPointLightData(std::vector<std::string> dataString);
 };

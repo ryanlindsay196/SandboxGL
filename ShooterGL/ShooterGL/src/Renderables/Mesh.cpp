@@ -147,18 +147,14 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 			numBones++;
 			std::pair<std::string, BoneData> boneMapEntry(BoneName, BoneData(BoneIndex));
 			boneMap.insert(boneMapEntry);
+			boneMap[BoneName].Initialize();
+			boneMap[BoneName].SetTransform(glm::mat4(
+				mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
+				mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
+				mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
+				mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
+			));
 		}
-		//else
-		//	BoneIndex = boneMap[BoneName].boneID;
-
-		//TODO: Move this into the if statement above?
-		boneMap[BoneName].Initialize();
-		boneMap[BoneName].SetTransform(glm::mat4(
-			mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
-			mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
-			mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
-			mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
-		));
 		
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 		{

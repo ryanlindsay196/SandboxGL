@@ -18,6 +18,7 @@
 
 void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 {
+
 	m_GlobalInverseTransform = glm::mat4(
 		scene->mRootNode->mTransformation.a1, scene->mRootNode->mTransformation.b1, scene->mRootNode->mTransformation.c1, scene->mRootNode->mTransformation.d1,
 		scene->mRootNode->mTransformation.a2, scene->mRootNode->mTransformation.b2, scene->mRootNode->mTransformation.c2, scene->mRootNode->mTransformation.d2,
@@ -25,7 +26,8 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 		scene->mRootNode->mTransformation.a4, scene->mRootNode->mTransformation.b4, scene->mRootNode->mTransformation.c4, scene->mRootNode->mTransformation.d4);
 
 	m_GlobalInverseTransform = glm::inverse(m_GlobalInverseTransform);
-	animation = new aiAnimation(*scene->mAnimations[animationIndex]);
+	aiAnimation* animation = new aiAnimation(*scene->mAnimations[animationIndex]);
+	ticksPerSecond = animation->mTicksPerSecond;
 
 	boneKeyMap.reserve(animation->mNumChannels);
 	for (unsigned int i = 0; i < animation->mNumChannels; i++)
@@ -62,7 +64,7 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 	}
 }
 
-void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
+void Animation::ReadNodeHierarchy(Node* node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap)
 {
 	std::string NodeName(node->name);
 	glm::mat4 NodeTransformation = node->transform;
@@ -71,17 +73,17 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 	if(pBoneKeyFrame != boneKeyMap.end()) {
 		// Interpolate scaling and generate scaling transformation matrix
 		glm::vec3 Scaling;
-		CalculateIntorpolatedScaling(Scaling, animationTime, NodeName);
+		CalculateIntorpolatedScaling(Scaling, NodeName);
 		glm::mat4 ScalingM;
 		ScalingM = glm::scale(glm::mat4(1), glm::vec3(Scaling.x, Scaling.y, Scaling.z));
 		// Interpolate rotation and generate rotation transformation matrix
 		glm::quat RotationQ;
-		CalculateInterpolatedRotation(RotationQ, animationTime, NodeName);
+		CalculateInterpolatedRotation(RotationQ, NodeName);
 		glm::mat4 RotationM = glm::mat4(glm::toMat4(RotationQ));
 
 		// Interpolate translation and generate translation transformation matrix
 		glm::vec3 Translation;
-		CalculateInterpolatedPosition(Translation, animationTime, NodeName);
+		CalculateInterpolatedPosition(Translation, NodeName);
 		glm::mat4 TranslationM;
 		TranslationM = glm::translate(glm::mat4(1), glm::vec3(Translation.x, Translation.y, Translation.z));
 		// Combine the above transformations
@@ -94,11 +96,11 @@ void Animation::ReadNodeHierarchy(float animationTime, Node* node, const glm::ma
 	}
 
 	for (unsigned int i = 0; i < node->children.size(); i++) {
-		ReadNodeHierarchy(animationTime, &node->children[i], GlobalTransformation, boneMap);
+		ReadNodeHierarchy(&node->children[i], GlobalTransformation, boneMap);
 	}
 }
 
-void Animation::CalculateInterpolatedPosition(glm::vec3& out, float animationTime, const std::string nodeName)
+void Animation::CalculateInterpolatedPosition(glm::vec3& out, const std::string nodeName)
 {
 	BoneKeyFrames* currentBoneKeyFrames = &boneKeyMap[nodeName];
 	if (currentBoneKeyFrames->transformKeyFrames.size() == 1) {
@@ -106,11 +108,13 @@ void Animation::CalculateInterpolatedPosition(glm::vec3& out, float animationTim
 		return;
 	}
 
+	float globalAnimationTime = animationTime;
+
 	//If animationTime is outside the bounds of the animation timeline
 	if (currentBoneKeyFrames->transformKeyTimes[currentBoneKeyFrames->transformKeyTimes.size() - 1] < animationTime)
 		animationTime = currentBoneKeyFrames->transformKeyTimes[currentBoneKeyFrames->transformKeyTimes.size() - 1] - 0.0001f;
 
-	unsigned int PositionIndex = FindPosition(animationTime, currentBoneKeyFrames);
+	unsigned int PositionIndex = FindPosition(currentBoneKeyFrames);
 	unsigned int NextPositionIndex = (PositionIndex + 1);
 	assert(NextPositionIndex < currentBoneKeyFrames->transformKeyTimes.size());
 	float DeltaTime = (float)(currentBoneKeyFrames->transformKeyTimes[NextPositionIndex] - currentBoneKeyFrames->transformKeyTimes[PositionIndex]);
@@ -121,9 +125,11 @@ void Animation::CalculateInterpolatedPosition(glm::vec3& out, float animationTim
 	const glm::vec3& End = glm::vec3(currentBoneKeyFrames->transformKeyFrames[NextPositionIndex].x, currentBoneKeyFrames->transformKeyFrames[NextPositionIndex].y, currentBoneKeyFrames->transformKeyFrames[NextPositionIndex].z);
 	glm::vec3 Delta = End - Start;
 	out = Start + Factor * Delta;
+
+	std::swap(globalAnimationTime, animationTime);
 }
 
-void Animation::CalculateInterpolatedRotation(glm::quat& out, float animationTime, const std::string nodeName)
+void Animation::CalculateInterpolatedRotation(glm::quat& out, const std::string nodeName)
 {
 	BoneKeyFrames* currentBoneKeyFrames = &boneKeyMap[nodeName];
 	// we need at least two values to interpolate...
@@ -132,11 +138,13 @@ void Animation::CalculateInterpolatedRotation(glm::quat& out, float animationTim
 		return;
 	}
 
+	float globalAnimationTime = animationTime;
+
 	//If animationTime is after the last keyframe, take the last keyframe
 	if (currentBoneKeyFrames->rotationKeyTimes[currentBoneKeyFrames->rotationKeyTimes.size() - 1] < animationTime)
 		animationTime = currentBoneKeyFrames->rotationKeyTimes[currentBoneKeyFrames->rotationKeyTimes.size() - 1] - 0.0001f;
 
-	unsigned int RotationIndex = FindRotation(animationTime, currentBoneKeyFrames);
+	unsigned int RotationIndex = FindRotation(currentBoneKeyFrames);
 	unsigned int NextRotationIndex = (RotationIndex + 1);
 	assert(NextRotationIndex < currentBoneKeyFrames->rotationKeyFrames.size());
 	float DeltaTime = (float)(currentBoneKeyFrames->rotationKeyTimes[NextRotationIndex] - currentBoneKeyFrames->rotationKeyTimes[RotationIndex]);
@@ -146,9 +154,11 @@ void Animation::CalculateInterpolatedRotation(glm::quat& out, float animationTim
 	const glm::quat& EndRotationQ = glm::quat(currentBoneKeyFrames->rotationKeyFrames[NextRotationIndex].x, currentBoneKeyFrames->rotationKeyFrames[NextRotationIndex].y, currentBoneKeyFrames->rotationKeyFrames[NextRotationIndex].z, currentBoneKeyFrames->rotationKeyFrames[NextRotationIndex].w);
 	out = glm::slerp(StartRotationQ, EndRotationQ, Factor);
 	out = normalize(out);
+
+	std::swap(globalAnimationTime, animationTime);
 }
 
-void Animation::CalculateIntorpolatedScaling(glm::vec3& out, float animationTime, const std::string nodeName)
+void Animation::CalculateIntorpolatedScaling(glm::vec3& out, const std::string nodeName)
 {
 	BoneKeyFrames* currentBoneKeyFrames = &boneKeyMap[nodeName];
 	if (currentBoneKeyFrames->scaleKeyFrames.size() == 1) {
@@ -156,11 +166,13 @@ void Animation::CalculateIntorpolatedScaling(glm::vec3& out, float animationTime
 		return;
 	}
 
+	float globalAnimationTime = animationTime;
+
 	//If animationTime is after the last keyframe, take the last keyframe
 	if (currentBoneKeyFrames->scaleKeyTimes[currentBoneKeyFrames->scaleKeyTimes.size() - 1] < animationTime)
 		animationTime = currentBoneKeyFrames->scaleKeyTimes[currentBoneKeyFrames->scaleKeyTimes.size() - 1] - 0.0001f;
 
-	unsigned int ScalingIndex = FindScaling(animationTime, currentBoneKeyFrames);
+	unsigned int ScalingIndex = FindScaling(currentBoneKeyFrames);
 	unsigned int NextScalingIndex = (ScalingIndex + 1);
 	assert(NextScalingIndex < currentBoneKeyFrames->scaleKeyFrames.size());
 	float DeltaTime = (float)(currentBoneKeyFrames->scaleKeyTimes[NextScalingIndex] - currentBoneKeyFrames->scaleKeyTimes[ScalingIndex]);
@@ -170,9 +182,11 @@ void Animation::CalculateIntorpolatedScaling(glm::vec3& out, float animationTime
 	const glm::vec3& End = glm::vec3(currentBoneKeyFrames->scaleKeyFrames[NextScalingIndex].x, currentBoneKeyFrames->scaleKeyFrames[NextScalingIndex].y, currentBoneKeyFrames->scaleKeyFrames[NextScalingIndex].z);
 	glm::vec3 Delta = End - Start;
 	out = Start + Factor * Delta;
+
+	std::swap(globalAnimationTime, animationTime);
 }
 
-unsigned int Animation::FindPosition(float animationTime, BoneKeyFrames* currentBoneKeyFrames)
+unsigned int Animation::FindPosition(BoneKeyFrames* currentBoneKeyFrames)
 {
 	for (unsigned int i = currentBoneKeyFrames->lastPositionKeyFrame; i < currentBoneKeyFrames->transformKeyTimes.size() - 1; i += sgn(animationTime - currentBoneKeyFrames->transformKeyTimes[currentBoneKeyFrames->lastPositionKeyFrame])) {
 		if (animationTime < currentBoneKeyFrames->transformKeyTimes[i + 1] && animationTime >= currentBoneKeyFrames->transformKeyTimes[i]) {
@@ -187,7 +201,7 @@ unsigned int Animation::FindPosition(float animationTime, BoneKeyFrames* current
 	return 0;
 }
 
-unsigned int Animation::FindRotation(float animationTime, BoneKeyFrames* currentBoneKeyFrames)
+unsigned int Animation::FindRotation(BoneKeyFrames* currentBoneKeyFrames)
 {
 	assert(currentBoneKeyFrames->rotationKeyFrames.size() > 0);
 
@@ -204,7 +218,7 @@ unsigned int Animation::FindRotation(float animationTime, BoneKeyFrames* current
 	return 0;
 }
 
-unsigned int Animation::FindScaling(float animationTime, BoneKeyFrames* currentBoneKeyFrames)
+unsigned int Animation::FindScaling(BoneKeyFrames* currentBoneKeyFrames)
 {
 	assert(currentBoneKeyFrames->scaleKeyFrames.size() > 0);
 

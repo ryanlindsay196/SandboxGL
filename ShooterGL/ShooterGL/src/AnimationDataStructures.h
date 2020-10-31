@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../WorldComponent.h"
+#include "assimp/matrix4x4.h"
 
 class BoneData : public WorldComponent
 {
@@ -21,3 +22,5 @@ struct Node
 	Node* parent;
 	std::string name;
 };
+
+glm::mat4 AiMat4ToGlmMat4(aiMatrix4x4 aiMat4);

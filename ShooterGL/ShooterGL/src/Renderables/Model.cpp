@@ -107,16 +107,9 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 {
 	currentNode->name = node->mName.C_Str();
 
-	currentNode->transform = glm::mat4(node->mTransformation.a1, node->mTransformation.b1, node->mTransformation.c1, node->mTransformation.d1,
-		node->mTransformation.a2, node->mTransformation.b2, node->mTransformation.c2, node->mTransformation.d2,
-		node->mTransformation.a3, node->mTransformation.b3, node->mTransformation.c3, node->mTransformation.d3,
-		node->mTransformation.a4, node->mTransformation.b4, node->mTransformation.c4, node->mTransformation.d4
-	);
-	//currentNode->transform = glm::mat4(node->mTransformation.a1, node->mTransformation.a2, node->mTransformation.c3, node->mTransformation.a4,
-	//	node->mTransformation.b1, node->mTransformation.b2, node->mTransformation.b3, node->mTransformation.b4,
-	//	node->mTransformation.c1, node->mTransformation.c2, node->mTransformation.c3, node->mTransformation.c4,
-	//	node->mTransformation.d1, node->mTransformation.d2, node->mTransformation.d3, node->mTransformation.d4
-	//);
+	currentNode->transform = AiMat4ToGlmMat4(node->mTransformation);
+	
+	//currentNode->transform = glm::inverse(currentNode->transform);
 	//if (parentNode != nullptr)
 	//	currentNode->transform = parentNode->transform * currentNode->transform;
 	currentNode->parent = parentNode;
@@ -132,10 +125,16 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//if(boneMap.find(currentNode->name) != boneMap.end())
 		//	m_meshes[m_meshes.size() - 1].SetTransform(boneMap[currentNode->name].GetOffsetTransform());
 		//m_meshes[m_meshes.size() - 1].SetTransform(currentNode->transform);
-		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
+		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
+		//boneMap[mesh->mName.C_Str()].SetTransform(currentNode->transform);
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
-
+		
+		//if(m_meshes.size() == 1)
 	}
+	//if(m_meshes.size() == 1)
+	//	boneMap[currentNode->name].SetTransform(currentNode->transform);
+
+
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
@@ -174,6 +173,8 @@ Mesh * Model::GetMesh(unsigned int i)
 void Model::Update(float gameTime)
 {
 	WorldComponent::Update(gameTime);
+	if(animationIndex < animations.size())
+		animations[animationIndex].animationTime += animations[animationIndex].ticksPerSecond * gameTime;
 }
 
 void Model::Render(LightManager* lightManager)
@@ -198,9 +199,9 @@ void Model::Render(LightManager* lightManager)
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1), GL_FALSE);
 
 	if (animations.size() > 0)
-		animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, glm::mat4(1), boneMap);
-		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, rootNode->transform, boneMap);
-	tempAnimTime += 1.f;
+		//animations[animationIndex].ReadNodeHierarchy(tempAnimTime, rootNode, glm::mat4(1), boneMap);
+		animations[animationIndex].ReadNodeHierarchy(rootNode, rootNode->transform, boneMap);
+	//tempAnimTime += 1.f;
 	//if (tempAnimTime > 40)
 	//	tempAnimTime = 0;
 
