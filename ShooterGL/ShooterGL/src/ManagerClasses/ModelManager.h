@@ -22,7 +22,6 @@ public:
 
 	void Initialize(ObjectManager * objectManager);
 
-	Model* LoadModel(glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
 	Model* LoadModel(char* modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
 	ModelData* LoadModelData(std::string hashID);
 	void LoadShaders();
