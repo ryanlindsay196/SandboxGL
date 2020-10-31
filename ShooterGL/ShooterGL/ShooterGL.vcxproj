@@ -132,7 +132,9 @@
     <ClCompile Include="Dependencies\Glad\src\glad.c" />
     <ClCompile Include="Dependencies\stb_image.cpp" />
     <ClCompile Include="MathHelperFunctions.cpp" />
+    <ClCompile Include="src\AnimationDataStructures.cpp" />
     <ClCompile Include="src\FileReader.cpp" />
+    <ClCompile Include="src\ManagerClasses\AIManager.cpp" />
     <ClCompile Include="src\ManagerClasses\PhysicsManager.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
     <ClCompile Include="src\Animation.cpp" />
@@ -203,6 +205,7 @@
     <ClInclude Include="Dependencies\stb_image.h" />
     <ClInclude Include="MathHelperFunctions.h" />
     <ClInclude Include="src\FileReader.h" />
+    <ClInclude Include="src\ManagerClasses\AIManager.h" />
     <ClInclude Include="src\ManagerClasses\PhysicsManager.h" />
     <ClInclude Include="src\RigidBody.h" />
     <ClInclude Include="src\Animation.h" />
