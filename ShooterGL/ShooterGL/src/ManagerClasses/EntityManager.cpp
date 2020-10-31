@@ -19,6 +19,10 @@ void EntityManager::Initialize(ObjectManager * in_objectManager)
 
 void EntityManager::LoadScene(std::string scenePath)
 {
+	for (auto entity : entities)
+	{
+		delete(entity);
+	}
 	std::ifstream sceneFile(scenePath);
 	std::string line;
 	while (getline(sceneFile, line))

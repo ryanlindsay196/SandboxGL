@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class EntityManager;
 class ModelManager;
@@ -8,8 +9,6 @@ class ControllerManager;
 class LightManager;
 class ShaderManager;
 class PhysicsManager;
-//TODO: Remove this
-class ParticleEmitter;
 
 //TODO: include all managers
 struct GLFWwindow;
@@ -29,8 +28,7 @@ public:
 	void Initialize(GLFWwindow* window);
 	void Update(float gameTime);
 	void Render();
-
-	//ParticleEmitter* tempEmitter;
+	void LoadScene(std::string scenePath);
 private:
 	float fixedUpdateTimer, fixedUpdateMaxTime;
 };

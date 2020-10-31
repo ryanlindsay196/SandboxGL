@@ -10,7 +10,6 @@ class LightManager;
 class Entity
 {
 public:
-	//Entity();
 	~Entity();
 
 	void Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, Entity* newParent);
@@ -25,7 +24,6 @@ public:
 	void Scale(glm::vec3 scaleBy);
 
 	void SetPosition(glm::vec3 newPosition);
-	//void SetRotation(glm::vec3 newRotation);
 	void SetEulerAngles(glm::vec3 newEuler);
 	void SetScale(glm::vec3 newScale);
 
@@ -37,8 +35,6 @@ public:
 
 	glm::vec3& GetDirectionReference();
 	glm::vec3& GetTranslationReference();
-	//glm::vec3& GetRotationReference();
-	//glm::vec3& GetEulerAnglesReference();
 	glm::vec3& GetScaleReference();
 
 	glm::mat4 GetTransform();

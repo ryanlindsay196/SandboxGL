@@ -12,6 +12,7 @@
 #define M_PI   3.14159265358979323846264338327950288
 Entity::~Entity()
 {
+	
 }
 
 void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, Entity * newParent)

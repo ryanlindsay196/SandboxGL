@@ -65,6 +65,9 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+			objectManager->LoadScene("Resources/Scenes/Test2.scene");
+
 		lastFrame = currentFrame;
 		std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
 	}

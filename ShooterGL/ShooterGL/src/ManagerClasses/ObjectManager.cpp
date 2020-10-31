@@ -38,8 +38,9 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	cameraManager->Initialize(this);
 
 	physicsManager->Initialize(glm::vec3(24, 24, 24), glm::vec3(1, 1, 1));
-	entityManager->LoadScene("Resources/Scenes/Test2.scene");
 	
+	LoadScene("Resources/Scenes/Test2.scene");
+
 	modelManager->LoadShaders();
 }
 
@@ -58,4 +59,9 @@ void ObjectManager::Update(float gameTime)
 void ObjectManager::Render()
 {
 	entityManager->Render(lightManager);
+}
+
+void ObjectManager::LoadScene(std::string scenePath)
+{
+	entityManager->LoadScene(scenePath);
 }
