@@ -2,6 +2,7 @@
 #include <vector>
 #include "glm.hpp"
 #include "../WorldComponent.h"
+#include <memory>
 class Shader;
 class ObjectManager;
 class ShaderManager;
@@ -62,7 +63,7 @@ private:
 	unsigned int lastUsedParticle = 0;
 	unsigned int FirstUnusedParticle();
 	void RespawnParticle(Particle *particle);
-	Shader* m_shader;
+	std::shared_ptr<Shader> m_shader;
 	ObjectManager* m_objectManager;
 	float timeUntilSpawn;
 };

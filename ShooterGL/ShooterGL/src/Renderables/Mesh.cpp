@@ -223,7 +223,7 @@ void Mesh::AttachMeshData(MeshData * meshData)
 	m_meshData = meshData;
 }
 
-Shader * Mesh::GetShader()
+std::shared_ptr<Shader> Mesh::GetShader()
 {
 	return shader;
 }

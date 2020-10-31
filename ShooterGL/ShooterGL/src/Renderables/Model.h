@@ -1,8 +1,6 @@
 #pragma once
-//#include "Component.h"
 #include "../WorldComponent.h"
 #include <unordered_map>
-//#include "assimp/scene.h"
 
 class Animation;
 class Shader;
@@ -30,11 +28,9 @@ public:
 	void LoadModel(std::string modelPath, std::string materialPath);
 	void ProcessNode(aiNode* node, const aiScene* scene, std::string materialPath, Node* currentNode, Node* parentNode);
 	Mesh ProcessMesh(aiMesh* mesh, char* materialPath, const aiNode* node);
-	//vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 	
 	void LoadShaders();
 
-	//Shader* GetShader();
 	unsigned int GetLoadedMeshesCount();
 	Mesh* GetMesh(unsigned int i);
 

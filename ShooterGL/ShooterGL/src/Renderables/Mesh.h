@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include "../WorldComponent.h"
 #include "Animation.h"
+#include <memory>
 
 class ObjectManager;
 class ModelData;
@@ -32,7 +33,7 @@ public:
 	//mesh data
 	//std::vector<Vertex> vertices;
 	//std::vector<unsigned int> indices;
-	Shader* shader;
+	std::shared_ptr<Shader> shader;
 	//unsigned int VAO;
 
 	//Mesh(ObjectManager* objectManager, std::vector<Vertex> vertices, std::vector<unsigned int> indices, char* materialPath, WorldComponent* newParent);
@@ -45,7 +46,7 @@ public:
 	void SetDefaultShaders();
 	void SetShaders(char* materialPath);
 	void AttachMeshData(MeshData* meshData);
-	Shader* GetShader();
+	std::shared_ptr<Shader> GetShader();
 	void Render();
 	void SetupMesh();
 	virtual void Update(float gameTime) override;
