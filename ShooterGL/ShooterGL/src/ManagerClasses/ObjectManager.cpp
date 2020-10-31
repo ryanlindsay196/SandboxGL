@@ -12,15 +12,10 @@
 #include "ShaderManager.h"
 #include "PhysicsManager.h"
 
-//TODO: Remove this
-#include "../Renderables/ParticleEmitter.h"
-
 #include <iostream>
 
 void ObjectManager::Initialize(GLFWwindow* window)
 {
-	//lightPos = glm::vec3(2, 1, 10);
-
 	//TODO: Load fixedUpdateTime and other variables (To Be Determined) from a project settings file
 	//30 fps = 2 / 60
 	//60 fps = 1 / 60
@@ -51,7 +46,6 @@ void ObjectManager::Initialize(GLFWwindow* window)
 void ObjectManager::Update(float gameTime)
 {
 	fixedUpdateTimer += gameTime;
-	//modelManager->UpdateModels(gameTime);
 	entityManager->Update(gameTime);
 	if (fixedUpdateTimer >= fixedUpdateMaxTime)
 	{
@@ -63,25 +57,5 @@ void ObjectManager::Update(float gameTime)
 
 void ObjectManager::Render()
 {
-	//entityManager->GetEntity(0)->SetTranslation(lightPos);
-	//TODO: make model rotate with parent entity
-	//TODO: Make the rotate function and other transformation functions use mat4
-	//entityManager->entities[1]->Rotate(glm::vec3(0, 1, 0));
-	//lightPos = entityManager->entities[0]->GetTranslation();
-
-	//entityManager->entities[0]->SetTranslation(entityManager->entities[1]->GetTranslation());
-
-	//for (unsigned int i = 0; i < modelManager->LoadedModelsCount(); i++)
-	//{
-	//	for (unsigned int j = 0; j < modelManager->GetModel(i)->GetLoadedMeshesCount(); j++)
-	//	{
-	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.position", lightManager->GetLight(0)->componentParent->GetTranslationReference());
-	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.ambient", lightManager->GetLight(0)->GetAmbientReference());
-	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.diffuse", lightManager->GetLight(0)->GetDiffuseReference());
-	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"light.specular", lightManager->GetLight(0)->GetSpecularReference());
-	//		modelManager->GetModel(i)->GetMesh(j)->GetShader()->SetShaderUniform_vec3((char*)"viewPos", cameraManager->GetCamera(0)->componentParent->GetTranslationReference());
-	//	}
-	//}
-	//modelManager->RenderModels();
 	entityManager->Render(lightManager);
 }
