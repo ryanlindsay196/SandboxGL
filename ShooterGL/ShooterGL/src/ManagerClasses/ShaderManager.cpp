@@ -22,11 +22,17 @@ std::shared_ptr<Shader> ShaderManager::LoadNewShader(std::string materialPath, O
 
 void ShaderManager::UnloadShaders()
 {
-	for (auto shader : shaders)
+	auto it = shaders.cbegin();
+	while (it != shaders.cend())
 	{
-		if (shader.second.use_count() == 1l)
+		if (shaders.find(it._Ptr->_Myval.first) != shaders.cend())
 		{
-			shaders.erase(shaders.find(shader.first));
+			if (it._Ptr->_Myval.second.use_count() == 1l)
+			{
+				it = shaders.erase(it);
+			}
+			else
+				it++;
 		}
 	}
 }

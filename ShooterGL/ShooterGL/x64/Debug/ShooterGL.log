@@ -1,83 +1,55 @@
-﻿  glad.c
-  stb_image.cpp
-  Animation.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(29): warning C4244: 'argument': conversion from 'double' to 'const _Ty', possible loss of data
+﻿  MathHelperFunctions.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(11): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
-              _Ty=float
+              T=float
           ]
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(36): warning C4244: 'argument': conversion from 'double' to 'const _Ty', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(16): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
-              _Ty=float
+              T=float
           ]
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(43): warning C4244: 'argument': conversion from 'double' to 'const _Ty', possible loss of data
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(18): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
-              _Ty=float
+              T=float
           ]
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(182): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(199): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\animation.cpp(216): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
-  Camera.cpp
-  Component.cpp
-  Controller.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(62): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(67): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(69): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.cpp(70): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Entity.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(23): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(44): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(50): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(89): warning C4244: '/=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(90): warning C4244: '/=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\mathhelperfunctions.cpp(91): warning C4244: '/=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
   main.cpp
   CameraManager.cpp
-  ControllerManager.cpp
-  EntityManager.cpp
-  LightManager.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\lightmanager.cpp(23): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
-  ObjectManager.cpp
-  ShaderManager.cpp
-  Light.cpp
-  Mesh.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\mesh.cpp(18): warning C4005: 'ARRAYSIZE': macro redefinition
-  c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\winnt.h(1334): note: see previous definition of 'ARRAYSIZE'
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\mesh.cpp(257): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  Model.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\model.cpp(161): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
-  ModelManager.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\modelmanager.cpp(98): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
-  ParticleEmitter.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\particleemitter.cpp(63): warning C4244: '=': conversion from 'float' to 'unsigned int', possible loss of data
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\renderables\particleemitter.cpp(69): warning C4244: '=': conversion from 'float' to 'unsigned int', possible loss of data
-  Shader.cpp
-  Texture.cpp
-  Generating Code...
-  Compiling...
-  TextureManager.cpp
-  WorldComponent.cpp
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\worldcomponent.cpp(90): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\worldcomponent.cpp(95): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\worldcomponent.cpp(97): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\worldcomponent.cpp(102): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
   Generating Code...
 Controller.obj : error LNK2019: unresolved external symbol glfwGetKey referenced in function "public: virtual void __cdecl Controller::Update(float)" (?Update@Controller@@UEAAXM@Z)
 main.obj : error LNK2001: unresolved external symbol glfwGetKey
+Controller.obj : error LNK2019: unresolved external symbol glfwSetMouseButtonCallback referenced in function "public: void __cdecl Controller::Initialize(struct GLFWwindow *)" (?Initialize@Controller@@QEAAXPEAUGLFWwindow@@@Z)
 Controller.obj : error LNK2019: unresolved external symbol glfwSetCursorPosCallback referenced in function "public: void __cdecl Controller::Initialize(struct GLFWwindow *)" (?Initialize@Controller@@QEAAXPEAUGLFWwindow@@@Z)
 main.obj : error LNK2019: unresolved external symbol glfwInit referenced in function main
 main.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function main
@@ -102,4 +74,4 @@ C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\Shoot
 C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\SOIL2\lib\soil2.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
 C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\SOIL2\lib\soil2-debug.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
 C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\ShooterGL\Dependencies\Assimp\lib\assimp-vc140-mt.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
-C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\x64\Debug\ShooterGL.exe : fatal error LNK1120: 19 unresolved externals
+C:\Users\Ryan\Desktop\Portfolio Materials\Repositories\ShooterGL\ShooterGL\x64\Debug\ShooterGL.exe : fatal error LNK1120: 20 unresolved externals

@@ -27,6 +27,8 @@ public:
 	std::shared_ptr<ModelData> LoadModelData(std::string hashID);
 	void LoadShaders();
 
+	void UnloadModelData();
+
 	Model* GetModel(int index);
 
 	unsigned int LoadedModelsCount();

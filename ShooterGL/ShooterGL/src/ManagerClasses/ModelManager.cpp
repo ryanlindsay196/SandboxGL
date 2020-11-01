@@ -54,6 +54,24 @@ void ModelManager::LoadShaders()
 	}
 }
 
+void ModelManager::UnloadModelData()
+{
+	using ModelMap = std::unordered_map<std::string, std::weak_ptr<ModelData>>;
+	auto it = modelDataMap.cbegin();
+	while (it != modelDataMap.cend())
+	{
+		if (modelDataMap.find(it._Ptr->_Myval.first) != modelDataMap.cend())
+		{
+			if (it._Ptr->_Myval.second.use_count() == 1l)
+			{
+				it = modelDataMap.erase(it);
+			}
+			else
+				it++;
+		}
+	}
+}
+
 Model * ModelManager::GetModel(int index)
 {
 	return models[index];

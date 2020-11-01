@@ -65,6 +65,7 @@ void ObjectManager::LoadScene(std::string scenePath, GLFWwindow* window)
 
 	modelManager->LoadShaders();
 
-	textureManager->UnloadTextures();
+	modelManager->UnloadModelData();
 	shaderManager->UnloadShaders();
+	textureManager->UnloadTextures();
 }

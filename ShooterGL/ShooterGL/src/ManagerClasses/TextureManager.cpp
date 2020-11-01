@@ -24,11 +24,17 @@ std::shared_ptr<Texture> TextureManager::LoadNewTexture(std::string texturePath)
 
 void TextureManager::UnloadTextures()
 {
-	for (auto texture : textures)
+	auto it = textures.cbegin();
+	while (it != textures.cend())
 	{
-		if (texture.second.use_count() == 1l)
+		if (textures.find(it._Ptr->_Myval.first) != textures.cend())
 		{
-			textures.erase(textures.find(texture.first));
+			if (it._Ptr->_Myval.second.use_count() == 1l)
+			{
+				it = textures.erase(it);
+			}
+			else
+				it++;
 		}
 	}
 }
