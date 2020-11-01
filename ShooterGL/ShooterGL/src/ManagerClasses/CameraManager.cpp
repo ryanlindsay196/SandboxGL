@@ -2,6 +2,7 @@
 
 void CameraManager::Initialize(ObjectManager * objectManager)
 {
+	cameras.clear();
 	m_objectManager = objectManager;
 }
 

@@ -27,6 +27,7 @@ Model::Model()
 
 Model::~Model()
 {
+	m_meshes.clear();
 }
 
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath)

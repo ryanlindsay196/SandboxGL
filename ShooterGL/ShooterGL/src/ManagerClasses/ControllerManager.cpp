@@ -2,6 +2,7 @@
 
 void ControllerManager::Initialize(GLFWwindow * window)
 {
+	controllers.clear();
 	m_window = window;
 }
 

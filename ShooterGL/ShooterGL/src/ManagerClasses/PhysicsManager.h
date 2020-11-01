@@ -9,6 +9,7 @@ struct RigidBodyNode
 {
 	RigidBody* rigidBody;
 	RigidBodyNode* nextNode;
+	//~RigidBodyNode() { delete(nextNode); }
 };
 
 struct PhysicsRegion

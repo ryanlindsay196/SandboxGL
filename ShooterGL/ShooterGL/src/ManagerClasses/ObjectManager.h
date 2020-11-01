@@ -28,7 +28,7 @@ public:
 	void Initialize(GLFWwindow* window);
 	void Update(float gameTime);
 	void Render();
-	void LoadScene(std::string scenePath);
+	void LoadScene(std::string scenePath, GLFWwindow* window);
 private:
 	float fixedUpdateTimer, fixedUpdateMaxTime;
 };

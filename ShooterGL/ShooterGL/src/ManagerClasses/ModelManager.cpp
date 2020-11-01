@@ -16,6 +16,9 @@ ModelManager::~ModelManager()
 
 void ModelManager::Initialize(ObjectManager * objectManager)
 {
+	for (unsigned int i = 0; i < models.size(); i++)
+		delete models[i];
+	models.clear();
 	m_objectManager = objectManager;
 	m_textureManager = objectManager->textureManager;
 }

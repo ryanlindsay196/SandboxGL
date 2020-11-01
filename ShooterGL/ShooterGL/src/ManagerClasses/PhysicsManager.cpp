@@ -13,6 +13,35 @@ PhysicsManager::~PhysicsManager()
 
 void PhysicsManager::Initialize(glm::vec3 regionBounds, glm::vec3 regionCount)
 {
+	rigidBodies.clear();
+#pragma region Delete rigid body nodes from each physics region
+	for (int i = 0; i < physicsRegions.size(); i++)
+	{
+		for (int j = 0; j < physicsRegions[i].size(); j++)
+		{
+			for (int k = 0; k < physicsRegions[i][j].size(); k++)
+			{
+				if (physicsRegions[i][j][k].startNode == nullptr)
+					continue;
+				RigidBodyNode* currentNode = physicsRegions[i][j][k].startNode;
+				RigidBodyNode* nextNode = currentNode->nextNode;
+				
+				while (currentNode != nullptr)
+				{
+					//Delete the start node of the physics regions, which then deletes all subsequent rigidbody nodes
+					delete(currentNode);
+					currentNode = nextNode;
+					if(currentNode != nullptr)
+						nextNode = currentNode->nextNode;
+				}
+				physicsRegions[i][j][k].startNode = nullptr;
+			}
+		}
+	}
+	physicsRegions.clear();
+#pragma endregion
+
+
 	physicsRegionBounds = regionBounds;
 	for (int i = 0; i < regionCount.x; i++)
 	{

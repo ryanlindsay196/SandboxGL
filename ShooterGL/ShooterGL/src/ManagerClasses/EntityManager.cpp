@@ -23,6 +23,7 @@ void EntityManager::LoadScene(std::string scenePath)
 	{
 		delete(entity);
 	}
+	entities.clear();
 	std::ifstream sceneFile(scenePath);
 	std::string line;
 	while (getline(sceneFile, line))

@@ -2,6 +2,9 @@
 
 void LightManager::Initialize()
 {
+	for (auto light : m_lights)
+		delete(light);
+	m_lights.clear();
 }
 
 Light* LightManager::AddLight(std::vector<std::string>& lightProperties)
