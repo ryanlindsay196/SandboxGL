@@ -1,12 +1,17 @@
 #include "TextureManager.h"
 #include "Renderables/Texture.h"
 
+#include <cctype>
+#include <algorithm>
+
 TextureManager::TextureManager()
 {
 }
 
 std::shared_ptr<Texture> TextureManager::LoadNewTexture(std::string texturePath)
 {
+	std::transform(texturePath.begin(), texturePath.end(), texturePath.begin(),
+		[](unsigned char c) { return std::tolower(c); });
 	auto texture = textures.find(texturePath);
 	if (texture == textures.end())
 	{

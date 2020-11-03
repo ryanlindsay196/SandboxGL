@@ -3,8 +3,13 @@
 #include "TextureManager.h"
 #include "ObjectManager.h"
 
+#include <cctype>
+#include <algorithm>
+
 std::shared_ptr<Shader> ShaderManager::LoadNewShader(std::string materialPath, ObjectManager* in_objectManager)
 {
+	std::transform(materialPath.begin(), materialPath.end(), materialPath.begin(),
+		[](unsigned char c) { return std::tolower(c); });
 	auto shader = shaders.find(materialPath);
 	if (shader == shaders.end())
 	{

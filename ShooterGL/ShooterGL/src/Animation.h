@@ -10,8 +10,7 @@ struct aiScene;
 struct aiAnimation;
 struct Node;
 class BoneData;
-//class aiQuaternion;
-//class aiVector3D;
+
 struct BoneKeyFrames
 {
 	std::vector<glm::vec3> transformKeyFrames, scaleKeyFrames;

@@ -4,6 +4,9 @@
 #include "ModelData.h"
 #include <unordered_map>
 
+#include <cctype>
+#include <algorithm>
+
 ModelManager::ModelManager()
 {
 }
@@ -33,6 +36,8 @@ Model* ModelManager::LoadModel(std::string& modelPath, std::string materialPath,
 
 std::shared_ptr<ModelData> ModelManager::LoadModelData(std::string hashID)
 {
+	std::transform(hashID.begin(), hashID.end(), hashID.begin(),
+		[](unsigned char c) { return std::tolower(c); });
 	auto modelData = modelDataMap.find(hashID);
 	if (modelData == modelDataMap.end())
 	{
