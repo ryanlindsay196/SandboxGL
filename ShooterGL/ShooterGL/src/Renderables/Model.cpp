@@ -28,9 +28,12 @@ Model::Model()
 Model::~Model()
 {
 	m_meshes.clear();
+	boneMap.clear();
+
+	delete(rootNode);
 }
 
-void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath)
+void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, std::string& modelPath, std::string& materialPath)
 {
 	animationIndex = 0;
 	m_textureManager = objectManager->textureManager;
@@ -111,7 +114,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the node object only contains indices to index the actual objects in the scene.
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		m_meshes.push_back(ProcessMesh(mesh, (char*)materialPath.c_str(), node));
+		m_meshes.push_back(ProcessMesh(mesh, materialPath, node));
 		//TODO: Remove
 		m_meshes[m_meshes.size() - 1].SetTransform(currentNode->transform);
 		//if(boneMap.find(currentNode->name) != boneMap.end())
@@ -131,11 +134,11 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
 		currentNode->children.push_back(Node());
-		ProcessNode(node->mChildren[i], scene, (char*)materialPath.c_str(), &currentNode->children[i], currentNode);
+		ProcessNode(node->mChildren[i], scene, materialPath, &currentNode->children[i], currentNode);
 	}
 }
 
-Mesh Model::ProcessMesh(aiMesh * mesh, char* materialPath, const aiNode* node)
+Mesh Model::ProcessMesh(aiMesh * mesh, std::string& materialPath, const aiNode* node)
 {
 	if (m_meshes.size() == m_modelData->m_meshData.size())
 		m_modelData->m_meshData.push_back(MeshData());

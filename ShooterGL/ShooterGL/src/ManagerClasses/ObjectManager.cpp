@@ -52,6 +52,8 @@ void ObjectManager::Render()
 
 void ObjectManager::LoadScene(std::string scenePath, GLFWwindow* window)
 {
+	//TODO: Fix memory leak somewhere in this function
+
 	lightManager->Initialize();
 
 	controllerManager->Initialize(window);
@@ -68,4 +70,5 @@ void ObjectManager::LoadScene(std::string scenePath, GLFWwindow* window)
 	modelManager->UnloadModelData();
 	shaderManager->UnloadShaders();
 	textureManager->UnloadTextures();
+	std::cout << "Finished loading scene: " << scenePath << std::endl;
 }

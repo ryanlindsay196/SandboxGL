@@ -25,10 +25,10 @@ public:
 	Model();
 	~Model();
 
-	void Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, char * modelPath, char * materialPath);
+	void Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, std::string& modelPath, std::string& materialPath);
 	void LoadModel(std::string modelPath, std::string materialPath);
 	void ProcessNode(aiNode* node, const aiScene* scene, std::string materialPath, Node* currentNode, Node* parentNode);
-	Mesh ProcessMesh(aiMesh* mesh, char* materialPath, const aiNode* node);
+	Mesh ProcessMesh(aiMesh* mesh, std::string& materialPath, const aiNode* node);
 	
 	void LoadShaders();
 

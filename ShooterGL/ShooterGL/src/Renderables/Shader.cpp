@@ -14,13 +14,13 @@
 //TODO: potentially remove pragma warning disable : 4996
 #pragma warning (disable : 4996)
 
-void Shader::Initialize(ObjectManager * in_objectManager, char* vertexPath, char* fragmentPath, char* materialPath)
+void Shader::Initialize(ObjectManager * in_objectManager, std::string& vertexPath, std::string& fragmentPath, std::string& materialPath)
 {
 	textureManager = in_objectManager->textureManager;
 	m_objectManager = in_objectManager;
 	shaderProgram = glCreateProgram();
 
-	if (materialPath)
+	if (materialPath != "")
 		LoadMaterial(materialPath);
 	else
 	{
@@ -71,32 +71,29 @@ void Shader::Initialize(ObjectManager * in_objectManager, char* vertexPath, char
 	glDeleteShader(fragmentShader);
 }
 
-void Shader::LoadMaterial(char * materialPath)
+void Shader::LoadMaterial(std::string& materialPath)
 {
 	std::ifstream materialFile(materialPath);
 
 	std::string line;
-	//std::vector<char*> texturePathsForShader;
-	//char* VertexPath = (char*)"";
-	//char* FragmentPath = (char*)"";
-	char* currentShader = (char*)"";
+	std::string currentShader = "";
 
 	while (getline(materialFile, line))
 	{
 		line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 		if (line.substr(0, 2) == "&&")
 		{
-			currentShader = ((char*)line.erase(0, 2).c_str());
+			currentShader = (line.erase(0, 2));
 			std::string tempTok[2];
 
 			tempTok[0] = line;
 			tempTok[0] = strtok((char*)tempTok[0].c_str(), " ");
 			tempTok[1] = line;
 			tempTok[1] = tempTok[1].substr(tempTok[1].find_first_of(" ") + 1);
-			if (tempTok[0] == (char*)"VertexShader")
-				SetVertexShader((char*)tempTok[1].c_str());
-			else if (tempTok[0] == (char*)"FragmentShader")
-				SetFragmentShader((char*)tempTok[1].c_str());
+			if (tempTok[0] == "VertexShader")
+				SetVertexShader(tempTok[1]);
+			else if (tempTok[0] == "FragmentShader")
+				SetFragmentShader(tempTok[1]);
 		}
 		else if (line == "<ATTACH AND LINK SHADER>")
 		{
@@ -121,7 +118,7 @@ void Shader::LoadMaterial(char * materialPath)
 				//Get the texture path
 				std::string newTexturePath = line.substr(line.find_first_of(":") + 1);
 				std::string newTextureUniform = strtok((char*)line.c_str(), ":");
-				AddNewTexture((char*)newTexturePath.c_str(), (char*)newTextureUniform.c_str());
+				AddNewTexture(newTexturePath, newTextureUniform);
 			}
 		}
 		else if (line == "vec3")
@@ -163,7 +160,7 @@ void Shader::LoadMaterial(char * materialPath)
 	materialFile.close();
 }
 
-void Shader::AddNewTexture(char * texturePath, char* textureUniform)
+void Shader::AddNewTexture(std::string& texturePath, std::string& textureUniform)
 {
 	textures.push_back(textureManager->LoadNewTexture(texturePath));
 	textureUniforms.push_back(textureUniform);
@@ -182,14 +179,9 @@ void Shader::BindTextures()
 		textures[i]->UseTexture(i);
 		SetShaderUniform_veci1((char*)textureUniforms[i].c_str(), textures[i]->GetTextureID());
 	}
-	
-	//SetShaderUniform_veci1((char*)"albedoMap", textures[0]->GetTextureID());
-	//SetShaderUniform_veci1((char*)"normalMap", textures[1]->GetTextureID());
-	
-	//glBindTexture(GL_TEXTURE_2D, (GLuint)textures[0]->GetTextureID());
 }
 
-void Shader::SetVertexShader(char* vertexPath)
+void Shader::SetVertexShader(std::string& vertexPath)
 {
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -228,7 +220,7 @@ void Shader::SetVertexShader(char* vertexPath)
 	}
 }
 
-void Shader::SetFragmentShader(char* fragmentPath)
+void Shader::SetFragmentShader(std::string& fragmentPath)
 {
 
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);

@@ -17,7 +17,7 @@
   ((sizeof(a) / sizeof(*(a))) / \
   static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
 
-Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones)
+Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones)
 {
 	meshData->vertices.reserve(mesh->mNumVertices);
 
@@ -179,7 +179,7 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, char * materialPath, Wor
 }
 
 //If mesh data has been loaded by another mesh
-Mesh::Mesh(ObjectManager * objectManager, char * materialPath, WorldComponent * newParent, MeshData * meshData)
+Mesh::Mesh(ObjectManager * objectManager, std::string& materialPath, WorldComponent * newParent, MeshData * meshData)
 {
 	m_materialPath = materialPath;
 	//m_modelData = modelData;
@@ -203,9 +203,13 @@ Mesh::Mesh(ObjectManager * objectManager, char * materialPath, WorldComponent * 
 void Mesh::LoadShaders()
 {
 	if (m_materialPath != "")
-		SetShaders((char*)m_materialPath.c_str());
+		SetShaders(m_materialPath);
 	else
-		shader->Initialize(m_objectManager, (char*)"Shaders/VertexDefault.glsl", (char*)"Shaders/FragmentDefault.glsl", (char*)m_materialPath.c_str());
+	{
+		std::string vertexDefault = "Shaders/VertexDefault.glsl";
+		std::string fragmentDefault = "Shaders/FragmentDefault.glsl";
+		shader->Initialize(m_objectManager, vertexDefault, fragmentDefault, m_materialPath);
+	}
 }
 
 void Mesh::SetDefaultShaders()
@@ -213,7 +217,7 @@ void Mesh::SetDefaultShaders()
 	SetShaders((char*)"Resources/Materials/DefaultMaterial.mat");
 }
 
-void Mesh::SetShaders(char* materialPath)
+void Mesh::SetShaders(std::string materialPath)
 {
 	shader = m_objectManager->shaderManager->LoadNewShader(materialPath, m_objectManager);
 }

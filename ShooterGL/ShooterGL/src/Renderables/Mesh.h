@@ -33,12 +33,12 @@ public:
 	//mesh data
 	std::shared_ptr<Shader> shader;
 
-	Mesh(ObjectManager* objectManager, aiMesh* mesh, char* materialPath, WorldComponent* newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones);
-	Mesh(ObjectManager* objectManager, char* materialPath, WorldComponent* newParent, MeshData* meshData);
+	Mesh(ObjectManager* objectManager, aiMesh* mesh, std::string& materialPath, WorldComponent* newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones);
+	Mesh(ObjectManager* objectManager, std::string& materialPath, WorldComponent* newParent, MeshData* meshData);
 
 	void LoadShaders();
 	void SetDefaultShaders();
-	void SetShaders(char* materialPath);
+	void SetShaders(std::string materialPath);
 	void AttachMeshData(MeshData* meshData);
 	std::shared_ptr<Shader> GetShader();
 	void Render();

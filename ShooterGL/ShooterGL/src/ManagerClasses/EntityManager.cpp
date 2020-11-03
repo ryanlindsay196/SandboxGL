@@ -137,11 +137,10 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 	if (entityProps == entityPropertiesMap.end())
 	{
 		EntityProperties* newEntityProps = new EntityProperties();
-		//newEntityProps->Initialize(in_objectManager, (char*)"", (char*)"", (char*)materialPath.c_str());
 
 		std::pair<std::string, EntityProperties*> newEntityPropsPair(prefabPath, newEntityProps);
 		entityPropertiesMap.insert(newEntityPropsPair);
-		return newEntityPropsPair.second;// shaders.find(shaderPath);
+		return newEntityProps;
 	}
 	return entityPropertiesMap[prefabPath];
 }
@@ -163,7 +162,7 @@ void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::v
 		{
 			ModelData modelTransform = ModelData();
 			modelTransform.ReadModelData(entityData.componentProperties);
-			entity->AddComponent(objectManager->modelManager->LoadModel((char*)modelTransform.modelPath.c_str(), modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale));
+			entity->AddComponent(objectManager->modelManager->LoadModel(modelTransform.modelPath, modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale));
 		}
 		else if (entityData.componentName == "ParticleSystem")
 		{

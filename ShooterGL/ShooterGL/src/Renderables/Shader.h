@@ -11,13 +11,13 @@ typedef unsigned char GLboolean;
 class Shader
 {
 public:
-	void Initialize(ObjectManager * in_objectManager, char* vertexPath, char* fragmentPath, char* materialPath);
-	void LoadMaterial(char* materialPath);
-	void AddNewTexture(char* texturePath, char* textureUniform);
+	void Initialize(ObjectManager * in_objectManager, std::string& vertexPath, std::string& fragmentPath, std::string& materialPath);
+	void LoadMaterial(std::string& materialPath);
+	void AddNewTexture(std::string& texturePath, std::string& textureUniform);
 	void ClearTextures();
 	void BindTextures();
-	void SetVertexShader(char* vertexPath);
-	void SetFragmentShader(char* fragmentPath);
+	void SetVertexShader(std::string& vertexPath);
+	void SetFragmentShader(std::string& fragmentPath);
 
 	std::vector<std::shared_ptr<Texture>> GetTextures();
 

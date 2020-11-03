@@ -3,7 +3,6 @@
 
 TextureManager::TextureManager()
 {
-	//textures = std::unordered_map<std::string, Texture*>();
 }
 
 std::shared_ptr<Texture> TextureManager::LoadNewTexture(std::string texturePath)

@@ -36,35 +36,12 @@ public:
 	void Initialize(const aiScene * scene, unsigned int animationIndex);
 
 	void ReadNodeHierarchy(Node* node, const glm::mat4& parentTransform, std::unordered_map<std::string, BoneData> & boneMap);
-	//const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
-	//const BoneKeyFrames* FindNodeBone(std::unordered_map<std::string, BoneKeyFrames>, const std::string NodeName);
 
 	void CalculateInterpolatedPosition(glm::vec3& out, const std::string nodeName);
 	void CalculateInterpolatedRotation(glm::quat& out, const std::string nodeName);
 	void CalculateIntorpolatedScaling(glm::vec3& out, const std::string nodeName);
 
-	//glm::mat4 InitTranslationTransform(float x, float y, float z)
-	//{
-	//	glm::mat4 m;
-	//	m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
-	//	m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = 0.0f;
-	//	m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f; m[2][3] = 0.0f;
-	//	m[3][0] = x; m[3][1] = y; m[3][2] = z; m[3][3] = 1.0f;
-	//	return m;
-	//}
-	//
-	//glm::mat4 InitScaleTransform(float ScaleX, float ScaleY, float ScaleZ)
-	//{
-	//	glm::mat4 m;
-	//	m[0][0] = ScaleX; m[0][1] = 0.0f;   m[0][2] = 0.0f;   m[0][3] = 0.0f;
-	//	m[1][0] = 0.0f;   m[1][1] = ScaleY; m[1][2] = 0.0f;   m[1][3] = 0.0f;
-	//	m[2][0] = 0.0f;   m[2][1] = 0.0f;   m[2][2] = ScaleZ; m[2][3] = 0.0f;
-	//	m[3][0] = 0.0f;   m[3][1] = 0.0f;   m[3][2] = 0.0f;   m[3][3] = 1.0f;
-	//	return m;
-	//}
-
 	unsigned int FindPosition(BoneKeyFrames* currentBoneKeyFrames);
 	unsigned int FindRotation(BoneKeyFrames* currentBoneKeyFrames);
 	unsigned int FindScaling(BoneKeyFrames* currentBoneKeyFrames);
-	//void ReadNodeHierarchy(float animationTime, const aiNode* node, const glm::mat4& ParentTransform);
 };

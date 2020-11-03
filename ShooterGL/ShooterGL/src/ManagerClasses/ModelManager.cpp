@@ -23,10 +23,10 @@ void ModelManager::Initialize(ObjectManager * objectManager)
 	m_textureManager = objectManager->textureManager;
 }
 
-Model* ModelManager::LoadModel(char * modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
+Model* ModelManager::LoadModel(std::string& modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
 {
 	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, (char*)materialPath.c_str());
+	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, materialPath);
 
 	return models[models.size() - 1];
 }
