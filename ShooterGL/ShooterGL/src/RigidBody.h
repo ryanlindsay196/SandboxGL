@@ -12,6 +12,7 @@ private:
 	glm::vec3 positionConstraints, rotationConstraints;
 	glm::vec3 positionOffset, scale;
 	bool useGravity;
+	bool isTrigger = false;
 
 	bool isVelocityStored;
 
@@ -34,6 +35,12 @@ public:
 	void StoreVelocity(glm::vec3 velocityToAdd);
 
 	void SetVelocity(glm::vec3 newVelocity);
+
+	void OnCollisionEnter(Entity* entity);
+	void OnTriggerEnter(Entity* entity);
+
+public:
+	bool IsTrigger();
 
 	//The projections of the bounds of a rigidbody on the x, y, and z axes.
 	struct RigidBodyProjections

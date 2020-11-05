@@ -219,6 +219,17 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 							//Check the collision
 							if(IsColliding(rbNode1, rbNode2, gameTime))
 							{
+								if (rbNode1->rigidBody->IsTrigger())
+									rbNode2->rigidBody->componentParent->OnTriggerEnter(rbNode1->rigidBody->componentParent);
+								else
+									rbNode2->rigidBody->componentParent->OnCollisionEnter(rbNode1->rigidBody->componentParent);
+								if (rbNode2->rigidBody->IsTrigger())
+									rbNode1->rigidBody->componentParent->OnTriggerEnter(rbNode2->rigidBody->componentParent);
+								else
+									rbNode1->rigidBody->componentParent->OnCollisionEnter(rbNode2->rigidBody->componentParent);
+								if (rbNode1->rigidBody->IsTrigger() || rbNode2->rigidBody->IsTrigger())
+									continue;
+
 								glm::vec3 rbPos1 = rbNode1->rigidBody->componentParent->GetTranslation() + rbNode1->rigidBody->GetPositionOffset();
 								glm::vec3 rbPos2 = rbNode2->rigidBody->componentParent->GetTranslation() + rbNode2->rigidBody->GetPositionOffset();
 								//glm::vec3 rbPosDiff = rbPos2 - rbPos1;

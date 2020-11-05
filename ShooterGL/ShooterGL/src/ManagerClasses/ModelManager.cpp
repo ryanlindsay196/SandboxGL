@@ -61,7 +61,6 @@ void ModelManager::LoadShaders()
 
 void ModelManager::UnloadModelData()
 {
-	using ModelMap = std::unordered_map<std::string, std::weak_ptr<ModelData>>;
 	auto it = modelDataMap.cbegin();
 	while (it != modelDataMap.cend())
 	{

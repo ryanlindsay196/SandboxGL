@@ -71,6 +71,18 @@ void Entity::AddComponent(Component* newComponent)
 	}
 }
 
+void Entity::OnCollisionEnter(Entity * entity)
+{
+	for (Component* component : components)
+		component->OnCollisionEnter(entity);
+}
+
+void Entity::OnTriggerEnter(Entity * entity)
+{
+	for (Component* component : components)
+		component->OnTriggerEnter(entity);
+}
+
 void Entity::Translate(glm::vec3 translateBy)
 {
 	position += translateBy;

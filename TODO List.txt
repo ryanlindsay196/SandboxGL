@@ -1,0 +1,193 @@
+Find memory leak	https://docs.microsoft.com/en-us/visualstudio/debugger/finding-memory-leaks-using-the-crt-library?view=vs-2019
+Fix bug with book animation
+Clear out warnings
+When a rigidbody is outside of the bounds of all physics regions, add to an outer region.
+When a model is out of view, don't draw it and don't update bone positions (frustrum culling?)
+
+Create bounding boxes based on skinned mesh
+Implement GJK collision
+
+Make FragmentDefault shader maximum brightness lower (check light settings)
+Move animations to modelData from model
+Make lighting work with bones
+
+Replace Euler Angles in prefab files, scene files, and the EntityManager with RotationAxis
+Replace angle in prefab files, scene files, and the EntityManager with RotationAngle
+
+Balls rolling
+Sprite Batching
+
+For the TextureManager class, consider having a vector of texture smart pointers, and changing the current hash map
+to include indices to the vector of textures instead of the actual textures.
+
+Texture Atlasing
+Individual materials can be specified for each mesh in a model
+
+Text rendering
+UI elements
+
+Multithreading
+	1. Make a Threader class which contains a list of tasks (work queue)
+		a. The threader class will have a list of threads (thread pool). Each thread will have a blocked bool
+		   std::vector<Thread> threadPool;
+		   Each thread will have specialties, taking on specific job types.
+		b. Research threading on different machines
+	2. Job
+		a. enum JobTypes: 
+			AI
+			Physics
+			UI
+			Particles
+			Network
+			Sound
+			Animation->Rendering
+		b. int priority
+		c. int totalDependencies
+		d. FunctionPointer jobFunc;
+		e. Jobs for scene loading
+		f. Jobs for scene updating
+	4. Thread (std::thread threadName(FunctionPointer)
+		a. bool isLocked;
+		b. Each thread has one or more specialties (JobTypes). These can be set in the Threader text file
+		c. If a new job is sent to the threader, and no thread specializes in the job type, dynamically assign a thread.
+	5. Locking Mechanicsms
+		a. mutex/futex(WaitOnAddress/std::condition_variable)
+		b. critical section
+		c. slim reader/writer lock
+		d. Check for spurious wake-ups using while(!m_signaled && status != std::cv_status::timeout)
+	6. Multithreading primitives
+	   	a. semaphores
+	   	b. lockfree data structures
+	7. Jobs can have dependencies on other jobs
+	8. Make sure jobs on two different threads can't modify or read the same data
+	9. Physics updates for next frame. Rendering runs for this frame
+
+Dependencies
+	1. Physics/animation->rendering
+	2. Physics->sound
+   
+Batch rendering
+	1. set glBufferData 3rd argument to nullptr instead of pointing to the vertices
+	2. set second argument of glBufferData to sizeof(Vertex) * X (X could be max particles)
+	3. set last argument of glBufferData to GL_DYNAMIC_DRAW
+	4. In the render function use glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices)
+Multiple lights
+Mesh and particle vertex array attrib setters should sample from shader instead of being hard coded
+In texture/shader manager classes, track the number of references to each texture/shader pointer. If one reaches zero, remove it from the map
+Clear out todo's
+
+Test Model classes vertices.reserve(). Is the parameter vertices.size() or vertices.size() * sizeof(Vertex)?
+
+Models without bones should use a shader without bones 
+
+Make entity Tags. There should be a hash map <string, EntityNode> that has a tag and points to an entity.
+EntityNode points to an entity, and has a next node. It's basically a linked list.
+
+Make sure that each model instance loads it's own bones. If it doesn't it will be confused.
+
+Particle Rectangular spawn
+Particle Constrain to edge
+
+Specular maps make weird squares
+
+Animation support
+Animation Manager (similar to shader/texture manager)
+Animation State machine
+walk
+{
+	index : 0
+	startFrame : 0
+	endFrame : 40
+}
+run
+{
+	index : 0
+	startFrame : 100
+	endFrame : 140
+}
+Animation blending (smoothly transitioning between two animations)
+	1. Length of transition time.
+	2. Position of transition time in preceding animation
+	3. Position of transition time in following animation
+	4. "Curve" (e.g. start transitioning fast and transition more slowly towards the end)
+Animation combinations (e.g. legs controlled by walking animation, but head controlled by looking animation)
+Varying (dynamic runtime) shader loading from model file, but overloaded by entity file
+Prefab creation 
+	1. Entity Name
+	2. Groups of objects/models/other components
+EntityManager: Implement list of entitiesByTag
+Re-implement lighting
+Potentially remove node reference in mesh constructor
+Collision component
+	1. Sphere
+	2. Rectangle
+	3. Capsule
+Physics
+	1. Gravity
+	2. Normal
+	3. Physics Materials
+	4. Tension
+	5. Rotation force
+	6. Friction
+	7. Mass
+	8. Acceleration
+	9. Velocity
+	10. Bounce
+Shadow Maps
+UI
+	1. Buttons
+	2. Text
+	3. Health bars
+	4. Menus
+UI in worldspace
+Audio Source
+Audio Player
+Audio Manager
+Audio Mixer
+Controller abstraction (let the entity decide what to do with controls)
+Control passing (if inside mech, pass control to mech with button from the controller abstraction to pass control back)
+Emmissive material map
+Normal Material Map
+Post processing
+Sky box
+Create material instances or have entities with model components store certain uniforms separately
+Shader Uniform Caching https://www.youtube.com/watch?v=nBB0LGSIm5Q
+---Shader.cpp
+GLint Shader::GetUniformLocation(const std::string& name) const
+{
+	if(m_UniformLocationCashe.find(name) != m_UniformLocationCache.end())
+		return m_UniformLocationCache[name];
+
+	GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+	m_UniformLocationCache[name] = location;
+	return location;
+}
+---Shader.h
+mutable std::unordered_map<std::string, GLint> m_UniformLocationCache;
+
+Player controls
+	1. Shoot
+	2. Pickup
+	3. Movement
+	4. Dash
+	5. Jump
+	6. Grapple
+	7. Interact
+	8. Rotate
+	9. Slide
+	10. Kyote time?
+Mech controls
+	1. Attack Right
+	2. Attack Left
+	3. Guard (blocks view)
+	4. Eject
+	
+
+AI Agent
+ShaderManager/TextureManager: If found in unordered map, don't iterate through the list, do the instant lookup
+Scale models with entity scale
+Convert entity rotation to entity euler angles when eulers are changed.
+Convert entity eulers to rotation when rotation is changed;
+Rotate models with entity rotation (euler angles?)
+Set up all classes to free unecessary memory when unloaded
+Set max rotation angles for controller component by loading them from prefab file

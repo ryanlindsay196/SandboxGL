@@ -46,7 +46,11 @@ void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties)
 		}
 		else if (keyValuePair.first == "UseGravity")
 		{
-			useGravity = std::stoi(keyValuePair.second.c_str());
+			useGravity = std::stoi(keyValuePair.second);
+		}
+		else if (keyValuePair.first == "IsTrigger")
+		{
+			isTrigger = std::stoi(keyValuePair.second);
 		}
 	}
 }
@@ -130,6 +134,21 @@ void RigidBody::StoreVelocity(glm::vec3 velocityToAdd)
 void RigidBody::SetVelocity(glm::vec3 newVelocity)
 {
 	velocity = newVelocity;
+}
+
+void RigidBody::OnCollisionEnter(Entity * entity)
+{
+	componentParent->OnCollisionEnter(entity);
+}
+
+void RigidBody::OnTriggerEnter(Entity * entity)
+{
+	componentParent->OnTriggerEnter(entity);
+}
+
+bool RigidBody::IsTrigger()
+{
+	return isTrigger;
 }
 
 //Calculates and returns the projections of this rigidbody on the x, y, and z axes.

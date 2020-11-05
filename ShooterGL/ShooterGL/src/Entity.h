@@ -19,6 +19,9 @@ public:
 	void SetParent(Entity* newParent);
 	void AddComponent(Component* newComponent);
 
+	void OnCollisionEnter(Entity* entity);
+	void OnTriggerEnter(Entity* entity);
+
 	void Translate(glm::vec3 translateBy);
 	void Rotate(glm::vec3 rotationAxis, float rotationAngle);
 	void Scale(glm::vec3 scaleBy);

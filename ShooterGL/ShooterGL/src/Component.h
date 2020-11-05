@@ -9,4 +9,7 @@ public:
 
 	virtual void Update(float gameTime);
 	virtual void Render(LightManager* lightManager) {};
+
+	virtual void OnCollisionEnter(Entity* entity);
+	virtual void OnTriggerEnter(Entity* entity);
 };
