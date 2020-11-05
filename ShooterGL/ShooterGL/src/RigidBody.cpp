@@ -138,12 +138,12 @@ void RigidBody::SetVelocity(glm::vec3 newVelocity)
 
 void RigidBody::OnCollisionEnter(Entity * entity)
 {
-	componentParent->OnCollisionEnter(entity);
+
 }
 
 void RigidBody::OnTriggerEnter(Entity * entity)
 {
-	componentParent->OnTriggerEnter(entity);
+
 }
 
 bool RigidBody::IsTrigger()
