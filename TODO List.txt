@@ -1,11 +1,15 @@
 Find memory leak	https://docs.microsoft.com/en-us/visualstudio/debugger/finding-memory-leaks-using-the-crt-library?view=vs-2019
 Fix bug with book animation
+Fix bug with bone/skin on shoulder when reloading scene or loading second arms
 Clear out warnings
 When a rigidbody is outside of the bounds of all physics regions, add to an outer region.
 When a model is out of view, don't draw it and don't update bone positions (frustrum culling?)
 
 Create bounding boxes based on skinned mesh
 Implement GJK collision
+
+Nested prefabs
+Debug Rays
 
 Make FragmentDefault shader maximum brightness lower (check light settings)
 Move animations to modelData from model

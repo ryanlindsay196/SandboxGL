@@ -81,6 +81,7 @@ EntityManager::EntityProperties* EntityManager::LoadEntityFromFile(std::string p
 			std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line, ":");
 			if (line == "Components")
 			{
+				int scopeDepth = 0;
 				getline(prefabFile, line);//This skips the "{" after the Components property
 				while (getline(prefabFile, line))
 				{
@@ -94,19 +95,26 @@ EntityManager::EntityProperties* EntityManager::LoadEntityFromFile(std::string p
 						//entityPropertiesToUse->entityData[entityPropertiesToUse->entityData.size() - 1].componentProperties.push_back(std::string());
 						entityPropertiesToUse->entityData[entityPropertiesToUse->entityData.size() - 1].componentName = line;
 					}
-					else if(line == "{")
+					else if (line == "{")
 					{
+						scopeDepth++;
 						while (getline(prefabFile, line))
 						{//Load component properties
 							line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 							line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
 							if (line == "}")
+							{
+								scopeDepth--;
+								if(scopeDepth == 0)
 								break;
-							else 
+							}
+							else if (line == "{")
+								scopeDepth++;
+							else
 								entityPropertiesToUse->entityData[entityPropertiesToUse->entityData.size() - 1].componentProperties.push_back(line);
 						}
 					}
-					else if(line == "}")
+					else if (line == "}")
 						break;
 
 				}

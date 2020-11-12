@@ -9,7 +9,6 @@ struct RigidBodyNode
 {
 	RigidBody* rigidBody;
 	RigidBodyNode* nextNode;
-	//~RigidBodyNode() { delete(nextNode); }
 };
 
 struct PhysicsRegion
@@ -37,7 +36,7 @@ private:
 
 
 	void CheckCollisions(int iterations, float gameTime);
-	bool IsColliding(RigidBodyNode* rbNode1, RigidBodyNode* rbNode2, float gameTime);
+	bool IsColliding(Collider * collider1, Collider * collider2, float gameTime);
 
 	//checks if a rigidbody is inside a particular region
 	bool RigidBodyInRegion(RigidBody* rb, glm::vec3 regionIDs, bool addRB_Velocity, float gameTime);

@@ -12,9 +12,10 @@ RigidBody::~RigidBody()
 
 void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties)
 {
-	for (std::string rbProp : rigidBodyProperties)
+	for(int i = 0; i < rigidBodyProperties.size(); i++)
+	//for (std::string rbProp : rigidBodyProperties)
 	{
-
+		std::string& rbProp = rigidBodyProperties[i];
 		rbProp.erase(std::remove(rbProp.begin(), rbProp.end(), '\t'), rbProp.end());
 		rbProp.erase(std::remove(rbProp.begin(), rbProp.end(), ' '), rbProp.end());
 		if (rbProp == "")
@@ -32,25 +33,44 @@ void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties)
 		{
 			mass = strtof(keyValuePair.second.c_str(), nullptr);
 		}
-		else if (keyValuePair.first == "ColliderType")
+		else if (keyValuePair.first == "Collider")
 		{
-			colliderType = (ColliderType)std::stoi(keyValuePair.second.c_str(), nullptr);
-		}
-		else if (keyValuePair.first == "PositionOffset")
-		{
-			positionOffset = ParseVector(keyValuePair.second);
-		}
-		else if (keyValuePair.first == "Scale")
-		{
-			scale = ParseVector(keyValuePair.second);
+			colliders.push_back(Collider());
+			colliders[colliders.size() - 1].colliderParent = this;
+			while (true)
+			{//Loop until you find a "}" character
+				i++;
+				if (i < rigidBodyProperties.size())
+					rbProp = rigidBodyProperties[i];
+				else
+					break;
+				rbProp.erase(std::remove(rbProp.begin(), rbProp.end(), '\t'), rbProp.end());
+				rbProp.erase(std::remove(rbProp.begin(), rbProp.end(), ' '), rbProp.end());
+				if (rbProp == "}")
+					break;
+
+				keyValuePair = GenerateKeyValuePair(rbProp, ":");
+				if (keyValuePair.first == "ColliderType")
+				{
+					colliders[colliders.size() - 1].colliderType = (Collider::ColliderType)std::stoi(keyValuePair.second.c_str(), nullptr);
+				}
+				else if (keyValuePair.first == "PositionOffset")
+				{
+					colliders[colliders.size() - 1].positionOffset = ParseVector(keyValuePair.second);
+				}
+				else if (keyValuePair.first == "Scale")
+				{
+					colliders[colliders.size() - 1].scale = ParseVector(keyValuePair.second);
+				}
+				else if (keyValuePair.first == "IsTrigger")
+				{
+					colliders[colliders.size() - 1].isTrigger = std::stoi(keyValuePair.second);
+				}
+			}
 		}
 		else if (keyValuePair.first == "UseGravity")
 		{
 			useGravity = std::stoi(keyValuePair.second);
-		}
-		else if (keyValuePair.first == "IsTrigger")
-		{
-			isTrigger = std::stoi(keyValuePair.second);
 		}
 	}
 }
@@ -76,31 +96,31 @@ void RigidBody::FixedUpdate(float gameTime)
 	componentParent->Translate(positionConstraints * velocity * gameTime);
 }
 
-RigidBody::ColliderType RigidBody::GetColliderType()
-{
-	return colliderType;
-}
-
-//Get's the rigidbody's position in local space (from the componentParent)
-glm::vec3 RigidBody::GetPositionOffset()
-{
-	return positionOffset;
-}
-
+////Get's the rigidbody's position in local space (from the componentParent)
+//glm::vec3 RigidBody::GetPositionOffset()
+//{
+//	return positionOffset;
+//}
+//
 //Get's the rigidbody's position in world space
 glm::vec3 RigidBody::GetPosition()
 {
-	return componentParent->GetTranslation() + positionOffset;
+	return componentParent->GetTranslation();
 }
 
-glm::vec3 RigidBody::GetScale()
-{
-	return scale;
-}
+//glm::vec3 RigidBody::GetScale()
+//{
+//	return scale;
+//}
 
 glm::vec3 RigidBody::GetVelocity()
 {
 	return velocity;
+}
+
+glm::vec3 RigidBody::GetStoredVelocity()
+{
+	return storedVelocity;
 }
 
 float RigidBody::GetMass()
@@ -146,24 +166,14 @@ void RigidBody::OnTriggerEnter(Entity * entity)
 
 }
 
-bool RigidBody::IsTrigger()
+std::vector<Collider> RigidBody::GetColliders()
 {
-	return isTrigger;
+	return colliders;
 }
 
-//Calculates and returns the projections of this rigidbody on the x, y, and z axes.
-RigidBody::RigidBodyProjections RigidBody::CalculateProjections(bool addVelocity, bool addStoredVelocity, float gameTime)
+Collider* RigidBody::GetColliderRef(int i)
 {
-	RigidBodyProjections projections = RigidBodyProjections();
-
-	glm::vec3 rigidBodyCenter = componentParent->GetTranslation() + positionOffset;
-
-	projections.x[0] = glm::dot(rigidBodyCenter, glm::vec3(1, 0, 0)) + (velocity.x * addVelocity * gameTime) + (storedVelocity.x * addStoredVelocity * gameTime) - scale.x;
-	projections.x[1] = glm::dot(rigidBodyCenter, glm::vec3(1, 0, 0)) + (velocity.x * addVelocity * gameTime) + (storedVelocity.x * addStoredVelocity * gameTime) + scale.x;
-	projections.y[0] = glm::dot(rigidBodyCenter, glm::vec3(0, 1, 0)) + (velocity.y * addVelocity * gameTime) + (storedVelocity.y * addStoredVelocity * gameTime) - scale.y;
-	projections.y[1] = glm::dot(rigidBodyCenter, glm::vec3(0, 1, 0)) + (velocity.y * addVelocity * gameTime) + (storedVelocity.y * addStoredVelocity * gameTime) + scale.y;
-	projections.z[0] = glm::dot(rigidBodyCenter, glm::vec3(0, 0, 1)) + (velocity.z * addVelocity * gameTime) + (storedVelocity.z * addStoredVelocity * gameTime) - scale.z;
-	projections.z[1] = glm::dot(rigidBodyCenter, glm::vec3(0, 0, 1)) + (velocity.z * addVelocity * gameTime) + (storedVelocity.z * addStoredVelocity * gameTime) + scale.z;
-
-	return projections;
+	if(i < colliders.size())
+		return &colliders[i];
+	return nullptr;
 }
