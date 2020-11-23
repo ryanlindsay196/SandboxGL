@@ -16,8 +16,9 @@
 #include <iostream>
 //TODO: Delete
 
-void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
+void Animation::Initialize(const aiScene * scene, unsigned int animationIndex, std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap)
 {
+	this->boneKeyMap = boneKeyMap;
 
 	m_GlobalInverseTransform = glm::mat4(
 		scene->mRootNode->mTransformation.a1, scene->mRootNode->mTransformation.b1, scene->mRootNode->mTransformation.c1, scene->mRootNode->mTransformation.d1,
@@ -29,38 +30,41 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex)
 	aiAnimation* animation = new aiAnimation(*scene->mAnimations[animationIndex]);
 	ticksPerSecond = animation->mTicksPerSecond;
 
-	boneKeyMap.reserve(animation->mNumChannels);
-	for (unsigned int i = 0; i < animation->mNumChannels; i++)
+	if (boneKeyMap == nullptr || boneKeyMap->empty())
 	{
-		std::pair<std::string, BoneKeyFrames> boneKey(animation->mChannels[i]->mNodeName.C_Str(), BoneKeyFrames());
-		for (unsigned int j = 0; j < animation->mChannels[i]->mNumPositionKeys; j++)
+		boneKeyMap->reserve(animation->mNumChannels);
+		for (unsigned int i = 0; i < animation->mNumChannels; i++)
 		{
-			boneKey.second.transformKeyFrames.reserve(animation->mChannels[i]->mNumPositionKeys);
-			boneKey.second.transformKeyFrames.push_back(
-				glm::vec3(animation->mChannels[i]->mPositionKeys[j].mValue.x, animation->mChannels[i]->mPositionKeys[j].mValue.y, animation->mChannels[i]->mPositionKeys[j].mValue.z)
-			);
-			boneKey.second.transformKeyTimes.push_back(animation->mChannels[i]->mPositionKeys[j].mTime);
+			std::pair<std::string, BoneKeyFrames> boneKey(animation->mChannels[i]->mNodeName.C_Str(), BoneKeyFrames());
+			for (unsigned int j = 0; j < animation->mChannels[i]->mNumPositionKeys; j++)
+			{
+				boneKey.second.transformKeyFrames.reserve(animation->mChannels[i]->mNumPositionKeys);
+				boneKey.second.transformKeyFrames.push_back(
+					glm::vec3(animation->mChannels[i]->mPositionKeys[j].mValue.x, animation->mChannels[i]->mPositionKeys[j].mValue.y, animation->mChannels[i]->mPositionKeys[j].mValue.z)
+				);
+				boneKey.second.transformKeyTimes.push_back((float)animation->mChannels[i]->mPositionKeys[j].mTime);
+			}
+			for (unsigned int j = 0; j < animation->mChannels[i]->mNumRotationKeys; j++)
+			{
+				boneKey.second.rotationKeyFrames.reserve(animation->mChannels[i]->mNumRotationKeys);
+				boneKey.second.rotationKeyFrames.push_back(
+					glm::quat(animation->mChannels[i]->mRotationKeys[j].mValue.z,
+						animation->mChannels[i]->mRotationKeys[j].mValue.w,
+						animation->mChannels[i]->mRotationKeys[j].mValue.x,
+						animation->mChannels[i]->mRotationKeys[j].mValue.y)
+				);
+				boneKey.second.rotationKeyTimes.push_back((float)animation->mChannels[i]->mRotationKeys[j].mTime);
+			}
+			for (unsigned int j = 0; j < animation->mChannels[i]->mNumScalingKeys; j++)
+			{
+				boneKey.second.scaleKeyFrames.reserve(animation->mChannels[i]->mNumScalingKeys);
+				boneKey.second.scaleKeyFrames.push_back(
+					glm::vec3(animation->mChannels[i]->mScalingKeys[j].mValue.x, animation->mChannels[i]->mScalingKeys[j].mValue.y, animation->mChannels[i]->mScalingKeys[j].mValue.z)
+				);
+				boneKey.second.scaleKeyTimes.push_back((float)animation->mChannels[i]->mScalingKeys[j].mTime);
+			}
+			boneKeyMap->insert(boneKey);
 		}
-		for (unsigned int j = 0; j < animation->mChannels[i]->mNumRotationKeys; j++)
-		{
-			boneKey.second.rotationKeyFrames.reserve(animation->mChannels[i]->mNumRotationKeys);
-			boneKey.second.rotationKeyFrames.push_back(
-				glm::quat(animation->mChannels[i]->mRotationKeys[j].mValue.z, 
-					animation->mChannels[i]->mRotationKeys[j].mValue.w, 
-					animation->mChannels[i]->mRotationKeys[j].mValue.x, 
-					animation->mChannels[i]->mRotationKeys[j].mValue.y)
-			);
-			boneKey.second.rotationKeyTimes.push_back(animation->mChannels[i]->mRotationKeys[j].mTime);
-		}
-		for (unsigned int j = 0; j < animation->mChannels[i]->mNumScalingKeys; j++)
-		{
-			boneKey.second.scaleKeyFrames.reserve(animation->mChannels[i]->mNumScalingKeys);
-			boneKey.second.scaleKeyFrames.push_back(
-				glm::vec3(animation->mChannels[i]->mScalingKeys[j].mValue.x, animation->mChannels[i]->mScalingKeys[j].mValue.y, animation->mChannels[i]->mScalingKeys[j].mValue.z)
-			);
-			boneKey.second.scaleKeyTimes.push_back(animation->mChannels[i]->mScalingKeys[j].mTime);
-		}
-		boneKeyMap.insert(boneKey);
 	}
 }
 
@@ -69,21 +73,24 @@ void Animation::ReadNodeHierarchy(Node* node, const glm::mat4 & parentTransform,
 	std::string NodeName(node->name);
 	glm::mat4 NodeTransformation = node->transform;
 
-	auto pBoneKeyFrame = boneKeyMap.find(NodeName);
-	if(pBoneKeyFrame != boneKeyMap.end()) {
+	//If there are no animations, exit the function
+	if (boneKeyMap == nullptr)
+		return;
+	auto pBoneKeyFrame = boneKeyMap->find(NodeName);
+	if(pBoneKeyFrame != boneKeyMap->end()) {
 		// Interpolate scaling and generate scaling transformation matrix
 		glm::vec3 Scaling;
-		CalculateIntorpolatedScaling(Scaling, NodeName);
+		CalculateIntorpolatedScaling(Scaling, NodeName, boneMap);
 		glm::mat4 ScalingM;
 		ScalingM = glm::scale(glm::mat4(1), glm::vec3(Scaling.x, Scaling.y, Scaling.z));
 		// Interpolate rotation and generate rotation transformation matrix
 		glm::quat RotationQ;
-		CalculateInterpolatedRotation(RotationQ, NodeName);
+		CalculateInterpolatedRotation(RotationQ, NodeName, boneMap);
 		glm::mat4 RotationM = glm::mat4(glm::toMat4(RotationQ));
 
 		// Interpolate translation and generate translation transformation matrix
 		glm::vec3 Translation;
-		CalculateInterpolatedPosition(Translation, NodeName);
+		CalculateInterpolatedPosition(Translation, NodeName, boneMap);
 		glm::mat4 TranslationM;
 		TranslationM = glm::translate(glm::mat4(1), glm::vec3(Translation.x, Translation.y, Translation.z));
 		// Combine the above transformations
@@ -100,9 +107,12 @@ void Animation::ReadNodeHierarchy(Node* node, const glm::mat4 & parentTransform,
 	}
 }
 
-void Animation::CalculateInterpolatedPosition(glm::vec3& out, const std::string nodeName)
+void Animation::CalculateInterpolatedPosition(glm::vec3& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap)
 {
-	BoneKeyFrames* currentBoneKeyFrames = &boneKeyMap[nodeName];
+	BoneKeyFrames* currentBoneKeyFrames = &(*boneKeyMap)[nodeName];
+
+	//currentBoneKeyFrames->lastPositionKeyFrame = boneMap[nodeName].lastPositionKeyFrame;
+
 	if (currentBoneKeyFrames->transformKeyFrames.size() == 1) {
 		out = glm::vec3(currentBoneKeyFrames->transformKeyFrames[0].x, currentBoneKeyFrames->transformKeyFrames[0].y, currentBoneKeyFrames->transformKeyFrames[0].z);
 		return;
@@ -127,12 +137,17 @@ void Animation::CalculateInterpolatedPosition(glm::vec3& out, const std::string 
 	out = Start + Factor * Delta;
 
 	std::swap(globalAnimationTime, animationTime);
+
+	//boneMap[nodeName].lastPositionKeyFrame = currentBoneKeyFrames->lastPositionKeyFrame;
 }
 
-void Animation::CalculateInterpolatedRotation(glm::quat& out, const std::string nodeName)
+void Animation::CalculateInterpolatedRotation(glm::quat& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap)
 {
-	BoneKeyFrames* currentBoneKeyFrames = &boneKeyMap[nodeName];
+	BoneKeyFrames* currentBoneKeyFrames = &(*boneKeyMap)[nodeName];
 	// we need at least two values to interpolate...
+
+	//currentBoneKeyFrames->lastRotationKeyFrame = boneMap[nodeName].lastRotationKeyFrame;
+
 	if (currentBoneKeyFrames->rotationKeyFrames.size() == 1) {
 		out = glm::quat(currentBoneKeyFrames->rotationKeyFrames[0].x, currentBoneKeyFrames->rotationKeyFrames[0].y, currentBoneKeyFrames->rotationKeyFrames[0].z, currentBoneKeyFrames->rotationKeyFrames[0].w);
 		return;
@@ -156,11 +171,16 @@ void Animation::CalculateInterpolatedRotation(glm::quat& out, const std::string 
 	out = normalize(out);
 
 	std::swap(globalAnimationTime, animationTime);
+
+	//boneMap[nodeName].lastRotationKeyFrame = currentBoneKeyFrames->lastRotationKeyFrame;
 }
 
-void Animation::CalculateIntorpolatedScaling(glm::vec3& out, const std::string nodeName)
+void Animation::CalculateIntorpolatedScaling(glm::vec3& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap)
 {
-	BoneKeyFrames* currentBoneKeyFrames = &boneKeyMap[nodeName];
+	BoneKeyFrames* currentBoneKeyFrames = &(*boneKeyMap)[nodeName];
+
+	//currentBoneKeyFrames->lastScaleKeyFrame = boneMap[nodeName].lastScaleKeyFrame;
+
 	if (currentBoneKeyFrames->scaleKeyFrames.size() == 1) {
 		out = glm::vec3(currentBoneKeyFrames->scaleKeyFrames[0].x, currentBoneKeyFrames->scaleKeyFrames[0].y, currentBoneKeyFrames->scaleKeyFrames[0].z);
 		return;
@@ -184,6 +204,8 @@ void Animation::CalculateIntorpolatedScaling(glm::vec3& out, const std::string n
 	out = Start + Factor * Delta;
 
 	std::swap(globalAnimationTime, animationTime);
+
+	//boneMap[nodeName].lastScaleKeyFrame = currentBoneKeyFrames->lastScaleKeyFrame;
 }
 
 unsigned int Animation::FindPosition(BoneKeyFrames* currentBoneKeyFrames)

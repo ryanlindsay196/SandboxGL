@@ -24,7 +24,7 @@ class Animation
 {
 private:
 	glm::mat4 m_GlobalInverseTransform;
-	std::unordered_map<std::string, BoneKeyFrames> boneKeyMap;
+	std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap;
 public:
 	float animationTime;
 	int ticksPerSecond;
@@ -32,13 +32,13 @@ public:
 		return (T(0) < val) - (val < T(0));
 	}
 
-	void Initialize(const aiScene * scene, unsigned int animationIndex);
-
+	void Initialize(const aiScene * scene, unsigned int animationIndex, std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap);
+	//void SetBoneKeyMap(std::unordered_map<std::string, BoneKeyFrames>* newBoneKeyMap);
 	void ReadNodeHierarchy(Node* node, const glm::mat4& parentTransform, std::unordered_map<std::string, BoneData> & boneMap);
 
-	void CalculateInterpolatedPosition(glm::vec3& out, const std::string nodeName);
-	void CalculateInterpolatedRotation(glm::quat& out, const std::string nodeName);
-	void CalculateIntorpolatedScaling(glm::vec3& out, const std::string nodeName);
+	void CalculateInterpolatedPosition(glm::vec3& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap);
+	void CalculateInterpolatedRotation(glm::quat& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap);
+	void CalculateIntorpolatedScaling(glm::vec3& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap);
 
 	unsigned int FindPosition(BoneKeyFrames* currentBoneKeyFrames);
 	unsigned int FindRotation(BoneKeyFrames* currentBoneKeyFrames);

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Renderables/Mesh.h"
+#include "AnimationDataStructures.h"
 
 class MeshData
 {
@@ -16,6 +17,10 @@ class ModelData
 public:
 	//unsigned int VAO, EBO, VBO;
 	std::vector<MeshData> m_meshData;
+	Node* rootNode;
+	std::vector<Animation> animations;
+	std::unordered_map<std::string, BoneData> boneMap;
+	std::unordered_map<std::string, BoneKeyFrames> boneKeyMap;
 };
 
 //struct Vertex {

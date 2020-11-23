@@ -30,7 +30,7 @@ Model::~Model()
 	m_meshes.clear();
 	boneMap.clear();
 
-	delete(rootNode);
+	//delete(rootNode);
 }
 
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, std::string& modelPath, std::string& materialPath)
@@ -49,11 +49,28 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 			//if (m_meshes.size() < m_modelData->m_meshData.size())
 			m_meshes.push_back(Mesh(objectManager, materialPath, this, &m_modelData->m_meshData[i]));
 			m_meshes[m_meshes.size() - 1].SetTransform(m_modelData->m_meshData[i].meshTransform);
+			//TODO: Load nodes from loaded model?
+
+		}
+
+		//Load bones from previously loaded model data
+		for (auto it : m_modelData->boneMap)
+		{
+			boneMap.insert(std::pair<std::string, BoneData>(it));
 		}
 	}
-	//If this is the first time loading a model
+	//If the model data isn't currently loaded in memory
 	else
+	{
 		LoadModel(modelPath, materialPath);
+		//m_modelData->boneMap.insert(boneMap.begin(), boneMap.end());
+		for (auto it : boneMap)
+		{
+			//when copying boneMap data into m_modelData->boneMap, make sure the values of each bone (e.g. offsetTransform) are initialized 
+			//with correct values
+			m_modelData->boneMap.insert(std::pair<std::string, BoneData>(it));
+		}
+	}
 	for(unsigned int i = 0; i < m_meshes.size(); i++)
 		m_meshes[i].AttachMeshData(&m_modelData->m_meshData[i]);
 
@@ -82,19 +99,19 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 		return;
 	}
 
-	if (!rootNode)
-		rootNode = new Node();
+	if (!m_modelData->rootNode)
+		m_modelData->rootNode = new Node();
 	//m_meshes.resize(scene->mNumMeshes);
 	//process ASSIMP's root node recursively
-	ProcessNode(scene->mRootNode, scene, materialPath, rootNode, nullptr);
+	ProcessNode(scene->mRootNode, scene, materialPath, m_modelData->rootNode, nullptr);
 
 	for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 	{
 		Animation newAnim = Animation();
-		newAnim.Initialize(scene, i);
+		newAnim.Initialize(scene, i, &m_modelData->boneKeyMap);
 		//std::pair<std::string, Animation> newAnimPair(aiScene->mAnimations[i]->mName.C_Str(), newAnim);
 		//animationMap.insert(newAnimPair);
-		animations.push_back(newAnim);
+		m_modelData->animations.push_back(newAnim);
 	}
 }
 
@@ -168,8 +185,8 @@ Mesh * Model::GetMesh(unsigned int i)
 void Model::Update(float gameTime)
 {
 	WorldComponent::Update(gameTime);
-	if(animationIndex < animations.size())
-		animations[animationIndex].animationTime += animations[animationIndex].ticksPerSecond * gameTime;
+	if(animationIndex < m_modelData->animations.size())
+		m_modelData->animations[animationIndex].animationTime += m_modelData->animations[animationIndex].ticksPerSecond * gameTime;
 }
 
 void Model::Render(LightManager* lightManager)
@@ -193,9 +210,9 @@ void Model::Render(LightManager* lightManager)
 	if (boneMap.size() == 0)
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1), GL_FALSE);
 
-	if (animations.size() > 0)
-		//animations[animationIndex].ReadNodeHierarchy(rootNode, glm::mat4(1), boneMap);
-		animations[animationIndex].ReadNodeHierarchy(rootNode, rootNode->transform, boneMap);
+	if (m_modelData->animations.size() > 0)
+		m_modelData->animations[animationIndex].ReadNodeHierarchy(m_modelData->rootNode, glm::mat4(1), boneMap);
+		//m_modelData->animations[animationIndex].ReadNodeHierarchy(m_modelData->rootNode, m_modelData->rootNode->transform, boneMap);
 
 	for (auto it : boneMap)
 	{

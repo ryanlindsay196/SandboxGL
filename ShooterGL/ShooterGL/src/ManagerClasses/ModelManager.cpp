@@ -36,6 +36,7 @@ Model* ModelManager::LoadModel(std::string& modelPath, std::string materialPath,
 
 std::shared_ptr<ModelData> ModelManager::LoadModelData(std::string hashID)
 {
+	//Make the hashID lower case
 	std::transform(hashID.begin(), hashID.end(), hashID.begin(),
 		[](unsigned char c) { return std::tolower(c); });
 	auto modelData = modelDataMap.find(hashID);

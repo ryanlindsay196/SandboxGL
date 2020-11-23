@@ -43,9 +43,7 @@ private:
 	TextureManager* m_textureManager;
 	std::shared_ptr<ModelData> m_modelData;
 	std::vector<Mesh> m_meshes;
-	Node* rootNode;
 
-	std::vector<Animation> animations;
 	unsigned int animationIndex;
 
 	unsigned int totalBones;
