@@ -81,8 +81,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)ShooterGL\Dependencies\assimp\include;src;src\vendor;$(SolutionDir)ShooterGL\Dependencies\GLFW\include;$(SolutionDir)ShooterGL\Dependencies\GLEW\include;$(SolutionDir)ShooterGL\Dependencies\GLM\include;$(SolutionDir)ShooterGL\Dependencies\SOIL2\include;$(SolutionDir)ShooterGL\Dependencies\Glad\include;$(SolutionDir)ShooterGL\Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)ShooterGL/Dependencies/Assimp/lib;$(SolutionDir)ShooterGL/Dependencies/GLEW/lib/Release/Win32;$(SolutionDir)ShooterGL/Dependencies/GLFW/lib-vc2017;$(SolutionDir)ShooterGL/Dependencies/SOIL2/lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32.lib;glew32s.lib;soil2.lib;soil2-debug.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ShooterGL/Dependencies/Assimp/lib;$(SolutionDir)ShooterGL/Dependencies/GLEW/lib/Release/Win32;$(SolutionDir)ShooterGL/Dependencies/GLFW/lib-vc2017;$(SolutionDir)ShooterGL/Dependencies/SOIL2/lib;$(SolutionDir)ShooterGL/Dependencies/Enet/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;glew32s.lib;soil2.lib;soil2-debug.lib;assimp-vc140-mt.lib;enet.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
