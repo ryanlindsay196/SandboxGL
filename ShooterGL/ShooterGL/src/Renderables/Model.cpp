@@ -191,7 +191,6 @@ void Model::Update(float gameTime)
 
 void Model::Render(LightManager* lightManager)
 {
-
 	//TODO: Check why the first condition (i < 1) is here
 	for (unsigned int i = 0; i < 1 && i < lightManager->TotalLights(); i++)
 	{

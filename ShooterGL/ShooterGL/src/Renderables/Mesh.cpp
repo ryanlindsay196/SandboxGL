@@ -195,9 +195,9 @@ Mesh::Mesh(ObjectManager * objectManager, std::string& materialPath, WorldCompon
 	positionOffset = glm::mat4(1);
 
 	offsetTransform = glm::mat4(1);
+	LoadShaders();
 	if (meshData->vertices.size() > 0)
 		return;
-
 }
 
 void Mesh::LoadShaders()

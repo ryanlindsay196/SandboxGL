@@ -32,8 +32,12 @@ int main()
 	//Server game loop start
 	while (true)
 	{
-		while (enet_host_service(server, &enetEvent, 1000) > 0)
+
+		while (enet_host_service(server, &enetEvent, 0) > 0)
 		{
+			ENetPacket* packet = enet_packet_create("SpawnPlayer", strlen("SpawnPlayer") + 1, ENET_PACKET_FLAG_RELIABLE);
+			enet_peer_send(enetEvent.peer, 0, packet);
+
 			switch (enetEvent.type)
 			{
 			case ENET_EVENT_TYPE_CONNECT:

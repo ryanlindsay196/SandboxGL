@@ -10,7 +10,9 @@
 #include "ControllerManager.h"
 #include "LightManager.h"
 #include "ShaderManager.h"
+#include "ManagerClasses/NetworkManager.h"
 #include "PhysicsManager.h"
+#include "NetworkManager.h"
 
 #include <iostream>
 
@@ -31,10 +33,25 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	physicsManager = new PhysicsManager();
 	
 	LoadScene("Resources/Scenes/Test2.scene", window);
+
+	//TODO: Make sure networkManager only loads and updates when there is a networked object in the scene
+	networkManager = new NetworkManager();
+	networkManager->Initialize(entityManager);
+
 }
 
 void ObjectManager::Update(float gameTime)
 {
+
+#pragma region TODO: Temporary. Please Move elsewhere or refactor
+	//while (true)
+	{
+		networkManager->Update(0.01f);
+	}
+	//networkManager->DeInitialize();
+#pragma endregion
+
+
 	fixedUpdateTimer += gameTime;
 	entityManager->Update(gameTime);
 	if (fixedUpdateTimer >= fixedUpdateMaxTime)

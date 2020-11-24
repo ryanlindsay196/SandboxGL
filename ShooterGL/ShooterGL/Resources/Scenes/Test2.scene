@@ -125,10 +125,3 @@ PREFAB : Resources/Prefabs/Floor.prefab
 	RotationAngle : 3.14
 	Scale : 1,1,1
 }
-PREFAB : Resources/Prefabs/Floor.prefab
-{
-	Position : 16,0,0
-	EulerAngles : 0,0,1
-	RotationAngle : 3.14
-	Scale : 0.5,0.5,0.5
-}

@@ -1,10 +1,11 @@
 #pragma once
 #include "Component.h"
+#include "enet/enet.h"
 struct GLFWwindow;
 
 class Controller : public Component
 {
-	//Needs hot swappable controls
+	//TODO: Add hot swappable controls
 	//Hot swapping for controls 
 public:
 	void Initialize(GLFWwindow* newWindow);
@@ -16,4 +17,6 @@ public:
 	//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 private:
 	GLFWwindow* window;
+	//ENet
+
 };

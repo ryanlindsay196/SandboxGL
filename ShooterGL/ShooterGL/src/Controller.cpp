@@ -36,6 +36,7 @@ void Controller::Update(float gameTime)
 
 	//Keeps the player from moving up/down
 	moveDirection.y = 0;
+	//Moves the player up or down
 	if (mouseButtonDown0)
 		moveDirection += glm::vec3(0, 0.001, 0);
 	if(mouseButtonDown1)

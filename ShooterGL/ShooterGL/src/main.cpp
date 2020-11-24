@@ -5,8 +5,6 @@
 #include <GLFW/glfw3.h>
 #include "ManagerClasses/ObjectManager.h"
 
-//TODO: DELETE
-#include "ManagerClasses/NetworkManager.h"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -54,14 +52,6 @@ int main()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	bool firstFrame = true;
-
-	NetworkManager* networkManager = new NetworkManager();
-	networkManager->Initialize();
-	while (true)
-	{
-		networkManager->Update(0.01f);
-	}
-	networkManager->DeInitialize();
 
 #pragma region Gameplay Loop
 	while (!glfwWindowShouldClose(window))

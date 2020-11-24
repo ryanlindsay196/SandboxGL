@@ -17,6 +17,15 @@ Components
 		RotationAngle : 0
 		Scale : 1,1,1
 	}
+	Model
+	{
+		Path : Resources/Models/guitar_backpack/Rock_low.FBX
+		PositionOffset : 4,0,0
+		EulerAngles : 0,1,0
+		RotationAngle : 3.14
+		ScaleOffset : 0.04,0.04,0.04
+		Material : Resources/Materials/BackPackMaterial.mat
+	}
 }
 Tags
 {

@@ -4,8 +4,14 @@
 //TODO: Delete?
 #include <assert.h>
 
-void NetworkManager::Initialize()
+#include "glm.hpp"
+#include "EntityManager.h"
+
+void NetworkManager::Initialize(EntityManager* in_entityManager)
 {
+	entityManager = in_entityManager;
+
+
 	if (enet_initialize() != 0)
 	{
 		std::cout << stderr << "An error occurred while initializing ENet!" << std::endl;
@@ -63,7 +69,7 @@ void NetworkManager::DeInitialize()
 
 void NetworkManager::Update(float gameTime)
 {
-	while (enet_host_service(client, &enetEvent, 1000) > 0)
+	while (enet_host_service(client, &enetEvent, 1) > 0)
 	{
 		switch (enetEvent.type)
 		{
@@ -74,6 +80,9 @@ void NetworkManager::Update(float gameTime)
 				enetEvent.peer->address.host,
 				enetEvent.peer->address.port,
 				enetEvent.channelID);
+
+			if ((unsigned char*)enetEvent.packet->data == (unsigned char*)"SpawnPlayer")
+				InstantiateNetworkedPlayer();
 			break;
 		}
 	}
@@ -81,4 +90,9 @@ void NetworkManager::Update(float gameTime)
 	//enet_packet_resize(packet, strlen("packetfoo") + 1);
 	//strcpy(&packet->data[strlen("packet")], "foo");
 	enet_peer_send(peer, 0, packet);
+}
+
+void NetworkManager::InstantiateNetworkedPlayer()
+{
+	entityManager->InstantiateEntity(entityManager->LoadEntityFromFile("Resources/Prefabs/Player.prefab"), glm::vec3(), glm::vec3(0, 1, 0), 0.f, glm::vec3(1), nullptr);
 }
