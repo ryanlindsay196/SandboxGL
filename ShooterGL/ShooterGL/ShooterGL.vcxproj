@@ -78,11 +78,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ShooterGL\Dependencies\assimp\include;src;src\vendor;$(SolutionDir)ShooterGL\Dependencies\GLFW\include;$(SolutionDir)ShooterGL\Dependencies\GLEW\include;$(SolutionDir)ShooterGL\Dependencies\GLM\include;$(SolutionDir)ShooterGL\Dependencies\SOIL2\include;$(SolutionDir)ShooterGL\Dependencies\Glad\include;$(SolutionDir)ShooterGL\Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ShooterGL\Dependencies\assimp\include;src;src\vendor;$(SolutionDir)ShooterGL\Dependencies\GLFW\include;$(SolutionDir)ShooterGL\Dependencies\GLEW\include;$(SolutionDir)ShooterGL\Dependencies\GLM\include;$(SolutionDir)ShooterGL\Dependencies\SOIL2\include;$(SolutionDir)ShooterGL\Dependencies\Glad\include;$(SolutionDir)ShooterGL\Dependencies\Assimp\include;$(SolutionDir)ShooterGL\Dependencies\Enet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)ShooterGL/Dependencies/Assimp/lib;$(SolutionDir)ShooterGL/Dependencies/GLEW/lib/Release/Win32;$(SolutionDir)ShooterGL/Dependencies/GLFW/lib-vc2017;$(SolutionDir)ShooterGL/Dependencies/SOIL2/lib;$(SolutionDir)ShooterGL/Dependencies/Enet/lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32.lib;glew32s.lib;soil2.lib;soil2-debug.lib;assimp-vc140-mt.lib;enet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;glew32s.lib;soil2.lib;soil2-debug.lib;assimp-vc140-mt.lib;enet.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -136,6 +136,7 @@
     <ClCompile Include="src\Collider.cpp" />
     <ClCompile Include="src\FileReader.cpp" />
     <ClCompile Include="src\ManagerClasses\AIManager.cpp" />
+    <ClCompile Include="src\ManagerClasses\NetworkManager.cpp" />
     <ClCompile Include="src\ManagerClasses\PhysicsManager.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
     <ClCompile Include="src\Animation.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="src\Collider.h" />
     <ClInclude Include="src\FileReader.h" />
     <ClInclude Include="src\ManagerClasses\AIManager.h" />
+    <ClInclude Include="src\ManagerClasses\NetworkManager.h" />
     <ClInclude Include="src\ManagerClasses\PhysicsManager.h" />
     <ClInclude Include="src\RigidBody.h" />
     <ClInclude Include="src\Animation.h" />
