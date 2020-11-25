@@ -22,28 +22,15 @@ void Controller::AddKeyBinding()
 
 void Controller::Update(float gameTime)
 {
-
-
-	glm::vec3 moveDirection = glm::vec3(0);
-	if (glfwGetKey(window, GLFW_KEY_W))
-		moveDirection -= componentParent->GetDirection();
-	if (glfwGetKey(window, GLFW_KEY_S))
-		moveDirection += componentParent->GetDirection();
-	if (glfwGetKey(window, GLFW_KEY_A))
-		moveDirection += glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
-	if (glfwGetKey(window, GLFW_KEY_D))
-		moveDirection -= glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
-
-	//Keeps the player from moving up/down
-	moveDirection.y = 0;
-	//Moves the player up or down
-	if (mouseButtonDown0)
-		moveDirection += glm::vec3(0, 0.001, 0);
-	if(mouseButtonDown1)
-		moveDirection -= glm::vec3(0, 0.001, 0);
-
-	Move(moveDirection, -3.f * gameTime);
-
+	if (!isNetworked)
+	{
+		forwardKeyPressed = glfwGetKey(window, GLFW_KEY_W);
+		leftKeyPressed = glfwGetKey(window, GLFW_KEY_A);
+		downKeyPressed = glfwGetKey(window, GLFW_KEY_S);
+		rightKeyPressed = glfwGetKey(window, GLFW_KEY_D);
+		//CheckForMovement(glfwGetKey(window, GLFW_KEY_W), glfwGetKey(window, GLFW_KEY_A), glfwGetKey(window, GLFW_KEY_S), glfwGetKey(window, GLFW_KEY_D), gameTime);
+	}
+	CheckForMovement(forwardKeyPressed, leftKeyPressed, downKeyPressed, rightKeyPressed, gameTime);
 	//Rotate the entity based on the mouse offset from the center of the screen
 	if (xoffset != 0 || yoffset != 0)
 	{
@@ -71,6 +58,47 @@ void Controller::Move(glm::vec3 direction, float moveSpeed)
 		//direction.y = 0;
 		componentParent->Translate(glm::normalize(direction) * moveSpeed);
 	}
+}
+
+void Controller::GetNetworkInput(int wasd)
+{
+	forwardKeyPressed = wasd & WASDPacket::W;
+	leftKeyPressed = wasd & WASDPacket::A;
+	downKeyPressed = wasd & WASDPacket::S;
+	rightKeyPressed = wasd & WASDPacket::D;
+}
+
+void Controller::SetIsNetworked(bool in_isNetworked)
+{
+	isNetworked = in_isNetworked;
+}
+
+bool Controller::GetIsNetworked()
+{
+	return isNetworked;
+}
+
+void Controller::CheckForMovement(bool wKey, bool aKey, bool sKey, bool dKey, float gameTime)
+{
+	glm::vec3 moveDirection = glm::vec3(0);
+	if (wKey)
+		moveDirection -= componentParent->GetDirection();
+	if (sKey)
+		moveDirection += componentParent->GetDirection();
+	if (aKey)
+		moveDirection += glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
+	if (dKey)
+		moveDirection -= glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
+
+	//Keeps the player from moving up/down
+	moveDirection.y = 0;
+	//Moves the player up or down
+	if (mouseButtonDown0)
+		moveDirection += glm::vec3(0, 0.001, 0);
+	if (mouseButtonDown1)
+		moveDirection -= glm::vec3(0, 0.001, 0);
+
+	Move(moveDirection, -3.f * gameTime);
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)

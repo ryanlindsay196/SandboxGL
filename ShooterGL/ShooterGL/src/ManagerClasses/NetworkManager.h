@@ -1,7 +1,10 @@
 #pragma once
 #include "enet/enet.h"
+#include <vector>
 
 class EntityManager;
+class Entity;
+class Controller;
 
 class NetworkManager
 {
@@ -10,7 +13,7 @@ public:
 	void DeInitialize();
 	void Update(float gameTime);
 private:
-	void InstantiateNetworkedPlayer();
+	Entity* InstantiateNetworkedPlayer();
 private:
 	ENetHost* client;
 	//Address and port of the server we're connecting to
@@ -21,4 +24,5 @@ private:
 	ENetPeer* peer;
 
 	EntityManager* entityManager;
+	std::vector<Controller*> networkedControllers;
 };

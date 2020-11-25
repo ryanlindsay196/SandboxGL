@@ -4,7 +4,7 @@ void ControllerManager::Initialize(GLFWwindow * window)
 {
 	controllers.clear();
 	m_window = window;
-	controllers.reserve(sizeof(Controller) * 4);
+	controllers.reserve(4);
 }
 
 Controller * ControllerManager::CreateController(Entity* newCameraParentEntity)

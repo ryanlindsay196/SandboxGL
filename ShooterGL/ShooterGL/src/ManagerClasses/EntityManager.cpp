@@ -154,7 +154,7 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 }
 
 //Add an entity into the scene
-void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 angleAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
+Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 angleAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
 	Entity* entity = new Entity();
 	entity->Instantiate(startPos, angleAxis, rotationAngle, startScale, parent);
@@ -200,6 +200,8 @@ void EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::v
 			std::cout << "EntityManager::InstantiateEntity(...)::Component " << entityData.componentName << " is not supported." << std::endl;
 		}
 	}
+
+	return entity;
 }
 
 void EntityManager::Update(float gameTime)

@@ -6,6 +6,9 @@
 
 #include "glm.hpp"
 #include "EntityManager.h"
+#include "Controller.h"
+#include "Entity.h"
+#include "FileReader.h"
 
 void NetworkManager::Initialize(EntityManager* in_entityManager)
 {
@@ -37,7 +40,7 @@ void NetworkManager::Initialize(EntityManager* in_entityManager)
 		assert(0);
 	}
 
-	if (enet_host_service(client, &enetEvent, 5000) > 0 &&
+	if (enet_host_service(client, &enetEvent, 1000) > 0 &&
 		enetEvent.type == ENET_EVENT_TYPE_CONNECT)
 	{
 		puts("Connection to 127.0.0.1:69 succeeded!");
@@ -69,7 +72,10 @@ void NetworkManager::DeInitialize()
 
 void NetworkManager::Update(float gameTime)
 {
-	while (enet_host_service(client, &enetEvent, 1) > 0)
+	//ENetPacket* packet = enet_packet_create("Check-in", strlen("Check-in") + 1, ENET_PACKET_FLAG_RELIABLE);
+	//enet_peer_send(peer, 0, packet);
+	//enet_packet_destroy(packet);
+	while (enet_host_service(client, &enetEvent, 0) > 0)
 	{
 		switch (enetEvent.type)
 		{
@@ -81,18 +87,39 @@ void NetworkManager::Update(float gameTime)
 				enetEvent.peer->address.port,
 				enetEvent.channelID);
 
-			if ((unsigned char*)enetEvent.packet->data == (unsigned char*)"SpawnPlayer")
-				InstantiateNetworkedPlayer();
+			if (strcmp((char*)enetEvent.packet->data, "SpawnPlayer") == 0)
+			{
+				Entity* newNetworkedPlayer = InstantiateNetworkedPlayer();
+				Controller* newNetworkedController = newNetworkedPlayer->FindController();
+				newNetworkedController->SetIsNetworked(true);
+				networkedControllers.push_back(newNetworkedController);
+			}
+
+			//New scope
+			{
+				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair((char*)enetEvent.packet->data, ":");
+				if (keyValuePair.first == "WASD")
+				{
+					std::pair<std::string, std::string> idWASDPair = GenerateKeyValuePair(keyValuePair.second, ":");
+					int controllerID = stoi(idWASDPair.first);
+					int wasd = stoi(idWASDPair.second);
+					networkedControllers[controllerID]->GetNetworkInput(wasd);
+				}
+			}
+
+			break;
+		case ENET_EVENT_TYPE_DISCONNECT:
+			printf("Disconnedted from server.");
 			break;
 		}
 	}
-	ENetPacket* packet = enet_packet_create("packetfoo", strlen("packetfoo") + 1, ENET_PACKET_FLAG_RELIABLE);
+	//ENetPacket* packet = enet_packet_create("packetfoo", strlen("packetfoo") + 1, ENET_PACKET_FLAG_RELIABLE);
 	//enet_packet_resize(packet, strlen("packetfoo") + 1);
 	//strcpy(&packet->data[strlen("packet")], "foo");
-	enet_peer_send(peer, 0, packet);
+	//enet_peer_send(peer, 0, packet);
 }
 
-void NetworkManager::InstantiateNetworkedPlayer()
+Entity* NetworkManager::InstantiateNetworkedPlayer()
 {
-	entityManager->InstantiateEntity(entityManager->LoadEntityFromFile("Resources/Prefabs/Player.prefab"), glm::vec3(), glm::vec3(0, 1, 0), 0.f, glm::vec3(1), nullptr);
+	return entityManager->InstantiateEntity(entityManager->LoadEntityFromFile("Resources/Prefabs/Player.prefab"), glm::vec3(), glm::vec3(0, 1, 0), 0.f, glm::vec3(1), nullptr);
 }

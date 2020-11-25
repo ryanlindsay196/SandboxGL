@@ -4,7 +4,7 @@ void CameraManager::Initialize(ObjectManager * objectManager)
 {
 	cameras.clear();
 	m_objectManager = objectManager;
-	cameras.reserve(sizeof(Camera) * 4);
+	cameras.reserve(4);
 }
 
 Camera* CameraManager::CreateCamera(Entity * newParent)

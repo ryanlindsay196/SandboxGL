@@ -72,7 +72,7 @@ int main()
 			objectManager->LoadScene("Resources/Scenes/Test2.scene", window);
 
 		lastFrame = currentFrame;
-		std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
+		//std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
 	}
 #pragma endregion
 

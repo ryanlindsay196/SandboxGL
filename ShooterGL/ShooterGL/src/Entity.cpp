@@ -10,6 +10,9 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 #define M_PI   3.14159265358979323846264338327950288
+
+#include "Controller.h"
+
 Entity::~Entity()
 {
 	components.clear();
@@ -55,6 +58,19 @@ void Entity::Render(LightManager* lightManager)
 	{
 		component->Render(lightManager);
 	}
+}
+
+Controller * Entity::FindController()
+{
+	for (Component* component : components)
+	{
+		Controller* controller = dynamic_cast<Controller*>(component);
+		if (controller != nullptr)
+		{
+			return controller;
+		}
+	}
+	return nullptr;
 }
 
 void Entity::SetParent(Entity * newParent)

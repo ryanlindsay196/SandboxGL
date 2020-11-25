@@ -4,6 +4,9 @@
 #include "pch.h"
 #include <iostream>
 #include <enet/enet.h>
+#include <vector>
+
+std::vector<ENetPeer> peers;
 
 int main()
 {
@@ -32,18 +35,28 @@ int main()
 	//Server game loop start
 	while (true)
 	{
+		ENetPacket* packet = nullptr;// = enet_packet_create("SpawnPlayer", strlen("SpawnPlayer") + 1, ENET_PACKET_FLAG_RELIABLE);
 
 		while (enet_host_service(server, &enetEvent, 0) > 0)
 		{
-			ENetPacket* packet = enet_packet_create("SpawnPlayer", strlen("SpawnPlayer") + 1, ENET_PACKET_FLAG_RELIABLE);
-			enet_peer_send(enetEvent.peer, 0, packet);
-
 			switch (enetEvent.type)
 			{
 			case ENET_EVENT_TYPE_CONNECT:
 				printf("A new client connected from %x:%u.\n",
 					enetEvent.peer->address.host,
 					enetEvent.peer->address.port);
+				{
+					packet = enet_packet_create("SpawnPlayer", strlen("SpawnPlayer") + 1, ENET_PACKET_FLAG_RELIABLE);
+
+					if (enet_peer_send(enetEvent.peer, 0, packet) < 0)
+						printf("Can't send packet");
+					//peers.push_back(*enetEvent.peer);
+
+
+					packet = enet_packet_create("WASD:0:6", strlen("WASD:0:1") + 1, ENET_PACKET_FLAG_RELIABLE);
+					enet_peer_send(enetEvent.peer, 0, packet);
+					//enet_packet_destroy(packet);
+				}
 				break;
 			case ENET_EVENT_TYPE_RECEIVE:
 				printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
@@ -61,9 +74,25 @@ int main()
 				break;
 			}
 		}
+		//enet_packet_destroy(packet);
+
+		//if (enetEvent.peer != NULL)
+		//{
+		//	packet = enet_packet_create("WASD:0:1", strlen("WASD:0:1") + 1, ENET_PACKET_FLAG_RELIABLE);
+		//	enet_peer_send(enetEvent.peer, 3000, packet);
+		//	enet_packet_destroy(packet);
+		//}
+		//for (ENetPeer peer : peers)
+		//{
+		//	if (&peer != nullptr)
+		//	{
+		//		packet = enet_packet_create("WASD:0:1", strlen("WASD:0:1") + 1, ENET_PACKET_FLAG_RELIABLE);
+		//		enet_peer_send(&peer, 300, packet);
+		//		enet_packet_destroy(packet);
+		//	}
+		//}
 	}
 	//server game loop end
-
 	enet_host_destroy(server);
 
 	return EXIT_SUCCESS;

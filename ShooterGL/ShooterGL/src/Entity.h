@@ -6,6 +6,7 @@
 
 class Component;
 class LightManager;
+class Controller;
 
 class Entity
 {
@@ -15,6 +16,8 @@ public:
 	void Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scale, Entity* newParent);
 	void Update(float gameTime);
 	void Render(LightManager* lightManager);
+
+	Controller* FindController();
 
 	void SetParent(Entity* newParent);
 	void AddComponent(Component* newComponent);
@@ -56,3 +59,4 @@ private:
 	std::vector<Component*> components;
 	std::vector<std::string> tags;
 };
+
