@@ -23,6 +23,9 @@ public:
 	void Move(glm::vec3 direction, float moveSpeed);
 	//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
+	void SetPlayerID(unsigned int newPlayerID);
+	unsigned int GetPlayerID();
+
 	void GetNetworkInput(int wasd);
 
 	void SetIsNetworked(bool in_isNetworked);
@@ -33,4 +36,5 @@ private:
 	GLFWwindow* window;
 	bool isNetworked;
 	bool forwardKeyPressed, leftKeyPressed, downKeyPressed, rightKeyPressed;
+	unsigned int playerID;
 };

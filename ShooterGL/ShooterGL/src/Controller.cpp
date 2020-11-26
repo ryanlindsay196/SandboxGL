@@ -60,6 +60,16 @@ void Controller::Move(glm::vec3 direction, float moveSpeed)
 	}
 }
 
+void Controller::SetPlayerID(unsigned int newPlayerID)
+{
+	playerID = newPlayerID;
+}
+
+unsigned int Controller::GetPlayerID()
+{
+	return playerID;
+}
+
 void Controller::GetNetworkInput(int wasd)
 {
 	forwardKeyPressed = wasd & WASDPacket::W;

@@ -80,6 +80,8 @@ void NetworkManager::Update(float gameTime)
 		switch (enetEvent.type)
 		{
 		case ENET_EVENT_TYPE_RECEIVE:
+		{
+			std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair((char*)enetEvent.packet->data, ":");
 			printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
 				enetEvent.packet->dataLength,
 				enetEvent.packet->data,
@@ -87,27 +89,32 @@ void NetworkManager::Update(float gameTime)
 				enetEvent.peer->address.port,
 				enetEvent.channelID);
 
-			if (strcmp((char*)enetEvent.packet->data, "SpawnPlayer") == 0)
+			if (keyValuePair.first == "SpawnPlayer")
 			{
 				Entity* newNetworkedPlayer = InstantiateNetworkedPlayer();
 				Controller* newNetworkedController = newNetworkedPlayer->FindController();
+				newNetworkedController->SetPlayerID((unsigned int)std::stoi(keyValuePair.second));
 				newNetworkedController->SetIsNetworked(true);
 				networkedControllers.push_back(newNetworkedController);
 			}
 
-			//New scope
+			if (keyValuePair.first == "WASD")
 			{
-				std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair((char*)enetEvent.packet->data, ":");
-				if (keyValuePair.first == "WASD")
+				std::pair<std::string, std::string> idWASDPair = GenerateKeyValuePair(keyValuePair.second, ":");
+				int controllerID = stoi(idWASDPair.first);
+				int wasd = stoi(idWASDPair.second);
+				for (int i = 0; i < networkedControllers.size(); i++)
 				{
-					std::pair<std::string, std::string> idWASDPair = GenerateKeyValuePair(keyValuePair.second, ":");
-					int controllerID = stoi(idWASDPair.first);
-					int wasd = stoi(idWASDPair.second);
-					networkedControllers[controllerID]->GetNetworkInput(wasd);
+					//Once the correct controller is found, update it's input
+					if (networkedControllers[i]->GetPlayerID() == controllerID)
+					{
+						networkedControllers[i]->GetNetworkInput(wasd);
+						break;
+					}
 				}
 			}
-
-			break;
+		}
+		break;
 		case ENET_EVENT_TYPE_DISCONNECT:
 			printf("Disconnedted from server.");
 			break;

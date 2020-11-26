@@ -1,10 +1,9 @@
-// ShooterGL_Server.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-#include "pch.h"
 #include <iostream>
 #include <enet/enet.h>
 #include <vector>
+#include <string>
+#include "Lobby.h"
+
 
 std::vector<ENetPeer> peers;
 
@@ -33,8 +32,10 @@ int main()
 	}
 
 	//Server game loop start
+	Lobby lobby = Lobby();
 	while (true)
 	{
+		lobby.Update(0.01f);
 		ENetPacket* packet = nullptr;// = enet_packet_create("SpawnPlayer", strlen("SpawnPlayer") + 1, ENET_PACKET_FLAG_RELIABLE);
 
 		while (enet_host_service(server, &enetEvent, 0) > 0)
@@ -46,15 +47,19 @@ int main()
 					enetEvent.peer->address.host,
 					enetEvent.peer->address.port);
 				{
-					packet = enet_packet_create("SpawnPlayer", strlen("SpawnPlayer") + 1, ENET_PACKET_FLAG_RELIABLE);
+					unsigned int newPlayerID = lobby.AddPeer(*enetEvent.peer);
 
-					if (enet_peer_send(enetEvent.peer, 0, packet) < 0)
-						printf("Can't send packet");
-					//peers.push_back(*enetEvent.peer);
-
-
-					packet = enet_packet_create("WASD:0:6", strlen("WASD:0:1") + 1, ENET_PACKET_FLAG_RELIABLE);
-					enet_peer_send(enetEvent.peer, 0, packet);
+					std::string packetData = "SpawnPlayer:" + std::to_string(newPlayerID);
+					lobby.BroadcastPacket(&packetData);
+					packetData = "WASD:0:1";
+					lobby.BroadcastPacket(&packetData);
+					//packet = enet_packet_create(packetData.c_str(), strlen(packetData.c_str()) + 1, ENET_PACKET_FLAG_RELIABLE);
+					//
+					//if (enet_peer_send(enetEvent.peer, 0, packet) < 0)
+					//	printf("Can't send packet");
+					//
+					//packet = enet_packet_create("WASD:0:6", strlen("WASD:0:1") + 1, ENET_PACKET_FLAG_RELIABLE);
+					//enet_peer_send(enetEvent.peer, 0, packet);
 					//enet_packet_destroy(packet);
 				}
 				break;

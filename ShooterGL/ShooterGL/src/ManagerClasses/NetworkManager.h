@@ -23,6 +23,9 @@ private:
 	//The server that we're connecting to
 	ENetPeer* peer;
 
+	unsigned int lobbyID;
+	unsigned int playerID;
+
 	EntityManager* entityManager;
 	std::vector<Controller*> networkedControllers;
 };

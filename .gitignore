@@ -1,6 +1,10 @@
 /ShooterGL/Debug/*
 /ShooterGL/.vs/*
 ShooterGL/ShooterGL/Debug
+
+/ShooterGL_Server/Debug/*
+/ShooterGL_Server/.vs/*
+ShooterGL_Server/ShooterGL_Server/Debug
 *.obj
 *.exe
 ShooterGL_Server/.vs/ShooterGL_Server/v15/Browse.VC.opendb
