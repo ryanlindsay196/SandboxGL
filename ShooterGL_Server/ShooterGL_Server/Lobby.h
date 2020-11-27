@@ -27,7 +27,9 @@ public:
 
 	//Sends a packet to all peers in the lobby
 	bool BroadcastPacket(std::string * packetData);
+	bool BroadcastPacket(std::string * packetData, int playerIDToExclude);
 private:
 	PeerData peers[4];
-	//std::vector<PacketData> packetsToDestroy;
+
+	void RequestPositions();
 };

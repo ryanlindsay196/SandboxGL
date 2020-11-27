@@ -30,6 +30,7 @@ public:
 	void Scale(glm::vec3 scaleBy);
 
 	void SetPosition(glm::vec3 newPosition);
+	void SetRotation(glm::quat newQuaternion);
 	void SetEulerAngles(glm::vec3 newEuler);
 	void SetScale(glm::vec3 newScale);
 

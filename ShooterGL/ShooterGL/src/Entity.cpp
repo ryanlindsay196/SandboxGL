@@ -120,6 +120,16 @@ void Entity::SetPosition(glm::vec3 newPosition)
 	position = newPosition;
 }
 
+void Entity::SetRotation(glm::quat newQuaternion)
+{
+	rotationQuat = newQuaternion;
+	glm::vec3 newEulers = MathHelperFunctions::QuaternionToEulerAngles(rotationQuat);
+
+	pitch = newEulers.x;
+	yaw = newEulers.y;
+	roll = newEulers.z;
+}
+
 void Entity::SetEulerAngles(glm::vec3 newEuler)
 {
 	pitch = newEuler.x;

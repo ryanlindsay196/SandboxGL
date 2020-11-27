@@ -21,6 +21,7 @@ public:
 			return &controllers[i];
 		return nullptr;
 	}
+	unsigned int TotalControllers();
 
 	GLFWwindow* m_window;
 

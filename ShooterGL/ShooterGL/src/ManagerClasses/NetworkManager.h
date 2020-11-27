@@ -5,15 +5,18 @@
 class EntityManager;
 class Entity;
 class Controller;
+class ControllerManager;
 
 class NetworkManager
 {
 public:
-	void Initialize(EntityManager* in_entityManager);
+	void Initialize(EntityManager* in_entityManager, ControllerManager* in_controllerManager);
 	void DeInitialize();
 	void Update(float gameTime);
 private:
 	Entity* InstantiateNetworkedPlayer();
+	bool SendPacket(std::string* packetData);
+	std::vector<std::string> ParsePacket(std::string * packet);
 private:
 	ENetHost* client;
 	//Address and port of the server we're connecting to
@@ -26,6 +29,9 @@ private:
 	unsigned int lobbyID;
 	unsigned int playerID;
 
+	float requestPositionsTimer;
+	const float requestPositionsMaxTime = 5;
+
 	EntityManager* entityManager;
-	std::vector<Controller*> networkedControllers;
+	ControllerManager* controllerManager;
 };

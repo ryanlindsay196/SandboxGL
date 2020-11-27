@@ -14,3 +14,8 @@ Controller * ControllerManager::CreateController(Entity* newCameraParentEntity)
 	controllers[controllers.size() - 1].componentParent = newCameraParentEntity;
 	return &controllers[controllers.size() - 1];
 }
+
+unsigned int ControllerManager::TotalControllers()
+{
+	return controllers.size();
+}

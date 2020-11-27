@@ -3,9 +3,9 @@
 #include <vector>
 #include <string>
 #include "Lobby.h"
+#pragma warning (disable : 4996)
 
-
-std::vector<ENetPeer> peers;
+std::vector<std::string> ParsePacket(ENetPacket* packet);
 
 int main()
 {
@@ -36,10 +36,10 @@ int main()
 	while (true)
 	{
 		lobby.Update(0.01f);
-		ENetPacket* packet = nullptr;// = enet_packet_create("SpawnPlayer", strlen("SpawnPlayer") + 1, ENET_PACKET_FLAG_RELIABLE);
 
 		while (enet_host_service(server, &enetEvent, 0) > 0)
 		{
+			std::vector<std::string> packetStrings;
 			switch (enetEvent.type)
 			{
 			case ENET_EVENT_TYPE_CONNECT:
@@ -50,17 +50,15 @@ int main()
 					unsigned int newPlayerID = lobby.AddPeer(*enetEvent.peer);
 
 					std::string packetData = "SpawnPlayer:" + std::to_string(newPlayerID);
+					lobby.BroadcastPacket(&packetData, newPlayerID);
+
+					packetData = "RequestPositions:" + std::to_string(newPlayerID);
 					lobby.BroadcastPacket(&packetData);
-					packetData = "WASD:0:1";
-					lobby.BroadcastPacket(&packetData);
-					//packet = enet_packet_create(packetData.c_str(), strlen(packetData.c_str()) + 1, ENET_PACKET_FLAG_RELIABLE);
-					//
-					//if (enet_peer_send(enetEvent.peer, 0, packet) < 0)
-					//	printf("Can't send packet");
-					//
-					//packet = enet_packet_create("WASD:0:6", strlen("WASD:0:1") + 1, ENET_PACKET_FLAG_RELIABLE);
-					//enet_peer_send(enetEvent.peer, 0, packet);
-					//enet_packet_destroy(packet);
+					//lobby.SendPacket(newPlayerID, &packetData);
+					
+					
+					//packetData = "WASD:0:1";
+					//lobby.BroadcastPacket(&packetData);
 				}
 				break;
 			case ENET_EVENT_TYPE_RECEIVE:
@@ -70,6 +68,31 @@ int main()
 					enetEvent.peer->address.host,
 					enetEvent.peer->address.port,
 					enetEvent.channelID);
+
+				packetStrings = ParsePacket(enetEvent.packet);
+
+				if (packetStrings.size() > 0)
+				{
+					if (packetStrings[0] == "PositionData")
+					{
+						///[0] = Header ("PositionData")
+						///[1] = LobbyID
+						///[2] = PlayerID of sender
+						///[3] = Position
+						///[4] = Rotation
+						///[5] = Scale
+						///[6] = PlayerID of receiver
+
+						std::string packetData = (char*)enetEvent.packet->data;
+						//TODO: When lobby is made into a list, broadcast packet to lobby[stoi(packetStrings[1])]
+						lobby.BroadcastPacket(&packetData, stoi(packetStrings[6]));
+					}
+					else if (packetStrings[0] == "RequestPositions")
+					{
+						std::string packetData = "RequestPositions:0";
+						lobby.SendPacket(stoi(packetStrings[1]), &packetData);
+					}
+				}
 				break;
 			case ENET_EVENT_TYPE_DISCONNECT:
 				printf("%x:%u disconnected.\n",
@@ -79,26 +102,27 @@ int main()
 				break;
 			}
 		}
-		//enet_packet_destroy(packet);
-
-		//if (enetEvent.peer != NULL)
-		//{
-		//	packet = enet_packet_create("WASD:0:1", strlen("WASD:0:1") + 1, ENET_PACKET_FLAG_RELIABLE);
-		//	enet_peer_send(enetEvent.peer, 3000, packet);
-		//	enet_packet_destroy(packet);
-		//}
-		//for (ENetPeer peer : peers)
-		//{
-		//	if (&peer != nullptr)
-		//	{
-		//		packet = enet_packet_create("WASD:0:1", strlen("WASD:0:1") + 1, ENET_PACKET_FLAG_RELIABLE);
-		//		enet_peer_send(&peer, 300, packet);
-		//		enet_packet_destroy(packet);
-		//	}
-		//}
 	}
 	//server game loop end
 	enet_host_destroy(server);
 
 	return EXIT_SUCCESS;
+}
+
+std::vector<std::string> ParsePacket(ENetPacket * packet)
+{
+	std::vector<std::string> returnStrings;
+	std::pair<std::string, std::string> packetPair;
+
+	packetPair.second = std::string((char*)(packet->data)).substr(std::string((char*)(packet->data)).find_first_of(":") + 1);
+	packetPair.first = strtok((char*)std::string((char*)packet->data).c_str(), ":");
+
+	while (packetPair.first != packetPair.second)
+	{
+		returnStrings.push_back(packetPair.first);
+		packetPair.first = strtok((char*)std::string((char*)packetPair.second.c_str()).c_str(), ":");
+		packetPair.second = std::string((char*)packetPair.second.c_str()).substr(std::string((char*)packetPair.second.c_str()).find_first_of(":") + 1);
+	}
+	returnStrings.push_back(packetPair.second);
+	return returnStrings;
 }

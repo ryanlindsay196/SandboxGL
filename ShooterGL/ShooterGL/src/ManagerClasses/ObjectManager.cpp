@@ -36,7 +36,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 
 	//TODO: Make sure networkManager only loads and updates when there is a networked object in the scene
 	networkManager = new NetworkManager();
-	networkManager->Initialize(entityManager);
+	networkManager->Initialize(entityManager, controllerManager);
 
 }
 

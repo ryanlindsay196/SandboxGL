@@ -10,20 +10,6 @@ void Lobby::Update(float gameTime)
 		if (peers[i].peer != nullptr && peers[i].timeOutTimer <= 0)
 			RemovePeer(*peers[i].peer);
 	}
-
-	//TODO: DELETE?
-	//Loop through all packets and delete those that are out of time
-	//for (int i = 0; i < packetsToDestroy.size(); i++)
-	//{
-	//	packetsToDestroy[i].deleteTimer -= gameTime;
-	//
-	//	if (packetsToDestroy[i].deleteTimer <= 0)
-	//	{
-	//		enet_packet_destroy(packetsToDestroy[i].packet);
-	//		packetsToDestroy.erase(packetsToDestroy.begin() + i);
-	//		i--;
-	//	}
-	//}
 }
 
 unsigned int Lobby::AddPeer(ENetPeer & peer)
@@ -85,4 +71,26 @@ bool Lobby::BroadcastPacket(std::string * packetData)
 		}
 	}
 	return true;
+}
+
+bool Lobby::BroadcastPacket(std::string * packetData, int playerIDToExclude)
+{
+	ENetPacket* packet = enet_packet_create(packetData->c_str(), strlen(packetData->c_str()) + 1, ENET_PACKET_FLAG_RELIABLE);
+	for (int i = 0; i < sizeof(peers) / sizeof(PeerData); i++)
+	{
+		if (i == playerIDToExclude)
+			continue;
+		//If there is a peer in the current slot
+		if (peers[i].peer != nullptr)
+		{
+			enet_peer_send(peers[i].peer, 0, packet);
+		}
+	}
+	return true;
+}
+
+void Lobby::RequestPositions()
+{
+	std::string packetData = "RequestPositions";
+	BroadcastPacket(&packetData);
 }

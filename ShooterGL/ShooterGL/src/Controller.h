@@ -36,5 +36,5 @@ private:
 	GLFWwindow* window;
 	bool isNetworked;
 	bool forwardKeyPressed, leftKeyPressed, downKeyPressed, rightKeyPressed;
-	unsigned int playerID;
+	unsigned int playerID = -1;
 };
