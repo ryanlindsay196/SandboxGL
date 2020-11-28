@@ -3,6 +3,20 @@
 #include "enet/enet.h"
 struct GLFWwindow;
 
+struct KeyData
+{
+private:
+	bool isDown = false;
+	bool wasDown = false;
+public:
+	bool IsPressed() { return isDown && !wasDown; }
+	bool IsReleased() { return !isDown && wasDown; }
+	bool IsDown() { return isDown; }
+	void Press() { isDown = true; }
+	void Release() { isDown = false; }
+	void Update() { wasDown = isDown; }
+};
+
 class Controller : public Component
 {
 	enum WASDPacket
@@ -21,7 +35,11 @@ public:
 	//TODO: Add keyboard/controller support
 	//TODO: Add support for different entity states. These should be hot swappable
 	void Move(glm::vec3 direction, float moveSpeed);
-	//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+	
+	//The value of the change in WASD this frame
+	int ChangedWASD();
+	//The value of the current WASD this frame
+	int CurrentWASD();
 
 	void SetPlayerID(unsigned int newPlayerID);
 	unsigned int GetPlayerID();
@@ -35,6 +53,6 @@ private:
 private:
 	GLFWwindow* window;
 	bool isNetworked;
-	bool forwardKeyPressed, leftKeyPressed, downKeyPressed, rightKeyPressed;
+	KeyData forwardKey, leftKey, downKey, rightKey;
 	unsigned int playerID = -1;
 };

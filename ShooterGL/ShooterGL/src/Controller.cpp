@@ -22,15 +22,31 @@ void Controller::AddKeyBinding()
 
 void Controller::Update(float gameTime)
 {
+	forwardKey.Update();
+	leftKey.Update();
+	downKey.Update();
+	rightKey.Update();
 	if (!isNetworked)
 	{
-		forwardKeyPressed = glfwGetKey(window, GLFW_KEY_W);
-		leftKeyPressed = glfwGetKey(window, GLFW_KEY_A);
-		downKeyPressed = glfwGetKey(window, GLFW_KEY_S);
-		rightKeyPressed = glfwGetKey(window, GLFW_KEY_D);
+		if (glfwGetKey(window, GLFW_KEY_W))
+			forwardKey.Press();
+		else
+			forwardKey.Release();
+		if (glfwGetKey(window, GLFW_KEY_A))
+			leftKey.Press();
+		else
+			leftKey.Release();
+		if (glfwGetKey(window, GLFW_KEY_S))
+			downKey.Press();
+		else
+			downKey.Release();
+		if (glfwGetKey(window, GLFW_KEY_D))
+			rightKey.Press();
+		else
+			rightKey.Release();
 		//CheckForMovement(glfwGetKey(window, GLFW_KEY_W), glfwGetKey(window, GLFW_KEY_A), glfwGetKey(window, GLFW_KEY_S), glfwGetKey(window, GLFW_KEY_D), gameTime);
 	}
-	CheckForMovement(forwardKeyPressed, leftKeyPressed, downKeyPressed, rightKeyPressed, gameTime);
+	CheckForMovement(forwardKey.IsDown(), leftKey.IsDown(), downKey.IsDown(), rightKey.IsDown(), gameTime);
 	//Rotate the entity based on the mouse offset from the center of the screen
 	if (xoffset != 0 || yoffset != 0)
 	{
@@ -60,6 +76,24 @@ void Controller::Move(glm::vec3 direction, float moveSpeed)
 	}
 }
 
+int Controller::ChangedWASD()
+{
+	int forwardKeyChanged = WASDPacket::W & ((forwardKey.IsPressed() || forwardKey.IsReleased()) << 3);
+	int leftKeyChanged = WASDPacket::A & ((leftKey.IsPressed() || leftKey.IsReleased()) << 2);
+	int downKeyChanged = WASDPacket::S & ((downKey.IsPressed() || downKey.IsReleased()) << 1);
+	int rightKeyChanged = WASDPacket::D & ((rightKey.IsPressed() || rightKey.IsReleased()) << 0);
+	return forwardKeyChanged | leftKeyChanged | downKeyChanged | rightKeyChanged;
+}
+
+int Controller::CurrentWASD()
+{
+	int forwardKeyDown = forwardKey.IsDown() << 3;
+	int leftKeyDown = leftKey.IsDown() << 2;
+	int downKeyDown = downKey.IsDown() << 1;
+	int rightKeyDown = rightKey.IsDown() << 0;
+	return forwardKeyDown | leftKeyDown | downKeyDown | rightKeyDown;
+}
+
 void Controller::SetPlayerID(unsigned int newPlayerID)
 {
 	playerID = newPlayerID;
@@ -72,10 +106,22 @@ unsigned int Controller::GetPlayerID()
 
 void Controller::GetNetworkInput(int wasd)
 {
-	forwardKeyPressed = wasd & WASDPacket::W;
-	leftKeyPressed = wasd & WASDPacket::A;
-	downKeyPressed = wasd & WASDPacket::S;
-	rightKeyPressed = wasd & WASDPacket::D;
+	if (wasd & WASDPacket::W)
+		forwardKey.Press();
+	else
+		forwardKey.Release();
+	if (wasd & WASDPacket::A)
+		leftKey.Press();
+	else
+		leftKey.Release();
+	if (wasd & WASDPacket::S)
+		downKey.Press();
+	else
+		downKey.Release();
+	if (wasd & WASDPacket::D)
+		rightKey.Press();
+	else
+		rightKey.Release();
 }
 
 void Controller::SetIsNetworked(bool in_isNetworked)

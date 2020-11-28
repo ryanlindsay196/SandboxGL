@@ -31,7 +31,7 @@ private:
 	unsigned int playerID;
 
 	float requestPositionsTimer;
-	const float requestPositionsMaxTime = 0.4f;
+	const float requestPositionsMaxTime = 5.f;
 
 	EntityManager* entityManager;
 	ControllerManager* controllerManager;

@@ -46,12 +46,16 @@ void NetworkManager::Update(float gameTime)
 		requestPositionsTimer = requestPositionsMaxTime;
 		std::string packetData = "RequestPositions:" + std::to_string(playerID);
 		SendPacket(&packetData);
-		std::cout << std::endl << std::endl << "PlayerID = " << playerID << std::endl << std::endl;
+		//std::cout << std::endl << std::endl << "PlayerID = " << playerID << std::endl << std::endl;
 	}
 
-	//ENetPacket* packet = enet_packet_create("Check-in", strlen("Check-in") + 1, ENET_PACKET_FLAG_RELIABLE);
-	//enet_peer_send(peer, 0, packet);
-	//enet_packet_destroy(packet);
+	//Check local player for change in WASD (move direction)
+	if(controllerManager->GetController(0)->ChangedWASD() != 0)
+	{
+		std::string packetData = std::string("WASD:" + std::to_string(playerID) + ":" + std::to_string(controllerManager->GetController(0)->CurrentWASD()));
+		SendPacket(&packetData);
+	}
+
 	while (enet_host_service(client, &enetEvent, 0) > 0)
 	{
 		switch (enetEvent.type)
