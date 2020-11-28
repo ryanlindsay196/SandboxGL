@@ -44,7 +44,6 @@ void Controller::Update(float gameTime)
 			rightKey.Press();
 		else
 			rightKey.Release();
-		//CheckForMovement(glfwGetKey(window, GLFW_KEY_W), glfwGetKey(window, GLFW_KEY_A), glfwGetKey(window, GLFW_KEY_S), glfwGetKey(window, GLFW_KEY_D), gameTime);
 	}
 	CheckForMovement(forwardKey.IsDown(), leftKey.IsDown(), downKey.IsDown(), rightKey.IsDown(), gameTime);
 	//Rotate the entity based on the mouse offset from the center of the screen

@@ -105,14 +105,21 @@ void NetworkManager::Update(float gameTime)
 					std::to_string(pos.y) + 
 					std::string(",") + 
 					std::to_string(pos.z);
-				glm::quat rotation = localPlayer->GetRotation();
-				std::string playerRotation = std::to_string(rotation.x) + 
-					std::string(",") + 
-					std::to_string(rotation.y) + 
-					std::string(",") + 
-					std::to_string(rotation.z) + 
-					std::string(",") + 
-					std::to_string(rotation.w);
+				//glm::quat rotation = localPlayer->GetRotation();
+				//std::string playerRotation = std::to_string(rotation.x) + 
+				//	std::string(",") + 
+				//	std::to_string(rotation.y) + 
+				//	std::string(",") + 
+				//	std::to_string(rotation.z) + 
+				//	std::string(",") + 
+				//	std::to_string(rotation.w);
+				glm::vec3 eulers = localPlayer->GetEulerAngles();
+				std::string playerEulers = std::to_string(eulers.x) +
+					std::string(",") +
+					std::to_string(eulers.y) +
+					std::string(",") +
+					std::to_string(eulers.z);
+
 				glm::vec3 scale = localPlayer->GetScale();
 				std::string playerScale = std::to_string(scale.x) +
 					std::string(",") +
@@ -129,7 +136,8 @@ void NetworkManager::Update(float gameTime)
 					":" +
 					playerPosition +
 					":" +
-					playerRotation +
+					playerEulers +
+					//playerRotation +
 					":" +
 					playerScale + 
 					":" + 
@@ -157,7 +165,10 @@ void NetworkManager::Update(float gameTime)
 						std::cout << " Updated PLayer's position " << packetStrings[1] << std::endl;
 						Entity* playerToUpdate = controllerManager->GetController(i)->componentParent;
 						playerToUpdate->SetPosition(ParseVector(packetStrings[2]));
-						playerToUpdate->SetRotation(ParseQuaternion(packetStrings[3]));
+						
+						playerToUpdate->SetEulerAngles(ParseVector(packetStrings[3]));
+						//playerToUpdate->SetRotation(ParseQuaternion(packetStrings[3]));
+						
 						playerToUpdate->SetScale(ParseVector(packetStrings[4]));
 						playerFound = true;
 					}

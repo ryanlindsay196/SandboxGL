@@ -128,6 +128,8 @@ void Entity::SetRotation(glm::quat newQuaternion)
 	pitch = newEulers.x;
 	yaw = newEulers.y;
 	roll = newEulers.z;
+
+	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
 }
 
 void Entity::SetEulerAngles(glm::vec3 newEuler)
