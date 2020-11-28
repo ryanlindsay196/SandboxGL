@@ -17,41 +17,7 @@ void NetworkManager::Initialize(EntityManager* in_entityManager, ControllerManag
 	entityManager = in_entityManager;
 	controllerManager = in_controllerManager;
 
-	if (enet_initialize() != 0)
-	{
-		std::cout << stderr << "An error occurred while initializing ENet!" << std::endl;
-		assert(0);
-	}
-	atexit(enet_deinitialize);
-
-	client = enet_host_create(NULL, 1, 1, 0, 0);
-
-	if (client == nullptr)
-	{
-		std::cout << stderr << "An error occurred while trying to create an ENet client host!" << std::endl;
-		assert(0);
-	}
-
-	enet_address_set_host(&address, "127.0.0.1");
-	address.port = 69;
-
-	peer = enet_host_connect(client, &address, 1, 0);
-	if (peer == NULL)
-	{
-		std::cout << stderr << "No available peers for initiating ENEt connection!" << std::endl;
-		assert(0);
-	}
-
-	if (enet_host_service(client, &enetEvent, 1000) > 0 &&
-		enetEvent.type == ENET_EVENT_TYPE_CONNECT)
-	{
-		puts("Connection to 127.0.0.1:69 succeeded!");
-	}
-	else
-	{
-		enet_peer_reset(peer);
-		puts("Connection to 127.0.0.1:69 failed.");
-	}
+	ConnectToServer();
 }
 
 void NetworkManager::DeInitialize()
@@ -80,6 +46,7 @@ void NetworkManager::Update(float gameTime)
 		requestPositionsTimer = requestPositionsMaxTime;
 		std::string packetData = "RequestPositions:" + std::to_string(playerID);
 		SendPacket(&packetData);
+		std::cout << std::endl << std::endl << "PlayerID = " << playerID << std::endl << std::endl;
 	}
 
 	//ENetPacket* packet = enet_packet_create("Check-in", strlen("Check-in") + 1, ENET_PACKET_FLAG_RELIABLE);
@@ -125,7 +92,8 @@ void NetworkManager::Update(float gameTime)
 			{
 				Entity* localPlayer = controllerManager->GetController(0)->componentParent;
 #pragma region RequestPositions Handler
-				std::string sendingPlayerIDString = std::to_string(playerID);
+				//std::string sendingPlayerIDString = std::to_string(playerID);
+				std::string sendingPlayerIDString = std::to_string(controllerManager->GetController(0)->GetPlayerID());
 
 				glm::vec3 pos = localPlayer->GetTranslation();
 				std::string playerPosition = std::to_string(pos.x) + 
@@ -170,10 +138,12 @@ void NetworkManager::Update(float gameTime)
 			{
 				std::vector<std::string> packetStrings = ParsePacket(&keyValuePair.second);
 				///[0] = LobbyID
-				///[1] = PlayerID
+				///[1] = PlayerID of sender
 				///[2] = Position
 				///[3] = Rotation
 				///[4] = Scale
+				///[5] = PlayerID of receiver
+
 
 				bool playerFound = false;
 				for (int i = 0; i < controllerManager->TotalControllers(); i++)
@@ -193,17 +163,24 @@ void NetworkManager::Update(float gameTime)
 				{
 					if (controllerManager->TotalControllers() < 4)
 					{
+						std::cout << "Spawned player " << keyValuePair.second;
 						Entity* newNetworkedPlayer = InstantiateNetworkedPlayer();
 						Controller* newNetworkedController = controllerManager->GetController(controllerManager->TotalControllers() - 1);//newNetworkedPlayer->FindController();
-						newNetworkedController->SetPlayerID((unsigned int)std::stoi(keyValuePair.second));
+						newNetworkedController->SetPlayerID((unsigned int)std::stoi(packetStrings[1]));
 						newNetworkedController->SetIsNetworked(true);
 					}
 				}
+			}
+			else if (keyValuePair.first == "InitPlayerID")
+			{
+				playerID = stoi(keyValuePair.second);
+				controllerManager->GetController(0)->SetPlayerID(playerID);
 			}
 		}
 		break;
 		case ENET_EVENT_TYPE_DISCONNECT:
 			printf("Disconneted from server.");
+			ConnectToServer();
 			break;
 		}
 	}
@@ -220,6 +197,8 @@ Entity* NetworkManager::InstantiateNetworkedPlayer()
 
 bool NetworkManager::SendPacket(std::string * packetData)
 {//Returns true if a packet is sent
+	if (peer == nullptr)
+		return false;
 	ENetPacket* packet = enet_packet_create(packetData->c_str(), strlen(packetData->c_str()) + 1, ENET_PACKET_FLAG_RELIABLE);
 	enet_peer_send(peer, 0, packet);
 
@@ -242,4 +221,43 @@ std::vector<std::string> NetworkManager::ParsePacket(std::string * packet)
 		}
 		returnStrings.push_back(packetPair.second);
 		return returnStrings;
+}
+
+void NetworkManager::ConnectToServer()
+{
+	if (enet_initialize() != 0)
+	{
+		std::cout << stderr << "An error occurred while initializing ENet!" << std::endl;
+		assert(0);
+	}
+	atexit(enet_deinitialize);
+
+	client = enet_host_create(NULL, 1, 1, 0, 0);
+
+	if (client == nullptr)
+	{
+		std::cout << stderr << "An error occurred while trying to create an ENet client host!" << std::endl;
+		assert(0);
+	}
+
+	enet_address_set_host(&address, "127.0.0.1");
+	address.port = 69;
+
+	peer = enet_host_connect(client, &address, 1, 0);
+	if (peer == NULL)
+	{
+		std::cout << stderr << "No available peers for initiating ENEt connection!" << std::endl;
+		assert(0);
+	}
+
+	if (enet_host_service(client, &enetEvent, 1000) > 0 &&
+		enetEvent.type == ENET_EVENT_TYPE_CONNECT)
+	{
+		puts("Connection to 127.0.0.1:69 succeeded!");
+	}
+	else
+	{
+		enet_peer_reset(peer);
+		puts("Connection to 127.0.0.1:69 failed.");
+	}
 }

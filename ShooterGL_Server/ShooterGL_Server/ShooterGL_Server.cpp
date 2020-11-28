@@ -49,11 +49,12 @@ int main()
 				{
 					unsigned int newPlayerID = lobby.AddPeer(*enetEvent.peer);
 
-					std::string packetData = "SpawnPlayer:" + std::to_string(newPlayerID);
-					lobby.BroadcastPacket(&packetData, newPlayerID);
 
+					std::string packetData = "InitPlayerID:" + std::to_string(newPlayerID);
+					lobby.SendPacket(newPlayerID, &packetData);
+					printf(packetData.c_str()); printf("\n");
 					packetData = "RequestPositions:" + std::to_string(newPlayerID);
-					lobby.BroadcastPacket(&packetData);
+					lobby.BroadcastPacket(&packetData, newPlayerID);
 					//lobby.SendPacket(newPlayerID, &packetData);
 					
 					
@@ -62,12 +63,12 @@ int main()
 				}
 				break;
 			case ENET_EVENT_TYPE_RECEIVE:
-				printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
-					enetEvent.packet->dataLength,
-					enetEvent.packet->data,
-					enetEvent.peer->address.host,
-					enetEvent.peer->address.port,
-					enetEvent.channelID);
+				//printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
+				//	enetEvent.packet->dataLength,
+				//	enetEvent.packet->data,
+				//	enetEvent.peer->address.host,
+				//	enetEvent.peer->address.port,
+				//	enetEvent.channelID);
 
 				packetStrings = ParsePacket(enetEvent.packet);
 
@@ -85,12 +86,14 @@ int main()
 
 						std::string packetData = (char*)enetEvent.packet->data;
 						//TODO: When lobby is made into a list, broadcast packet to lobby[stoi(packetStrings[1])]
-						lobby.BroadcastPacket(&packetData, stoi(packetStrings[6]));
+						//lobby.BroadcastPacket(&packetData, stoi(packetStrings[2]));
+						lobby.SendPacket(stoi(packetStrings[6]), &packetData);
 					}
 					else if (packetStrings[0] == "RequestPositions")
 					{
-						std::string packetData = "RequestPositions:0";
-						lobby.SendPacket(stoi(packetStrings[1]), &packetData);
+						std::string packetData = "RequestPositions:" + packetStrings[1];
+						//lobby.SendPacket(stoi(packetStrings[1]), &packetData);
+						lobby.BroadcastPacket(&packetData, stoi(packetStrings[1]));
 					}
 				}
 				break;
@@ -99,6 +102,7 @@ int main()
 					enetEvent.peer->address.host,
 					enetEvent.peer->address.port);
 				//enetEvent.peer->data = NULL;
+				lobby.RemovePeer(enetEvent.peer);
 				break;
 			}
 		}

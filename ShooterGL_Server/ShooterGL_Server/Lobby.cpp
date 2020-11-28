@@ -1,14 +1,15 @@
 #include "Lobby.h"
+#include <iostream>
 
 void Lobby::Update(float gameTime)
 {
 	//Check if any peer connections have timed out
 	for (int i = 0; i < sizeof(peers) / sizeof(PeerData); i++)
 	{
-		peers[i].timeOutTimer -= gameTime;
+		//peers[i].timeOutTimer -= gameTime;
 		//If the peer exists and has timed out
-		if (peers[i].peer != nullptr && peers[i].timeOutTimer <= 0)
-			RemovePeer(*peers[i].peer);
+		//if (peers[i].peer != nullptr && peers[i].timeOutTimer <= 0)
+		//	RemovePeer(*peers[i].peer);
 	}
 }
 
@@ -25,12 +26,15 @@ unsigned int Lobby::AddPeer(ENetPeer & peer)
 	}
 }
 
-void Lobby::RemovePeer(ENetPeer & peer)
+void Lobby::RemovePeer(ENetPeer * peer)
 {
+	if (peer == nullptr)
+		return;
 	for (int i = 0; i < sizeof(peers) / sizeof(PeerData); i++)
 	{
-		if (peers[i].peer == &peer)
+		if (peers[i].peer == peer)
 		{
+			std::cout << "Removed peer: " << i << std::endl;
 			peers[i].peer = nullptr;
 		}
 	}
@@ -40,6 +44,7 @@ void Lobby::RemovePeer(unsigned int peerID)
 {
 	if (peerID < sizeof(peers))
 	{
+		std::cout << "Removed peer: " << peerID << std::endl;
 		peers[peerID] = PeerData();
 	}
 }

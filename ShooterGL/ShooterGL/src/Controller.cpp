@@ -102,12 +102,14 @@ void Controller::CheckForMovement(bool wKey, bool aKey, bool sKey, bool dKey, fl
 
 	//Keeps the player from moving up/down
 	moveDirection.y = 0;
-	//Moves the player up or down
-	if (mouseButtonDown0)
-		moveDirection += glm::vec3(0, 0.001, 0);
-	if (mouseButtonDown1)
-		moveDirection -= glm::vec3(0, 0.001, 0);
-
+	if (!isNetworked)
+	{
+		//Moves the player up or down
+		if (mouseButtonDown0)
+			moveDirection += glm::vec3(0, 0.001, 0);
+		if (mouseButtonDown1)
+			moveDirection -= glm::vec3(0, 0.001, 0);
+	}
 	Move(moveDirection, -3.f * gameTime);
 }
 

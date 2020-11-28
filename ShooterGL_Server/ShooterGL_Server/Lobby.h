@@ -20,7 +20,7 @@ public:
 	void Update(float gameTime);
 
 	unsigned int AddPeer(ENetPeer& peer);
-	void RemovePeer(ENetPeer& peer);
+	void RemovePeer(ENetPeer * peer);
 	void RemovePeer(unsigned int peerID);
 
 	bool SendPacket(unsigned int peerID, std::string * packetData);

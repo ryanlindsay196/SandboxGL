@@ -17,6 +17,7 @@ private:
 	Entity* InstantiateNetworkedPlayer();
 	bool SendPacket(std::string* packetData);
 	std::vector<std::string> ParsePacket(std::string * packet);
+	void ConnectToServer();
 private:
 	ENetHost* client;
 	//Address and port of the server we're connecting to
@@ -30,7 +31,7 @@ private:
 	unsigned int playerID;
 
 	float requestPositionsTimer;
-	const float requestPositionsMaxTime = 5;
+	const float requestPositionsMaxTime = 0.4f;
 
 	EntityManager* entityManager;
 	ControllerManager* controllerManager;
