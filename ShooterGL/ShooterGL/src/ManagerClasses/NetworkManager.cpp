@@ -103,7 +103,7 @@ void NetworkManager::Update(float gameTime)
 					if (controllerManager->GetController(i)->GetPlayerID() == stoi(packetStrings[0]))
 					{
 						//Update the networked player's rotation
-						controllerManager->GetController(i)->componentParent->SetEulerAngles(ParseVector(packetStrings[1]));
+						controllerManager->GetController(i)->componentParent->SetNetworkedEulerAngles(ParseVector(packetStrings[1]));
 						break;
 					}
 				}

@@ -34,6 +34,8 @@ public:
 	void SetEulerAngles(glm::vec3 newEuler);
 	void SetScale(glm::vec3 newScale);
 
+	void SetNetworkedEulerAngles(glm::vec3 newEuler);
+
 	glm::vec3 GetDirection();
 	glm::vec3 GetTranslation();
 	glm::quat GetRotation();
@@ -56,6 +58,7 @@ private:
 
 	glm::vec3 direction;
 	float roll, pitch, yaw;
+	float targetRoll, targetPitch, targetYaw;
 
 	std::vector<Component*> components;
 	std::vector<std::string> tags;

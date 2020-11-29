@@ -41,6 +41,16 @@ void Entity::Update(float gameTime)
 	//Calculate entity direction
 	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
 
+	const float rotationLerpFactor = 0.1f;
+	//Apply SLERP (Sperical linear interpolation) to a networked object
+	rotationQuat = glm::slerp(rotationQuat,
+		glm::toQuat(glm::orientate3(glm::vec3(glm::radians(-targetRoll), glm::radians(targetPitch), glm::radians(-targetYaw)))),
+		rotationLerpFactor);
+	pitch += (targetPitch - pitch) * rotationLerpFactor;
+	yaw += (targetYaw - yaw) * rotationLerpFactor;
+	roll += (targetRoll - roll) * rotationLerpFactor;
+
+
 	//Calculate transform for this frame
 	transform = glm::translate(glm::mat4(1), position) * glm::toMat4(rotationQuat) * glm::scale(glm::mat4(1), scale);
 
@@ -125,6 +135,10 @@ void Entity::SetRotation(glm::quat newQuaternion)
 	rotationQuat = newQuaternion;
 	glm::vec3 newEulers = MathHelperFunctions::QuaternionToEulerAngles(rotationQuat);
 
+	targetPitch += newEulers.x - pitch;
+	targetYaw += newEulers.y - yaw;
+	targetRoll += newEulers.z - roll;
+
 	pitch = newEulers.x;
 	yaw = newEulers.y;
 	roll = newEulers.z;
@@ -134,6 +148,10 @@ void Entity::SetRotation(glm::quat newQuaternion)
 
 void Entity::SetEulerAngles(glm::vec3 newEuler)
 {
+	targetPitch += newEuler.x - pitch;
+	targetYaw += newEuler.y - yaw;
+	targetRoll += newEuler.z - roll;
+
 	pitch = newEuler.x;
 	yaw = newEuler.y;
 	roll = newEuler.z;
@@ -144,6 +162,14 @@ void Entity::SetEulerAngles(glm::vec3 newEuler)
 void Entity::SetScale(glm::vec3 newScale)
 {
 	scale = newScale;
+}
+
+//Set networked euler angles to rotate this entity towards.
+void Entity::SetNetworkedEulerAngles(glm::vec3 newEuler)
+{
+	targetPitch = newEuler.x;
+	targetYaw = newEuler.y;
+	targetRoll = newEuler.z;
 }
 
 glm::vec3 Entity::GetDirection()

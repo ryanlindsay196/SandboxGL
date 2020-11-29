@@ -4,7 +4,7 @@
 glm::vec3 MathHelperFunctions::QuaternionToEulerAngles(glm::quat rotationQuat)
 {
 	glm::vec3 angles;
-
+	//TODO: Test that yaw is around the y-axis, roll is around the z-axis, and pitch is around the x-axis
 	// roll (x-axis rotation)
 	double sinr_cosp = +2.0 * (rotationQuat.w * rotationQuat.x + rotationQuat.y * rotationQuat.z);
 	double cosr_cosp = +1.0 - 2.0 * (rotationQuat.x * rotationQuat.x + rotationQuat.y * rotationQuat.y);
