@@ -40,6 +40,7 @@ void NetworkManager::DeInitialize()
 
 void NetworkManager::Update(float gameTime)
 {
+#pragma region Timers
 	requestPositionsTimer -= gameTime;
 	if (requestPositionsTimer <= 0)
 	{
@@ -48,6 +49,20 @@ void NetworkManager::Update(float gameTime)
 		SendPacket(&packetData);
 		//std::cout << std::endl << std::endl << "PlayerID = " << playerID << std::endl << std::endl;
 	}
+
+	sendRotationsTimer -= gameTime;
+	if(sendRotationsTimer < 0)
+	{
+		sendRotationsTimer = sendRotationsMaxTime;
+		glm::vec3 eulers = controllerManager->GetController(0)->componentParent->GetEulerAngles();
+		std::string packetData = "Rotation:" +
+			std::to_string(playerID) + std::string(":") +
+			std::to_string(eulers.x) + std::string(",") +
+			std::to_string(eulers.y) + std::string(",") +
+			std::to_string(eulers.z);
+		SendPacket(&packetData);
+	}
+#pragma endregion
 
 	//Check local player for change in WASD (move direction)
 	if(controllerManager->GetController(0)->ChangedWASD() != 0)
@@ -75,6 +90,23 @@ void NetworkManager::Update(float gameTime)
 				Controller* newNetworkedController = controllerManager->GetController(controllerManager->TotalControllers() - 1);//newNetworkedPlayer->FindController();
 				newNetworkedController->SetPlayerID((unsigned int)std::stoi(keyValuePair.second));
 				newNetworkedController->SetIsNetworked(true);
+			}
+			else if (keyValuePair.first == "Rotation")
+			{
+				///When receiving this, update the rotation of a networked player
+				///[0] = Sending player ID (Update the player with this ID on the local machine)
+				///[1] = Euler Angles of player to update
+				std::vector<std::string> packetStrings = ParsePacket(&keyValuePair.second);
+				for (int i = 0; i < controllerManager->TotalControllers(); i++)
+				{
+					//If we've found the correct networked player on the local machine...
+					if (controllerManager->GetController(i)->GetPlayerID() == stoi(packetStrings[0]))
+					{
+						//Update the networked player's rotation
+						controllerManager->GetController(i)->componentParent->SetEulerAngles(ParseVector(packetStrings[1]));
+						break;
+					}
+				}
 			}
 			else if (keyValuePair.first == "WASD")
 			{

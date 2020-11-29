@@ -30,8 +30,11 @@ private:
 	unsigned int lobbyID;
 	unsigned int playerID;
 
+	///Timers
 	float requestPositionsTimer;
 	const float requestPositionsMaxTime = 5.f;
+	float sendRotationsTimer;
+	const float sendRotationsMaxTime = 0.2f;
 
 	EntityManager* entityManager;
 	ControllerManager* controllerManager;

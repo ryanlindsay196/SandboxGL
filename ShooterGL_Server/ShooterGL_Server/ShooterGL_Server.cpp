@@ -74,7 +74,12 @@ int main()
 
 				if (packetStrings.size() > 0)
 				{
-					if (packetStrings[0] == "WASD")
+					if (packetStrings[0] == "Rotation")
+					{
+						std::string packetData = std::string((char*)enetEvent.packet->data);
+						lobby.BroadcastPacket(&packetData, stoi(packetStrings[1]));
+					}
+					else if (packetStrings[0] == "WASD")
 					{
 						std::string packetData = std::string((char*)enetEvent.packet->data);
 						lobby.BroadcastPacket(&packetData, stoi(packetStrings[1]));
