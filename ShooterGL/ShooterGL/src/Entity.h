@@ -34,6 +34,7 @@ public:
 	void SetEulerAngles(glm::vec3 newEuler);
 	void SetScale(glm::vec3 newScale);
 
+	void SetNetworkedPosition(glm::vec3 newPosition);
 	void SetNetworkedEulerAngles(glm::vec3 newEuler);
 
 	glm::vec3 GetDirection();
@@ -55,6 +56,7 @@ private:
 	glm::vec3 position;
 	glm::quat rotationQuat;
 	glm::vec3 scale;
+	glm::vec3 targetPosition;
 
 	glm::vec3 direction;
 	float roll, pitch, yaw;

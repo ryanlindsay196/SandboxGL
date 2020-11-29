@@ -196,9 +196,9 @@ void NetworkManager::Update(float gameTime)
 					{
 						std::cout << " Updated PLayer's position " << packetStrings[1] << std::endl;
 						Entity* playerToUpdate = controllerManager->GetController(i)->componentParent;
-						playerToUpdate->SetPosition(ParseVector(packetStrings[2]));
+						playerToUpdate->SetNetworkedPosition(ParseVector(packetStrings[2]));
 						
-						playerToUpdate->SetEulerAngles(ParseVector(packetStrings[3]));
+						playerToUpdate->SetNetworkedEulerAngles(ParseVector(packetStrings[3]));
 						//playerToUpdate->SetRotation(ParseQuaternion(packetStrings[3]));
 						
 						playerToUpdate->SetScale(ParseVector(packetStrings[4]));

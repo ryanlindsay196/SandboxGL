@@ -33,6 +33,7 @@ void Entity::Instantiate(glm::vec3 position, glm::vec3 rotationAxis, float rotat
 	newEulers.z = glm::degrees(newEulers.z);
 	SetEulerAngles(newEulers);
 	
+	SetNetworkedPosition(position);
 	transform = glm::translate(glm::mat4(1), position) * glm::toMat4(rotationQuat) * glm::scale(glm::mat4(1), scale);
 }
 
@@ -49,6 +50,9 @@ void Entity::Update(float gameTime)
 	pitch += (targetPitch - pitch) * rotationLerpFactor;
 	yaw += (targetYaw - yaw) * rotationLerpFactor;
 	roll += (targetRoll - roll) * rotationLerpFactor;
+
+	const float positionLerpFactor = 0.05f;
+	position = glm::lerp(position, targetPosition, positionLerpFactor);
 
 
 	//Calculate transform for this frame
@@ -112,6 +116,7 @@ void Entity::OnTriggerEnter(Entity * entity)
 void Entity::Translate(glm::vec3 translateBy)
 {
 	position += translateBy;
+	targetPosition += translateBy;
 }
 
 void Entity::Rotate(glm::vec3 rotationAxis, float rotationAngle)
@@ -127,6 +132,7 @@ void Entity::Scale(glm::vec3 scaleBy)
 
 void Entity::SetPosition(glm::vec3 newPosition)
 {
+	targetPosition = newPosition - position;
 	position = newPosition;
 }
 
@@ -162,6 +168,11 @@ void Entity::SetEulerAngles(glm::vec3 newEuler)
 void Entity::SetScale(glm::vec3 newScale)
 {
 	scale = newScale;
+}
+
+void Entity::SetNetworkedPosition(glm::vec3 newPosition)
+{
+	targetPosition = newPosition;
 }
 
 //Set networked euler angles to rotate this entity towards.
