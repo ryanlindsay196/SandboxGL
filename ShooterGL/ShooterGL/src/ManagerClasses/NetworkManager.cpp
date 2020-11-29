@@ -10,6 +10,9 @@
 #include "Controller.h"
 #include "Entity.h"
 #include "FileReader.h"
+#include "../MathHelperFunctions.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "gtx/quaternion.hpp"
 #pragma warning (disable : 4996)
 
 void NetworkManager::Initialize(EntityManager* in_entityManager, ControllerManager* in_controllerManager)
@@ -50,16 +53,18 @@ void NetworkManager::Update(float gameTime)
 		//std::cout << std::endl << std::endl << "PlayerID = " << playerID << std::endl << std::endl;
 	}
 
-	sendRotationsTimer -= gameTime;
-	if(sendRotationsTimer < 0)
+	//The angle the local player has changed it's rotation by since last sending rotation to the server
+	float rotationDot = dot(MathHelperFunctions::EulerAnglesToQuaternion(latestEulerAnglesSent), 
+		MathHelperFunctions::EulerAnglesToQuaternion(controllerManager->GetController(0)->componentParent->GetEulerAngles()));
+	if(rotationDot < 0.9999f)
 	{
-		sendRotationsTimer = sendRotationsMaxTime;
 		glm::vec3 eulers = controllerManager->GetController(0)->componentParent->GetEulerAngles();
 		std::string packetData = "Rotation:" +
 			std::to_string(playerID) + std::string(":") +
 			std::to_string(eulers.x) + std::string(",") +
 			std::to_string(eulers.y) + std::string(",") +
 			std::to_string(eulers.z);
+		latestEulerAnglesSent = eulers;
 		SendPacket(&packetData);
 	}
 #pragma endregion
@@ -199,7 +204,6 @@ void NetworkManager::Update(float gameTime)
 						playerToUpdate->SetNetworkedPosition(ParseVector(packetStrings[2]));
 						
 						playerToUpdate->SetNetworkedEulerAngles(ParseVector(packetStrings[3]));
-						//playerToUpdate->SetRotation(ParseQuaternion(packetStrings[3]));
 						
 						playerToUpdate->SetScale(ParseVector(packetStrings[4]));
 						playerFound = true;
@@ -215,6 +219,13 @@ void NetworkManager::Update(float gameTime)
 						Controller* newNetworkedController = controllerManager->GetController(controllerManager->TotalControllers() - 1);//newNetworkedPlayer->FindController();
 						newNetworkedController->SetPlayerID((unsigned int)std::stoi(packetStrings[1]));
 						newNetworkedController->SetIsNetworked(true);
+
+						newNetworkedPlayer->SetPosition(ParseVector(packetStrings[2]));
+
+						newNetworkedPlayer->SetEulerAngles(ParseVector(packetStrings[3]));
+
+						newNetworkedPlayer->SetScale(ParseVector(packetStrings[4]));
+
 					}
 				}
 			}

@@ -49,7 +49,7 @@ void Controller::Update(float gameTime)
 	//Rotate the entity based on the mouse offset from the center of the screen
 	if (xoffset != 0 || yoffset != 0)
 	{
-		componentParent->SetEulerAngles(componentParent->GetEulerAngles() + glm::vec3(yoffset, xoffset, 0));
+		componentParent->SetEulerAngles(componentParent->GetEulerAngles() + glm::vec3(-yoffset, xoffset, 0));
 		xoffset = 0;
 		yoffset = 0;
 

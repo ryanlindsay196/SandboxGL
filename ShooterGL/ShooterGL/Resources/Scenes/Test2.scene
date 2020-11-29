@@ -6,6 +6,14 @@ PREFAB : Resources/Prefabs/Player.prefab
 	Scale : 1,1,1
 }
 
+PREFAB : Resources/Prefabs/BoxingRing.prefab
+{
+	Position : 0,0,0
+	EulerAngles : 0,1,0
+	RotationAngle : 0
+	Scale : 1,1,1
+}
+
 PREFAB : Resources/Prefabs/PoolBalls/BallDot.prefab
 {
 	Position : -5,1,3

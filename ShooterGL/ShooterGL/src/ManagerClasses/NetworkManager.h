@@ -1,6 +1,7 @@
 #pragma once
 #include "enet/enet.h"
 #include <vector>
+#include "glm.hpp"
 
 class EntityManager;
 class Entity;
@@ -32,9 +33,9 @@ private:
 
 	///Timers
 	float requestPositionsTimer;
-	const float requestPositionsMaxTime = 5.f;
-	float sendRotationsTimer;
-	const float sendRotationsMaxTime = 0.2f;
+	const float requestPositionsMaxTime = 1.f;
+
+	glm::vec3 latestEulerAnglesSent;
 
 	EntityManager* entityManager;
 	ControllerManager* controllerManager;

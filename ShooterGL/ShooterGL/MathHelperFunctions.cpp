@@ -1,5 +1,8 @@
 #include "MathHelperFunctions.h"
 #include <algorithm>
+#include "gtx/euler_angles.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "gtx/quaternion.hpp"
 
 glm::vec3 MathHelperFunctions::QuaternionToEulerAngles(glm::quat rotationQuat)
 {
@@ -23,6 +26,11 @@ glm::vec3 MathHelperFunctions::QuaternionToEulerAngles(glm::quat rotationQuat)
 	angles.z = atan2(siny_cosp, cosy_cosp);
 
 	return angles;
+}
+
+glm::quat MathHelperFunctions::EulerAnglesToQuaternion(glm::vec3 eulers)
+{
+	return glm::toQuat(glm::orientate3(glm::vec3(glm::radians(eulers.x), glm::radians(eulers.y), glm::radians(eulers.z))));
 }
 
 glm::vec3 MathHelperFunctions::AngleAxisToEuler(glm::vec3 axis, float angle)

@@ -18,7 +18,7 @@ void Camera::Update(float gameTime)
 	cameraUp = glm::vec3(0, 1, 0);// glm::cross(cameraDirection, cameraRight);
 
 	cameraViewMatrix = glm::lookAt(cameraPos,
-							cameraPos + cameraDirection,
+							cameraPos + (cameraDirection * glm::vec3(1,-1,1)),
 							cameraUp);
 	//cameraViewMatrix = componentParent->GetTransform();
 	//cameraViewMatrix = glm::lookAt(glm::vec3(-15, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
