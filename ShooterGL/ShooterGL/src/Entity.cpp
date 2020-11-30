@@ -139,6 +139,20 @@ void Entity::Rotate(glm::vec3 rotationAxis, float rotationAngle)
 	rotationQuat *= glm::angleAxis(rotationAngle, rotationAxis);
 	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
 	targetDirection = glm::vec3(cos(glm::radians(targetYaw)) * cos(glm::radians(targetPitch)), sin(glm::radians(targetPitch)), sin(glm::radians(targetYaw)) * cos(glm::radians(targetPitch)));
+
+	glm::vec3 newEuler = glm::eulerAngles(rotationQuat);
+	
+	//newEuler.x = glm::degrees(newEuler.x);
+	//newEuler.y = glm::degrees(newEuler.y);
+	//newEuler.z = glm::degrees(newEuler.z);
+
+	targetPitch += newEuler.x - pitch;
+	targetYaw += newEuler.y - yaw;
+	targetRoll += newEuler.z - roll;
+	
+	pitch = newEuler.x;
+	yaw = newEuler.y;
+	roll = newEuler.z;
 }
 
 void Entity::Scale(glm::vec3 scaleBy)
@@ -155,7 +169,12 @@ void Entity::SetPosition(glm::vec3 newPosition)
 void Entity::SetRotation(glm::quat newQuaternion)
 {
 	rotationQuat = newQuaternion;
-	glm::vec3 newEulers = MathHelperFunctions::QuaternionToEulerAngles(rotationQuat);
+	//glm::vec3 newEulers = MathHelperFunctions::QuaternionToEulerAngles(rotationQuat);
+	glm::vec3 newEulers = glm::eulerAngles(rotationQuat);
+
+	newEulers.x = glm::degrees(newEulers.x);
+	newEulers.y = glm::degrees(newEulers.y);
+	newEulers.z = glm::degrees(newEulers.z);
 
 	targetPitch += newEulers.x - pitch;
 	targetYaw += newEulers.y - yaw;

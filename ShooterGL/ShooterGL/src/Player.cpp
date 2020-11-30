@@ -30,7 +30,8 @@ void Player::Update(float gameTime)
 			AngleAxis entityAngleAxis = MathHelperFunctions::EulerToAngleAxis(componentParent->GetEulerAngles());
 			//TODO: If the hitbox is disjointed or a projectile, the hitbox parent is nullptr, otherwise, the hitbox parent is componentParent
 			Entity* newEntity = entityManager->InstantiateEntity(entityManager->LoadProperties("Resources/Prefabs/Missile.prefab"), componentParent->GetTranslation(), entityAngleAxis.axis, entityAngleAxis.angle, glm::vec3(1), nullptr);
-			newEntity->SetRotation(componentParent->GetRotation());
+			//newEntity->SetRotation(componentParent->GetRotation());
+			newEntity->SetEulerAngles(componentParent->GetEulerAngles());
 		}
 	}
 }

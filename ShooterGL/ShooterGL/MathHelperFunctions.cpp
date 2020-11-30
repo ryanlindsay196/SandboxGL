@@ -101,7 +101,7 @@ AngleAxis MathHelperFunctions::EulerToAngleAxis(glm::vec3 eulers)
 
 	//std::swap(angleAxis.axis.z, angleAxis.axis.y);
 	//std::swap(angleAxis.axis.y, angleAxis.axis.x);
-	//angleAxis.axis.y *= -1;
+	angleAxis.axis.y *= -1;
 	float axisDist = glm::length(angleAxis.axis);
 	angleAxis.axis = angleAxis.axis / axisDist;
 	return angleAxis;
