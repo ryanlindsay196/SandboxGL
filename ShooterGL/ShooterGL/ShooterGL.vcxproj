@@ -138,6 +138,7 @@
     <ClCompile Include="src\ManagerClasses\AIManager.cpp" />
     <ClCompile Include="src\ManagerClasses\NetworkManager.cpp" />
     <ClCompile Include="src\ManagerClasses\PhysicsManager.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="src\ManagerClasses\AIManager.h" />
     <ClInclude Include="src\ManagerClasses\NetworkManager.h" />
     <ClInclude Include="src\ManagerClasses\PhysicsManager.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\RigidBody.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationDataStructures.h" />

@@ -134,10 +134,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		m_meshes.push_back(ProcessMesh(mesh, materialPath, node));
 		//TODO: Remove
 		m_meshes[m_meshes.size() - 1].SetTransform(currentNode->transform);
-		//if(boneMap.find(currentNode->name) != boneMap.end())
-		//	m_meshes[m_meshes.size() - 1].SetTransform(boneMap[currentNode->name].GetOffsetTransform());
-		//m_meshes[m_meshes.size() - 1].SetTransform(currentNode->transform);
-		m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
+		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
 		//boneMap[mesh->mName.C_Str()].SetTransform(currentNode->transform);
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 		
