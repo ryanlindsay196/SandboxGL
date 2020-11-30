@@ -26,6 +26,10 @@ void Controller::Update(float gameTime)
 	leftKey.Update();
 	downKey.Update();
 	rightKey.Update();
+	action1Key.Update();
+	action2Key.Update();
+	action3Key.Update();
+	action4Key.Update();
 	if (!isNetworked)
 	{
 		if (glfwGetKey(window, GLFW_KEY_W))
@@ -44,6 +48,23 @@ void Controller::Update(float gameTime)
 			rightKey.Press();
 		else
 			rightKey.Release();
+
+		if (glfwGetKey(window, GLFW_KEY_U))
+			action1Key.Press();
+		else
+			action1Key.Release();
+		if (glfwGetKey(window, GLFW_KEY_I))
+			action2Key.Press();
+		else
+			action2Key.Release();
+		if (glfwGetKey(window, GLFW_KEY_O))
+			action3Key.Press();
+		else
+			action3Key.Release();
+		if (glfwGetKey(window, GLFW_KEY_P))
+			action4Key.Press();
+		else
+			action4Key.Release();
 	}
 	CheckForMovement(forwardKey.IsDown(), leftKey.IsDown(), downKey.IsDown(), rightKey.IsDown(), gameTime);
 	//Rotate the entity based on the mouse offset from the center of the screen
@@ -93,6 +114,24 @@ int Controller::CurrentWASD()
 	return forwardKeyDown | leftKeyDown | downKeyDown | rightKeyDown;
 }
 
+int Controller::ChangedActionInput()
+{
+	int action4KeyChanged = WASDPacket::W & ((action4Key.IsPressed() || action4Key.IsReleased()) << 3);
+	int action3KeyChanged = WASDPacket::A & ((action3Key.IsPressed() || action3Key.IsReleased()) << 2);
+	int action2KeyChanged = WASDPacket::S & ((action2Key.IsPressed() || action2Key.IsReleased()) << 1);
+	int action1KeyChanged = WASDPacket::D & ((action1Key.IsPressed() || action1Key.IsReleased()) << 0);
+	return action4KeyChanged | action3KeyChanged | action2KeyChanged | action1KeyChanged;
+}
+
+int Controller::CurrentActionInput()
+{
+	int action4KeyDown = action4Key.IsDown() << 3;
+	int action3KeyDown = action3Key.IsDown() << 2;
+	int action2KeyDown = action2Key.IsDown() << 1;
+	int action1KeyDown = action1Key.IsDown() << 0;
+	return action4KeyDown | action3KeyDown | action2KeyDown | action1KeyDown;
+}
+
 void Controller::SetPlayerID(unsigned int newPlayerID)
 {
 	playerID = newPlayerID;
@@ -103,7 +142,7 @@ unsigned int Controller::GetPlayerID()
 	return playerID;
 }
 
-void Controller::GetNetworkInput(int wasd)
+void Controller::SetNetworkWASDInput(int wasd)
 {
 	if (wasd & WASDPacket::W)
 		forwardKey.Press();
@@ -121,6 +160,27 @@ void Controller::GetNetworkInput(int wasd)
 		rightKey.Press();
 	else
 		rightKey.Release();
+}
+
+void Controller::SetNetworkActionInput(int action)
+{
+
+	if (action & ActionPacket::Action4)
+		action4Key.Press();
+	else
+		action4Key.Release();
+	if (action & ActionPacket::Action3)
+		action3Key.Press();
+	else
+		action3Key.Release();
+	if (action & ActionPacket::Action2)
+		action2Key.Press();
+	else
+		action2Key.Release();
+	if (action & ActionPacket::Action1)
+		action1Key.Press();
+	else
+		action1Key.Release();
 }
 
 void Controller::SetIsNetworked(bool in_isNetworked)

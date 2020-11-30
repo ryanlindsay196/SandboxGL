@@ -2,20 +2,11 @@ Components
 {
 	Model
 	{
-		Path : Resources/Models/BoxingRing.FBX
-		PositionOffset : 0,0,-0.24
+		Path : Resources/Models/BoxingRing.fbx
+		PositionOffset : 0,0,0
 		EulerAngles : 0,0,1
 		RotationAngle : 3.14
 		ScaleOffset : 1,1,1
-		Material : Resources/Materials/BackPackMaterial.mat
-	}
-	Model
-	{
-		Path : Resources/Models/Sphere3.FBX
-		PositionOffset : 0,0,0
-		EulerAngles : 0,0,1
-		RotationAngle : 3.15
-		ScaleOffset : 0.2,0.2,0.2
 		Material : Resources/Materials/BackPackMaterial.mat
 	}
 }

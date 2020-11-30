@@ -10,6 +10,7 @@ class LightManager;
 class ShaderManager;
 class PhysicsManager;
 class NetworkManager;
+class PlayerManager;
 
 //TODO: include all managers
 struct GLFWwindow;
@@ -26,6 +27,7 @@ public:
 	ShaderManager* shaderManager;
 	PhysicsManager* physicsManager;
 	NetworkManager* networkManager;
+	PlayerManager* playerManager;
 
 	void Initialize(GLFWwindow* window);
 	void Update(float gameTime);

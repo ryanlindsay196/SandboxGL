@@ -12,6 +12,7 @@
 #define M_PI   3.14159265358979323846264338327950288
 
 #include "Controller.h"
+#include "Player.h"
 
 Entity::~Entity()
 {
@@ -83,6 +84,19 @@ Controller * Entity::FindController()
 		if (controller != nullptr)
 		{
 			return controller;
+		}
+	}
+	return nullptr;
+}
+
+HitBox* Entity::FindHitBox()
+{
+	for (Component* component : components)
+	{
+		HitBox* hitBox = dynamic_cast<HitBox*>(component);
+		if (hitBox != nullptr)
+		{
+			return hitBox;
 		}
 	}
 	return nullptr;

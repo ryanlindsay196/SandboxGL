@@ -70,9 +70,15 @@ void NetworkManager::Update(float gameTime)
 #pragma endregion
 
 	//Check local player for change in WASD (move direction)
-	if(controllerManager->GetController(0)->ChangedWASD() != 0)
+	if (controllerManager->GetController(0)->ChangedWASD() != 0)
 	{
 		std::string packetData = std::string("WASD:" + std::to_string(playerID) + ":" + std::to_string(controllerManager->GetController(0)->CurrentWASD()));
+		SendPacket(&packetData);
+	}
+	//Check local player for change in Action Input(attacks and stuff)
+	if (controllerManager->GetController(0)->ChangedActionInput() != 0)
+	{
+		std::string packetData = std::string("Action:" + std::to_string(playerID) + ":" + std::to_string(controllerManager->GetController(0)->CurrentActionInput()));
 		SendPacket(&packetData);
 	}
 
@@ -120,11 +126,27 @@ void NetworkManager::Update(float gameTime)
 				int wasd = stoi(idWASDPair.second);
 				for (int i = 0; i < controllerManager->TotalControllers(); i++)
 				{
-					//Once the correct controller is found, update it's input
+					//Once the correct controller is found, update it's WASD input
 					if (controllerManager->GetController(i)->GetIsNetworked() &&
 						controllerManager->GetController(i)->GetPlayerID() == controllerID)
 					{
-						controllerManager->GetController(i)->GetNetworkInput(wasd);
+						controllerManager->GetController(i)->SetNetworkWASDInput(wasd);
+						break;
+					}
+				}
+			}
+			else if (keyValuePair.first == "Action")
+			{
+				std::pair<std::string, std::string> idActionPair = GenerateKeyValuePair(keyValuePair.second, ":");
+				int controllerID = stoi(idActionPair.first);
+				int action = stoi(idActionPair.second);
+				for (int i = 0; i < controllerManager->TotalControllers(); i++)
+				{
+					//Once the correct controller is found, update it's action input
+					if (controllerManager->GetController(i)->GetIsNetworked() &&
+						controllerManager->GetController(i)->GetPlayerID() == controllerID)
+					{
+						controllerManager->GetController(i)->SetNetworkActionInput(action);
 						break;
 					}
 				}

@@ -132,17 +132,9 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		//the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		m_meshes.push_back(ProcessMesh(mesh, materialPath, node));
-		//TODO: Remove
 		m_meshes[m_meshes.size() - 1].SetTransform(currentNode->transform);
-		//m_meshes[m_meshes.size() - 1].SetTransform(glm::mat4(1));
-		//boneMap[mesh->mName.C_Str()].SetTransform(currentNode->transform);
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
-		
-		//if(m_meshes.size() == 1)
 	}
-	//if(m_meshes.size() == 1)
-	//	boneMap[currentNode->name].SetTransform(currentNode->transform);
-
 
 	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)

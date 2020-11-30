@@ -94,9 +94,14 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, std::string& materialPat
 		{
 			vertex.WeightValue[k] = 0;
 			if (mesh->mNumBones > 0)
+			{
 				vertex.BoneID[k] = -1;
+				vertex.WeightValue[k] = 0;
+			}
 			else
+			{
 				vertex.BoneID[k] = 0;
+			}
 		}
 		meshData->vertices.push_back(vertex);
 

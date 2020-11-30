@@ -2,6 +2,8 @@
 #include <string>
 #include "Component.h"
 
+class ControllerManager;
+
 struct PlayerInfo
 {
 	std::string name;
@@ -33,6 +35,7 @@ struct ProjectileData
 
 struct HitBox
 {
+	float damage;
 	glm::vec3 hitBoxSize;
 	float duration;
 };
@@ -51,6 +54,15 @@ struct AttackData
 
 class Player : public Component
 {
+public:
+	Player();
+	void Initialize(ControllerManager* controllerManager, Entity* newParent);
+	void Update(float gameTime) override;
+	void OnCollisionEnter(Entity* entity) override;
+
+	void SetController(Controller* newController);
+private:
 	std::vector<ProjectileData> projectileData;
 	PlayerInfo playerInfo;
+	Controller* controller;
 };

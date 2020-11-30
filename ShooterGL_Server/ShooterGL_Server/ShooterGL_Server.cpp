@@ -84,6 +84,11 @@ int main()
 						std::string packetData = std::string((char*)enetEvent.packet->data);
 						lobby.BroadcastPacket(&packetData, stoi(packetStrings[1]));
 					}
+					else if (packetStrings[0] == "Action")
+					{
+						std::string packetData = std::string((char*)enetEvent.packet->data);
+						lobby.BroadcastPacket(&packetData, stoi(packetStrings[1]));
+					}
 					else if (packetStrings[0] == "PositionData")
 					{
 						///[0] = Header ("PositionData")

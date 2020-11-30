@@ -1,5 +1,6 @@
 Components
 {
+	Player
 	Camera
 	Controller
 	Light : Point
@@ -25,6 +26,20 @@ Components
 		RotationAngle : 3.14
 		ScaleOffset : 0.01,0.01,0.01
 		Material : Resources/Materials/BackPackMaterial.mat
+	}
+	RigidBody
+	{
+		PositionConstaints : 0,0,0
+		RotationConstraints : 0,0,0
+		Mass : 1
+		Collider
+		{
+			ColliderType : 0
+			PositionOffset : 0,0,0
+			Scale : 0.22,0.22,0.22
+			IsTrigger : 0
+		}
+		UseGravity : 0
 	}
 }
 Tags

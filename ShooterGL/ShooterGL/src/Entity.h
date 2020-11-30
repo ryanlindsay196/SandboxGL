@@ -7,6 +7,7 @@
 class Component;
 class LightManager;
 class Controller;
+struct HitBox;
 
 class Entity
 {
@@ -18,6 +19,7 @@ public:
 	void Render(LightManager* lightManager);
 
 	Controller* FindController();
+	HitBox* FindHitBox();
 
 	void SetParent(Entity* newParent);
 	void AddComponent(Component* newComponent);

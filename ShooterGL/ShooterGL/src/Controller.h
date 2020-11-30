@@ -26,6 +26,13 @@ class Controller : public Component
 		A = (1 << 2),
 		W = (1 << 3)
 	};
+	enum ActionPacket
+	{
+		Action1 = (1 << 0),
+		Action2 = (1 << 1),
+		Action3 = (1 << 2),
+		Action4 = (1 << 3)
+	};
 	//TODO: Add hot swappable controls
 	//Hot swapping for controls 
 public:
@@ -35,16 +42,22 @@ public:
 	//TODO: Add keyboard/controller support
 	//TODO: Add support for different entity states. These should be hot swappable
 	void Move(glm::vec3 direction, float moveSpeed);
-	
+
 	//The value of the change in WASD this frame
 	int ChangedWASD();
 	//The value of the current WASD this frame
 	int CurrentWASD();
 
+	//The value of the change in Action Input this frame
+	int ChangedActionInput();
+	//The value of the current Action Input this frame
+	int CurrentActionInput();
+
 	void SetPlayerID(unsigned int newPlayerID);
 	unsigned int GetPlayerID();
 
-	void GetNetworkInput(int wasd);
+	void SetNetworkWASDInput(int wasd);
+	void SetNetworkActionInput(int action);
 
 	void SetIsNetworked(bool in_isNetworked);
 	bool GetIsNetworked();
@@ -54,5 +67,6 @@ private:
 	GLFWwindow* window;
 	bool isNetworked;
 	KeyData forwardKey, leftKey, downKey, rightKey;
+	KeyData action1Key, action2Key, action3Key, action4Key;
 	unsigned int playerID = -1;
 };

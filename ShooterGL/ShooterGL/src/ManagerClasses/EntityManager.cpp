@@ -4,6 +4,8 @@
 #include "ControllerManager.h"
 #include "ModelManager.h"
 #include "LightManager.h"
+#include "PlayerManager.h"
+#include "Player.h"
 #include "Renderables/ParticleEmitter.h"
 
 #include "GLFW/glfw3.h"
@@ -182,6 +184,15 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		else if (entityData.componentName == "Controller")
 		{
 			entity->AddComponent(objectManager->controllerManager->CreateController(nullptr));
+
+			Player* latestPlayer = objectManager->playerManager->GetPlayer(objectManager->playerManager->TotalPlayers() - 1);
+			//if the player was added before the controller
+			//if not, then attach the controller inside the player script instead
+			if (latestPlayer != nullptr && latestPlayer->componentParent == entity)
+			{
+				//Set the controller in the current entity's player component to the newly created controller
+				latestPlayer->SetController(objectManager->controllerManager->GetController(objectManager->controllerManager->TotalControllers() - 1));
+			}
 		}
 		else if (entityData.componentName == "Light:Point")
 		{
@@ -194,6 +205,13 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 			entity->AddComponent(newRigidBody);
 			newRigidBody->componentParent = entity;
 			objectManager->physicsManager->InitializeRigidBody(newRigidBody, 0.f);
+		}
+		else if (entityData.componentName == "Player")
+		{
+			Player* player = new Player();
+			player->Initialize(objectManager->controllerManager, entity);
+			entity->AddComponent(player);
+			objectManager->playerManager->AddPlayer(player);
 		}
 		else
 		{

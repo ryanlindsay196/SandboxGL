@@ -13,6 +13,7 @@
 #include "ManagerClasses/NetworkManager.h"
 #include "PhysicsManager.h"
 #include "NetworkManager.h"
+#include "PlayerManager.h"
 
 #include <iostream>
 
@@ -31,6 +32,7 @@ void ObjectManager::Initialize(GLFWwindow* window)
 	lightManager = new LightManager();
 	shaderManager = new ShaderManager();
 	physicsManager = new PhysicsManager();
+	playerManager = new PlayerManager();
 	
 	LoadScene("Resources/Scenes/Test2.scene", window);
 
