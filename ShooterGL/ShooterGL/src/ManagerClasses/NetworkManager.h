@@ -33,7 +33,7 @@ private:
 
 	///Timers
 	float requestPositionsTimer;
-	const float requestPositionsMaxTime = 1.f;
+	const float requestPositionsMaxTime = 5.f;
 
 	glm::vec3 latestEulerAnglesSent;
 

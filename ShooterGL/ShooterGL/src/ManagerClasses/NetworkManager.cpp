@@ -56,7 +56,7 @@ void NetworkManager::Update(float gameTime)
 	//The angle the local player has changed it's rotation by since last sending rotation to the server
 	float rotationDot = dot(MathHelperFunctions::EulerAnglesToQuaternion(latestEulerAnglesSent), 
 		MathHelperFunctions::EulerAnglesToQuaternion(controllerManager->GetController(0)->componentParent->GetEulerAngles()));
-	if(rotationDot < 0.9999f)
+	if(rotationDot < 0.99999f)
 	{
 		glm::vec3 eulers = controllerManager->GetController(0)->componentParent->GetEulerAngles();
 		std::string packetData = "Rotation:" +

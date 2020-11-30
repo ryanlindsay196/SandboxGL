@@ -41,8 +41,9 @@ void Entity::Update(float gameTime)
 {
 	//Calculate entity direction
 	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
+	targetDirection = glm::vec3(cos(glm::radians(targetYaw)) * cos(glm::radians(targetPitch)), sin(glm::radians(targetPitch)), sin(glm::radians(targetYaw)) * cos(glm::radians(targetPitch)));
 
-	const float rotationLerpFactor = 0.02f;
+	const float rotationLerpFactor = 0.06f;
 	//Apply SLERP (Sperical linear interpolation) to a networked object
 	rotationQuat = glm::slerp(rotationQuat,
 		MathHelperFunctions::EulerAnglesToQuaternion(glm::vec3(-targetRoll, targetPitch, -targetYaw)),
@@ -123,6 +124,7 @@ void Entity::Rotate(glm::vec3 rotationAxis, float rotationAngle)
 {
 	rotationQuat *= glm::angleAxis(rotationAngle, rotationAxis);
 	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
+	targetDirection = glm::vec3(cos(glm::radians(targetYaw)) * cos(glm::radians(targetPitch)), sin(glm::radians(targetPitch)), sin(glm::radians(targetYaw)) * cos(glm::radians(targetPitch)));
 }
 
 void Entity::Scale(glm::vec3 scaleBy)
@@ -150,6 +152,7 @@ void Entity::SetRotation(glm::quat newQuaternion)
 	roll = newEulers.z;
 
 	direction = glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)), sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
+	targetDirection = glm::vec3(cos(glm::radians(targetYaw)) * cos(glm::radians(targetPitch)), sin(glm::radians(targetPitch)), sin(glm::radians(targetYaw)) * cos(glm::radians(targetPitch)));
 }
 
 void Entity::SetEulerAngles(glm::vec3 newEuler)
@@ -206,6 +209,11 @@ glm::vec3 Entity::GetEulerAngles()
 glm::vec3 Entity::GetScale()
 {
 	return scale;
+}
+
+glm::vec3 Entity::GetTargetDirection()
+{
+	return targetDirection;
 }
 
 glm::vec3& Entity::GetDirectionReference()

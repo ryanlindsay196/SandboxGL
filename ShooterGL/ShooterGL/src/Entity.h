@@ -43,6 +43,8 @@ public:
 	glm::vec3 GetEulerAngles();
 	glm::vec3 GetScale();
 
+	glm::vec3 GetTargetDirection();
+
 	glm::vec3& GetDirectionReference();
 	glm::vec3& GetTranslationReference();
 	glm::vec3& GetScaleReference();
@@ -59,6 +61,7 @@ private:
 	glm::vec3 targetPosition;
 
 	glm::vec3 direction;
+	glm::vec3 targetDirection;
 	float roll, pitch, yaw;
 	float targetRoll, targetPitch, targetYaw;
 

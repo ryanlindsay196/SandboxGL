@@ -137,13 +137,13 @@ void Controller::CheckForMovement(bool wKey, bool aKey, bool sKey, bool dKey, fl
 {
 	glm::vec3 moveDirection = glm::vec3(0);
 	if (wKey)
-		moveDirection -= componentParent->GetDirection();
+		moveDirection -= componentParent->GetTargetDirection();
 	if (sKey)
-		moveDirection += componentParent->GetDirection();
+		moveDirection += componentParent->GetTargetDirection();
 	if (aKey)
-		moveDirection += glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
+		moveDirection += glm::cross(componentParent->GetTargetDirection(), glm::vec3(0, 1, 0));
 	if (dKey)
-		moveDirection -= glm::cross(componentParent->GetDirection(), glm::vec3(0, 1, 0));
+		moveDirection -= glm::cross(componentParent->GetTargetDirection(), glm::vec3(0, 1, 0));
 
 	//Keeps the player from moving up/down
 	moveDirection.y = 0;

@@ -1,0 +1,50 @@
+Info
+{
+	Name : Sentry
+	Portrait : Textures/Sentry.jpg
+	Health : 100
+	Weight : 200
+	Energy : 50
+	EnergyRecovery : 3
+	Speed : 10
+	ShieldHealth : 40
+	ShieldRecovery : 5
+}
+Attacks
+{
+	space
+	{
+		Energy:-3
+		KnockBack:4
+		Rate:3
+	}
+	forward,space
+	{
+	}
+	back,space
+	{
+		Frame:1
+		{
+			Energy:-10
+			Rate:Semi
+			Spawn : Resources/Prefabs/Missile.prefab
+			{
+				Behavior : Lob
+				Damage : 50
+				PositionOffset : 0,0,-1
+				RotationAxis : 1,0,0
+				RotationAngle : 0.13083
+				HomingAngle : 0.1
+				HomingDuration : 3
+				ExplodeOnHit : 1
+				KnockBack : 30
+				StartVelocity : 0,3,-1
+				StartAcceleration : 0,0,0
+			}
+		}
+	}
+	left,space
+	{
+	}
+	
+}
