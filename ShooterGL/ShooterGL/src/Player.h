@@ -3,6 +3,7 @@
 #include "Component.h"
 
 class ControllerManager;
+class EntityManager;
 
 struct PlayerInfo
 {
@@ -56,7 +57,7 @@ class Player : public Component
 {
 public:
 	Player();
-	void Initialize(ControllerManager* controllerManager, Entity* newParent);
+	void Initialize(ControllerManager* controllerManager, Entity* newParent, EntityManager* newEntityManager);
 	void Update(float gameTime) override;
 	void OnCollisionEnter(Entity* entity) override;
 
@@ -65,4 +66,5 @@ private:
 	std::vector<ProjectileData> projectileData;
 	PlayerInfo playerInfo;
 	Controller* controller;
+	EntityManager* entityManager;
 };

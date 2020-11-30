@@ -3,10 +3,10 @@ Components
 	Model
 	{
 		Path : Resources/Models/BoxingRing.fbx
-		PositionOffset : 0,0,0
-		EulerAngles : 0,0,1
-		RotationAngle : 3.14
-		ScaleOffset : 1,1,1
+		PositionOffset : 0,-3,0
+		RotationAxis : 0,0,1
+		RotationAngle : 4.72
+		ScaleOffset : 0.01,0.01,0.01
 		Material : Resources/Materials/BackPackMaterial.mat
 	}
 }

@@ -19,6 +19,7 @@ public:
 
 class Controller : public Component
 {
+public:
 	enum WASDPacket
 	{
 		D = (1 << 0),

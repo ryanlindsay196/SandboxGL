@@ -209,7 +209,7 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		else if (entityData.componentName == "Player")
 		{
 			Player* player = new Player();
-			player->Initialize(objectManager->controllerManager, entity);
+			player->Initialize(objectManager->controllerManager, entity, this);
 			entity->AddComponent(player);
 			objectManager->playerManager->AddPlayer(player);
 		}
@@ -224,9 +224,9 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 
 void EntityManager::Update(float gameTime)
 {
-	for (Entity* entity : entities)
+	for(int i = 0; i < entities.size(); i++)
 	{
-		entity->Update(gameTime);
+		entities[i]->Update(gameTime);
 	}
 }
 

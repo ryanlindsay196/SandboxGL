@@ -67,16 +67,16 @@ glm::vec3 MathHelperFunctions::AngleAxisToEuler(glm::vec3 axis, float angle)
 
 AngleAxis MathHelperFunctions::EulerToAngleAxis(glm::vec3 eulers)
 {
-	//This function doesn't work
-	assert(0);
+	//TODO: This function doesn't work
+	//assert(0);
 
 	// Assuming the angles are in radians.
-	float c1 = cosf(eulers.x / 2);
-	float s1 = sinf(eulers.x / 2);
-	float c2 = cosf(eulers.y / 2);
-	float s2 = sinf(eulers.y / 2);
-	float c3 = cosf(eulers.z / 2);
-	float s3 = sinf(eulers.z / 2);
+	float c1 = cosf(glm::radians(eulers.x) / 2);
+	float s1 = sinf(glm::radians(eulers.x) / 2);
+	float c2 = cosf(glm::radians(eulers.y) / 2);
+	float s2 = sinf(glm::radians(eulers.y) / 2);
+	float c3 = cosf(glm::radians(eulers.z) / 2);
+	float s3 = sinf(glm::radians(eulers.z) / 2);
 	float c1c2 = c1 * c2;
 	float s1s2 = s1 * s2;
 	AngleAxis angleAxis;
@@ -99,7 +99,8 @@ AngleAxis MathHelperFunctions::EulerToAngleAxis(glm::vec3 eulers)
 		angleAxis.axis.z /= norm;
 	}
 
-	std::swap(angleAxis.axis.z, angleAxis.axis.y);
+	//std::swap(angleAxis.axis.z, angleAxis.axis.y);
+	//std::swap(angleAxis.axis.y, angleAxis.axis.x);
 	//angleAxis.axis.y *= -1;
 	float axisDist = glm::length(angleAxis.axis);
 	angleAxis.axis = angleAxis.axis / axisDist;
