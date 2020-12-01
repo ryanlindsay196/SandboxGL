@@ -6,6 +6,7 @@
 
 //TODO: find a way to remove this
 #include "Renderables/Model.h"
+#include "RigidBody.h"
 #include "ManagerClasses/LightManager.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
@@ -84,6 +85,19 @@ Controller * Entity::FindController()
 		if (controller != nullptr)
 		{
 			return controller;
+		}
+	}
+	return nullptr;
+}
+
+RigidBody* Entity::FindRigidBody()
+{
+	for (Component* component : components)
+	{
+		RigidBody* rigidBody = dynamic_cast<RigidBody*>(component);
+		if (rigidBody != nullptr)
+		{
+			return rigidBody;
 		}
 	}
 	return nullptr;

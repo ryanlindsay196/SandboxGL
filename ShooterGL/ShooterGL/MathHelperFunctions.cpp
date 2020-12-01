@@ -68,7 +68,7 @@ glm::vec3 MathHelperFunctions::AngleAxisToEuler(glm::vec3 axis, float angle)
 AngleAxis MathHelperFunctions::EulerToAngleAxis(glm::vec3 eulers)
 {
 	//TODO: This function doesn't work
-	//assert(0);
+	assert(0);
 
 	// Assuming the angles are in radians.
 	float c1 = cosf(glm::radians(eulers.x) / 2);

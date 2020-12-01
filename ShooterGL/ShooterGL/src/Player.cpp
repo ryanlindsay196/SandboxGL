@@ -26,12 +26,14 @@ void Player::Update(float gameTime)
 	{
 		if (controller->CurrentActionInput() & Controller::ActionPacket::Action1)
 		{
-			//TODO: Find angleAxis function that works
-			AngleAxis entityAngleAxis = MathHelperFunctions::EulerToAngleAxis(componentParent->GetEulerAngles());
 			//TODO: If the hitbox is disjointed or a projectile, the hitbox parent is nullptr, otherwise, the hitbox parent is componentParent
-			Entity* newEntity = entityManager->InstantiateEntity(entityManager->LoadProperties("Resources/Prefabs/Missile.prefab"), componentParent->GetTranslation(), entityAngleAxis.axis, entityAngleAxis.angle, glm::vec3(1), nullptr);
+			//TODO: Check that scale can be set either in the prefab file or elsewhere
+			Entity* newEntity = entityManager->InstantiateEntity(entityManager->LoadProperties("Resources/Prefabs/Missile.prefab"), componentParent->GetTranslation(), glm::vec3(0,1,0), 0.f, glm::vec3(1), nullptr);
 			//newEntity->SetRotation(componentParent->GetRotation());
 			newEntity->SetEulerAngles(componentParent->GetEulerAngles());
+			RigidBody* rb = newEntity->FindRigidBody();
+			rb->SetVelocity(componentParent->GetTargetDirection() * glm::vec3(1,-1,1));
+			rb->SetVelocity(componentParent->GetDirection() * glm::vec3(1,-1,1));
 		}
 	}
 }

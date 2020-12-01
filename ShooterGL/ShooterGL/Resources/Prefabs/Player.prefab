@@ -20,11 +20,11 @@ Components
 	}
 	Model
 	{
-		Path : Resources/Models/guitar_backpack/Survival_BackPack_2.fbx
-		PositionOffset : 0,-3,0
+		Path : Resources/Models/guitar_backpack/Rock_low.FBX
+		PositionOffset : 0,0,0
 		EulerAngles : 0,1,0
 		RotationAngle : 3.14
-		ScaleOffset : 0.01,0.01,0.01
+		ScaleOffset : 0.22,0.22,0.22
 		Material : Resources/Materials/BackPackMaterial.mat
 	}
 	RigidBody
