@@ -35,6 +35,7 @@ void Player::Update(float gameTime)
 			rb->SetVelocity(componentParent->GetTargetDirection() * glm::vec3(1,-1,1));
 			rb->SetVelocity(componentParent->GetDirection() * glm::vec3(1,-1,1));
 			rb->SetProperties(RigidBody::Properties::DestroyOnHit | rb->GetProperties());
+			rb->SetSpawnedBy(componentParent);
 		}
 	}
 }

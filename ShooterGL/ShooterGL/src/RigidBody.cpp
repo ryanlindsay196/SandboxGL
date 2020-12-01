@@ -10,8 +10,10 @@ RigidBody::~RigidBody()
 {
 }
 
-void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties)
+void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties, Entity* spawningEntity)
 {
+	spawnedBy = spawningEntity;
+
 	for(int i = 0; i < rigidBodyProperties.size(); i++)
 	//for (std::string rbProp : rigidBodyProperties)
 	{
@@ -108,6 +110,16 @@ void RigidBody::FixedUpdate(float gameTime)
 	}
 	storedVelocity = glm::vec3(0);
 	componentParent->Translate(positionConstraints * velocity * gameTime);
+}
+
+void RigidBody::SetSpawnedBy(Entity * spawningEntity)
+{
+	spawnedBy = spawningEntity;
+}
+
+Entity * RigidBody::GetSpawnedBy()
+{
+	return spawnedBy;
 }
 
 ////Get's the rigidbody's position in local space (from the componentParent)

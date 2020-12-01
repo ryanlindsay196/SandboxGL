@@ -19,6 +19,7 @@ private:
 	glm::vec3 velocity, storedVelocity;
 	glm::vec3 positionConstraints, rotationConstraints;
 	bool useGravity;
+	Entity* spawnedBy;
 
 	bool isActive = true;
 	bool isVelocityStored;
@@ -28,9 +29,11 @@ private:
 public:
 	RigidBody();
 	~RigidBody();
-	void Initialize(std::vector<std::string>& rigidBodyProperties);
+	void Initialize(std::vector<std::string>& rigidBodyProperties, Entity* spawningEntity);
 	void Update(float gameTime) override;
 	void FixedUpdate(float gameTime);
+	void SetSpawnedBy(Entity* spawningEntity);
+	Entity* GetSpawnedBy();
 	//glm::vec3 GetPositionOffset();
 	glm::vec3 GetPosition();
 	//glm::vec3 GetScale();

@@ -223,6 +223,10 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 									//Players don't bounce off of each other //TODO: Check for other solutions
 									if (rbNode1->rigidBody->componentParent->FindController() && rbNode2->rigidBody->componentParent->FindController())
 										continue;
+									//if one of the rigidbodies were spawned by the other colliding entity
+									else if (rbNode1->rigidBody->componentParent == rbNode2->rigidBody->GetSpawnedBy() ||
+										rbNode2->rigidBody->componentParent == rbNode1->rigidBody->GetSpawnedBy())
+										continue;
 
 									Collider* currentCollider2 = rbNode2->rigidBody->GetColliderRef(j);
 
