@@ -75,13 +75,27 @@ void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties)
 	}
 }
 
-//TODO: DELETE
 void RigidBody::Update(float gameTime)
 {
+	for (Collider collider : colliders)
+	{
+		collider.Update(gameTime);
+	}
 }
 
 void RigidBody::FixedUpdate(float gameTime)
 {
+	bool reactivateTimerActive = properties & Properties::ReactivateTimerActive;
+	if (reactivateTimerActive)
+	{
+		if (reactivateTimer < 0)
+		{
+			SetIsActive(true);
+		}
+		else
+			reactivateTimer -= gameTime;
+	}
+
 	//if (useGravity)
 	//{
 	//	velocity.y += 10 * gameTime;
@@ -176,4 +190,34 @@ Collider* RigidBody::GetColliderRef(int i)
 	if(i < colliders.size())
 		return &colliders[i];
 	return nullptr;
+}
+
+void RigidBody::SetIsActive(bool newIsActive)
+{
+	isActive = newIsActive;
+	for (Collider collider : colliders)
+	{
+		collider.isActive = newIsActive;
+	}
+
+}
+
+bool RigidBody::GetIsActive()
+{
+	return isActive;
+}
+
+void RigidBody::SetReactivateTimer(float newReactivateTimer)
+{
+	reactivateTimer = newReactivateTimer;
+}
+
+unsigned int RigidBody::GetProperties()
+{
+	return properties;
+}
+
+void RigidBody::SetProperties(int i)
+{
+	properties = i;
 }

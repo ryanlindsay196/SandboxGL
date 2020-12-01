@@ -34,16 +34,18 @@ void Player::Update(float gameTime)
 			RigidBody* rb = newEntity->FindRigidBody();
 			rb->SetVelocity(componentParent->GetTargetDirection() * glm::vec3(1,-1,1));
 			rb->SetVelocity(componentParent->GetDirection() * glm::vec3(1,-1,1));
+			rb->SetProperties(RigidBody::Properties::DestroyOnHit | rb->GetProperties());
 		}
 	}
 }
 
 void Player::OnCollisionEnter(Entity * entity)
 {
-	HitBox* hitBox = entity->FindHitBox();
-	if (hitBox != nullptr)
+	RigidBody* rigidBody = entity->FindRigidBody();
+	if (rigidBody != nullptr && rigidBody->GetProperties() & RigidBody::Properties::HitBox)
 	{
-		playerInfo.health -= hitBox->damage;
+		rigidBody->SetIsActive(false);
+		playerInfo.health -= 20;
 		if (playerInfo.health <= 0)
 		{
 			printf("Match lost\n");

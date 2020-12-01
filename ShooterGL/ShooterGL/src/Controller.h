@@ -42,7 +42,7 @@ public:
 	virtual void Update(float gameTime) override;
 	//TODO: Add keyboard/controller support
 	//TODO: Add support for different entity states. These should be hot swappable
-	void Move(glm::vec3 direction, float moveSpeed);
+	void Move(glm::vec3 direction, float moveSpeed, float gameTime);
 
 	//The value of the change in WASD this frame
 	int ChangedWASD();

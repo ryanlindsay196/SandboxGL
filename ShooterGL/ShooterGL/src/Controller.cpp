@@ -1,5 +1,6 @@
 #include "Controller.h"
 #include "GLFW/glfw3.h"
+#include "RigidBody.h"
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
@@ -22,6 +23,7 @@ void Controller::AddKeyBinding()
 
 void Controller::Update(float gameTime)
 {
+#pragma region Update Keys/Inputs
 	forwardKey.Update();
 	leftKey.Update();
 	downKey.Update();
@@ -66,6 +68,7 @@ void Controller::Update(float gameTime)
 		else
 			action4Key.Release();
 	}
+#pragma endregion
 	CheckForMovement(forwardKey.IsDown(), leftKey.IsDown(), downKey.IsDown(), rightKey.IsDown(), gameTime);
 	//Rotate the entity based on the mouse offset from the center of the screen
 	if (xoffset != 0 || yoffset != 0)
@@ -87,12 +90,30 @@ void Controller::Update(float gameTime)
 	mouseButtonPressed1 = false;
 }
 
-void Controller::Move(glm::vec3 direction, float moveSpeed)
+void Controller::Move(glm::vec3 direction, float moveSpeed, float gameTime)
 {
 	if (direction != glm::vec3(0))
 	{
-		//direction.y = 0;
-		componentParent->Translate(glm::normalize(direction) * moveSpeed);
+		RigidBody* rigidBody = componentParent->FindRigidBody();
+		if (rigidBody == nullptr)
+		{
+			componentParent->Translate(glm::normalize(direction) * moveSpeed * gameTime);
+		}
+		else
+		{
+			//Don't multiply by gameTime because it is computed by the rigidBody->FixedUpdate function
+			rigidBody->StoreVelocity(glm::normalize(direction) * moveSpeed);
+		}
+	}
+	//If wasd input just changed and is not receiving directional input
+	if (ChangedWASD() != 0 && CurrentWASD() == 0)
+	{
+		RigidBody* rigidBody = componentParent->FindRigidBody();
+		if (rigidBody != nullptr)
+		{
+			rigidBody->SetVelocity(glm::vec3(0, 0, 0));
+			rigidBody->StoreVelocity(-rigidBody->GetStoredVelocity());
+		}
 	}
 }
 
@@ -160,6 +181,17 @@ void Controller::SetNetworkWASDInput(int wasd)
 		rightKey.Press();
 	else
 		rightKey.Release();
+
+	//If wasd input just changed and is not receiving directional input
+	if (CurrentWASD() == 0)
+	{
+		RigidBody* rigidBody = componentParent->FindRigidBody();
+		if (rigidBody != nullptr)
+		{
+			rigidBody->SetVelocity(glm::vec3(0, 0, 0));
+			rigidBody->StoreVelocity(-rigidBody->GetStoredVelocity());
+		}
+	}
 }
 
 void Controller::SetNetworkActionInput(int action)
@@ -215,7 +247,7 @@ void Controller::CheckForMovement(bool wKey, bool aKey, bool sKey, bool dKey, fl
 		if (mouseButtonDown1)
 			moveDirection -= glm::vec3(0, 0.001, 0);
 	}
-	Move(moveDirection, -3.f * gameTime);
+	Move(moveDirection, -3.f, gameTime);
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)

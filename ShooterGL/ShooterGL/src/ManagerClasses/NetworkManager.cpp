@@ -89,12 +89,13 @@ void NetworkManager::Update(float gameTime)
 		case ENET_EVENT_TYPE_RECEIVE:
 		{
 			std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair((char*)enetEvent.packet->data, ":");
-			printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
-				enetEvent.packet->dataLength,
-				enetEvent.packet->data,
-				enetEvent.peer->address.host,
-				enetEvent.peer->address.port,
-				enetEvent.channelID);
+			//printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
+			//	enetEvent.packet->dataLength,
+			//	enetEvent.packet->data,
+			//	enetEvent.peer->address.host,
+			//	enetEvent.peer->address.port,
+			//	enetEvent.channelID);
+			printf("%s\n", enetEvent.packet->data);
 			if (keyValuePair.first == "SpawnPlayer")
 			{
 				Entity* newNetworkedPlayer = InstantiateNetworkedPlayer();
@@ -247,7 +248,6 @@ void NetworkManager::Update(float gameTime)
 						newNetworkedPlayer->SetEulerAngles(ParseVector(packetStrings[3]));
 
 						newNetworkedPlayer->SetScale(ParseVector(packetStrings[4]));
-
 					}
 				}
 			}

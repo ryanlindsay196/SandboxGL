@@ -1,6 +1,9 @@
 #include "Collider.h"
-#include "glm.hpp"
 #include "RigidBody.h"
+
+void Collider::Update(float gameTime)
+{
+}
 
 //Calculates and returns the projections of this rigidbody on the x, y, and z axes.
 Collider::ColliderProjections Collider::CalculateProjections(bool addVelocity, bool addStoredVelocity, float gameTime)

@@ -5,14 +5,26 @@
 #include <Collider.h>
 class RigidBody : public Component
 {
+public:
+	enum Properties
+	{
+		HitBox = 1,
+		Static = 1 << 1,
+		DestroyOnHit = 1 << 2,
+		ReactivateTimerActive = 1 << 3
+	};
 private:
+	unsigned int properties;
 	float mass;
 	glm::vec3 velocity, storedVelocity;
 	glm::vec3 positionConstraints, rotationConstraints;
 	bool useGravity;
 
+	bool isActive = true;
 	bool isVelocityStored;
 	std::vector<Collider> colliders;
+
+	float reactivateTimer;
 public:
 	RigidBody();
 	~RigidBody();
@@ -35,10 +47,15 @@ public:
 	void OnCollisionEnter(Entity* entity);
 	void OnTriggerEnter(Entity* entity);
 
-public:
 	std::vector<Collider> GetColliders();
 	Collider* GetColliderRef(int i);
-	//TODO: Remove
-	//int tempIndex;
+
+	void SetIsActive(bool newIsActive);
+	bool GetIsActive();
+
+	void SetReactivateTimer(float newReactivateTimer);
+	unsigned int GetProperties();
+	void SetProperties(int i);
+public:
 };
 

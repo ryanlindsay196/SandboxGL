@@ -5,10 +5,13 @@ class RigidBody;
 class Collider
 {
 public:
+	void Update(float gameTime);
+
 	enum ColliderType { Sphere, Rectangle, Mesh };
 
 	RigidBody* colliderParent;
 	bool isTrigger = false;
+	bool isActive = true;
 	ColliderType colliderType;
 	glm::vec3 positionOffset, scale;
 
