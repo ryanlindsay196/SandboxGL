@@ -151,6 +151,11 @@ Mesh Model::ProcessMesh(aiMesh * mesh, std::string& materialPath, const aiNode* 
 	return Mesh(m_objectManager, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node, boneMap, totalBones);
 }
 
+void Model::SetIsActive(bool newIsActive)
+{
+	isActive = newIsActive;
+}
+
 void Model::LoadShaders()
 {
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
@@ -180,6 +185,8 @@ void Model::Update(float gameTime)
 
 void Model::Render(LightManager* lightManager)
 {
+	if (!isActive)
+		return;
 	//TODO: Check why the first condition (i < 1) is here
 	for (unsigned int i = 0; i < 1 && i < lightManager->TotalLights(); i++)
 	{

@@ -36,7 +36,7 @@ Components
 		{
 			ColliderType : 0
 			PositionOffset : 0,0,0
-			Scale : 2,2,2
+			Scale : 2,5,2
 			IsTrigger : 0
 		}
 		UseGravity : 0

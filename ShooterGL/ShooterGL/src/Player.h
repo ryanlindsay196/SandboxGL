@@ -4,18 +4,19 @@
 
 class ControllerManager;
 class EntityManager;
+class NetworkManager;
 
 struct PlayerInfo
 {
 	std::string name;
 	std::string portrait;
-	float health, currentHealth;
-	float weight;
-	float energy, currentEnergy;
-	float energyRecovery;
-	float speed;
-	float shield, currentShield;
-	float shieldRecovery;
+	int health, currentHealth;
+	int weight;
+	int energy, currentEnergy;
+	int energyRecovery;
+	int speed;
+	int shield, currentShield;
+	int shieldRecovery;
 };
 
 enum ProjectileType { lob, skillshot };
@@ -57,7 +58,7 @@ class Player : public Component
 {
 public:
 	Player();
-	void Initialize(ControllerManager* controllerManager, Entity* newParent, EntityManager* newEntityManager);
+	void Initialize(ControllerManager* controllerManager, Entity* newParent, EntityManager* newEntityManager, NetworkManager* in_networkManager);
 	void Update(float gameTime) override;
 	void OnCollisionEnter(Entity* entity) override;
 
@@ -67,4 +68,5 @@ private:
 	PlayerInfo playerInfo;
 	Controller* controller;
 	EntityManager* entityManager;
+	NetworkManager* networkManager;
 };

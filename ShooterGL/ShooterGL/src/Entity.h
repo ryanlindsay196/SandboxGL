@@ -8,6 +8,7 @@ class Component;
 class LightManager;
 class Controller;
 class RigidBody;
+class Model;
 struct HitBox;
 
 class Entity
@@ -22,6 +23,7 @@ public:
 	Controller* FindController();
 	RigidBody* FindRigidBody();
 	HitBox* FindHitBox();
+	Model* FindModel();
 
 	void SetParent(Entity* newParent);
 	void AddComponent(Component* newComponent);

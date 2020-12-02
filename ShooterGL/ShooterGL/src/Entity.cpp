@@ -14,6 +14,7 @@
 
 #include "Controller.h"
 #include "Player.h"
+#include "Renderables/Model.h"
 
 Entity::~Entity()
 {
@@ -111,6 +112,19 @@ HitBox* Entity::FindHitBox()
 		if (hitBox != nullptr)
 		{
 			return hitBox;
+		}
+	}
+	return nullptr;
+}
+
+Model * Entity::FindModel()
+{
+	for (Component* component : components)
+	{
+		Model* model = dynamic_cast<Model*>(component);
+		if (model != nullptr)
+		{
+			return model;
 		}
 	}
 	return nullptr;

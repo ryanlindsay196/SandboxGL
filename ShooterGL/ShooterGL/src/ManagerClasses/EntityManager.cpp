@@ -209,7 +209,7 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		else if (entityData.componentName == "Player")
 		{
 			Player* player = new Player();
-			player->Initialize(objectManager->controllerManager, entity, this);
+			player->Initialize(objectManager->controllerManager, entity, this, );
 			entity->AddComponent(player);
 			objectManager->playerManager->AddPlayer(player);
 		}

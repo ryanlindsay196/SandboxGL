@@ -30,6 +30,8 @@ public:
 	void ProcessNode(aiNode* node, const aiScene* scene, std::string materialPath, Node* currentNode, Node* parentNode);
 	Mesh ProcessMesh(aiMesh* mesh, std::string& materialPath, const aiNode* node);
 	
+	void SetIsActive(bool newIsActive);
+
 	void LoadShaders();
 
 	unsigned int GetLoadedMeshesCount();
@@ -43,6 +45,7 @@ private:
 	TextureManager* m_textureManager;
 	std::shared_ptr<ModelData> m_modelData;
 	std::vector<Mesh> m_meshes;
+	bool isActive = true;
 
 	unsigned int animationIndex;
 
