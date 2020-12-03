@@ -507,12 +507,14 @@ bool PhysicsManager::RigidBodyInRegion(RigidBody * rb, glm::vec3 regionIDs, bool
 				closestSpherePoint += rbVelocityConstant;
 			}
 
-			if (closestSpherePoint.x >= physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z].startBound.x &&
-				closestSpherePoint.x <= physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z].endBound.x &&
-				closestSpherePoint.y >= physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z].startBound.y &&
-				closestSpherePoint.y <= physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z].endBound.y &&
-				closestSpherePoint.z >= physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z].startBound.z &&
-				closestSpherePoint.z <= physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z].endBound.z)
+			PhysicsRegion& region = physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z];
+
+			if (closestSpherePoint.x >= region.startBound.x &&
+				closestSpherePoint.x <= region.endBound.x &&
+				closestSpherePoint.y >= region.startBound.y &&
+				closestSpherePoint.y <= region.endBound.y &&
+				closestSpherePoint.z >= region.startBound.z &&
+				closestSpherePoint.z <= region.endBound.z)
 				return true;
 		}
 
