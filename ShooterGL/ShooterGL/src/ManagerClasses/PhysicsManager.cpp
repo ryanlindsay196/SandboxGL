@@ -1,6 +1,6 @@
 #include "PhysicsManager.h"
 
-
+PhysicsManager* PhysicsManager::instance = 0;
 
 PhysicsManager::PhysicsManager()
 {
@@ -432,4 +432,11 @@ bool PhysicsManager::RigidBodyInRegion(RigidBody * rb, glm::vec3 regionIDs, bool
 		}
 		return false;
 	}
+}
+
+PhysicsManager* PhysicsManager::GetInstance()
+{
+	if (!instance)
+		instance = new PhysicsManager();
+	return instance;
 }

@@ -1,12 +1,25 @@
 #include "ShaderManager.h"
 #include "../Renderables/Shader.h"
 #include "TextureManager.h"
-#include "ObjectManager.h"
+//#include "ObjectManager.h"
 
 #include <cctype>
 #include <algorithm>
 
-std::shared_ptr<Shader> ShaderManager::LoadNewShader(std::string materialPath, ObjectManager* in_objectManager)
+ShaderManager* ShaderManager::instance = 0;
+
+ShaderManager::ShaderManager()
+{
+}
+
+ShaderManager * ShaderManager::GetInstance()
+{
+	if (!instance)
+		instance = new ShaderManager();
+	return instance;
+}
+
+std::shared_ptr<Shader> ShaderManager::LoadNewShader(std::string materialPath)
 {
 	std::transform(materialPath.begin(), materialPath.end(), materialPath.begin(),
 		[](unsigned char c) { return std::tolower(c); });
@@ -16,7 +29,7 @@ std::shared_ptr<Shader> ShaderManager::LoadNewShader(std::string materialPath, O
 		std::shared_ptr<Shader> newShader = std::make_shared<Shader>();
 		std::string vertexPath = "";
 		std::string fragmentPath = "";
-		newShader->Initialize(in_objectManager, vertexPath, fragmentPath, materialPath);
+		newShader->Initialize(vertexPath, fragmentPath, materialPath);
 
 		std::pair<std::string, std::weak_ptr<Shader>> newShaderEntry(materialPath, newShader);
 		shaders.insert(newShaderEntry);

@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "Texture.h"
 #include "ManagerClasses/TextureManager.h"
-#include "ManagerClasses/ObjectManager.h"
+//#include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/LightManager.h"
 #include <gtc/type_ptr.hpp>
 #include "FileReader.h"
@@ -14,10 +14,9 @@
 //TODO: potentially remove pragma warning disable : 4996
 #pragma warning (disable : 4996)
 
-void Shader::Initialize(ObjectManager * in_objectManager, std::string& vertexPath, std::string& fragmentPath, std::string& materialPath)
+void Shader::Initialize(std::string& vertexPath, std::string& fragmentPath, std::string& materialPath)
 {
-	textureManager = in_objectManager->textureManager;
-	m_objectManager = in_objectManager;
+	textureManager = TextureManager::GetInstance();
 	shaderProgram = glCreateProgram();
 
 	if (materialPath != "")
@@ -239,13 +238,13 @@ void Shader::SetFragmentShader(std::string& fragmentPath)
 		{
 			if (line == "#define NR_POINT_LIGHTS X")
 			{
- 				line = "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
+ 				line = "#define NR_POINT_LIGHTS " + std::to_string(LightManager::GetInstance()->TotalLights());
 			}
 			tempFShader += line + "\n";
 		}
 
 		std::string fString = fShaderStream.str();
-		std::string lightsString = "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());
+		std::string lightsString = "#define NR_POINT_LIGHTS " + std::to_string(LightManager::GetInstance()->TotalLights());
 		fString.replace(fString.begin() + fString.find_first_of("#"), fString.begin() + fString.find_first_of("#") + 25, lightsString.c_str());
 		//fString.replace(fString.begin() + fString.find_first_of("#define"), 25, "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights()));
 		//fString.replace(fString.begin(), 5, "#define NR_POINT_LIGHTS " + std::to_string(m_objectManager->lightManager->TotalLights());

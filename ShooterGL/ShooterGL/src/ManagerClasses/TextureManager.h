@@ -7,8 +7,10 @@ class TextureManager
 {
 private:
 	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
-public:
 	TextureManager();
+	static TextureManager* instance;
+public:
+	static TextureManager* GetInstance();
 	std::shared_ptr<Texture> LoadNewTexture(std::string texturePath);
 	void UnloadTextures();
 };

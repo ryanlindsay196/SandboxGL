@@ -7,10 +7,12 @@ class ObjectManager;
 class CameraManager
 {
 private:
-	ObjectManager* m_objectManager;
 	std::vector<Camera> cameras;
+	static CameraManager* instance;
+	CameraManager();
 public:
-	void Initialize(ObjectManager* objectManager);
+	static CameraManager* GetInstance();
+	void Initialize();
 	Camera* CreateCamera(Entity* newParent);
 	Camera* GetCamera(int i);
 	void Update();

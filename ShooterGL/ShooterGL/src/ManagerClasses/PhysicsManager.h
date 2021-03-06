@@ -28,6 +28,10 @@ struct PhysicsRegion
 class PhysicsManager
 {
 private:
+	static PhysicsManager* instance;
+	PhysicsManager();
+
+private:
 	//set this in initialize
 	glm::vec3 physicsRegionBounds;
 	//update this whenever a new rigidbody is instantiated
@@ -49,7 +53,8 @@ private:
 	//checks if a rigidbody is inside a particular region
 	bool RigidBodyInRegion(RigidBody* rb, glm::vec3 regionIDs, bool addRB_Velocity, float gameTime);
 public:
-	PhysicsManager();
+	static PhysicsManager* GetInstance();
+
 	~PhysicsManager();
 	void Initialize(glm::vec3 regionBounds, glm::vec3 regionCount);
 	void FixedUpdate(float gameTime);

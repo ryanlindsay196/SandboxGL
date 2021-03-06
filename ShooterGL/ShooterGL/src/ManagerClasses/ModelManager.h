@@ -15,13 +15,15 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<ModelData>> modelDataMap;
 
 	TextureManager* m_textureManager;
-	ObjectManager* m_objectManager;
 
-public:
+	static ModelManager* instance;
 	ModelManager();
+public:
 	~ModelManager();
 
-	void Initialize(ObjectManager * objectManager);
+	static ModelManager* GetInstance();
+
+	void Initialize();
 
 	Model* LoadModel(std::string& modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset);
 	std::shared_ptr<ModelData> LoadModelData(std::string hashID);

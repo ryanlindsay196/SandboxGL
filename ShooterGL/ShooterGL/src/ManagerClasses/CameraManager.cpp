@@ -1,9 +1,22 @@
 #include "CameraManager.h"
+//#include "ObjectManager.h"
 
-void CameraManager::Initialize(ObjectManager * objectManager)
+CameraManager* CameraManager::instance = 0;
+
+CameraManager::CameraManager()
+{
+}
+
+CameraManager * CameraManager::GetInstance()
+{
+	if (!instance)
+		instance = new CameraManager();
+	return instance;
+}
+
+void CameraManager::Initialize()
 {
 	cameras.clear();
-	m_objectManager = objectManager;
 	cameras.reserve(4);
 }
 

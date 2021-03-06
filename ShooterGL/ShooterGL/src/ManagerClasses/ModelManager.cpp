@@ -1,11 +1,13 @@
 #include "ModelManager.h"
 #include "TextureManager.h"
-#include "ObjectManager.h"
+//#include "ObjectManager.h"
 #include "ModelData.h"
 #include <unordered_map>
 
 #include <cctype>
 #include <algorithm>
+
+ModelManager* ModelManager::instance = 0;
 
 ModelManager::ModelManager()
 {
@@ -17,19 +19,25 @@ ModelManager::~ModelManager()
 		delete models[i];
 }
 
-void ModelManager::Initialize(ObjectManager * objectManager)
+ModelManager * ModelManager::GetInstance()
+{
+	if (!instance)
+		instance = new ModelManager();
+	return instance;
+}
+
+void ModelManager::Initialize()
 {
 	for (unsigned int i = 0; i < models.size(); i++)
 		delete models[i];
 	models.clear();
-	m_objectManager = objectManager;
-	m_textureManager = objectManager->textureManager;
+	m_textureManager = TextureManager::GetInstance();
 }
 
 Model* ModelManager::LoadModel(std::string& modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
 {
 	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(m_objectManager, positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, materialPath);
+	models[models.size() - 1]->Initialize(positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, materialPath);
 
 	return models[models.size() - 1];
 }

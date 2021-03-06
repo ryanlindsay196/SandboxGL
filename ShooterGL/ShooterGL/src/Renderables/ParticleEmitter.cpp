@@ -3,7 +3,7 @@
 #include "ManagerClasses/ShaderManager.h"
 //#include "GLFW/glfw3.h"
 #include <glad/glad.h>
-#include "ManagerClasses/ObjectManager.h"
+//#include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/CameraManager.h"
 #include <fstream>
 #include <sstream>
@@ -11,7 +11,7 @@
 #include <gtc/random.hpp>
 #include "FileReader.h"
 
-void ParticleEmitter::Initialize(ObjectManager * objectManager, char* particlePath)
+void ParticleEmitter::Initialize(char* particlePath)
 {
 	float particle_quad[] = {
 	0.0f, 1.0f, 0.0f, 1.0f,
@@ -34,7 +34,6 @@ void ParticleEmitter::Initialize(ObjectManager * objectManager, char* particlePa
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glBindVertexArray(0);
 
-	m_objectManager = objectManager;
 	LoadParticleSettings(particlePath);
 	//create the correct amount of particle instances
 	for (unsigned int i = 0; i < spawnerSettings.maxParticles; ++i)
@@ -55,7 +54,7 @@ void ParticleEmitter::LoadParticleSettings(char * particlePath)
 		line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
 		std::pair<std::string, std::string> keyValuePair = GenerateKeyValuePair(line, ":");
 		if (keyValuePair.first == "material")
-			m_shader = m_objectManager->shaderManager->LoadNewShader(keyValuePair.second, m_objectManager);
+			m_shader = ShaderManager::GetInstance()->LoadNewShader(keyValuePair.second);
 		else if (keyValuePair.first == "spawnsPerSecond")
 			spawnerSettings.spawnsPerSecond = strtof(keyValuePair.second.c_str(), nullptr);
 		else if (keyValuePair.first == "particlesPerSpawn")
@@ -166,8 +165,8 @@ void ParticleEmitter::Render()
 	glCullFace(GL_FRONT);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	m_shader->UseShader();
-	m_shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
-	m_shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->cameraViewMatrix, GL_FALSE);
+	m_shader->SetShaderUniform_mat4fv((char*)"projection", CameraManager::GetInstance()->GetCamera(0)->projectionMatrix, GL_FALSE);
+	m_shader->SetShaderUniform_mat4fv((char*)"view", CameraManager::GetInstance()->GetCamera(0)->cameraViewMatrix, GL_FALSE);
 	for (Particle particle : particles)
 	{
 		if (particle.Life > 0.0f)

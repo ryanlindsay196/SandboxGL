@@ -2,7 +2,7 @@
 #include "Shader.h"
 #include <glad/glad.h>
 #include "ManagerClasses/TextureManager.h"
-#include "ManagerClasses/ObjectManager.h"
+//#include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/CameraManager.h"
 #include "ManagerClasses/LightManager.h"
 #include "ManagerClasses/ModelManager.h"
@@ -34,20 +34,19 @@ Model::~Model()
 }
 
 //Initialize variables and load model vertex data
-void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, std::string& modelPath, std::string& materialPath)
+void Model::Initialize(glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, std::string& modelPath, std::string& materialPath)
 {
 	animationIndex = 0;
-	m_textureManager = objectManager->textureManager;
-	m_objectManager = objectManager;
+	m_textureManager = TextureManager::GetInstance();
 
-	m_modelData = objectManager->modelManager->LoadModelData(modelPath);
+	m_modelData = ModelManager::GetInstance()->LoadModelData(modelPath);
 
 	//If model's vertex data was already loaded in another model
 	if(m_modelData->m_meshData.size() != 0)
 	{
 		for (unsigned int i = 0; i < m_modelData->m_meshData.size(); i++)
 		{
-			m_meshes.push_back(Mesh(objectManager, materialPath, this, &m_modelData->m_meshData[i]));
+			m_meshes.push_back(Mesh(materialPath, this, &m_modelData->m_meshData[i]));
 			m_meshes[m_meshes.size() - 1].SetTransform(m_modelData->m_meshData[i].meshTransform);
 		}
 
@@ -143,7 +142,7 @@ Mesh Model::ProcessMesh(aiMesh * mesh, std::string& materialPath, const aiNode* 
 	if (m_meshes.size() == m_modelData->m_meshData.size())
 		m_modelData->m_meshData.push_back(MeshData());
 	//Create and return a new mesh
-	return Mesh(m_objectManager, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node, boneMap, totalBones);
+	return Mesh(mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node, boneMap, totalBones);
 }
 
 //Set the internal isActive variable, which enables/disables rendering for the model
@@ -223,8 +222,8 @@ void Model::Render(LightManager* lightManager)
 	//Set the mvp matrix in the shader
 	for (Mesh mesh : m_meshes)
 	{
-		mesh.shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->cameraViewMatrix, GL_FALSE);
-		mesh.shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
+		mesh.shader->SetShaderUniform_mat4fv((char*)"view", CameraManager::GetInstance()->GetCamera(0)->cameraViewMatrix, GL_FALSE);
+		mesh.shader->SetShaderUniform_mat4fv((char*)"projection", CameraManager::GetInstance()->GetCamera(0)->projectionMatrix, GL_FALSE);
 		//If the model has a parent entity
 		if (componentParent != nullptr)
 		{

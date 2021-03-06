@@ -9,8 +9,10 @@ class ControllerManager
 private:
 	std::vector<Controller> controllers;
 
-
+	ControllerManager();
+	static ControllerManager* instance;
 public:
+	static ControllerManager* GetInstance();
 	~ControllerManager();
 
 	void Initialize(GLFWwindow* window);

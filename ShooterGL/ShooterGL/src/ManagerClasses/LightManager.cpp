@@ -1,5 +1,18 @@
 #include "LightManager.h"
 
+LightManager* LightManager::instance = 0;
+
+LightManager::LightManager()
+{
+}
+
+LightManager * LightManager::GetInstance()
+{
+	if (!instance)
+		instance = new LightManager();
+	return instance;
+}
+
 void LightManager::Initialize()
 {
 	for (auto light : m_lights)

@@ -17,7 +17,12 @@ struct GLFWwindow;
 
 class ObjectManager
 {
+private:
+	ObjectManager();
+	static ObjectManager* instance;
 public:
+	static ObjectManager* GetInstance();
+
 	EntityManager* entityManager;
 	ModelManager* modelManager;
 	TextureManager* textureManager;

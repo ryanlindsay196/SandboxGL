@@ -10,9 +10,14 @@ class ControllerManager;
 
 class NetworkManager
 {
+private:
+	NetworkManager();
+	static NetworkManager* instance;
 public:
+	static NetworkManager* GetInstance();
+
 	//Initialize the server
-	void Initialize(EntityManager* in_entityManager, ControllerManager* in_controllerManager);
+	void Initialize();
 	//Disconnect from the server
 	void DisconnectFromServer();
 	//Reads and responds to incoming packets. Sends outgoing packets.

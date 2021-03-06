@@ -4,27 +4,27 @@
 #include "glad/glad.h"
 #include <string>
 #include <algorithm>
-#include "ManagerClasses/ObjectManager.h"
+//#include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/ShaderManager.h"
 #include <assimp/scene.h>
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 #include "ModelData.h"
 #include "AnimationDataStructures.h"
+#include "../ManagerClasses/TextureManager.h"
 //#include "Animation.h"
 
 #define ARRAYSIZE(a) \
   ((sizeof(a) / sizeof(*(a))) / \
   static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
 
-Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones)
+Mesh::Mesh(aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones)
 {
 	meshData->vertices.reserve(mesh->mNumVertices);
 
 	m_materialPath = materialPath;
 	parentMesh = newParent;
-	textureManager = objectManager->textureManager;
-	m_objectManager = objectManager;
+	textureManager = TextureManager::GetInstance();
 	m_meshData = meshData;
 
 	//scaleOffset = glm::mat4(1);
@@ -184,14 +184,13 @@ Mesh::Mesh(ObjectManager * objectManager, aiMesh* mesh, std::string& materialPat
 }
 
 //If mesh data has been loaded by another mesh
-Mesh::Mesh(ObjectManager * objectManager, std::string& materialPath, WorldComponent * newParent, MeshData * meshData)
+Mesh::Mesh(std::string& materialPath, WorldComponent * newParent, MeshData * meshData)
 {
 	m_materialPath = materialPath;
 	//m_modelData = modelData;
 	parentMesh = newParent;
 	yaw = -90;
-	textureManager = objectManager->textureManager;
-	m_objectManager = objectManager;
+	textureManager = TextureManager::GetInstance();
 	m_meshData = meshData;
 
 	scaleOffset = glm::mat4(1);
@@ -213,7 +212,7 @@ void Mesh::LoadShaders()
 	{
 		std::string vertexDefault = "Shaders/VertexDefault.glsl";
 		std::string fragmentDefault = "Shaders/FragmentDefault.glsl";
-		shader->Initialize(m_objectManager, vertexDefault, fragmentDefault, m_materialPath);
+		shader->Initialize(vertexDefault, fragmentDefault, m_materialPath);
 	}
 }
 
@@ -224,7 +223,7 @@ void Mesh::SetDefaultShaders()
 
 void Mesh::SetShaders(std::string materialPath)
 {
-	shader = m_objectManager->shaderManager->LoadNewShader(materialPath, m_objectManager);
+	shader = ShaderManager::GetInstance()->LoadNewShader(materialPath);
 }
 
 void Mesh::AttachMeshData(MeshData * meshData)

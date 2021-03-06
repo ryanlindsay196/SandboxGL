@@ -15,11 +15,29 @@
 #include "gtx/quaternion.hpp"
 #pragma warning (disable : 4996)
 
-//Initialize the server
-void NetworkManager::Initialize(EntityManager* in_entityManager, ControllerManager* in_controllerManager)
+NetworkManager* NetworkManager::instance = 0;
+
+NetworkManager::NetworkManager()
 {
-	entityManager = in_entityManager;
-	controllerManager = in_controllerManager;
+}
+
+NetworkManager* NetworkManager::GetInstance()
+{
+	if (!instance)
+	{
+		instance = new NetworkManager();
+		instance->Initialize();
+	}
+	return instance;
+}
+
+//Initialize the server
+void NetworkManager::Initialize()
+{
+	//entityManager = in_entityManager;
+	//controllerManager = in_controllerManager;
+	entityManager = EntityManager::GetInstance();
+	controllerManager = ControllerManager::GetInstance();
 
 	ConnectToServer();
 }

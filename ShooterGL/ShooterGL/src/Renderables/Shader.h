@@ -11,7 +11,7 @@ typedef unsigned char GLboolean;
 class Shader
 {
 public:
-	void Initialize(ObjectManager * in_objectManager, std::string& vertexPath, std::string& fragmentPath, std::string& materialPath);
+	void Initialize(std::string& vertexPath, std::string& fragmentPath, std::string& materialPath);
 	void LoadMaterial(std::string& materialPath);
 	void AddNewTexture(std::string& texturePath, std::string& textureUniform);
 	void ClearTextures();
@@ -39,7 +39,6 @@ public:
 
 private:
 	TextureManager* textureManager;
-	ObjectManager* m_objectManager;
 
 	unsigned int vertexShader;
 	char* vertexShaderSource;

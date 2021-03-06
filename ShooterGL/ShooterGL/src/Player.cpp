@@ -10,11 +10,11 @@ Player::Player()
 	playerInfo.currentHealth = 100;
 }
 
-void Player::Initialize(ControllerManager* controllerManager, Entity* newParent, EntityManager* newEntityManager, NetworkManager* in_networkManager)
+void Player::Initialize(Entity* newParent)
 {
-	networkManager = in_networkManager;
-	Controller* latestInstantiatedController = controllerManager->GetController(controllerManager->TotalControllers() - 1);
-	entityManager = newEntityManager;
+	networkManager = NetworkManager::GetInstance();
+	Controller* latestInstantiatedController = ControllerManager::GetInstance()->GetController(ControllerManager::GetInstance()->TotalControllers() - 1);
+	entityManager = EntityManager::GetInstance();
 	//If the controller on this entity was added before this component (player) was
 	if (latestInstantiatedController != nullptr && latestInstantiatedController->componentParent == newParent)
 	{

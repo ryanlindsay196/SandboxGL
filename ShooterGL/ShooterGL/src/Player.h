@@ -58,7 +58,7 @@ class Player : public Component
 {
 public:
 	Player();
-	void Initialize(ControllerManager* controllerManager, Entity* newParent, EntityManager* newEntityManager, NetworkManager* in_networkManager);
+	void Initialize(Entity* newParent);
 	void Update(float gameTime) override;
 	void OnCollisionEnter(Entity* entity) override;
 

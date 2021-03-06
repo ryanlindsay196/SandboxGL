@@ -1,5 +1,5 @@
 #include "EntityManager.h"
-#include "ObjectManager.h"
+//#include "ObjectManager.h"
 #include "CameraManager.h"
 #include "ControllerManager.h"
 #include "ModelManager.h"
@@ -14,9 +14,21 @@
 #include <sstream>
 #include <algorithm>
 
-void EntityManager::Initialize(ObjectManager * in_objectManager)
+EntityManager* EntityManager::instance = 0;
+
+EntityManager::EntityManager()
 {
-	objectManager = in_objectManager;
+}
+
+EntityManager * EntityManager::GetInstance()
+{
+	if (!instance)
+		instance = new EntityManager();
+	return instance;
+}
+
+void EntityManager::Initialize()
+{
 }
 
 void EntityManager::LoadScene(std::string scenePath)
@@ -166,37 +178,37 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 	{
 		if (entityData.componentName == "Camera")
 		{
-			entity->AddComponent(objectManager->cameraManager->CreateCamera(entity));
+			entity->AddComponent(CameraManager::GetInstance()->CreateCamera(entity));
 		}
 		else if (entityData.componentName == "Model")
 		{
 			ModelData modelTransform = ModelData();
 			modelTransform.ReadModelData(entityData.componentProperties);
-			entity->AddComponent(objectManager->modelManager->LoadModel(modelTransform.modelPath, modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale));
+			entity->AddComponent(ModelManager::GetInstance()->LoadModel(modelTransform.modelPath, modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale));
 		}
 		else if (entityData.componentName == "ParticleSystem")
 		{
 			ParticleEmitter* newParticleEmitter = new ParticleEmitter();
 			std::pair<std::string, std::string> particleKeyValue = GenerateKeyValuePair(entityData.componentProperties[0], ":");
-			newParticleEmitter->Initialize(objectManager, (char*)particleKeyValue.second.c_str());
+			newParticleEmitter->Initialize((char*)particleKeyValue.second.c_str());
 			entity->AddComponent(newParticleEmitter);
 		}
 		else if (entityData.componentName == "Controller")
 		{
-			entity->AddComponent(objectManager->controllerManager->CreateController(nullptr));
+			entity->AddComponent(ControllerManager::GetInstance()->CreateController(nullptr));
 
-			Player* latestPlayer = objectManager->playerManager->GetPlayer(objectManager->playerManager->TotalPlayers() - 1);
+			Player* latestPlayer = PlayerManager::GetInstance()->GetPlayer(PlayerManager::GetInstance()->TotalPlayers() - 1);
 			//if the player was added before the controller
 			//if not, then attach the controller inside the player script instead
 			if (latestPlayer != nullptr && latestPlayer->componentParent == entity)
 			{
 				//Set the controller in the current entity's player component to the newly created controller
-				latestPlayer->SetController(objectManager->controllerManager->GetController(objectManager->controllerManager->TotalControllers() - 1));
+				latestPlayer->SetController(ControllerManager::GetInstance()->GetController(ControllerManager::GetInstance()->TotalControllers() - 1));
 			}
 		}
 		else if (entityData.componentName == "Light:Point")
 		{
-			entity->AddComponent(objectManager->lightManager->AddLight(entityData.componentProperties));
+			entity->AddComponent(LightManager::GetInstance()->AddLight(entityData.componentProperties));
 		}
 		else if (entityData.componentName == "RigidBody")
 		{
@@ -204,14 +216,14 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 			newRigidBody->Initialize(entityData.componentProperties, nullptr);
 			entity->AddComponent(newRigidBody);
 			newRigidBody->componentParent = entity;
-			objectManager->physicsManager->InitializeRigidBody(newRigidBody, 0.f);
+			PhysicsManager::GetInstance()->InitializeRigidBody(newRigidBody, 0.f);
 		}
 		else if (entityData.componentName == "Player")
 		{
 			Player* player = new Player();
-			player->Initialize(objectManager->controllerManager, entity, this, objectManager->networkManager);
+			player->Initialize(entity);
 			entity->AddComponent(player);
-			objectManager->playerManager->AddPlayer(player);
+			PlayerManager::GetInstance()->AddPlayer(player);
 		}
 		else
 		{

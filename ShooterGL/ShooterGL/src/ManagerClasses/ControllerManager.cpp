@@ -1,5 +1,22 @@
 #include "ControllerManager.h"
 
+ControllerManager* ControllerManager::instance = 0;
+
+ControllerManager::ControllerManager()
+{
+}
+
+ControllerManager * ControllerManager::GetInstance()
+{
+	if (!instance)
+		instance = new ControllerManager();
+	return instance;
+}
+
+ControllerManager::~ControllerManager()
+{
+}
+
 void ControllerManager::Initialize(GLFWwindow * window)
 {
 	controllers.clear();

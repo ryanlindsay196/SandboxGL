@@ -11,8 +11,6 @@ class LightManager;
 
 class EntityManager
 {
-private:
-	ObjectManager* objectManager;
 public://TODO: Implement
 
 	struct EntityData
@@ -83,11 +81,16 @@ private:
 	//The string is the file path of the entity
 	std::unordered_map<std::string, EntityProperties*> entityPropertiesMap;
 	std::vector<Entity*> entities;
+
+	EntityManager();
+	static EntityManager* instance;
 public:
+	static EntityManager* GetInstance();
+
 	//TODO: Implement. This will be a linked list with a pointer to an entityNode. Each entityNode has a pointer to the next entityNode, and an entity
 	std::unordered_map<std::string, Entity*> entitiesByTag;
 
-	void Initialize(ObjectManager* in_objectManager);
+	void Initialize();
 	void LoadScene(std::string scenePath);
 	EntityProperties* LoadEntityFromFile(std::string prefabPath);
 	EntityProperties* LoadProperties(std::string prefabPath);

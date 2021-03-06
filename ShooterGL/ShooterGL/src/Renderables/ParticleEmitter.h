@@ -52,7 +52,7 @@ class ParticleEmitter : public WorldComponent
 private:
 	SpawnerSettings spawnerSettings;
 public:
-	void Initialize(ObjectManager* objectManager, char* particlePath);
+	void Initialize(char* particlePath);
 	void LoadParticleSettings(char* particlePath);
 	virtual void Update(float gameTime) override;
 	void Render();
@@ -64,6 +64,5 @@ private:
 	unsigned int FirstUnusedParticle();
 	void RespawnParticle(Particle *particle);
 	std::shared_ptr<Shader> m_shader;
-	ObjectManager* m_objectManager;
 	float timeUntilSpawn;
 };

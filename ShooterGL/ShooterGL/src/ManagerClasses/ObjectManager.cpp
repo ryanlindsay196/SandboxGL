@@ -17,28 +17,43 @@
 
 #include <iostream>
 
+ObjectManager* ObjectManager::instance = 0;
+
+ObjectManager::ObjectManager()
+{
+}
+
+ObjectManager * ObjectManager::GetInstance()
+{
+	if (!instance)
+		instance = new ObjectManager();
+	return instance;
+}
+
 void ObjectManager::Initialize(GLFWwindow* window)
 {
+	//TODO: when calling fixedUpdate, use fixedUpdateMaxTime instead of time elapsed since last fixed update
+
 	//TODO: Load fixedUpdateTime and other variables (To Be Determined) from a project settings file
 	//30 fps = 2 / 60
 	//60 fps = 1 / 60
 	fixedUpdateMaxTime = 2.f / 60.f;
 
-	entityManager = new EntityManager();
-	modelManager = new ModelManager();
-	textureManager = new TextureManager();
-	cameraManager = new CameraManager();
-	controllerManager = new ControllerManager();
-	lightManager = new LightManager();
-	shaderManager = new ShaderManager();
-	physicsManager = new PhysicsManager();
-	playerManager = new PlayerManager();
+	entityManager = EntityManager::GetInstance();
+	modelManager = ModelManager::GetInstance();
+	textureManager = TextureManager::GetInstance();
+	cameraManager = CameraManager::GetInstance();
+	controllerManager = ControllerManager::GetInstance();
+	lightManager = LightManager::GetInstance();
+	shaderManager = ShaderManager::GetInstance();
+	physicsManager = PhysicsManager::GetInstance();
+	playerManager = PlayerManager::GetInstance();
 	
 	LoadScene("Resources/Scenes/Test2.scene", window);
 
 	//TODO: Make sure networkManager only loads and updates when there is a networked object in the scene
-	networkManager = new NetworkManager();
-	networkManager->Initialize(entityManager, controllerManager);
+	networkManager = NetworkManager::GetInstance();
+	//networkManager->Initialize(entityManager, controllerManager);
 
 }
 
@@ -76,9 +91,9 @@ void ObjectManager::LoadScene(std::string scenePath, GLFWwindow* window)
 	lightManager->Initialize();
 
 	controllerManager->Initialize(window);
-	entityManager->Initialize(this);
-	modelManager->Initialize(this);
-	cameraManager->Initialize(this);
+	entityManager->Initialize();
+	modelManager->Initialize();
+	cameraManager->Initialize();
 
 	physicsManager->Initialize(glm::vec3(24, 24, 24), glm::vec3(1, 1, 1));
 

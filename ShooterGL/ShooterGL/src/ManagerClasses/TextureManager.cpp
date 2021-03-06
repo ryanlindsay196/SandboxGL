@@ -4,8 +4,17 @@
 #include <cctype>
 #include <algorithm>
 
+TextureManager* TextureManager::instance = 0;
+
 TextureManager::TextureManager()
 {
+}
+
+TextureManager * TextureManager::GetInstance()
+{
+	if (!instance)
+		instance = new TextureManager();
+	return instance;
 }
 
 std::shared_ptr<Texture> TextureManager::LoadNewTexture(std::string texturePath)

@@ -41,7 +41,7 @@ int main()
 	}
 #pragma endregion
 
-	ObjectManager* objectManager = new ObjectManager();
+	ObjectManager* objectManager = ObjectManager::GetInstance();
 	objectManager->Initialize(window);
 	glEnable(GL_DEPTH_TEST);
 
@@ -72,7 +72,7 @@ int main()
 			objectManager->LoadScene("Resources/Scenes/Test2.scene", window);
 
 		lastFrame = currentFrame;
-		//std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
+		std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
 	}
 #pragma endregion
 

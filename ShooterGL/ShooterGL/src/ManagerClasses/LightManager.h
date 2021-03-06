@@ -2,7 +2,12 @@
 #include "Renderables/Light.h"
 class LightManager
 {
+private:
+	static LightManager* instance;
+	LightManager();
 public:
+	static LightManager* GetInstance();
+
 	void Initialize();
 
 	Light* AddLight(std::vector<std::string>& lightProperties);

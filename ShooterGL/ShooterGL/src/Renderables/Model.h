@@ -26,7 +26,7 @@ public:
 	~Model();
 
 	//Initialize variables and load model vertex data
-	void Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, std::string& modelPath, std::string& materialPath);
+	void Initialize(glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, std::string& modelPath, std::string& materialPath);
 	//Interface with ASSIMP library to get model data, which are loaded into internal data structures
 	void LoadModel(std::string modelPath, std::string materialPath);
 	//Process each aiNode from ASSIMP recursively, and copy relevant data to the currentNode variable
@@ -52,8 +52,6 @@ public:
 	void Render(LightManager* lightManager);
 
 private:
-	//Manages objects in the scene
-	ObjectManager* m_objectManager;
 	//Manages loaded textures
 	TextureManager* m_textureManager;
 
