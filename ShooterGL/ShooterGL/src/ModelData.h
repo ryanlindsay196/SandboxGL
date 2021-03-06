@@ -15,18 +15,10 @@ public:
 class ModelData
 {
 public:
-	//unsigned int VAO, EBO, VBO;
 	std::vector<MeshData> m_meshData;
 	Node* rootNode;
 	std::vector<Animation> animations;
 	std::unordered_map<std::string, BoneData> boneMap;
+	//Contains the position/rotation/scale for each bone, and the frames they occur
 	std::unordered_map<std::string, BoneKeyFrames> boneKeyMap;
 };
-
-//struct Vertex {
-//	glm::vec3 Position;
-//	glm::vec3 Normal;
-//	glm::vec2 TexCoords;
-//	glm::vec3 Tangent;
-//	glm::vec3 Bitangent;
-//};

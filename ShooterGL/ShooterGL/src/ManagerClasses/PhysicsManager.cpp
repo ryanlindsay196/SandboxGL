@@ -139,6 +139,7 @@ void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
 	}
  }
 
+//Replace the start node of a region with a new one containing the RigidBody* argument
 void PhysicsManager::AddRigidBodyToRegion(RigidBody * rb, glm::vec3 region)
 {
 	RigidBodyNode* oldStartNode = physicsRegions[region.x][region.y][region.z].startNode;
@@ -165,7 +166,7 @@ void PhysicsManager::UpdatePhysicsRegions_RemoveNodes(float gameTime)
 					if (!RigidBodyInRegion(rbNode->rigidBody, regionIDs, false, gameTime) && !RigidBodyInRegion(rbNode->rigidBody, regionIDs, true, gameTime))
 					{
 						std::cout << "Removed rigidBody: " << rbNode->rigidBody << " from physics region " << regionIDs.x << ", " << regionIDs.y << ", " << regionIDs.z << std::endl;
-						//If we're not at the head node for the physics region
+						//If not at the head node for the physics region
 						if (prevRBNode != nullptr && rbNode != physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z].startNode)
 						{
 							//Remove current Node
@@ -174,7 +175,7 @@ void PhysicsManager::UpdatePhysicsRegions_RemoveNodes(float gameTime)
 							rbNode = prevRBNode->nextNode;
 						}
 						else
-							//If we're at the head node for the physics region
+							//If at the head node for the physics region
 						{
 							physicsRegions[regionIDs.x][regionIDs.y][regionIDs.z].startNode = rbNode->nextNode;
 							delete(rbNode);
@@ -197,7 +198,6 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 {
 	for(int currentIteration = 0; currentIteration < iterations; currentIteration++)
 	{
-		//for (int i = 0; i < physicsRegions.size(); i++)
 		for (std::vector<std::vector<PhysicsRegion>> physicsRegionI : physicsRegions)
 		{
 			for (std::vector<PhysicsRegion> physicsRegionIJ : physicsRegionI)
@@ -247,11 +247,6 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 
 										glm::vec3 colliderPos1 = rb1->componentParent->GetTranslation() + currentCollider1->positionOffset;
 										glm::vec3 colliderPos2 = rb2->componentParent->GetTranslation() + currentCollider2->positionOffset;
-										//glm::vec3 rbPosDiff = rbPos2 - rbPos1;
-										//float rbDistance = sqrtf(powf(rbPosDiff.x, 2) + powf(rbPosDiff.y, 2) + powf(rbPosDiff.z, 2));
-
-										//std::cout << "RigidBody " << rbNode1->rigidBody->tempIndex << " has collided with " << rbNode2->rigidBody->tempIndex << "!" << std::endl;
-										//std::cout << "Distance between rigid bodies is: " << glm::length(rbPos1 - rbPos2) << std::endl;
 
 										glm::vec3 velocity1 = rbNode1->rigidBody->GetVelocity();
 										glm::vec3 velocity2 = rbNode2->rigidBody->GetVelocity();
@@ -263,16 +258,6 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 										glm::vec3 velocityToStore1 = glm::vec3(0);// = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
 										glm::vec3 velocityToStore2 = glm::vec3(0);// = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
 
-#pragma region stuff
-
-
-								//velocityToStore1 = ((2 * mass2) / (mass1 + mass2)) *
-								//	((velocity1 - velocity2, rbPos1 - rbPos2) / (abs(rbPos1 - rbPos2) * abs(rbPos1 - rbPos2))) *
-								//(rbPos1 - rbPos2);
-								//velocityToStore2 = ((2 * mass1) / (mass1 + mass2)) *
-								//	((velocity2 - velocity1, rbPos2 - rbPos1) / (abs(rbPos2 - rbPos1) * abs(rbPos2 - rbPos1))) * 
-								//	(rbPos2 - rbPos1);
-
 										velocityToStore1 = (colliderPos1 - colliderPos2) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
 										velocityToStore2 = (colliderPos2 - colliderPos1) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
 
@@ -282,31 +267,12 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 											velocityToStore1.y = 0;
 										if (isnan(velocityToStore1.z))
 											velocityToStore1.z = 0;
-										//velocityToStore2 = velocity1 + velocity2 - velocityToStore1;
 										if (isnan(velocityToStore2.x))
 											velocityToStore2.x = 0;
 										if (isnan(velocityToStore2.y))
 											velocityToStore2.y = 0;
 										if (isnan(velocityToStore2.z))
 											velocityToStore2.z = 0;
-										//velocityToStore1 = glm::length(velocityToStore1) * glm::normalize(rbPos1 - rbPos2);
-										//float v2FinalMagnitude = glm::length(velocityToStore1);
-										//velocityToStore2 = v2FinalMagnitude * glm::normalize(rbPos2 - rbPos1);
-										//velocityToStore1 = velocityToStore2 + velocity2 - velocity1;
-#pragma endregion
-								//velocityToStore1 = (rbNode2->rigidBody->GetMomentum() * mass2 / mass1) * (rbPos1 - rbPos2);
-								//velocityToStore2 = (rbNode1->rigidBody->GetMomentum() * mass1 / mass2) * (rbPos2 - rbPos1);
-
-								//velocityToStore1 = ((velocity1) + glm::normalize(rbPos1 - rbPos2) * glm::dot(glm::normalize(rbPos1 - rbPos2), glm::normalize(velocity1)) * (mass2 / mass1));
-								//velocityToStore2 = ((velocity2) + glm::normalize(rbPos2 - rbPos1) * glm::dot(glm::normalize(rbPos2 - rbPos2), glm::normalize(velocity2)) * (mass1 / mass2));
-
-								//velocityToStore1 = velocity1 + (normalDirection * (mass2 / mass1));// * glm::length(velocity2);
-								//velocityToStore2 = velocity2 + (-normalDirection * (mass1 / mass2));// * glm::length(velocity2);
-								//
-								//if(velocityToStore1 != glm::vec3(0))
-								//	velocityToStore1 *= (glm::dot(normalDirection, glm::normalize(velocityToStore1)));
-								//if(velocityToStore2 != glm::vec3(0))
-								//	velocityToStore2 *= (glm::dot(-normalDirection, glm::normalize(velocityToStore2)));
 
 										float momentumToStore1 = glm::length(velocityToStore1) * mass1;
 										float momentumToStore2 = glm::length(velocityToStore2) * mass2;
@@ -322,65 +288,9 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 											momentumToStore1 = glm::length(velocityToStore1) * mass1;
 											momentumToStore2 = glm::length(velocityToStore2) * mass2;
 										}
-#pragma region DUD
-
-
-										//velocityToStore1 = velocity1 +
-										//	((2 * mass2) / (mass1 + mass2)) *
-										//	((velocity1 - velocity2, rbPos1 - rbPos2) / (glm::length(rbPos1 - rbPos2) * glm::length(rbPos1 - rbPos2))) *
-										//	(rbPos1 - rbPos2);
-										//
-										//velocityToStore2 = velocity2 +
-										//	((2 * mass1) / (mass1 + mass2)) *
-										//	((velocity2 - velocity1, rbPos2 - rbPos1) / (glm::length(rbPos2 - rbPos1) * glm::length(rbPos2 - rbPos1))) *
-										//	(rbPos2 - rbPos1);
-										//
-										//if (isnan(velocityToStore1.x))
-										//	velocityToStore1.x = 0;
-										//if (isnan(velocityToStore1.y))
-										//	velocityToStore1.y = 0;
-										//if (isnan(velocityToStore1.z))
-										//	velocityToStore1.z = 0;
-										//
-										//if (isnan(velocityToStore2.x))
-										//	velocityToStore2.x = 0;
-										//if (isnan(velocityToStore2.y))
-										//	velocityToStore2.y = 0;
-										//if (isnan(velocityToStore2.z))
-										//	velocityToStore2.z = 0;
-
-										//glm::vec3 n = (rbPos1 - rbPos2) / (glm::abs(rbPos1) - glm::abs(rbPos2));
-										//glm::vec3 vRelative = velocity1 - velocity2;
-										//glm::vec3 vNormal = (vRelative*n)*n;
-										//velocityToStore1 = velocity1 - vNormal;
-										//velocityToStore2 = velocity2 + vNormal;
-
-
-#pragma endregion								
-								//
-								//float totalMomentum = momentum1 + momentum2;
-								//float totalMomentumToStore = momentumToStore1 + momentumToStore2;
-								//
-								//assert(totalMomentumToStore <= totalMomentum);
-
-								//assert(abs((glm::length(velocity1) + glm::length(velocity2)) - (glm::length(velocityToStore1) + glm::length(velocityToStore2))) > 0.3f);
-								//Store velocity in the storedVelocity variable this frame. storedVelocity is applied to velocity after calculating all collisions
-
-								//velocityToStore1 = (velocity1 * (mass1 - mass2) + 2 * mass2 * velocity2) / (mass1 + mass2);
-								//velocityToStore2 = (velocity2 * (mass2 - mass1) + 2 * mass1 * velocity1) / (mass1 + mass2);
-
-								//mass1 = (2 * rbNode2->rigidBody->GetMass()) / (rbNode1->rigidBody->GetMass() + rbNode2->rigidBody->GetMass());
-								//mass2 = (2 * rbNode1->rigidBody->GetMass()) / (rbNode1->rigidBody->GetMass() + rbNode2->rigidBody->GetMass());
-								//velocityToStore1 = velocity1 - (mass1 * glm::dot(rbNode1->rigidBody->GetMomentumVec3() - rbNode2->rigidBody->GetMomentumVec3(), glm::normalize(rbPos1 - rbPos2)) / pow(glm::length(glm::normalize(rbPos1 - rbPos2)), 2)) * glm::normalize(rbPos1 - rbPos2);
-								//velocityToStore2 = velocity2 - (mass2 * glm::dot(rbNode2->rigidBody->GetMomentumVec3() - rbNode1->rigidBody->GetMomentumVec3(), glm::normalize(rbPos2 - rbPos1)) / pow(glm::length(glm::normalize(rbPos2 - rbPos1)), 2)) * glm::normalize(rbPos2 - rbPos1);
 
 										rbNode1->rigidBody->StoreVelocity(velocityToStore1);
 										rbNode2->rigidBody->StoreVelocity(velocityToStore2);
-
-										//std::cout << "Previous total momentum = " << rbNode1->rigidBody->GetMomentumFloat() + rbNode2->rigidBody->GetMomentumFloat() << std::endl;
-										//std::cout << "New total momentum = " << (rbNode1->rigidBody->GetStoredMomentum()) + (rbNode2->rigidBody->GetStoredMomentum()) << std::endl;
-										//std::cout << "Change in total momentum: " << ((rbNode1->rigidBody->GetStoredMomentum() + rbNode2->rigidBody->GetStoredMomentum()) - (rbNode1->rigidBody->GetMomentumFloat() + rbNode2->rigidBody->GetMomentumFloat())) << std::endl << std::endl;
-
 									}
 								}
 							}
@@ -402,45 +312,37 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 //Check for collisions using vector projections on the x, y, and z axes.
 bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, float gameTime)
 {
-//	for(int i = 0; i < rbNode1->rigidBody->GetColliders().size(); i++)
-//	{
-//		Collider& currentCollider1 = rbNode1->rigidBody->GetColliders()[i];
-//		for (int j = 0; j < rbNode2->rigidBody->GetColliders().size(); j++)
-//		{
-//			Collider& currentCollider2 = rbNode2->rigidBody->GetColliders()[j];
+	//Calculate collision for Axis-aligned bounding boxes (Cubes)
+	Collider::ColliderProjections rbProjections1 = collider1->CalculateProjections(true, true, gameTime);
+	Collider::ColliderProjections rbProjections2 = collider2->CalculateProjections(true, true, gameTime);
+	if (rbProjections1.x[0] > rbProjections2.x[1] || rbProjections2.x[0] > rbProjections1.x[1])
+		return false;
+	if (rbProjections1.y[0] > rbProjections2.y[1] || rbProjections2.y[0] > rbProjections1.y[1])
+		return false;
+	if (rbProjections1.z[0] > rbProjections2.z[1] || rbProjections2.z[0] > rbProjections1.z[1])
+		return false;
 
-			//Calculate collision for Axis-aligned bounding boxes (Cubes)
-			Collider::ColliderProjections rbProjections1 = collider1->CalculateProjections(true, true, gameTime);
-			Collider::ColliderProjections rbProjections2 = collider2->CalculateProjections(true, true, gameTime);
-			if (rbProjections1.x[0] > rbProjections2.x[1] || rbProjections2.x[0] > rbProjections1.x[1])
-				return false;
-			if (rbProjections1.y[0] > rbProjections2.y[1] || rbProjections2.y[0] > rbProjections1.y[1])
-				return false;
-			if (rbProjections1.z[0] > rbProjections2.z[1] || rbProjections2.z[0] > rbProjections1.z[1])
-				return false;
-
-			if (collider1->colliderType == Collider::ColliderType::Rectangle &&
-				collider2->colliderType == Collider::ColliderType::Rectangle)
-			{
-				return true;
-			}
-			else if (collider1->colliderType == Collider::ColliderType::Sphere &&
-				collider2->colliderType == Collider::ColliderType::Sphere)
-			{
-				float distanceBetweenRBs = glm::length((collider1->colliderParent->GetPosition() + collider1->positionOffset) -
-					(collider2->colliderParent->GetPosition() + collider2->positionOffset));
-				float radius1 = glm::length(collider1->scale);
-				float radius2 = glm::length(collider2->scale);
-				if (distanceBetweenRBs <= radius1 + radius2)
-				{
-					return true;
-				}
-			}
-	//	}
-	//}
+	if (collider1->colliderType == Collider::ColliderType::Rectangle &&
+		collider2->colliderType == Collider::ColliderType::Rectangle)
+	{
+		return true;
+	}
+	else if (collider1->colliderType == Collider::ColliderType::Sphere &&
+		collider2->colliderType == Collider::ColliderType::Sphere)
+	{
+		float distanceBetweenRBs = glm::length((collider1->colliderParent->GetPosition() + collider1->positionOffset) -
+			(collider2->colliderParent->GetPosition() + collider2->positionOffset));
+		float radius1 = glm::length(collider1->scale);
+		float radius2 = glm::length(collider2->scale);
+		if (distanceBetweenRBs <= radius1 + radius2)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
+//Checks if a rigidbody is inside a region
 bool PhysicsManager::RigidBodyInRegion(RigidBody * rb, glm::vec3 regionIDs, bool addRB_Velocity, float gameTime)
 {
 	for (int i = 0; i < rb->GetColliders().size(); i++)
@@ -519,7 +421,7 @@ bool PhysicsManager::RigidBodyInRegion(RigidBody * rb, glm::vec3 regionIDs, bool
 		}
 
 		//mesh collider
-		//TODO: Implement mesh collider
+		//TODO: Implement mesh collider (GJK algorithm?) (Not needed for minimum viable product)
 		else if (currentCollider->colliderType == Collider::ColliderType::Mesh)
 		{
 			//TODO: Implement

@@ -15,6 +15,7 @@
 #include "gtx/quaternion.hpp"
 #pragma warning (disable : 4996)
 
+//Initialize the server
 void NetworkManager::Initialize(EntityManager* in_entityManager, ControllerManager* in_controllerManager)
 {
 	entityManager = in_entityManager;
@@ -23,7 +24,8 @@ void NetworkManager::Initialize(EntityManager* in_entityManager, ControllerManag
 	ConnectToServer();
 }
 
-void NetworkManager::DeInitialize()
+//Disconnect from the server
+void NetworkManager::DisconnectFromServer()
 {
 	enet_peer_disconnect(peer, 0);
 
@@ -41,21 +43,25 @@ void NetworkManager::DeInitialize()
 	}
 }
 
+//Reads and responds to incoming packets. Sends outgoing packets.
 void NetworkManager::Update(float gameTime)
 {
 #pragma region Timers
+	//Once enough time has elapsed, ask for other players' positions
 	requestPositionsTimer -= gameTime;
 	if (requestPositionsTimer <= 0)
 	{
 		requestPositionsTimer = requestPositionsMaxTime;
 		std::string packetData = "RequestPositions:" + std::to_string(playerID);
 		SendPacket(&packetData);
-		//std::cout << std::endl << std::endl << "PlayerID = " << playerID << std::endl << std::endl;
 	}
+#pragma endregion
 
 	//The angle the local player has changed it's rotation by since last sending rotation to the server
 	float rotationDot = dot(MathHelperFunctions::EulerAnglesToQuaternion(latestEulerAnglesSent), 
 		MathHelperFunctions::EulerAnglesToQuaternion(controllerManager->GetController(0)->componentParent->GetEulerAngles()));
+
+	//If the local player has rotated above a certain threshold, send a new packet
 	if(rotationDot < 0.99999f)
 	{
 		glm::vec3 eulers = controllerManager->GetController(0)->componentParent->GetEulerAngles();
@@ -67,7 +73,6 @@ void NetworkManager::Update(float gameTime)
 		latestEulerAnglesSent = eulers;
 		SendPacket(&packetData);
 	}
-#pragma endregion
 
 	//Check local player for change in WASD (move direction)
 	if (controllerManager->GetController(0)->ChangedWASD() != 0)
@@ -82,6 +87,7 @@ void NetworkManager::Update(float gameTime)
 		SendPacket(&packetData);
 	}
 
+	//Processes all packets received from the server
 	while (enet_host_service(client, &enetEvent, 0) > 0)
 	{
 		switch (enetEvent.type)
@@ -98,6 +104,7 @@ void NetworkManager::Update(float gameTime)
 			printf("%s\n", enetEvent.packet->data);
 			if (keyValuePair.first == "SpawnPlayer")
 			{
+				//Spawns a player using the entityManager and initializes relevant data.
 				Entity* newNetworkedPlayer = InstantiateNetworkedPlayer();
 				Controller* newNetworkedController = controllerManager->GetController(controllerManager->TotalControllers() - 1);//newNetworkedPlayer->FindController();
 				newNetworkedController->SetPlayerID((unsigned int)std::stoi(keyValuePair.second));
@@ -111,7 +118,7 @@ void NetworkManager::Update(float gameTime)
 				std::vector<std::string> packetStrings = ParsePacket(&keyValuePair.second);
 				for (int i = 0; i < controllerManager->TotalControllers(); i++)
 				{
-					//If we've found the correct networked player on the local machine...
+					//If found the correct networked player is found on the local machine...
 					if (controllerManager->GetController(i)->GetPlayerID() == stoi(packetStrings[0]))
 					{
 						//Update the networked player's rotation
@@ -122,6 +129,7 @@ void NetworkManager::Update(float gameTime)
 			}
 			else if (keyValuePair.first == "WASD")
 			{
+				//If we've received keyboard input for a player from the server
 				std::pair<std::string, std::string> idWASDPair = GenerateKeyValuePair(keyValuePair.second, ":");
 				int controllerID = stoi(idWASDPair.first);
 				int wasd = stoi(idWASDPair.second);
@@ -131,6 +139,7 @@ void NetworkManager::Update(float gameTime)
 					if (controllerManager->GetController(i)->GetIsNetworked() &&
 						controllerManager->GetController(i)->GetPlayerID() == controllerID)
 					{
+						//Set the input for our networked player
 						controllerManager->GetController(i)->SetNetworkWASDInput(wasd);
 						break;
 					}
@@ -138,6 +147,7 @@ void NetworkManager::Update(float gameTime)
 			}
 			else if (keyValuePair.first == "Action")
 			{
+				//Similar to WASD, this determines whether a networked player is pressing a button
 				std::pair<std::string, std::string> idActionPair = GenerateKeyValuePair(keyValuePair.second, ":");
 				int controllerID = stoi(idActionPair.first);
 				int action = stoi(idActionPair.second);
@@ -154,9 +164,11 @@ void NetworkManager::Update(float gameTime)
 			}
 			else if (keyValuePair.first == "RequestPositions")
 			{
+				//Sends the position of the local player
+				//[0] Is the header
+				//[1] Is the player to send the local player's positions to
 				Entity* localPlayer = controllerManager->GetController(0)->componentParent;
 #pragma region RequestPositions Handler
-				//std::string sendingPlayerIDString = std::to_string(playerID);
 				std::string sendingPlayerIDString = std::to_string(controllerManager->GetController(0)->GetPlayerID());
 
 				glm::vec3 pos = localPlayer->GetTranslation();
@@ -165,14 +177,6 @@ void NetworkManager::Update(float gameTime)
 					std::to_string(pos.y) + 
 					std::string(",") + 
 					std::to_string(pos.z);
-				//glm::quat rotation = localPlayer->GetRotation();
-				//std::string playerRotation = std::to_string(rotation.x) + 
-				//	std::string(",") + 
-				//	std::to_string(rotation.y) + 
-				//	std::string(",") + 
-				//	std::to_string(rotation.z) + 
-				//	std::string(",") + 
-				//	std::to_string(rotation.w);
 				glm::vec3 eulers = localPlayer->GetEulerAngles();
 				std::string playerEulers = std::to_string(eulers.x) +
 					std::string(",") +
@@ -218,25 +222,31 @@ void NetworkManager::Update(float gameTime)
 
 
 				bool playerFound = false;
+				//Find the (networked) player corresponding to the received position data
 				for (int i = 0; i < controllerManager->TotalControllers(); i++)
 				{
 					if (controllerManager->GetController(i)->GetPlayerID() == stoi(packetStrings[1]))
 					{
-						std::cout << " Updated PLayer's position " << packetStrings[1] << std::endl;
+						//Update the transform of a networked player
+						std::cout << " Updated Player's position " << packetStrings[1] << std::endl;
 						Entity* playerToUpdate = controllerManager->GetController(i)->componentParent;
+						//Set networked position, which the networked player will lerp to
 						playerToUpdate->SetNetworkedPosition(ParseVector(packetStrings[2]));
-						
+						//Set networked euler angles (which convert internally to a quaternion). Player will lerp rotation to this value
 						playerToUpdate->SetNetworkedEulerAngles(ParseVector(packetStrings[3]));
 						
+						//Set networked scale for networked player. Lerp networked player scale to this value
 						playerToUpdate->SetScale(ParseVector(packetStrings[4]));
 						playerFound = true;
 					}
 				}
-				//If the player we're receiving position data for hasn't been spawned.
+				//If the playerID doesn't match a local player
 				if (!playerFound)
 				{
+					//If below the maximum number of players
 					if (controllerManager->TotalControllers() < 4)
 					{
+						//Spawn a new player using the newly received position data
 						std::cout << "Spawned player " << keyValuePair.second;
 						Entity* newNetworkedPlayer = InstantiateNetworkedPlayer();
 						Controller* newNetworkedController = controllerManager->GetController(controllerManager->TotalControllers() - 1);//newNetworkedPlayer->FindController();
@@ -253,6 +263,7 @@ void NetworkManager::Update(float gameTime)
 			}
 			else if (keyValuePair.first == "InitPlayerID")
 			{
+				//Set the player id for the local player
 				playerID = stoi(keyValuePair.second);
 				controllerManager->GetController(0)->SetPlayerID(playerID);
 			}
@@ -264,17 +275,15 @@ void NetworkManager::Update(float gameTime)
 			break;
 		}
 	}
-	//ENetPacket* packet = enet_packet_create("packetfoo", strlen("packetfoo") + 1, ENET_PACKET_FLAG_RELIABLE);
-	//enet_packet_resize(packet, strlen("packetfoo") + 1);
-	//strcpy(&packet->data[strlen("packet")], "foo");
-	//enet_peer_send(peer, 0, packet);
 }
 
+//Instantiate a player
 Entity* NetworkManager::InstantiateNetworkedPlayer()
 {
 	return entityManager->InstantiateEntity(entityManager->LoadEntityFromFile("Resources/Prefabs/Player.prefab"), glm::vec3(), glm::vec3(0, 1, 0), 0.f, glm::vec3(1), nullptr);
 }
 
+//Sends a packet to our connected peer
 bool NetworkManager::SendPacket(std::string * packetData)
 {//Returns true if a packet is sent
 	if (peer == nullptr)
@@ -285,6 +294,7 @@ bool NetworkManager::SendPacket(std::string * packetData)
 	return true;
 }
 
+//Parses a packet into a series of strings
 std::vector<std::string> NetworkManager::ParsePacket(std::string * packet)
 {
 		std::vector<std::string> returnStrings;
@@ -303,6 +313,7 @@ std::vector<std::string> NetworkManager::ParsePacket(std::string * packet)
 		return returnStrings;
 }
 
+//Connect to our server
 void NetworkManager::ConnectToServer()
 {
 	if (enet_initialize() != 0)
@@ -320,24 +331,29 @@ void NetworkManager::ConnectToServer()
 		assert(0);
 	}
 
+	//TODO: Update this to use our server's IP
 	enet_address_set_host(&address, "127.0.0.1");
-	address.port = 69;
+	address.port = 70;
 
+	//Try to connect to a host
 	peer = enet_host_connect(client, &address, 1, 0);
+	//If host connection fails
 	if (peer == NULL)
 	{
-		std::cout << stderr << "No available peers for initiating ENEt connection!" << std::endl;
+		std::cout << stderr << "No available peers for initiating ENET connection!" << std::endl;
 		assert(0);
 	}
 
+	//If the server has connected back to us
 	if (enet_host_service(client, &enetEvent, 1000) > 0 &&
 		enetEvent.type == ENET_EVENT_TYPE_CONNECT)
 	{
-		puts("Connection to 127.0.0.1:69 succeeded!");
+		puts("Connection to 127.0.0.1:70 succeeded!");
 	}
+	//If the server has failed to connect back with us
 	else
 	{
 		enet_peer_reset(peer);
-		puts("Connection to 127.0.0.1:69 failed.");
+		puts("Connection to 127.0.0.1:70 failed.");
 	}
 }

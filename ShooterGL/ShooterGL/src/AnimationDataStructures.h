@@ -16,11 +16,11 @@ public:
 		finalTransformation = other.finalTransformation;
 		componentParent = other.componentParent;
 		isActive = other.isActive;
-		pitch = other.pitch;
 		roll = other.roll;
+		pitch = other.pitch;
+		yaw = other.yaw;
 		rotationQuat = other.rotationQuat;
 		scaleOffset = other.scaleOffset;
-		yaw = other.yaw;
 	}
 	const unsigned int boneID;
 	glm::mat4 finalTransformation;

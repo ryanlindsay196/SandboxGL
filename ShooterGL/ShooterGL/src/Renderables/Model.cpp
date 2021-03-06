@@ -27,12 +27,13 @@ Model::Model()
 
 Model::~Model()
 {
+	//Don't delete vertex data, as it's stored in a common area among models
+	//Vertex data is deleted when there are no references to it
 	m_meshes.clear();
 	boneMap.clear();
-
-	//delete(rootNode);
 }
 
+//Initialize variables and load model vertex data
 void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 initialScaleOffset, std::string& modelPath, std::string& materialPath)
 {
 	animationIndex = 0;
@@ -46,11 +47,8 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	{
 		for (unsigned int i = 0; i < m_modelData->m_meshData.size(); i++)
 		{
-			//if (m_meshes.size() < m_modelData->m_meshData.size())
 			m_meshes.push_back(Mesh(objectManager, materialPath, this, &m_modelData->m_meshData[i]));
 			m_meshes[m_meshes.size() - 1].SetTransform(m_modelData->m_meshData[i].meshTransform);
-			//TODO: Load nodes from loaded model?
-
 		}
 
 		//Load bones from previously loaded model data
@@ -63,17 +61,15 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 	else
 	{
 		LoadModel(modelPath, materialPath);
-		//m_modelData->boneMap.insert(boneMap.begin(), boneMap.end());
 		for (auto it : boneMap)
 		{
-			//when copying boneMap data into m_modelData->boneMap, make sure the values of each bone (e.g. offsetTransform) are initialized 
-			//with correct values
 			m_modelData->boneMap.insert(std::pair<std::string, BoneData>(it));
 		}
 	}
 	for(unsigned int i = 0; i < m_meshes.size(); i++)
 		m_meshes[i].AttachMeshData(&m_modelData->m_meshData[i]);
 
+	//Initialize transformation variables
 	offsetTransform = glm::mat4(1);
 	positionOffset = glm::mat4(1);
 	scaleOffset = glm::mat4(1);
@@ -88,6 +84,7 @@ void Model::Initialize(ObjectManager* objectManager, glm::vec3 initialPositionOf
 
 }
 
+//Interface with ASSIMP library to get model data, which are loaded into internal data structures
 void Model::LoadModel(std::string modelPath, std::string materialPath)
 {
 	Assimp::Importer importer;
@@ -101,7 +98,6 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 
 	if (!m_modelData->rootNode)
 		m_modelData->rootNode = new Node();
-	//m_meshes.resize(scene->mNumMeshes);
 	//process ASSIMP's root node recursively
 	ProcessNode(scene->mRootNode, scene, materialPath, m_modelData->rootNode, nullptr);
 
@@ -109,21 +105,17 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 	{
 		Animation newAnim = Animation();
 		newAnim.Initialize(scene, i, &m_modelData->boneKeyMap);
-		//std::pair<std::string, Animation> newAnimPair(aiScene->mAnimations[i]->mName.C_Str(), newAnim);
-		//animationMap.insert(newAnimPair);
 		m_modelData->animations.push_back(newAnim);
 	}
 }
 
+//Process each aiNode from ASSIMP recursively, and copy relevant data to the currentNode variable
 void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materialPath, Node* currentNode, Node* parentNode)
 {
 	currentNode->name = node->mName.C_Str();
 
 	currentNode->transform = AiMat4ToGlmMat4(node->mTransformation);
 	
-	//currentNode->transform = glm::inverse(currentNode->transform);
-	//if (parentNode != nullptr)
-	//	currentNode->transform = parentNode->transform * currentNode->transform;
 	currentNode->parent = parentNode;
 	//process each mesh located at the current node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -136,7 +128,7 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 		m_modelData->m_meshData[m_meshes.size() - 1].meshTransform = m_meshes[m_meshes.size() - 1].GetOffsetTransform();
 	}
 
-	//after we've processed all of the meshes (if any) when recursively process each of the children nodes
+	//after processing all of the meshes for this node (if any), recursively process each of the children nodes/meshes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
 		currentNode->children.push_back(Node());
@@ -144,18 +136,23 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene, std::string materi
 	}
 }
 
+//Load vertex data for a new mesh
 Mesh Model::ProcessMesh(aiMesh * mesh, std::string& materialPath, const aiNode* node)
 {
+	//This is true if the model isn't loaded yet
 	if (m_meshes.size() == m_modelData->m_meshData.size())
 		m_modelData->m_meshData.push_back(MeshData());
+	//Create and return a new mesh
 	return Mesh(m_objectManager, mesh, materialPath, this, &(m_modelData->m_meshData[m_meshes.size()]), node, boneMap, totalBones);
 }
 
+//Set the internal isActive variable, which enables/disables rendering for the model
 void Model::SetIsActive(bool newIsActive)
 {
 	isActive = newIsActive;
 }
 
+//Load a shader for each mesh
 void Model::LoadShaders()
 {
 	for (unsigned int i = 0; i < m_meshes.size(); i++)
@@ -164,11 +161,14 @@ void Model::LoadShaders()
 	}
 }
 
+//Get the number of meshes referenced by this model
 unsigned int Model::GetLoadedMeshesCount()
 {
 	return m_meshes.size();
 }
 
+//Get a mesh at index i
+//Returns nullptr if i is greater than the size of the meshes vector
 Mesh * Model::GetMesh(unsigned int i)
 {
 	if (i < m_meshes.size())
@@ -176,19 +176,24 @@ Mesh * Model::GetMesh(unsigned int i)
 	return nullptr;
 }
 
+//Updates the model and animation
 void Model::Update(float gameTime)
 {
 	WorldComponent::Update(gameTime);
 	if(animationIndex < m_modelData->animations.size())
+		//TODO: Move animationTime from m_modelData to an internal variable
 		m_modelData->animations[animationIndex].animationTime += m_modelData->animations[animationIndex].ticksPerSecond * gameTime;
 }
 
+//Renders the model
 void Model::Render(LightManager* lightManager)
 {
+	//Don't draw if the model component isn't active
 	if (!isActive)
 		return;
-	//TODO: Check why the first condition (i < 1) is here
-	for (unsigned int i = 0; i < 1 && i < lightManager->TotalLights(); i++)
+
+	//Find all lights, and send their positions to the shader
+	for (unsigned int i = 0; i < lightManager->TotalLights(); i++)
 	{
 		std::string lightShaderHandle = std::string("pointLights[") + std::to_string(i) + std::string("].");
 		m_meshes[0].shader->SetShaderUniform_vec3((std::string(lightShaderHandle + "position")).c_str(), lightManager->GetLight(i)->componentParent->GetTranslationReference());
@@ -198,34 +203,37 @@ void Model::Render(LightManager* lightManager)
 		m_meshes[0].shader->SetShaderUniform_vec1((std::string(lightShaderHandle + "constant")).c_str(), lightManager->GetLight(i)->GetConstantReference());
 		m_meshes[0].shader->SetShaderUniform_vec1((std::string(lightShaderHandle + "linear")).c_str(), lightManager->GetLight(i)->GetLinearReference());
 		m_meshes[0].shader->SetShaderUniform_vec1((std::string(lightShaderHandle + "quadratic")).c_str(), lightManager->GetLight(i)->GetQuadraticReference());
-
 	}
 
-		//TODO: Potentially move to load function?
+	//If there are no bones, set gBones[0] to identity matrix so the model renders
 	if (boneMap.size() == 0)
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1), GL_FALSE);
 
 	if (m_modelData->animations.size() > 0)
+	//Calculate bone transformations recursively, for the current animation frame.
 		m_modelData->animations[animationIndex].ReadNodeHierarchy(m_modelData->rootNode, glm::mat4(1), boneMap);
-		//m_modelData->animations[animationIndex].ReadNodeHierarchy(m_modelData->rootNode, m_modelData->rootNode->transform, boneMap);
 
+	//Set all bones in the shader to their appropriate transformations
 	for (auto it : boneMap)
 	{
 		std::string boneUniform = "gBones[" + std::to_string(it.second.boneID) + "]";
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)boneUniform.c_str(), boneMap[it.first].finalTransformation, GL_FALSE);
 	}
 
+	//Set the mvp matrix in the shader
 	for (Mesh mesh : m_meshes)
 	{
 		mesh.shader->SetShaderUniform_mat4fv((char*)"view", m_objectManager->cameraManager->GetCamera(0)->cameraViewMatrix, GL_FALSE);
 		mesh.shader->SetShaderUniform_mat4fv((char*)"projection", m_objectManager->cameraManager->GetCamera(0)->projectionMatrix, GL_FALSE);
+		//If the model has a parent entity
 		if (componentParent != nullptr)
 		{
+			//Get the models offset from it's parent entity
 			mesh.shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform * (mesh.GetOffsetTransform()), GL_FALSE);
-			//mesh.shader->SetShaderUniform_mat4fv((char*)"model", componentParent->GetTransform() * offsetTransform, GL_FALSE);
 		}
 		else
 		{
+			//Set the model's world space transform to its offset transform
 			mesh.shader->SetShaderUniform_mat4fv((char*)"model", offsetTransform * mesh.GetOffsetTransform(), GL_FALSE);
 		}
 		mesh.Render();
