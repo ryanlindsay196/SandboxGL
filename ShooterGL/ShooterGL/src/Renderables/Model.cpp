@@ -180,8 +180,7 @@ void Model::Update(float gameTime)
 {
 	WorldComponent::Update(gameTime);
 	if(animationIndex < m_modelData->animations.size())
-		//TODO: Move animationTime from m_modelData to an internal variable
-		m_modelData->animations[animationIndex].animationTime += m_modelData->animations[animationIndex].ticksPerSecond * gameTime;
+		animationTime += m_modelData->animations[animationIndex].ticksPerSecond * gameTime;
 }
 
 //Renders the model
@@ -210,7 +209,7 @@ void Model::Render(LightManager* lightManager)
 
 	if (m_modelData->animations.size() > 0)
 	//Calculate bone transformations recursively, for the current animation frame.
-		m_modelData->animations[animationIndex].ReadNodeHierarchy(m_modelData->rootNode, glm::mat4(1), boneMap);
+		m_modelData->animations[animationIndex].ReadNodeHierarchy(m_modelData->rootNode, glm::mat4(1), boneMap, animationTime);
 
 	//Set all bones in the shader to their appropriate transformations
 	for (auto it : boneMap)

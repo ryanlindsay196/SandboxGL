@@ -16,8 +16,6 @@ struct BoneKeyFrames
 	std::vector<glm::vec3> transformKeyFrames, scaleKeyFrames;
 	std::vector<glm::quat> rotationKeyFrames;
 	std::vector<float> transformKeyTimes, scaleKeyTimes, rotationKeyTimes;
-
-	unsigned int lastPositionKeyFrame, lastRotationKeyFrame, lastScaleKeyFrame;
 };
 
 class Animation
@@ -26,7 +24,6 @@ private:
 	glm::mat4 m_GlobalInverseTransform;
 	std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap;
 public:
-	float animationTime;
 	int ticksPerSecond;
 	template <typename T> int sgn(T val) {
 		return (T(0) < val) - (val < T(0));
@@ -34,13 +31,13 @@ public:
 
 	void Initialize(const aiScene * scene, unsigned int animationIndex, std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap);
 	//void SetBoneKeyMap(std::unordered_map<std::string, BoneKeyFrames>* newBoneKeyMap);
-	void ReadNodeHierarchy(Node* node, const glm::mat4& parentTransform, std::unordered_map<std::string, BoneData> & boneMap);
+	void ReadNodeHierarchy(Node* node, const glm::mat4& parentTransform, std::unordered_map<std::string, BoneData> & boneMap, float& animationTime);
 
-	void CalculateInterpolatedPosition(glm::vec3& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap);
-	void CalculateInterpolatedRotation(glm::quat& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap);
-	void CalculateIntorpolatedScaling(glm::vec3& out, const std::string nodeName, std::unordered_map<std::string, BoneData>& boneMap);
+	void CalculateInterpolatedPosition(glm::vec3& out, Node* node, std::unordered_map<std::string, BoneData>& boneMap, float& animationTime);
+	void CalculateInterpolatedRotation(glm::quat& out, Node* node, std::unordered_map<std::string, BoneData>& boneMap, float& animationTime);
+	void CalculateIntorpolatedScaling(glm::vec3& out, Node* node, std::unordered_map<std::string, BoneData>& boneMap, float& animationTime);
 
-	unsigned int FindPosition(BoneKeyFrames* currentBoneKeyFrames);
-	unsigned int FindRotation(BoneKeyFrames* currentBoneKeyFrames);
-	unsigned int FindScaling(BoneKeyFrames* currentBoneKeyFrames);
+	unsigned int FindPosition(BoneKeyFrames* currentBoneKeyFrames, Node* node, float& animationTime);
+	unsigned int FindRotation(BoneKeyFrames* currentBoneKeyFrames, Node* node, float& animationTime);
+	unsigned int FindScaling(BoneKeyFrames* currentBoneKeyFrames, Node* node, float& animationTime);
 };

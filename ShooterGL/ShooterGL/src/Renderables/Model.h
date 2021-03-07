@@ -65,6 +65,9 @@ private:
 	//Index of the current animation
 	unsigned int animationIndex;
 
+	//Time elapsed for the current animation
+	float animationTime;
+
 	//The number of bones for the model
 	unsigned int totalBones;
 
