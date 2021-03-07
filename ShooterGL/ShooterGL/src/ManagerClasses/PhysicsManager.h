@@ -34,10 +34,13 @@ private:
 private:
 	//set this in initialize
 	glm::vec3 physicsRegionBounds;
+	//The total number of physics regions in the scene
+	glm::vec3 totalPhysicsRegions;
 	//update this whenever a new rigidbody is instantiated
 	std::vector<RigidBody*> rigidBodies;
 	//initialize based on physicsRegionBounds
 	std::vector<std::vector<std::vector<PhysicsRegion>>> physicsRegions;
+	PhysicsRegion outerPhysicsRegion;
 
 	//Moves through all regions, removing rigidbodies that leave a region
 	void UpdatePhysicsRegions_RemoveNodes(float gameTime);
@@ -51,7 +54,7 @@ private:
 	bool IsColliding(Collider * collider1, Collider * collider2, float gameTime);
 
 	//checks if a rigidbody is inside a particular region
-	bool RigidBodyInRegion(RigidBody* rb, glm::vec3 regionIDs, bool addRB_Velocity, float gameTime);
+	bool RigidBodyInRegion(RigidBody* rb, PhysicsRegion& currentPhysicsRegion, bool addRB_Velocity, float gameTime);
 public:
 	static PhysicsManager* GetInstance();
 

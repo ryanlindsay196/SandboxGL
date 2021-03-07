@@ -136,7 +136,7 @@ PREFAB : Resources/Prefabs/PoolBalls/Ball15.prefab
 
 PREFAB : Resources/Prefabs/Floor.prefab
 {
-	Position : 17,0,0
+	Position : 0,-5,7
 	EulerAngles : 0,0,1
 	RotationAngle : 3.14
 	Scale : 1,1,1

@@ -6,7 +6,7 @@
 #include "ManagerClasses/ObjectManager.h"
 
 //TODO: Delete
-#include "Debug/GenerateSpreadsheet.h"
+//#include "Debug/GenerateSpreadsheet.h"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -57,8 +57,8 @@ int main()
 	glCullFace(GL_BACK);
 	bool firstFrame = true;
 
-	GenerateSpreadsheet sheet = GenerateSpreadsheet();
-	sheet.Initialize(std::string("frameOutput.csv"));
+	//GenerateSpreadsheet sheet = GenerateSpreadsheet();
+	//sheet.Initialize(std::string("frameOutput.csv"));
 
 #pragma region Gameplay Loop
 	while (!glfwWindowShouldClose(window))
@@ -79,13 +79,13 @@ int main()
 			objectManager->LoadScene("Resources/Scenes/Test2.scene", window);
 
 		lastFrame = currentFrame;
-		std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
+		//std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
 
-		sheet.AppendText(std::string(std::to_string(1 / deltaTime)));
-		sheet.AppendText(",");
+		//sheet.AppendText(std::string(std::to_string(1 / deltaTime)));
+		//sheet.AppendText(",");
 	}
 #pragma endregion
-	sheet.CloseFile();
+	//sheet.CloseFile();
 
 #pragma region End game
 	glfwTerminate();

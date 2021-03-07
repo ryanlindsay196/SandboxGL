@@ -96,7 +96,6 @@ Mesh::Mesh(aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, 
 			if (mesh->mNumBones > 0)
 			{
 				vertex.BoneID[k] = -1;
-				vertex.WeightValue[k] = 0;
 			}
 			else
 			{
