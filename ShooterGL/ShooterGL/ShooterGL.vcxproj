@@ -134,6 +134,7 @@
     <ClCompile Include="MathHelperFunctions.cpp" />
     <ClCompile Include="src\AnimationDataStructures.cpp" />
     <ClCompile Include="src\Collider.cpp" />
+    <ClCompile Include="src\Debug\DrawRay.cpp" />
     <ClCompile Include="src\Debug\GenerateSpreadsheet.cpp" />
     <ClCompile Include="src\FileReader.cpp" />
     <ClCompile Include="src\ManagerClasses\AIManager.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Dependencies\stb_image.h" />
     <ClInclude Include="MathHelperFunctions.h" />
     <ClInclude Include="src\Collider.h" />
+    <ClInclude Include="src\Debug\DrawRay.h" />
     <ClInclude Include="src\Debug\GenerateSpreadsheet.h" />
     <ClInclude Include="src\FileReader.h" />
     <ClInclude Include="src\ManagerClasses\AIManager.h" />

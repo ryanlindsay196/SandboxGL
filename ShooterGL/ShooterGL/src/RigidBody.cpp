@@ -79,10 +79,10 @@ void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties, Entity
 
 void RigidBody::Update(float gameTime)
 {
-	//for (Collider collider : colliders)
-	//{
-	//	collider.Update(gameTime);
-	//}
+	for (Collider collider : colliders)
+	{
+		collider.Update(gameTime);
+	}
 }
 
 void RigidBody::FixedUpdate(float gameTime)

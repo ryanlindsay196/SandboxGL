@@ -1,10 +1,8 @@
 #include "Mesh.h"
-//#include "GLFW/glfw3.h"
 #include "gtc/matrix_transform.hpp"
 #include "glad/glad.h"
 #include <string>
 #include <algorithm>
-//#include "ManagerClasses/ObjectManager.h"
 #include "ManagerClasses/ShaderManager.h"
 #include <assimp/scene.h>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -12,7 +10,6 @@
 #include "ModelData.h"
 #include "AnimationDataStructures.h"
 #include "../ManagerClasses/TextureManager.h"
-//#include "Animation.h"
 
 #define ARRAYSIZE(a) \
   ((sizeof(a) / sizeof(*(a))) / \
@@ -107,7 +104,7 @@ Mesh::Mesh(aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, 
 
 
 	}
-	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+	// now walk through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];

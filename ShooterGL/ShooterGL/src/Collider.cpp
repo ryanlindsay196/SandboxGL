@@ -1,8 +1,13 @@
 #include "Collider.h"
 #include "RigidBody.h"
+#include "Debug/DrawRay.h"
 
 void Collider::Update(float gameTime)
 {
+	glm::vec3 colliderCenter = colliderParent->componentParent->GetTranslation() + positionOffset;
+	glm::vec3 colliderStart = colliderCenter - scale;
+	glm::vec3 colliderEnd = colliderCenter + scale;
+	DrawRay::DrawLine(glm::vec3(colliderStart.x, colliderStart.y, colliderStart.z), glm::vec3(colliderEnd.x, colliderEnd.y, colliderEnd.z), colliderParent->componentParent->GetTransform());
 }
 
 //Calculates and returns the projections of this rigidbody on the x, y, and z axes.

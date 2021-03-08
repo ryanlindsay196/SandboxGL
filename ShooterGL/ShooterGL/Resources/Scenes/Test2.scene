@@ -16,10 +16,10 @@ PREFAB : Resources/Prefabs/Missile.prefab
 
 PREFAB : Resources/Prefabs/BoxingRing.prefab
 {
-	Position : 0,0,0
-	EulerAngles : 0,1,0
-	RotationAngle : 0
-	Scale : 1,1,1
+	Position : 0,-7,0
+	EulerAngles : 1,0,0
+	RotationAngle : 3.15
+	Scale : 2,2,2
 }
 
 PREFAB : Resources/Prefabs/PoolBalls/BallDot.prefab

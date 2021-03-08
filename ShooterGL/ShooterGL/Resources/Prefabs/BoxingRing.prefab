@@ -9,4 +9,18 @@ Components
 		ScaleOffset : 0.01,0.01,0.01
 		Material : Resources/Materials/BackPackMaterial.mat
 	}
+	RigidBody
+	{
+		PositionConstaints : 1,1,1
+		RotationConstraints : 0,0,0
+		Mass : 1
+		Collider
+		{
+			ColliderType : 1
+			PositionOffset : 0,0,0
+			Scale : 55.22,0.22,55.22
+			IsTrigger : 0
+		}
+		UseGravity : 0
+	}
 }
