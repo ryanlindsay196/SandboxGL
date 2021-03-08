@@ -9,7 +9,7 @@ private:
 	DrawRay();
 public:
 	static DrawRay* GetInstance();
-	static void DrawLine(glm::vec3 startPos, glm::vec3 endPos, glm::mat4 mvp);
+	static void DrawLine(glm::vec3 startPos, glm::vec3 endPos, const glm::mat4& parentTransform);
 };
 
 class Line {
@@ -66,8 +66,7 @@ public:
 
 		vertices = {
 			 start.x, start.y, start.z,
-			 end.x, end.y, end.z,
-
+			 end.x, end.y, end.z
 		};
 
 		glGenVertexArrays(1, &VAO);
@@ -75,7 +74,7 @@ public:
 		glBindVertexArray(VAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
@@ -102,6 +101,7 @@ public:
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_LINES, 0, 2);
+		glBindVertexArray(0);
 		return 0;
 	}
 

@@ -14,13 +14,12 @@ DrawRay * DrawRay::GetInstance()
 	return instance;
 }
 
-void DrawRay::DrawLine(glm::vec3 startPos, glm::vec3 endPos, glm::mat4 mvp)
+void DrawRay::DrawLine(glm::vec3 startPos, glm::vec3 endPos, const glm::mat4& parentTransform)
 {
 	Line l = Line(startPos, endPos);
 	CameraManager* cameraManager = CameraManager::GetInstance();
-	mvp = cameraManager->GetCamera(0)->cameraViewMatrix * mvp;
-	mvp = cameraManager->GetCamera(0)->projectionMatrix * mvp;
+	glm::mat4 mvp = cameraManager->GetCamera(0)->projectionMatrix * cameraManager->GetCamera(0)->cameraViewMatrix * parentTransform;
 	l.setMVP(mvp);
-	l.setColor(glm::vec3(1, 1, 0));
+	l.setColor(glm::vec3(0, 1, 0));
 	l.draw();
 }

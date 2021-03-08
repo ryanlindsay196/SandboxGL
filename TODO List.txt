@@ -3,6 +3,9 @@ Fix bug with book animation
 Clear out warnings
 When a model is out of view, don't draw it and don't update bone positions (frustrum culling?)
 
+Batch rendering for debug collider boxes
+Batch rendering for particles
+
 Create bounding boxes based on skinned mesh
 Implement GJK collision
 

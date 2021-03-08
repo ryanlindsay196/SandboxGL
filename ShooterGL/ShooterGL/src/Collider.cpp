@@ -7,7 +7,59 @@ void Collider::Update(float gameTime)
 	glm::vec3 colliderCenter = colliderParent->componentParent->GetTranslation() + positionOffset;
 	glm::vec3 colliderStart = colliderCenter - scale;
 	glm::vec3 colliderEnd = colliderCenter + scale;
-	DrawRay::DrawLine(glm::vec3(colliderStart.x, colliderStart.y, colliderStart.z), glm::vec3(colliderEnd.x, colliderEnd.y, colliderEnd.z), colliderParent->componentParent->GetTransform());
+
+#pragma region TODO DELETE: Draw debug rays
+	//Lines that span the z-axis
+	DrawRay::DrawLine(glm::vec3(-scale.x, -scale.y, -scale.z),
+		glm::vec3(-scale.x, -scale.y, scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, -scale.z),
+		glm::vec3(scale.x, -scale.y, scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(-scale.x, scale.y, -scale.z),
+		glm::vec3(-scale.x, scale.y, scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(scale.x, scale.y, -scale.z),
+		glm::vec3(scale.x, scale.y, scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	//lines that span the y-axis
+	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, -scale.z),
+		glm::vec3(scale.x, scale.y, -scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, scale.z),
+		glm::vec3(scale.x, scale.y, scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(-scale.x, scale.y, scale.z),
+		glm::vec3(-scale.x, -scale.y, scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(-scale.x, scale.y, -scale.z),
+		glm::vec3(-scale.x, -scale.y, -scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	//Lines that span the x-axis
+	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, -scale.z),
+		glm::vec3(-scale.x, -scale.y, -scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, scale.z),
+		glm::vec3(-scale.x, -scale.y, scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(scale.x, scale.y, -scale.z),
+		glm::vec3(-scale.x, scale.y, -scale.z),
+		colliderParent->componentParent->GetTransform());
+
+	DrawRay::DrawLine(glm::vec3(scale.x, scale.y, scale.z),
+		glm::vec3(-scale.x, scale.y, scale.z),
+		colliderParent->componentParent->GetTransform());
+#pragma endregion
 }
 
 //Calculates and returns the projections of this rigidbody on the x, y, and z axes.

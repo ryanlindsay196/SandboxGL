@@ -79,7 +79,7 @@ int main()
 			objectManager->LoadScene("Resources/Scenes/Test2.scene", window);
 
 		lastFrame = currentFrame;
-		//std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
+		std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
 
 		//sheet.AppendText(std::string(std::to_string(1 / deltaTime)));
 		//sheet.AppendText(",");
