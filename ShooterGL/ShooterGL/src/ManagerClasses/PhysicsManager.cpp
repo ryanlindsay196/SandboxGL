@@ -14,12 +14,29 @@ PhysicsManager::~PhysicsManager()
 void PhysicsManager::Initialize(glm::vec3 regionBounds, glm::vec3 regionCount)
 {
 	rigidBodies.clear();
-#pragma region Delete rigid body nodes from each physics region
-	for (int i = 0; i < physicsRegions.size(); i++)
+#pragma region Delete rigid body nodes from the outer physics region
+	if (outerPhysicsRegion.startNode != nullptr)
 	{
-		for (int j = 0; j < physicsRegions[i].size(); j++)
+		RigidBodyNode* currentNode = outerPhysicsRegion.startNode;
+		RigidBodyNode* nextNode = currentNode->nextNode;
+
+		while (currentNode != nullptr)
 		{
-			for (int k = 0; k < physicsRegions[i][j].size(); k++)
+			//Delete the start node of the physics regions, which then deletes all subsequent rigidbody nodes
+			delete(currentNode);
+			currentNode = nextNode;
+			if (currentNode != nullptr)
+				nextNode = currentNode->nextNode;
+		}
+		outerPhysicsRegion.startNode = nullptr;
+	}
+#pragma endregion
+#pragma region Delete rigid body nodes from each indexed physics region
+	for (unsigned int i = 0; i < physicsRegions.size(); i++)
+	{
+		for (unsigned int j = 0; j < physicsRegions[i].size(); j++)
+		{
+			for (unsigned int k = 0; k < physicsRegions[i][j].size(); k++)
 			{
 				if (physicsRegions[i][j][k].startNode == nullptr)
 					continue;
@@ -40,7 +57,7 @@ void PhysicsManager::Initialize(glm::vec3 regionBounds, glm::vec3 regionCount)
 	}
 	physicsRegions.clear();
 #pragma endregion
-
+#pragma region Set up each indexed physics region with its own bounds
 	totalPhysicsRegions = regionCount;
 	//Set up each physics region with it's own bounds
 	physicsRegionBounds = regionBounds;
@@ -60,27 +77,24 @@ void PhysicsManager::Initialize(glm::vec3 regionBounds, glm::vec3 regionCount)
 	}
 	outerPhysicsRegion.startBound = physicsRegions[0][0][0].startBound;
 	outerPhysicsRegion.endBound = physicsRegions[regionCount.x - 1][regionCount.y - 1][regionCount.z - 1].endBound;
+#pragma endregion
 }
 
 void PhysicsManager::FixedUpdate(float gameTime)
 {
-	//TODO: Remove
-	//float testTotalMomentum = 0;
 	UpdatePhysicsRegions_RemoveNodes(gameTime);
-	for (int i = 0; i < rigidBodies.size(); i++)
+	for (unsigned int i = 0; i < rigidBodies.size(); i++)
 	{
-		//testTotalMomentum += rigidBodies[i]->GetMomentumFloat();
 		UpdatePhysicsRegions_AddNodes(rigidBodies[i], gameTime);
 		rigidBodies[i]->FixedUpdate(gameTime);
 	}
 	CheckCollisions(1, gameTime);
-	//std::cout << testTotalMomentum << std::endl;
 }
 
 //Loop through all regions. Add nodes to a region if they entered the region this frame
 void PhysicsManager::UpdatePhysicsRegions_AddNodes(RigidBody * rb, float gameTime)
 {
-	for (int i = 0; i < rb->GetColliders().size(); i++)
+	for (unsigned int i = 0; i < rb->GetColliders().size(); i++)
 	{
 		Collider* currentCollider = rb->GetColliderRef(i);
 		glm::vec3 physicsRegionToAdd = (rb->componentParent->GetTranslation() + currentCollider->positionOffset) / physicsRegionBounds;
@@ -261,17 +275,15 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 		//Check collisions for all rigidbodies outside indexed physics regions
 		RigidBodyNode* rbNode1 = outerPhysicsRegion.startNode;
 		RigidBodyNode* rbNode2 = outerPhysicsRegion.startNode->nextNode;
-		if (rbNode2 == nullptr)
-			continue;
 		while (rbNode1->nextNode != nullptr)
 		{
 			if ((rbNode1->rigidBody->GetIsActive() && rbNode2->rigidBody->GetIsActive()) && rbNode1 != rbNode2)
 			{
 				//Check the collision
-				for (int i = 0; i < rbNode1->rigidBody->GetColliders().size(); i++)
+				for (unsigned int i = 0; i < rbNode1->rigidBody->GetColliders().size(); i++)
 				{
 					Collider* currentCollider1 = rbNode1->rigidBody->GetColliderRef(i);
-					for (int j = 0; j < rbNode2->rigidBody->GetColliders().size(); j++)
+					for (unsigned int j = 0; j < rbNode2->rigidBody->GetColliders().size(); j++)
 					{
 						//Players don't bounce off of each other //TODO: Check for other solutions
 						if (rbNode1->rigidBody->componentParent->FindController() && rbNode2->rigidBody->componentParent->FindController())
@@ -376,10 +388,10 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 						if ((rbNode1->rigidBody->GetIsActive() && rbNode2->rigidBody->GetIsActive()) && rbNode1 != rbNode2)
 						{
 							//Check the collision
-							for (int i = 0; i < rbNode1->rigidBody->GetColliders().size(); i++)
+							for (unsigned int i = 0; i < rbNode1->rigidBody->GetColliders().size(); i++)
 							{
 								Collider* currentCollider1 = rbNode1->rigidBody->GetColliderRef(i);
-								for (int j = 0; j < rbNode2->rigidBody->GetColliders().size(); j++)
+								for (unsigned int j = 0; j < rbNode2->rigidBody->GetColliders().size(); j++)
 								{
 									//Players don't bounce off of each other //TODO: Check for other solutions
 									if (rbNode1->rigidBody->componentParent->FindController() && rbNode2->rigidBody->componentParent->FindController())
@@ -507,7 +519,7 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 //Checks if a rigidbody is inside a region
 bool PhysicsManager::RigidBodyInRegion(RigidBody * rb, PhysicsRegion& currentPhysicsRegion, bool addRB_Velocity, float gameTime)
 {
-	for (int i = 0; i < rb->GetColliders().size(); i++)
+	for (unsigned int i = 0; i < rb->GetColliders().size(); i++)
 	{
 		Collider* currentCollider = rb->GetColliderRef(i);
 		//rectangle collider
@@ -594,6 +606,7 @@ bool PhysicsManager::RigidBodyInRegion(RigidBody * rb, PhysicsRegion& currentPhy
 		}
 		return false;
 	}
+	return false;
 }
 
 PhysicsManager* PhysicsManager::GetInstance()
