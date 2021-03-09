@@ -21,6 +21,7 @@ Components
 			Scale : 12.22,0.22,12.22
 			IsTrigger : 0
 		}
+		EndCollider
 		UseGravity : 0
 	}
 }

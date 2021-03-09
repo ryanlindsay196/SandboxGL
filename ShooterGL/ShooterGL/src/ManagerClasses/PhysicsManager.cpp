@@ -1,4 +1,5 @@
 #include "PhysicsManager.h"
+#include <math.h>
 
 PhysicsManager* PhysicsManager::instance = 0;
 
@@ -419,6 +420,40 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 		{
 			return true;
 		}
+	}
+	//If one collider is a rectangle and the other is a sphere
+	else if ((collider1->colliderType == Collider::ColliderType::Sphere && collider2->colliderType == Collider::ColliderType::Rectangle) ||
+		collider1->colliderType == Collider::ColliderType::Rectangle && collider2->colliderType == Collider::ColliderType::Sphere)
+	{
+		Collider* sphereCollider;
+		Collider* rectangleCollider;
+
+		if (collider1->colliderType == Collider::ColliderType::Sphere)
+		{
+			sphereCollider = collider1;
+			rectangleCollider = collider2;
+		}
+		else
+		{
+			sphereCollider = collider2;
+			rectangleCollider = collider1;
+		}
+
+		glm::vec3 spherePos = sphereCollider->colliderParent->componentParent->GetTranslation() + sphereCollider->positionOffset;
+		glm::vec3 rectanglePos = rectangleCollider->colliderParent->componentParent->GetTranslation() - rectangleCollider->positionOffset;
+
+		float distanceX = abs(spherePos.x - rectanglePos.x);
+		float distanceY = abs(spherePos.y - rectanglePos.y);
+		float distanceZ = abs(spherePos.z - rectanglePos.z);
+
+		if (distanceX > (rectangleCollider->scale.x / 2 + sphereCollider->scale.x)) { return false; }
+		if (distanceY > (rectangleCollider->scale.y / 2 + sphereCollider->scale.y)) { return false; }
+		if (distanceZ > (rectangleCollider->scale.z / 2 + sphereCollider->scale.z)) { return false; }
+		if (distanceX <= (rectangleCollider->scale.x / 2)) { return true; }
+		if (distanceY <= (rectangleCollider->scale.y / 2)) { return true; }
+		if (distanceZ <= (rectangleCollider->scale.z / 2)) { return true; }
+		float cDist_sq = pow(distanceX - rectangleCollider->scale.x / 2, 2) + pow(distanceY - rectangleCollider->scale.y / 2, 2) + pow(distanceZ - rectangleCollider->scale.z / 2, 2);
+		return cDist_sq <= sphereCollider->scale.x;
 	}
 	return false;
 }

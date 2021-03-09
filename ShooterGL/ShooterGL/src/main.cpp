@@ -66,7 +66,7 @@ int main()
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = !firstFrame * (currentFrame - lastFrame);
 		firstFrame = false;
-		glClearColor(1.0f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		objectManager->Update(deltaTime);
 		objectManager->Render();
@@ -78,7 +78,7 @@ int main()
 			objectManager->LoadScene("Resources/Scenes/Test2.scene", window);
 
 		lastFrame = currentFrame;
-		std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
+		//std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
 
 		//sheet.AppendText(std::string(std::to_string(1 / deltaTime)));
 		//sheet.AppendText(",");
