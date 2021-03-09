@@ -5,7 +5,6 @@
 #include <GLFW/glfw3.h>
 #include "ManagerClasses/ObjectManager.h"
 
-//TODO: Delete
 //#include "Debug/GenerateSpreadsheet.h"
 
 

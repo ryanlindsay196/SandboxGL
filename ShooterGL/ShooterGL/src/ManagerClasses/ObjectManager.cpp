@@ -1,6 +1,7 @@
 
-//TODO: REMOVE THIS?
+#ifdef DEBUG
 #include "Debug/DrawRay.h"
+#endif //DEBUG
 
 #include "ObjectManager.h"
 #include "EntityManager.h"
@@ -64,9 +65,9 @@ void ObjectManager::Initialize(GLFWwindow* window)
 
 void ObjectManager::Update(float gameTime)
 {
-
-	//TODO: Debug only
+#ifdef DEBUG
 	DebugLines::ClearVertices();
+#endif //DEBUG
 
 #pragma region TODO: Temporary. Please Move elsewhere or refactor
 	//while (true)
@@ -85,8 +86,9 @@ void ObjectManager::Update(float gameTime)
 		fixedUpdateTimer = 0;
 	}
 
-	//TODO: REMOVE THIS?
+#ifdef DEBUG
 	DebugLines::GetInstance()->DrawLines();
+#endif //DEBUG
 
 	cameraManager->Update();
 }
@@ -100,8 +102,9 @@ void ObjectManager::LoadScene(std::string scenePath, GLFWwindow* window)
 {
 	//TODO: Fix memory leak somewhere in this function
 
-	//TODO: Debug only
+#ifdef DEBUG
 	DebugLines::ClearVertices();
+#endif //DEBUG
 
 	lightManager->Initialize();
 

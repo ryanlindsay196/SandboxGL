@@ -1,2 +1,167 @@
-﻿  glad.c
-c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\dependencies\glad\src\glad.c(25): fatal error C1083: Cannot open include file: 'glad/glad.h': No such file or directory
+﻿  stb_image.cpp
+  Collider.cpp
+  DrawRay.cpp
+  NetworkManager.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\networkmanager.h(2): fatal error C1083: Cannot open include file: 'enet/enet.h': No such file or directory
+  PhysicsManager.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(79): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(108): warning C4244: '=': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(110): warning C4244: '=': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(110): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(112): warning C4244: '=': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(112): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(116): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(152): warning C4244: '=': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(154): warning C4244: '=': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(154): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(156): warning C4244: '=': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(156): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(159): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(183): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(184): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(185): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(186): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(231): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(233): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(235): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(239): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(243): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(253): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\managerclasses\physicsmanager.cpp(255): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+  Player.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.h(3): fatal error C1083: Cannot open include file: 'enet/enet.h': No such file or directory
+  RigidBody.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\rigidbody.cpp(17): warning C4018: '<': signed/unsigned mismatch
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\rigidbody.cpp(45): warning C4018: '<': signed/unsigned mismatch
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\rigidbody.cpp(202): warning C4018: '<': signed/unsigned mismatch
+  Controller.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.h(3): fatal error C1083: Cannot open include file: 'enet/enet.h': No such file or directory
+  Entity.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.h(3): fatal error C1083: Cannot open include file: 'enet/enet.h': No such file or directory
+  main.cpp
+  ControllerManager.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.h(3): fatal error C1083: Cannot open include file: 'enet/enet.h': No such file or directory
+  EntityManager.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.h(3): fatal error C1083: Cannot open include file: 'enet/enet.h': No such file or directory
+  ObjectManager.cpp
+c:\users\ryan\desktop\portfolio materials\repositories\shootergl\shootergl\shootergl\src\controller.h(3): fatal error C1083: Cannot open include file: 'enet/enet.h': No such file or directory

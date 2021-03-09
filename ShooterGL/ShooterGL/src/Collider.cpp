@@ -6,6 +6,7 @@ Collider::Collider()
 {
 }
 
+#ifdef DEBUG
 void Collider::CreateDebugLines()
 {
 	DebugLines* debugLines = DebugLines::GetInstance();
@@ -50,6 +51,7 @@ void Collider::CreateDebugLines()
 		colliderCenter + glm::vec3(-scale.x, scale.y, scale.z),
 	colliderParent->componentParent);
 }
+#endif //DEBUG
 
 void Collider::Update(float gameTime)
 {
@@ -57,10 +59,9 @@ void Collider::Update(float gameTime)
 	glm::vec3 colliderStart = colliderCenter - scale;
 	glm::vec3 colliderEnd = colliderCenter + scale;
 
-#pragma region TODO DELETE: Draw debug rays
-	//TODO: Debug only
+#ifdef DEBUG
 	CreateDebugLines();
-#pragma endregion
+#endif
 }
 
 //Calculates and returns the projections of this rigidbody on the x, y, and z axes.

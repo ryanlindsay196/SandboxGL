@@ -24,13 +24,6 @@ Mesh::Mesh(aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, 
 	textureManager = TextureManager::GetInstance();
 	m_meshData = meshData;
 
-	//scaleOffset = glm::mat4(1);
-	////TODO: Delete rotationQuat?
-	//rotationQuat = glm::quat();
-	//positionOffset = glm::mat4(1);
-	//
-	//offsetTransform = glm::mat4(1);
-
 	//Handle edge case where mesh already loaded vertices
 	if (meshData->vertices.size() > 0)
 		return;
@@ -183,15 +176,12 @@ Mesh::Mesh(aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, 
 Mesh::Mesh(std::string& materialPath, WorldComponent * newParent, MeshData * meshData)
 {
 	m_materialPath = materialPath;
-	//m_modelData = modelData;
 	parentMesh = newParent;
 	yaw = -90;
 	textureManager = TextureManager::GetInstance();
 	m_meshData = meshData;
 
 	scaleOffset = glm::mat4(1);
-	//TODO: Delete rotationQuat?
-	rotationQuat = glm::quat();
 	positionOffset = glm::mat4(1);
 
 	offsetTransform = glm::mat4(1);

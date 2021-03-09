@@ -6,8 +6,9 @@ class Collider
 {
 public:
 	Collider();
-	//TODO: DEBUG ONLY
+#ifdef DEBUG
 	void CreateDebugLines();
+#endif //DEBUG
 
 	void Update(float gameTime);
 

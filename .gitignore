@@ -2,7 +2,11 @@
 /ShooterGL/.vs/*
 ShooterGL/ShooterGL/Debug
 
+ShooterGL/Release/*
+ShooterGL/ShhoterGL/Release
+
 /ShooterGL_Server/Debug/*
+/ShooterGL_Server/Release/*
 /ShooterGL_Server/.vs/*
 ShooterGL_Server/ShooterGL_Server/Debug
 *.obj

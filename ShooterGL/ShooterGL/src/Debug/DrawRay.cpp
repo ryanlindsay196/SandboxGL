@@ -2,22 +2,7 @@
 #include "ManagerClasses/CameraManager.h"
 #include "../Entity.h"
 
-DebugRay* DebugRay::instance = 0;
 DebugLines* DebugLines::instance = 0;
-
-DebugRay::DebugRay()
-{
-}
-
-//void DebugRay::DrawLine(glm::vec3 startPos, glm::vec3 endPos, const glm::mat4& parentTransform)
-//{
-//	//Line l = Line(startPos, endPos);
-//	CameraManager* cameraManager = CameraManager::GetInstance();
-//	glm::mat4 mvp = cameraManager->GetCamera(0)->projectionMatrix * cameraManager->GetCamera(0)->cameraViewMatrix * parentTransform;
-//	//l.setMVP(mvp);
-//	//l.setColor(glm::vec3(0, 1, 0));
-//	//l.draw();
-//}
 
 DebugLines::DebugLines()
 {
