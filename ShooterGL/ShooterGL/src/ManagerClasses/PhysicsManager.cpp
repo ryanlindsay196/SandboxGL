@@ -124,7 +124,6 @@ void PhysicsManager::UpdatePhysicsRegions_AddNodes(RigidBody * rb, float gameTim
 			}
 		}
 		//Determine whether or not to add a rigid body to the outer physics region
-		//TODO: Rename outerPhysicsRegion?
 		//If rigidBody just entered the outer physics region
 		if(!RigidBodyInRegion(rb, outerPhysicsRegion, true, gameTime) && RigidBodyInRegion(rb, outerPhysicsRegion, false, gameTime))
 		{
