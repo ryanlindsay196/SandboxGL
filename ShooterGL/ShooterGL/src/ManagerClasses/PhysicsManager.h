@@ -50,6 +50,8 @@ private:
 
 	//Iterate through all rigidbodies (grouped by region), and check if they're colliding
 	void CheckCollisions(int iterations, float gameTime);
+	//Check for collisions between all objects inside a given region
+	void CheckCollisionsInRegion(PhysicsRegion physicsRegion, float gameTime);
 	//Returns true if the two colliders are overlapping
 	bool IsColliding(Collider * collider1, Collider * collider2, float gameTime);
 

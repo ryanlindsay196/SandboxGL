@@ -270,105 +270,8 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 {
 	for(int currentIteration = 0; currentIteration < iterations; currentIteration++)
 	{
-#pragma region Check collisions for rigidbodies outside indexed physics regions
 		//Check collisions for all rigidbodies outside indexed physics regions
-		RigidBodyNode* rbNode1 = outerPhysicsRegion.startNode;
-		RigidBodyNode* rbNode2 = outerPhysicsRegion.startNode->nextNode;
-		while (rbNode1->nextNode != nullptr)
-		{
-			if ((rbNode1->rigidBody->GetIsActive() && rbNode2->rigidBody->GetIsActive()) && rbNode1 != rbNode2)
-			{
-				//Check the collision
-				for (unsigned int i = 0; i < rbNode1->rigidBody->GetColliders().size(); i++)
-				{
-					Collider* currentCollider1 = rbNode1->rigidBody->GetColliderRef(i);
-					for (unsigned int j = 0; j < rbNode2->rigidBody->GetColliders().size(); j++)
-					{
-						//Players don't bounce off of each other //TODO: Check for other solutions
-						if (rbNode1->rigidBody->componentParent->FindController() && rbNode2->rigidBody->componentParent->FindController())
-							continue;
-						//if one of the rigidbodies were spawned by the other colliding entity
-						else if (rbNode1->rigidBody->componentParent == rbNode2->rigidBody->GetSpawnedBy() ||
-							rbNode2->rigidBody->componentParent == rbNode1->rigidBody->GetSpawnedBy())
-							continue;
-
-						Collider* currentCollider2 = rbNode2->rigidBody->GetColliderRef(j);
-
-						if (IsColliding(currentCollider1, currentCollider2, gameTime))
-						{
-							RigidBody* rb1 = rbNode1->rigidBody;
-							RigidBody* rb2 = rbNode2->rigidBody;
-							if (currentCollider1->isTrigger)
-								rb2->componentParent->OnTriggerEnter(rb1->componentParent);
-							else
-								rb2->componentParent->OnCollisionEnter(rb1->componentParent);
-							if (currentCollider2->isTrigger)
-								rb1->componentParent->OnTriggerEnter(rb2->componentParent);
-							else
-								rb1->componentParent->OnCollisionEnter(rb2->componentParent);
-							if (currentCollider1->isTrigger || currentCollider2->isTrigger)
-								continue;
-
-							glm::vec3 colliderPos1 = rb1->componentParent->GetTranslation() + currentCollider1->positionOffset;
-							glm::vec3 colliderPos2 = rb2->componentParent->GetTranslation() + currentCollider2->positionOffset;
-
-							glm::vec3 velocity1 = rbNode1->rigidBody->GetVelocity();
-							glm::vec3 velocity2 = rbNode2->rigidBody->GetVelocity();
-							float mass1 = rbNode1->rigidBody->GetMass();
-							float mass2 = rbNode2->rigidBody->GetMass();
-
-							glm::vec3 normalDirection = glm::normalize(colliderPos1 - colliderPos2);
-
-							glm::vec3 velocityToStore1 = glm::vec3(0);// = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
-							glm::vec3 velocityToStore2 = glm::vec3(0);// = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
-
-							velocityToStore1 = (colliderPos1 - colliderPos2) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
-							velocityToStore2 = (colliderPos2 - colliderPos1) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
-
-							if (isnan(velocityToStore1.x))
-								velocityToStore1.x = 0;
-							if (isnan(velocityToStore1.y))
-								velocityToStore1.y = 0;
-							if (isnan(velocityToStore1.z))
-								velocityToStore1.z = 0;
-							if (isnan(velocityToStore2.x))
-								velocityToStore2.x = 0;
-							if (isnan(velocityToStore2.y))
-								velocityToStore2.y = 0;
-							if (isnan(velocityToStore2.z))
-								velocityToStore2.z = 0;
-
-							float momentumToStore1 = glm::length(velocityToStore1) * mass1;
-							float momentumToStore2 = glm::length(velocityToStore2) * mass2;
-
-							float momentum1 = rbNode1->rigidBody->GetMomentumFloat();
-							float momentum2 = rbNode2->rigidBody->GetMomentumFloat();
-
-							while (momentumToStore1 + momentumToStore2 > momentum1 + momentum2)
-							{
-								velocityToStore1 *= 0.99;
-								velocityToStore2 *= 0.99;
-
-								momentumToStore1 = glm::length(velocityToStore1) * mass1;
-								momentumToStore2 = glm::length(velocityToStore2) * mass2;
-							}
-
-							rbNode1->rigidBody->StoreVelocity(velocityToStore1);
-							rbNode2->rigidBody->StoreVelocity(velocityToStore2);
-						}
-					}
-				}
-			}
-			rbNode2 = rbNode2->nextNode;
-			//if node2 has reached the end, increment node1 and loop again
-			if (rbNode2 == nullptr)
-			{
-				rbNode1 = rbNode1->nextNode;
-				rbNode2 = rbNode1->nextNode;
-			}
-		}
-#pragma endregion
-#pragma region Check collisions fora ll rigidbodies inside indexed physics regions
+		CheckCollisionsInRegion(outerPhysicsRegion, gameTime);
 		//Check collisions for all rigidbodies inside indexed physics regions
 		for (std::vector<std::vector<PhysicsRegion>> physicsRegionI : physicsRegions)
 		{
@@ -376,110 +279,115 @@ void PhysicsManager::CheckCollisions(int iterations, float gameTime)
 			{
 				for (PhysicsRegion physicsRegion : physicsRegionIJ)
 				{
-					if (physicsRegion.startNode == nullptr)
-						continue;
-					RigidBodyNode* rbNode1 = physicsRegion.startNode;
-					RigidBodyNode* rbNode2 = physicsRegion.startNode->nextNode;
-					if (rbNode2 == nullptr)
-						continue;
-					while (rbNode1->nextNode != nullptr)
-					{
-						if ((rbNode1->rigidBody->GetIsActive() && rbNode2->rigidBody->GetIsActive()) && rbNode1 != rbNode2)
-						{
-							//Check the collision
-							for (unsigned int i = 0; i < rbNode1->rigidBody->GetColliders().size(); i++)
-							{
-								Collider* currentCollider1 = rbNode1->rigidBody->GetColliderRef(i);
-								for (unsigned int j = 0; j < rbNode2->rigidBody->GetColliders().size(); j++)
-								{
-									//Players don't bounce off of each other //TODO: Check for other solutions
-									if (rbNode1->rigidBody->componentParent->FindController() && rbNode2->rigidBody->componentParent->FindController())
-										continue;
-									//if one of the rigidbodies were spawned by the other colliding entity
-									else if (rbNode1->rigidBody->componentParent == rbNode2->rigidBody->GetSpawnedBy() ||
-										rbNode2->rigidBody->componentParent == rbNode1->rigidBody->GetSpawnedBy())
-										continue;
-
-									Collider* currentCollider2 = rbNode2->rigidBody->GetColliderRef(j);
-
-									if (IsColliding(currentCollider1, currentCollider2, gameTime))
-									{
-										RigidBody* rb1 = rbNode1->rigidBody;
-										RigidBody* rb2 = rbNode2->rigidBody;
-										if (currentCollider1->isTrigger)
-											rb2->componentParent->OnTriggerEnter(rb1->componentParent);
-										else
-											rb2->componentParent->OnCollisionEnter(rb1->componentParent);
-										if (currentCollider2->isTrigger)
-											rb1->componentParent->OnTriggerEnter(rb2->componentParent);
-										else
-											rb1->componentParent->OnCollisionEnter(rb2->componentParent);
-										if (currentCollider1->isTrigger || currentCollider2->isTrigger)
-											continue;
-
-										glm::vec3 colliderPos1 = rb1->componentParent->GetTranslation() + currentCollider1->positionOffset;
-										glm::vec3 colliderPos2 = rb2->componentParent->GetTranslation() + currentCollider2->positionOffset;
-
-										glm::vec3 velocity1 = rbNode1->rigidBody->GetVelocity();
-										glm::vec3 velocity2 = rbNode2->rigidBody->GetVelocity();
-										float mass1 = rbNode1->rigidBody->GetMass();
-										float mass2 = rbNode2->rigidBody->GetMass();
-
-										glm::vec3 normalDirection = glm::normalize(colliderPos1 - colliderPos2);
-
-										glm::vec3 velocityToStore1 = glm::vec3(0);// = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
-										glm::vec3 velocityToStore2 = glm::vec3(0);// = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
-
-										velocityToStore1 = (colliderPos1 - colliderPos2) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
-										velocityToStore2 = (colliderPos2 - colliderPos1) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
-
-										if (isnan(velocityToStore1.x))
-											velocityToStore1.x = 0;
-										if (isnan(velocityToStore1.y))
-											velocityToStore1.y = 0;
-										if (isnan(velocityToStore1.z))
-											velocityToStore1.z = 0;
-										if (isnan(velocityToStore2.x))
-											velocityToStore2.x = 0;
-										if (isnan(velocityToStore2.y))
-											velocityToStore2.y = 0;
-										if (isnan(velocityToStore2.z))
-											velocityToStore2.z = 0;
-
-										float momentumToStore1 = glm::length(velocityToStore1) * mass1;
-										float momentumToStore2 = glm::length(velocityToStore2) * mass2;
-
-										float momentum1 = rbNode1->rigidBody->GetMomentumFloat();
-										float momentum2 = rbNode2->rigidBody->GetMomentumFloat();
-
-										while (momentumToStore1 + momentumToStore2 > momentum1 + momentum2)
-										{
-											velocityToStore1 *= 0.99;
-											velocityToStore2 *= 0.99;
-
-											momentumToStore1 = glm::length(velocityToStore1) * mass1;
-											momentumToStore2 = glm::length(velocityToStore2) * mass2;
-										}
-
-										rbNode1->rigidBody->StoreVelocity(velocityToStore1);
-										rbNode2->rigidBody->StoreVelocity(velocityToStore2);
-									}
-								}
-							}
-						}
-						rbNode2 = rbNode2->nextNode;
-						//if node2 has reached the end, increment node1 and loop again
-						if (rbNode2 == nullptr)
-						{
-							rbNode1 = rbNode1->nextNode;
-							rbNode2 = rbNode1->nextNode;
-						}
-					}
+					CheckCollisionsInRegion(physicsRegion, gameTime);
 				}
 			}
 		}
 	}
-#pragma endregion
+}
+
+void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float gameTime)
+{
+
+	if (physicsRegion.startNode == nullptr)
+		return;
+	RigidBodyNode* rbNode1 = physicsRegion.startNode;
+	RigidBodyNode* rbNode2 = physicsRegion.startNode->nextNode;
+	if (rbNode2 == nullptr)
+		return;
+	while (rbNode1->nextNode != nullptr)
+	{
+		if ((rbNode1->rigidBody->GetIsActive() && rbNode2->rigidBody->GetIsActive()) && rbNode1 != rbNode2)
+		{
+			//Check the collision
+			for (unsigned int i = 0; i < rbNode1->rigidBody->GetColliders().size(); i++)
+			{
+				Collider* currentCollider1 = rbNode1->rigidBody->GetColliderRef(i);
+				for (unsigned int j = 0; j < rbNode2->rigidBody->GetColliders().size(); j++)
+				{
+					//Players don't bounce off of each other //TODO: Check for other solutions
+					if (rbNode1->rigidBody->componentParent->FindController() && rbNode2->rigidBody->componentParent->FindController())
+						continue;
+					//if one of the rigidbodies were spawned by the other colliding entity
+					else if (rbNode1->rigidBody->componentParent == rbNode2->rigidBody->GetSpawnedBy() ||
+						rbNode2->rigidBody->componentParent == rbNode1->rigidBody->GetSpawnedBy())
+						continue;
+
+					Collider* currentCollider2 = rbNode2->rigidBody->GetColliderRef(j);
+
+					if (IsColliding(currentCollider1, currentCollider2, gameTime))
+					{
+						RigidBody* rb1 = rbNode1->rigidBody;
+						RigidBody* rb2 = rbNode2->rigidBody;
+						if (currentCollider1->isTrigger)
+							rb2->componentParent->OnTriggerEnter(rb1->componentParent);
+						else
+							rb2->componentParent->OnCollisionEnter(rb1->componentParent);
+						if (currentCollider2->isTrigger)
+							rb1->componentParent->OnTriggerEnter(rb2->componentParent);
+						else
+							rb1->componentParent->OnCollisionEnter(rb2->componentParent);
+						if (currentCollider1->isTrigger || currentCollider2->isTrigger)
+							continue;
+
+						glm::vec3 colliderPos1 = rb1->componentParent->GetTranslation() + currentCollider1->positionOffset;
+						glm::vec3 colliderPos2 = rb2->componentParent->GetTranslation() + currentCollider2->positionOffset;
+
+						glm::vec3 velocity1 = rbNode1->rigidBody->GetVelocity();
+						glm::vec3 velocity2 = rbNode2->rigidBody->GetVelocity();
+						float mass1 = rbNode1->rigidBody->GetMass();
+						float mass2 = rbNode2->rigidBody->GetMass();
+
+						glm::vec3 normalDirection = glm::normalize(colliderPos1 - colliderPos2);
+
+						glm::vec3 velocityToStore1 = glm::vec3(0);// = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
+						glm::vec3 velocityToStore2 = glm::vec3(0);// = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
+
+						velocityToStore1 = (colliderPos1 - colliderPos2) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
+						velocityToStore2 = (colliderPos2 - colliderPos1) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
+
+						if (isnan(velocityToStore1.x))
+							velocityToStore1.x = 0;
+						if (isnan(velocityToStore1.y))
+							velocityToStore1.y = 0;
+						if (isnan(velocityToStore1.z))
+							velocityToStore1.z = 0;
+						if (isnan(velocityToStore2.x))
+							velocityToStore2.x = 0;
+						if (isnan(velocityToStore2.y))
+							velocityToStore2.y = 0;
+						if (isnan(velocityToStore2.z))
+							velocityToStore2.z = 0;
+
+						float momentumToStore1 = glm::length(velocityToStore1) * mass1;
+						float momentumToStore2 = glm::length(velocityToStore2) * mass2;
+
+						float momentum1 = rbNode1->rigidBody->GetMomentumFloat();
+						float momentum2 = rbNode2->rigidBody->GetMomentumFloat();
+
+						while (momentumToStore1 + momentumToStore2 > momentum1 + momentum2)
+						{
+							velocityToStore1 *= 0.99;
+							velocityToStore2 *= 0.99;
+
+							momentumToStore1 = glm::length(velocityToStore1) * mass1;
+							momentumToStore2 = glm::length(velocityToStore2) * mass2;
+						}
+
+						rbNode1->rigidBody->StoreVelocity(velocityToStore1);
+						rbNode2->rigidBody->StoreVelocity(velocityToStore2);
+					}
+				}
+			}
+		}
+		rbNode2 = rbNode2->nextNode;
+		//if node2 has reached the end, increment node1 and loop again
+		if (rbNode2 == nullptr)
+		{
+			rbNode1 = rbNode1->nextNode;
+			rbNode2 = rbNode1->nextNode;
+		}
+	}
 }
 
 //Check for collisions using vector projections on the x, y, and z axes.
