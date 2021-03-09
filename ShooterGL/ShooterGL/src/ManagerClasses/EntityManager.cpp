@@ -213,9 +213,9 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		else if (entityData.componentName == "RigidBody")
 		{
 			RigidBody* newRigidBody = new RigidBody();
+			newRigidBody->componentParent = entity;
 			newRigidBody->Initialize(entityData.componentProperties, nullptr);
 			entity->AddComponent(newRigidBody);
-			newRigidBody->componentParent = entity;
 			PhysicsManager::GetInstance()->InitializeRigidBody(newRigidBody, 0.f);
 		}
 		else if (entityData.componentName == "Player")

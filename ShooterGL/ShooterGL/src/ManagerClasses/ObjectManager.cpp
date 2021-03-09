@@ -1,3 +1,7 @@
+
+//TODO: REMOVE THIS?
+#include "Debug/DrawRay.h"
+
 #include "ObjectManager.h"
 #include "EntityManager.h"
 #include "GLFW/glfw3.h"
@@ -16,6 +20,7 @@
 #include "PlayerManager.h"
 
 #include <iostream>
+
 
 ObjectManager* ObjectManager::instance = 0;
 
@@ -60,6 +65,9 @@ void ObjectManager::Initialize(GLFWwindow* window)
 void ObjectManager::Update(float gameTime)
 {
 
+	//TODO: Debug only
+	DebugLines::ClearVertices();
+
 #pragma region TODO: Temporary. Please Move elsewhere or refactor
 	//while (true)
 	{
@@ -76,6 +84,10 @@ void ObjectManager::Update(float gameTime)
 		physicsManager->FixedUpdate(fixedUpdateTimer);
 		fixedUpdateTimer = 0;
 	}
+
+	//TODO: REMOVE THIS?
+	DebugLines::GetInstance()->DrawLines();
+
 	cameraManager->Update();
 }
 
@@ -87,6 +99,9 @@ void ObjectManager::Render()
 void ObjectManager::LoadScene(std::string scenePath, GLFWwindow* window)
 {
 	//TODO: Fix memory leak somewhere in this function
+
+	//TODO: Debug only
+	DebugLines::ClearVertices();
 
 	lightManager->Initialize();
 

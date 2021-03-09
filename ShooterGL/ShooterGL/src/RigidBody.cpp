@@ -48,7 +48,7 @@ void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties, Entity
 					break;
 				rbProp.erase(std::remove(rbProp.begin(), rbProp.end(), '\t'), rbProp.end());
 				rbProp.erase(std::remove(rbProp.begin(), rbProp.end(), ' '), rbProp.end());
-				if (rbProp == "}")
+				if (rbProp == "EndCollider" || rbProp == "}")
 					break;
 
 				keyValuePair = GenerateKeyValuePair(rbProp, ":");
@@ -98,11 +98,11 @@ void RigidBody::FixedUpdate(float gameTime)
 			reactivateTimer -= gameTime;
 	}
 
-	//if (useGravity)
-	//{
-	//	velocity.y += 10 * gameTime;
-	//	velocity.y = std::min(10.f, velocity.y);
-	//}
+	if (useGravity)
+	{
+		velocity.y -= 1 * gameTime;
+		velocity.y = std::min(10.f, velocity.y);
+	}
 	if (isVelocityStored)
 	{
 		velocity = storedVelocity;

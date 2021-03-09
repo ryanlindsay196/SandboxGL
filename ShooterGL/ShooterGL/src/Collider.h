@@ -5,6 +5,10 @@ class RigidBody;
 class Collider
 {
 public:
+	Collider();
+	//TODO: DEBUG ONLY
+	void CreateDebugLines();
+
 	void Update(float gameTime);
 
 	enum ColliderType { Sphere, Rectangle, Mesh };

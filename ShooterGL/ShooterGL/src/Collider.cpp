@@ -2,6 +2,55 @@
 #include "RigidBody.h"
 #include "Debug/DrawRay.h"
 
+Collider::Collider()
+{
+}
+
+void Collider::CreateDebugLines()
+{
+	DebugLines* debugLines = DebugLines::GetInstance();
+	glm::vec3 colliderCenter = /*colliderParent->componentParent->GetTranslation() + */positionOffset;
+	//Lines that span the z-axis
+	debugLines->AddLine(colliderCenter + glm::vec3(-scale.x, -scale.y, -scale.z),
+		colliderCenter + glm::vec3(-scale.x, -scale.y, scale.z),
+		colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, -scale.z),
+		colliderCenter + glm::vec3(scale.x, -scale.y, scale.z),
+	colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(-scale.x, scale.y, -scale.z),
+		colliderCenter + glm::vec3(-scale.x, scale.y, scale.z),
+	colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, scale.y, -scale.z),
+		colliderCenter + glm::vec3(scale.x, scale.y, scale.z),
+	colliderParent->componentParent);
+	//lines that span the y-axis
+	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, -scale.z),
+		colliderCenter + glm::vec3(scale.x, scale.y, -scale.z),
+	colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, scale.z),
+		colliderCenter + glm::vec3(scale.x, scale.y, scale.z),
+	colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(-scale.x, scale.y, scale.z),
+		colliderCenter + glm::vec3(-scale.x, -scale.y, scale.z),
+	colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(-scale.x, scale.y, -scale.z),
+		colliderCenter + glm::vec3(-scale.x, -scale.y, -scale.z),
+	colliderParent->componentParent);
+	//Lines that span the x-axis
+	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, -scale.z),
+		colliderCenter + glm::vec3(-scale.x, -scale.y, -scale.z),
+	colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, scale.z),
+		colliderCenter + glm::vec3(-scale.x, -scale.y, scale.z),
+	colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, scale.y, -scale.z),
+		colliderCenter + glm::vec3(-scale.x, scale.y, -scale.z),
+	colliderParent->componentParent);
+	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, scale.y, scale.z),
+		colliderCenter + glm::vec3(-scale.x, scale.y, scale.z),
+	colliderParent->componentParent);
+}
+
 void Collider::Update(float gameTime)
 {
 	glm::vec3 colliderCenter = colliderParent->componentParent->GetTranslation() + positionOffset;
@@ -9,56 +58,8 @@ void Collider::Update(float gameTime)
 	glm::vec3 colliderEnd = colliderCenter + scale;
 
 #pragma region TODO DELETE: Draw debug rays
-	//Lines that span the z-axis
-	DrawRay::DrawLine(glm::vec3(-scale.x, -scale.y, -scale.z),
-		glm::vec3(-scale.x, -scale.y, scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, -scale.z),
-		glm::vec3(scale.x, -scale.y, scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(-scale.x, scale.y, -scale.z),
-		glm::vec3(-scale.x, scale.y, scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(scale.x, scale.y, -scale.z),
-		glm::vec3(scale.x, scale.y, scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	//lines that span the y-axis
-	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, -scale.z),
-		glm::vec3(scale.x, scale.y, -scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, scale.z),
-		glm::vec3(scale.x, scale.y, scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(-scale.x, scale.y, scale.z),
-		glm::vec3(-scale.x, -scale.y, scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(-scale.x, scale.y, -scale.z),
-		glm::vec3(-scale.x, -scale.y, -scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	//Lines that span the x-axis
-	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, -scale.z),
-		glm::vec3(-scale.x, -scale.y, -scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(scale.x, -scale.y, scale.z),
-		glm::vec3(-scale.x, -scale.y, scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(scale.x, scale.y, -scale.z),
-		glm::vec3(-scale.x, scale.y, -scale.z),
-		colliderParent->componentParent->GetTransform());
-
-	DrawRay::DrawLine(glm::vec3(scale.x, scale.y, scale.z),
-		glm::vec3(-scale.x, scale.y, scale.z),
-		colliderParent->componentParent->GetTransform());
+	//TODO: Debug only
+	CreateDebugLines();
 #pragma endregion
 }
 

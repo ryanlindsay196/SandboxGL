@@ -39,7 +39,8 @@ Components
 			Scale : 2,5,2
 			IsTrigger : 0
 		}
-		UseGravity : 0
+		EndCollider
+		UseGravity : 1
 	}
 }
 Tags
