@@ -11,7 +11,7 @@ Components
 	}
 	RigidBody
 	{
-		PositionConstaints : 1,1,1
+		PositionConstaints : 0,0,0
 		RotationConstraints : 0,0,0
 		Mass : 1
 		Collider

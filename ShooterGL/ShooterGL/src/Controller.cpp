@@ -102,7 +102,7 @@ void Controller::Move(glm::vec3 direction, float moveSpeed, float gameTime)
 		else
 		{
 			//Don't multiply by gameTime because it is computed by the rigidBody->FixedUpdate function
-			rigidBody->StoreVelocity(glm::normalize(direction) * moveSpeed);
+			rigidBody->SetVelocity(glm::normalize(direction) * moveSpeed + glm::vec3(0, rigidBody->GetVelocity().y, 0));
 		}
 	}
 	//If wasd input just changed and is not receiving directional input
@@ -111,8 +111,8 @@ void Controller::Move(glm::vec3 direction, float moveSpeed, float gameTime)
 		RigidBody* rigidBody = componentParent->FindRigidBody();
 		if (rigidBody != nullptr)
 		{
-			rigidBody->SetVelocity(glm::vec3(0, 0, 0));
-			rigidBody->StoreVelocity(-rigidBody->GetStoredVelocity());
+			rigidBody->SetVelocity(glm::vec3(0, rigidBody->GetVelocity().y, 0));
+			rigidBody->ResetStoredVelocity();
 		}
 	}
 }
@@ -181,17 +181,6 @@ void Controller::SetNetworkWASDInput(int wasd)
 		rightKey.Press();
 	else
 		rightKey.Release();
-
-	//If wasd input just changed and is not receiving directional input
-	if (CurrentWASD() == 0)
-	{
-		RigidBody* rigidBody = componentParent->FindRigidBody();
-		if (rigidBody != nullptr)
-		{
-			rigidBody->SetVelocity(glm::vec3(0, 0, 0));
-			rigidBody->StoreVelocity(-rigidBody->GetStoredVelocity());
-		}
-	}
 }
 
 void Controller::SetNetworkActionInput(int action)

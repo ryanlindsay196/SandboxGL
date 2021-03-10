@@ -43,6 +43,8 @@ public:
 	float GetMomentumFloat();
 	glm::vec3 GetMomentumVec3();
 	float GetStoredMomentum();
+
+	void ResetStoredVelocity();
 	void StoreVelocity(glm::vec3 velocityToAdd);
 
 	void SetVelocity(glm::vec3 newVelocity);
