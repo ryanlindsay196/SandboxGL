@@ -6,6 +6,8 @@ When a model is out of view, don't draw it and don't update bone positions (frus
 Collisions with a rectangle should send the other object in the direction of the face normal
 Give each collider a normalized "elasticity" factor that controls bounce speed.
 
+Sphere colliders should draw sphere debug lines
+
 Assync model loading
 
 All singleton manager classes' copy constructor = delete

@@ -339,13 +339,13 @@ void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float 
 						float mass1 = rbNode1->rigidBody->GetMass();
 						float mass2 = rbNode2->rigidBody->GetMass();
 
-						glm::vec3 normalDirection = glm::normalize(colliderPos1 - colliderPos2);
+						glm::vec3 normalDirection = colliderPos1 - colliderPos2;
 
 						glm::vec3 velocityToStore1 = glm::vec3(0);// = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
 						glm::vec3 velocityToStore2 = glm::vec3(0);// = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
 
-						velocityToStore1 = (colliderPos1 - colliderPos2) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
-						velocityToStore2 = (colliderPos2 - colliderPos1) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
+						velocityToStore1 = (normalDirection) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
+						velocityToStore2 = (-normalDirection) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
 
 						if (isnan(velocityToStore1.x))
 							velocityToStore1.x = 0;
@@ -442,16 +442,26 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 		glm::vec3 spherePos = sphereCollider->colliderParent->componentParent->GetTranslation() + sphereCollider->positionOffset;
 		glm::vec3 rectanglePos = rectangleCollider->colliderParent->componentParent->GetTranslation() - rectangleCollider->positionOffset;
 
+		//glm::vec3 aabb_half_extents = -rectangleCollider->scale;
+		//glm::vec3 aabb_center = glm::vec3(rectanglePos + aabb_half_extents);
+		//
+		//glm::vec3 center = spherePos + sphereCollider->scale;
+		//glm::vec3 difference = center - aabb_center;
+		//glm::vec3 clamped = glm::clamp(difference, -aabb_half_extents, aabb_half_extents);
+		//glm::vec3 closest = aabb_center + clamped;
+		//difference = closest - center;
+		//return glm::length(difference) < sphereCollider->scale.x;
+
 		float distanceX = abs(spherePos.x - rectanglePos.x);
 		float distanceY = abs(spherePos.y - rectanglePos.y);
 		float distanceZ = abs(spherePos.z - rectanglePos.z);
-
-		if (distanceX > (rectangleCollider->scale.x / 2 + sphereCollider->scale.x)) { return false; }
-		if (distanceY > (rectangleCollider->scale.y / 2 + sphereCollider->scale.y)) { return false; }
-		if (distanceZ > (rectangleCollider->scale.z / 2 + sphereCollider->scale.z)) { return false; }
-		if (distanceX <= (rectangleCollider->scale.x / 2)) { return true; }
-		if (distanceY <= (rectangleCollider->scale.y / 2)) { return true; }
-		if (distanceZ <= (rectangleCollider->scale.z / 2)) { return true; }
+		
+		if (distanceX > (rectangleCollider->scale.x + sphereCollider->scale.x)) { return false; }
+		if (distanceY > (rectangleCollider->scale.y + sphereCollider->scale.y)) { return false; }
+		if (distanceZ > (rectangleCollider->scale.z + sphereCollider->scale.z)) { return false; }
+		if (distanceX <= (rectangleCollider->scale.x)) { return true; }
+		if (distanceY <= (rectangleCollider->scale.y)) { return true; }
+		if (distanceZ <= (rectangleCollider->scale.z)) { return true; }
 		float cDist_sq = pow(distanceX - rectangleCollider->scale.x / 2, 2) + pow(distanceY - rectangleCollider->scale.y / 2, 2) + pow(distanceZ - rectangleCollider->scale.z / 2, 2);
 		return cDist_sq <= sphereCollider->scale.x;
 	}
