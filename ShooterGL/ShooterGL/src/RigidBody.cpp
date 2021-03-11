@@ -74,6 +74,10 @@ void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties, Entity
 		{
 			useGravity = std::stoi(keyValuePair.second);
 		}
+		else if (keyValuePair.first == "Bounce")
+		{
+			bounce = std::stof(keyValuePair.second);
+		}
 	}
 }
 
@@ -147,6 +151,11 @@ glm::vec3 RigidBody::GetVelocity()
 glm::vec3 RigidBody::GetStoredVelocity()
 {
 	return storedVelocity;
+}
+
+float RigidBody::GetBounce()
+{
+	return bounce;
 }
 
 float RigidBody::GetMass()

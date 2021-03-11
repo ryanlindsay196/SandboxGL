@@ -15,7 +15,7 @@ public:
 	};
 private:
 	unsigned int properties;
-	float mass;
+	float mass, bounce;
 	glm::vec3 velocity, storedVelocity;
 	glm::vec3 positionConstraints, rotationConstraints;
 	bool useGravity;
@@ -39,6 +39,7 @@ public:
 	//glm::vec3 GetScale();
 	glm::vec3 GetVelocity();
 	glm::vec3 GetStoredVelocity();
+	float GetBounce();
 	float GetMass();
 	float GetMomentumFloat();
 	glm::vec3 GetMomentumVec3();

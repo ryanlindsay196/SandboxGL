@@ -53,7 +53,7 @@ private:
 	//Check for collisions between all objects inside a given region
 	void CheckCollisionsInRegion(PhysicsRegion physicsRegion, float gameTime);
 	//Returns true if the two colliders are overlapping
-	bool IsColliding(Collider * collider1, Collider * collider2, float gameTime);
+	bool IsColliding(Collider * collider1, Collider * collider2, float gameTime, glm::vec3& normalDirection);
 
 	//checks if a rigidbody is inside a particular region
 	bool RigidBodyInRegion(RigidBody* rb, PhysicsRegion& currentPhysicsRegion, bool addRB_Velocity, float gameTime);

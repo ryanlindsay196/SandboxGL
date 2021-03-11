@@ -316,7 +316,9 @@ void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float 
 
 					Collider* currentCollider2 = rbNode2->rigidBody->GetColliderRef(j);
 
-					if (IsColliding(currentCollider1, currentCollider2, gameTime))
+					glm::vec3 normalDirection;
+
+					if (IsColliding(currentCollider1, currentCollider2, gameTime, normalDirection))
 					{
 						RigidBody* rb1 = rbNode1->rigidBody;
 						RigidBody* rb2 = rbNode2->rigidBody;
@@ -338,8 +340,6 @@ void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float 
 						glm::vec3 velocity2 = rbNode2->rigidBody->GetVelocity();
 						float mass1 = rbNode1->rigidBody->GetMass();
 						float mass2 = rbNode2->rigidBody->GetMass();
-
-						glm::vec3 normalDirection = colliderPos1 - colliderPos2;
 
 						glm::vec3 velocityToStore1 = glm::vec3(0);// = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
 						glm::vec3 velocityToStore2 = glm::vec3(0);// = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
@@ -375,6 +375,9 @@ void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float 
 							momentumToStore2 = glm::length(velocityToStore2) * mass2;
 						}
 
+						velocityToStore2 *= rbNode1->rigidBody->GetBounce();
+						velocityToStore1 *= rbNode2->rigidBody->GetBounce();
+
 						rbNode1->rigidBody->StoreVelocity(velocityToStore1);
 						rbNode2->rigidBody->StoreVelocity(velocityToStore2);
 					}
@@ -392,8 +395,11 @@ void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float 
 }
 
 //Check for collisions using vector projections on the x, y, and z axes.
-bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, float gameTime)
+bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, float gameTime, glm::vec3& normalDirection)
 {
+	glm::vec3 colliderPos1 = collider1->colliderParent->componentParent->GetTranslation() + collider1->positionOffset;
+	glm::vec3 colliderPos2 = collider2->colliderParent->componentParent->GetTranslation() + collider2->positionOffset;
+
 	//Calculate collision for Axis-aligned bounding boxes (Cubes)
 	Collider::ColliderProjections rbProjections1 = collider1->CalculateProjections(true, true, gameTime);
 	Collider::ColliderProjections rbProjections2 = collider2->CalculateProjections(true, true, gameTime);
@@ -407,11 +413,24 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 	if (collider1->colliderType == Collider::ColliderType::Rectangle &&
 		collider2->colliderType == Collider::ColliderType::Rectangle)
 	{
+		float closestX = std::min(abs(rbProjections1.x[0] - rbProjections2.x[1]), abs(rbProjections2.x[1] - rbProjections1.x[0]));
+		float closestY = std::min(abs(rbProjections1.y[0] - rbProjections2.y[1]), abs(rbProjections2.y[1] - rbProjections1.y[0]));
+		float closestZ = std::min(abs(rbProjections1.z[0] - rbProjections2.z[1]), abs(rbProjections2.z[1] - rbProjections1.z[0]));
+		if (closestX < closestY && closestX < closestZ)
+			normalDirection = glm::vec3(1, 0, 0) * colliderPos1.x - colliderPos2.x;
+		else if (closestY < closestX && closestY < closestZ)
+			normalDirection = glm::vec3(0, 1, 0) * colliderPos1.y - colliderPos2.y;
+		else
+			normalDirection = glm::vec3(0, 0, 1) * colliderPos1.z - colliderPos2.z;
+		normalDirection = glm::normalize(normalDirection);
 		return true;
 	}
 	else if (collider1->colliderType == Collider::ColliderType::Sphere &&
 		collider2->colliderType == Collider::ColliderType::Sphere)
 	{
+		normalDirection = glm::normalize(colliderPos1 - colliderPos2);
+
+
 		float distanceBetweenRBs = glm::length((collider1->colliderParent->GetPosition() + collider1->positionOffset) -
 			(collider2->colliderParent->GetPosition() + collider2->positionOffset));
 		float radius1 = glm::length(collider1->scale);
@@ -442,16 +461,6 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 		glm::vec3 spherePos = sphereCollider->colliderParent->componentParent->GetTranslation() + sphereCollider->positionOffset;
 		glm::vec3 rectanglePos = rectangleCollider->colliderParent->componentParent->GetTranslation() - rectangleCollider->positionOffset;
 
-		//glm::vec3 aabb_half_extents = -rectangleCollider->scale;
-		//glm::vec3 aabb_center = glm::vec3(rectanglePos + aabb_half_extents);
-		//
-		//glm::vec3 center = spherePos + sphereCollider->scale;
-		//glm::vec3 difference = center - aabb_center;
-		//glm::vec3 clamped = glm::clamp(difference, -aabb_half_extents, aabb_half_extents);
-		//glm::vec3 closest = aabb_center + clamped;
-		//difference = closest - center;
-		//return glm::length(difference) < sphereCollider->scale.x;
-
 		float distanceX = abs(spherePos.x - rectanglePos.x);
 		float distanceY = abs(spherePos.y - rectanglePos.y);
 		float distanceZ = abs(spherePos.z - rectanglePos.z);
@@ -463,6 +472,17 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 		if (distanceY <= (rectangleCollider->scale.y)) { return true; }
 		if (distanceZ <= (rectangleCollider->scale.z)) { return true; }
 		float cDist_sq = pow(distanceX - rectangleCollider->scale.x / 2, 2) + pow(distanceY - rectangleCollider->scale.y / 2, 2) + pow(distanceZ - rectangleCollider->scale.z / 2, 2);
+
+		float closestX = std::min(abs(rbProjections1.x[0] - rbProjections2.x[1]), abs(rbProjections2.x[1] - rbProjections1.x[0]));
+		float closestY = std::min(abs(rbProjections1.y[0] - rbProjections2.y[1]), abs(rbProjections2.y[1] - rbProjections1.y[0]));
+		float closestZ = std::min(abs(rbProjections1.z[0] - rbProjections2.z[1]), abs(rbProjections2.z[1] - rbProjections1.z[0]));
+		if (closestX < closestY && closestX < closestZ)
+			normalDirection = glm::vec3(1, 0, 0) * colliderPos1.x - colliderPos2.x;
+		else if (closestY < closestX && closestY < closestZ)
+			normalDirection = glm::vec3(0, 1, 0) * colliderPos1.y - colliderPos2.y;
+		else
+			normalDirection = glm::vec3(0, 0, 1) * colliderPos1.z - colliderPos2.z;
+		normalDirection = glm::normalize(normalDirection);
 		return cDist_sq <= sphereCollider->scale.x;
 	}
 	return false;
