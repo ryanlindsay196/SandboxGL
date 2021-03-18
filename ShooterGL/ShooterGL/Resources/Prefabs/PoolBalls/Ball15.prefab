@@ -21,7 +21,9 @@ Components
 			Scale : 0.22,0.22,0.22
 			IsTrigger : 0
 		}
+		EndCollider
 		UseGravity : 0
+		Bounce : 1
 	}
 	Light : Point
 	{
