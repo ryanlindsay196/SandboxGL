@@ -1,10 +1,19 @@
 PREFAB : Resources/Prefabs/Player.prefab
 {
-	Position : 0,0,17
+	Position : 0,0,12
 	EulerAngles : 0,1,0
 	RotationAngle : -1.57
 	Scale : 1,1,1
 }
+
+PREFAB : Resources/Prefabs/Missile.prefab
+{
+	Position : 0,0,0
+	EulerAngles : 0,1,0
+	RotationAngle : 0
+	Scale : 1,1,1
+}
+
 PREFAB : Resources/Prefabs/BoxingRing.prefab
 {
 	Position : 0,-7,0
@@ -13,3 +22,122 @@ PREFAB : Resources/Prefabs/BoxingRing.prefab
 	Scale : 2,2,2
 }
 
+PREFAB : Resources/Prefabs/PoolBalls/BallDot.prefab
+{
+	Position : -5,1,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball1.prefab
+{
+	Position : 1.5,1,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball2.prefab
+{
+	Position : 2.45,1.25,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball3.prefab
+{
+	Position : 2.45,0.75,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball4.prefab
+{
+	Position : 2.9,1.5,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball5.prefab
+{
+	Position : 2.9,1,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball6.prefab
+{
+	Position : 2.9,0.5,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball7.prefab
+{
+	Position : 3.35,1.75,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball8.prefab
+{
+	Position : 3.35,1.25,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball9.prefab
+{
+	Position : 3.35,0.75,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball10.prefab
+{
+	Position : 3.35,0.25,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball11.prefab
+{
+	Position : 3.8,2,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball12.prefab
+{
+	Position : 3.8,1.5,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball13.prefab
+{
+	Position : 3.8,1,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball14.prefab
+{
+	Position : 3.8,0.5,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/PoolBalls/Ball15.prefab
+{
+	Position : 3.8,0,3
+	EulerAngles : 0,0,0
+	Scale : 1,1,1
+}
+
+PREFAB : Resources/Prefabs/Floor.prefab
+{
+	Position : 0,-5,7
+	EulerAngles : 0,0,1
+	RotationAngle : 3.14
+	Scale : 1,1,1
+}
