@@ -105,11 +105,12 @@ void RigidBody::FixedUpdate(float gameTime)
 	if (useGravity)
 	{
 		velocity.y -= 1 * gameTime;
-		velocity.y = std::min(10.f, velocity.y);
+		velocity.y = std::max(-5.f, velocity.y);
+		velocity.y = std::min(5.f, velocity.y);
 	}
 	if (isVelocityStored)
 	{
-		velocity = storedVelocity;
+		velocity += storedVelocity;
 		isVelocityStored = false;
 	}
 	storedVelocity = glm::vec3(0);
@@ -151,6 +152,11 @@ glm::vec3 RigidBody::GetVelocity()
 glm::vec3 RigidBody::GetStoredVelocity()
 {
 	return storedVelocity;
+}
+
+glm::vec3 RigidBody::GetPositionConstraints()
+{
+	return positionConstraints;
 }
 
 float RigidBody::GetBounce()

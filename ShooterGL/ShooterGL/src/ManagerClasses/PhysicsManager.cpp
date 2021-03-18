@@ -141,7 +141,8 @@ void PhysicsManager::UpdatePhysicsRegions_AddNodes(RigidBody * rb, float gameTim
 void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
 {
 	rigidBodies.push_back(rb);
-
+	//if (rigidBodies.size() == 4)
+	//	rb->SetVelocity(glm::vec3(1, 0, 0));
 	glm::vec3 physicsRegionToAdd = (rb->componentParent->GetTranslation()/* + rb->GetPositionOffset()*/) / physicsRegionBounds;
 	//Make sure the physics region to add to is an integer and not a float
 	physicsRegionToAdd = glm::vec3(floorf(physicsRegionToAdd.x), floorf(physicsRegionToAdd.y), floorf(physicsRegionToAdd.z));
@@ -341,11 +342,23 @@ void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float 
 						float mass1 = rbNode1->rigidBody->GetMass();
 						float mass2 = rbNode2->rigidBody->GetMass();
 
+						glm::vec3 mass1Vec = glm::vec3(mass1); 
+						glm::vec3 mass2Vec = glm::vec3(mass2);
+						
+						if (rb1->GetPositionConstraints().x == 0) { mass1Vec.x = 200000.f; }
+						if (rb1->GetPositionConstraints().y == 0) { mass1Vec.y = 200000.f; }
+						if (rb1->GetPositionConstraints().z == 0) { mass1Vec.z = 200000.f; }
+						if (rb2->GetPositionConstraints().x == 0) { mass2Vec.x = 200000.f; }
+						if (rb2->GetPositionConstraints().y == 0) { mass2Vec.y = 200000.f; }
+						if (rb2->GetPositionConstraints().z == 0) { mass2Vec.z = 200000.f; }
+
+						//glm::vec3 normalDirection = colliderPos1 - colliderPos2;
+
 						glm::vec3 velocityToStore1 = glm::vec3(0);// = (velocity1 * (mass1 - mass2) / (mass2 + mass1)) + ((2.f * mass2 * velocity2) / (mass2 + mass1));
 						glm::vec3 velocityToStore2 = glm::vec3(0);// = ((velocity1 * 2.f * mass1) / (mass2 + mass1)) + (velocity2 * (mass2 - mass1) / (mass2 + mass1));
 
-						velocityToStore1 = (normalDirection) * glm::length(((mass1 - mass2)*velocity1 + (2 * mass2 * velocity2)) / (mass1 + mass2));
-						velocityToStore2 = (-normalDirection) * glm::length(((2 * mass1 * velocity1) - ((mass1 - mass2)*velocity2)) / (mass1 + mass2));
+						velocityToStore1 = (normalDirection) * glm::length(((mass1Vec - mass2Vec)*velocity1 + (2.f * mass2Vec * velocity2)) / (mass1Vec + mass2Vec));
+						velocityToStore2 = (-normalDirection) * glm::length(((2.f * mass1Vec * velocity1) - ((mass1Vec - mass2Vec)*velocity2)) / (mass1Vec + mass2Vec));
 
 						if (isnan(velocityToStore1.x))
 							velocityToStore1.x = 0;
@@ -375,8 +388,8 @@ void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float 
 							momentumToStore2 = glm::length(velocityToStore2) * mass2;
 						}
 
-						velocityToStore2 *= rbNode1->rigidBody->GetBounce();
-						velocityToStore1 *= rbNode2->rigidBody->GetBounce();
+						//velocityToStore2 *= rbNode1->rigidBody->GetBounce();
+						//velocityToStore1 *= rbNode2->rigidBody->GetBounce();
 
 						rbNode1->rigidBody->StoreVelocity(velocityToStore1);
 						rbNode2->rigidBody->StoreVelocity(velocityToStore2);
@@ -417,18 +430,18 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 		float closestY = std::min(abs(rbProjections1.y[0] - rbProjections2.y[1]), abs(rbProjections2.y[1] - rbProjections1.y[0]));
 		float closestZ = std::min(abs(rbProjections1.z[0] - rbProjections2.z[1]), abs(rbProjections2.z[1] - rbProjections1.z[0]));
 		if (closestX < closestY && closestX < closestZ)
-			normalDirection = glm::vec3(1, 0, 0) * colliderPos1.x - colliderPos2.x;
+			normalDirection = glm::vec3(1, 0, 0) * (colliderPos2.x - colliderPos1.x);
 		else if (closestY < closestX && closestY < closestZ)
-			normalDirection = glm::vec3(0, 1, 0) * colliderPos1.y - colliderPos2.y;
+			normalDirection = glm::vec3(0, 1, 0) *(colliderPos2.y - colliderPos1.y);
 		else
-			normalDirection = glm::vec3(0, 0, 1) * colliderPos1.z - colliderPos2.z;
-		normalDirection = glm::normalize(normalDirection);
+			normalDirection = glm::vec3(0, 0, 1) * (colliderPos2.z - colliderPos1.z);
+		//normalDirection = (normalDirection);
 		return true;
 	}
 	else if (collider1->colliderType == Collider::ColliderType::Sphere &&
 		collider2->colliderType == Collider::ColliderType::Sphere)
 	{
-		normalDirection = glm::normalize(colliderPos1 - colliderPos2);
+		normalDirection = -(colliderPos2 - colliderPos1);
 
 
 		float distanceBetweenRBs = glm::length((collider1->colliderParent->GetPosition() + collider1->positionOffset) -
@@ -461,6 +474,17 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 		glm::vec3 spherePos = sphereCollider->colliderParent->componentParent->GetTranslation() + sphereCollider->positionOffset;
 		glm::vec3 rectanglePos = rectangleCollider->colliderParent->componentParent->GetTranslation() - rectangleCollider->positionOffset;
 
+
+		float closestX = std::min(abs(rbProjections1.x[0] - rbProjections2.x[1]), abs(rbProjections2.x[1] - rbProjections1.x[0]));
+		float closestY = std::min(abs(rbProjections1.y[0] - rbProjections2.y[1]), abs(rbProjections2.y[1] - rbProjections1.y[0]));
+		float closestZ = std::min(abs(rbProjections1.z[0] - rbProjections2.z[1]), abs(rbProjections2.z[1] - rbProjections1.z[0]));
+		if (closestX < closestY && closestX < closestZ)
+			normalDirection = glm::vec3(1, 0, 0) * (spherePos.x - rectanglePos.x);
+		else if (closestY < closestX && closestY < closestZ)
+			normalDirection = glm::vec3(0, 1, 0) * (spherePos.y - rectanglePos.y);
+		else
+			normalDirection = glm::vec3(0, 0, 1) * (spherePos.z - rectanglePos.z);
+
 		float distanceX = abs(spherePos.x - rectanglePos.x);
 		float distanceY = abs(spherePos.y - rectanglePos.y);
 		float distanceZ = abs(spherePos.z - rectanglePos.z);
@@ -473,16 +497,6 @@ bool PhysicsManager::IsColliding(Collider * collider1, Collider * collider2, flo
 		if (distanceZ <= (rectangleCollider->scale.z)) { return true; }
 		float cDist_sq = pow(distanceX - rectangleCollider->scale.x / 2, 2) + pow(distanceY - rectangleCollider->scale.y / 2, 2) + pow(distanceZ - rectangleCollider->scale.z / 2, 2);
 
-		float closestX = std::min(abs(rbProjections1.x[0] - rbProjections2.x[1]), abs(rbProjections2.x[1] - rbProjections1.x[0]));
-		float closestY = std::min(abs(rbProjections1.y[0] - rbProjections2.y[1]), abs(rbProjections2.y[1] - rbProjections1.y[0]));
-		float closestZ = std::min(abs(rbProjections1.z[0] - rbProjections2.z[1]), abs(rbProjections2.z[1] - rbProjections1.z[0]));
-		if (closestX < closestY && closestX < closestZ)
-			normalDirection = glm::vec3(1, 0, 0) * colliderPos1.x - colliderPos2.x;
-		else if (closestY < closestX && closestY < closestZ)
-			normalDirection = glm::vec3(0, 1, 0) * colliderPos1.y - colliderPos2.y;
-		else
-			normalDirection = glm::vec3(0, 0, 1) * colliderPos1.z - colliderPos2.z;
-		normalDirection = glm::normalize(normalDirection);
 		return cDist_sq <= sphereCollider->scale.x;
 	}
 	return false;

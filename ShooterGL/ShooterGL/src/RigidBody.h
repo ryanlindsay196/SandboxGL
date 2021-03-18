@@ -39,6 +39,7 @@ public:
 	//glm::vec3 GetScale();
 	glm::vec3 GetVelocity();
 	glm::vec3 GetStoredVelocity();
+	glm::vec3 GetPositionConstraints();
 	float GetBounce();
 	float GetMass();
 	float GetMomentumFloat();
