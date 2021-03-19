@@ -86,8 +86,8 @@ void PhysicsManager::FixedUpdate(float gameTime)
 	UpdatePhysicsRegions_RemoveNodes(gameTime);
 	for (unsigned int i = 0; i < rigidBodies.size(); i++)
 	{
-		UpdatePhysicsRegions_AddNodes(rigidBodies[i], gameTime);
-		rigidBodies[i]->FixedUpdate(gameTime);
+		UpdatePhysicsRegions_AddNodes(&rigidBodies[i], gameTime);
+		rigidBodies[i].FixedUpdate(gameTime);
 	}
 	CheckCollisions(1, gameTime);
 }
@@ -138,12 +138,16 @@ void PhysicsManager::UpdatePhysicsRegions_AddNodes(RigidBody * rb, float gameTim
 }
 
 //When adding a rigidbody to a scene (during loading or instantiation)
-void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
+RigidBody* PhysicsManager::InitializeRigidBody(Entity* entity, float gameTime, std::vector<std::string> rigidBodyProperties)
 {
-	rigidBodies.push_back(rb);
+	rigidBodies.push_back(RigidBody());
+	RigidBody* rb = &(rigidBodies[rigidBodies.size() - 1]);
+	rb->Initialize(rigidBodyProperties, nullptr);
+	rb->componentParent = entity;
+
 	//if (rigidBodies.size() == 4)
 	//	rb->SetVelocity(glm::vec3(1, 0, 0));
-	glm::vec3 physicsRegionToAdd = (rb->componentParent->GetTranslation()/* + rb->GetPositionOffset()*/) / physicsRegionBounds;
+	glm::vec3 physicsRegionToAdd = (entity->GetTranslation()/* + rb->GetPositionOffset()*/) / physicsRegionBounds;
 	//Make sure the physics region to add to is an integer and not a float
 	physicsRegionToAdd = glm::vec3(floorf(physicsRegionToAdd.x), floorf(physicsRegionToAdd.y), floorf(physicsRegionToAdd.z));
 
@@ -175,7 +179,7 @@ void PhysicsManager::InitializeRigidBody(RigidBody * rb, float gameTime)
 		outerPhysicsRegion.startNode->nextNode = oldStartNode;
 		std::cout << "Added rigidBody: " << rb << " to the outer physics region." << std::endl;
 	}
-
+	return rb;
  }
 
 //Replace the start node of a region with a new one containing the RigidBody* argument

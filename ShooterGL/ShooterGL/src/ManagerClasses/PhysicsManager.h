@@ -37,7 +37,7 @@ private:
 	//The total number of physics regions in the scene
 	glm::vec3 totalPhysicsRegions;
 	//update this whenever a new rigidbody is instantiated
-	std::vector<RigidBody*> rigidBodies;
+	std::vector<RigidBody> rigidBodies;
 	//initialize based on physicsRegionBounds
 	std::vector<std::vector<std::vector<PhysicsRegion>>> physicsRegions;
 	PhysicsRegion outerPhysicsRegion;
@@ -65,7 +65,7 @@ public:
 	void FixedUpdate(float gameTime);
 
 	//Add rigidbody to the rigidbody list and add it to one or more physics regions
-	void InitializeRigidBody(RigidBody* rb, float gameTime);
+	RigidBody* InitializeRigidBody(Entity* entity, float gameTime, std::vector<std::string> rigidBodyProperties);
 	//Replace the starting node in a rigidbody region with a new one
 	void AddRigidBodyToRegion(RigidBody* rb, glm::vec3 region);
 };
