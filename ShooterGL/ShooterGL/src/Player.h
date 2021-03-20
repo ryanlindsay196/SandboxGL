@@ -58,7 +58,7 @@ class Player : public Component
 {
 public:
 	Player();
-	void Initialize(Entity* newParent);
+	void Initialize();
 	void Update(float gameTime) override;
 	void OnCollisionEnter(Entity* entity) override;
 

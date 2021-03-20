@@ -10,17 +10,19 @@ Player::Player()
 	playerInfo.currentHealth = 100;
 }
 
-void Player::Initialize(Entity* newParent)
+void Player::Initialize()
 {
 	networkManager = NetworkManager::GetInstance();
 	Controller* latestInstantiatedController = ControllerManager::GetInstance()->GetController(ControllerManager::GetInstance()->TotalControllers() - 1);
 	entityManager = EntityManager::GetInstance();
+
+	assert(componentParent);
+
 	//If the controller on this entity was added before this component (player) was
-	if (latestInstantiatedController != nullptr && latestInstantiatedController->componentParent == newParent)
+	if (latestInstantiatedController != nullptr && latestInstantiatedController->componentParent == componentParent)
 	{
 		SetController(latestInstantiatedController);
 	}
-	componentParent = newParent;
 }
 
 void Player::Update(float gameTime)

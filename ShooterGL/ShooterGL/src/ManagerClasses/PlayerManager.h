@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
 #include "BaseManager.h"
-
-class Player;
+#include "Player.h"
 
 class PlayerManager : BaseManager
 {
@@ -12,9 +11,9 @@ private:
 public:
 	static PlayerManager* GetInstance();
 
-	void AddPlayer(Player* newPlayer);
+	Player* AddPlayer(unsigned int newEntityComponentIndex, Entity* parentEntity);
 	Player* GetPlayer(int i);
 	unsigned int TotalPlayers();
 private:
-	std::vector<Player*> players;
+	std::vector<Player> players;
 };

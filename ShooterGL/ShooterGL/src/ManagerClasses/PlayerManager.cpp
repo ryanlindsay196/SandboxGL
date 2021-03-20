@@ -13,15 +13,17 @@ PlayerManager * PlayerManager::GetInstance()
 	return instance;
 }
 
-void PlayerManager::AddPlayer(Player * newPlayer)
+Player* PlayerManager::AddPlayer(unsigned int newEntityComponentIndex, Entity* parentEntity)
 {
-	players.push_back(newPlayer);
+	AddComponent<Player>(players, newEntityComponentIndex, parentEntity);
+	players[players.size() - 1].Initialize();
+	return &players[players.size() - 1];
 }
 
 Player * PlayerManager::GetPlayer(int i)
 {
 	if(i < players.size())
-		return players[i];
+		return &players[i];
 	return nullptr;
 }
 
