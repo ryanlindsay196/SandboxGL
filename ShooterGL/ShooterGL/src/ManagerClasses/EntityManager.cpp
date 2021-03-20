@@ -33,10 +33,10 @@ void EntityManager::Initialize()
 
 void EntityManager::LoadScene(std::string scenePath)
 {
-	for (auto entity : entities)
-	{
-		delete(entity);
-	}
+	//for (auto entity : entities)
+	//{
+	//	delete(entity);
+	//}
 	entities.clear();
 	std::ifstream sceneFile(scenePath);
 	std::string line;
@@ -170,9 +170,9 @@ EntityManager::EntityProperties* EntityManager::LoadProperties(std::string prefa
 //Add an entity into the scene
 Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm::vec3 startPos, glm::vec3 angleAxis, float rotationAngle, glm::vec3 startScale, Entity* parent)
 {
-	Entity* entity = new Entity();
+	AddEntity(entities, parent);
+	Entity* entity = &entities[entities.size() - 1];
 	entity->Instantiate(startPos, angleAxis, rotationAngle, startScale, parent);
-	entities.push_back(entity);
 	unsigned int componentIndex = 0;
 	for (EntityData entityData : entityProperties->entityData)
 	{
@@ -241,21 +241,21 @@ void EntityManager::Update(float gameTime)
 {
 	for(int i = 0; i < entities.size(); i++)
 	{
-		entities[i]->Update(gameTime);
+		entities[i].Update(gameTime);
 	}
 }
 
 void EntityManager::Render(LightManager* lightManager)
 {
-	for (Entity* e : entities)
+	for (unsigned int i = 0; i < entities.size(); i++)
 	{
-		e->Render(lightManager);
+		entities[i].Render(lightManager);
 	}
 }
 
 Entity* EntityManager::GetEntity(int i)
 {
 	if ((unsigned int)i < entities.size())
-		return entities[i];
+		return &entities[i];
 	return nullptr;
 }

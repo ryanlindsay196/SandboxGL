@@ -307,3 +307,8 @@ void Entity::SetComponent(unsigned int index, Component* componentAddress)
 	if (index < components.size())
 		components[index] = componentAddress;
 }
+
+std::vector<Component*>& Entity::GetComponents()
+{
+	return components;
+}

@@ -81,7 +81,7 @@ public:
 private:
 	//The string is the file path of the entity
 	std::unordered_map<std::string, EntityProperties*> entityPropertiesMap;
-	std::vector<Entity*> entities;
+	std::vector<Entity> entities;
 
 	EntityManager();
 	static EntityManager* instance;

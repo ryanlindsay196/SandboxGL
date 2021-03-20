@@ -60,6 +60,8 @@ public:
 	Component* GetComponent(unsigned int index);
 	void SetComponent(unsigned int index, Component* componentAddress);
 
+	std::vector<Component*>& GetComponents();
+
 private:
 	Entity* parent;
 

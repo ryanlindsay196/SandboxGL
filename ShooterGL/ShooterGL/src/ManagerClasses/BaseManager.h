@@ -40,4 +40,29 @@ public:
 		//If components list was resized, then this is true, otherwise it is false
 		return componentsAboutToReallocate;
 	}
+
+	bool AddEntity(std::vector<Entity>& entityList, Entity* parentEntity)
+	{
+		bool componentsAboutToReallocate = (unsigned int)entityList.size() == (unsigned int)(entityList.capacity());
+		//TODO: Make the next line not copy what's produced by the constructor
+		entityList.push_back(Entity());
+		entityList[entityList.size() - 1].SetParent(parentEntity);
+
+		if (componentsAboutToReallocate)
+		{
+			for (unsigned int i = 0; i < entityList.size(); i++)
+			{
+				for (unsigned int j = 0; j < entityList[i].GetComponents().size(); j++)
+				{
+					entityList[i].GetComponent(j)->componentParent = &entityList[i];
+				}
+				//entityList[i].componentParent->SetComponent(currentComponent->GetEntityComponentIndex(), currentComponent);
+				//Changes references to currentComponent in children
+				//currentComponent->MoveChildReferences();
+			}
+		}
+		//If components list was resized, then this is true, otherwise it is false
+		return componentsAboutToReallocate;
+	}
+
 };
