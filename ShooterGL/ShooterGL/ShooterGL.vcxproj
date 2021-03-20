@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ManagerClasses\BaseManager.cpp" />
     <ClCompile Include="Dependencies\Glad\src\glad.c" />
     <ClCompile Include="Dependencies\stb_image.cpp" />
     <ClCompile Include="MathHelperFunctions.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="src\WorldComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ManagerClasses\BaseManager.h" />
     <ClInclude Include="Dependencies\Assimp\include\assimp\ai_assert.h" />
     <ClInclude Include="Dependencies\Assimp\include\assimp\anim.h" />
     <ClInclude Include="Dependencies\Assimp\include\assimp\camera.h" />

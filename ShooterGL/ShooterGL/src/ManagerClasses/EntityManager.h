@@ -5,13 +5,14 @@
 #include "../RigidBody.h"
 #include "PhysicsManager.h"
 #include "FileReader.h"
+#include "BaseManager.h"
 
 class ObjectManager;
 class LightManager;
 
-class EntityManager
+class EntityManager : public BaseManager
 {
-public://TODO: Implement
+public:
 
 	struct EntityData
 	{

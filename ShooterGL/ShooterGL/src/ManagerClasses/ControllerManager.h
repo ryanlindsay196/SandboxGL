@@ -1,10 +1,11 @@
 #pragma once
 #include "Controller.h"
 #include <vector>
+#include "BaseManager.h"
 
 struct GLFWwindow;
 
-class ControllerManager
+class ControllerManager : public BaseManager
 {
 private:
 	std::vector<Controller> controllers;

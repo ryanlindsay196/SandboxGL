@@ -296,3 +296,14 @@ glm::mat4 Entity::GetTransform()
 {
 	return transform;
 }
+
+Component* Entity::GetComponent(unsigned int index)
+{
+	return components[index];
+}
+
+void Entity::SetComponent(unsigned int index, Component* componentAddress)
+{
+	if (index < components.size())
+		components[index] = componentAddress;
+}

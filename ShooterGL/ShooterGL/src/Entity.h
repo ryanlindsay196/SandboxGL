@@ -57,6 +57,9 @@ public:
 
 	glm::mat4 GetTransform();
 
+	Component* GetComponent(unsigned int index);
+	void SetComponent(unsigned int index, Component* componentAddress);
+
 private:
 	Entity* parent;
 

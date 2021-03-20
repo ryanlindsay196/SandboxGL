@@ -1,7 +1,7 @@
 #pragma once
-#include "Component.h"
+#include "BaseManager.h"
 
-class AIManager : public Component
+class AIManager : public BaseManager
 {
 	enum AIState { idle, patrol, suspicious, alert, attack, defend, retreat };
 	AIState aiState;
@@ -13,5 +13,5 @@ class AIManager : public Component
 	void Run();
 	void Attack();
 
-	void Update(float gameTime) override;
+	void Update(float gameTime);
 };

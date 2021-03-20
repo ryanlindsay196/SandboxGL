@@ -1,10 +1,11 @@
 #pragma once
 #include "../WorldComponent.h"
 #include "Camera.h"
+#include "BaseManager.h"
 //#include "ObjectManager.h"
 class ObjectManager;
 
-class CameraManager
+class CameraManager : public BaseManager
 {
 private:
 	std::vector<Camera> cameras;

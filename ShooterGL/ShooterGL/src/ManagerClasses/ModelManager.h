@@ -4,11 +4,12 @@
 #include "Renderables/Model.h"
 #include <unordered_map>
 #include <memory>
+#include "BaseManager.h"
 
 class TextureManager;
 class ObjectManager;
 
-class ModelManager
+class ModelManager : public BaseManager
 {
 private:
 	std::vector<Model*> models;

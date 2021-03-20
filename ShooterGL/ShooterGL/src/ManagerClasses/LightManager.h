@@ -1,6 +1,8 @@
 #pragma once
 #include "Renderables/Light.h"
-class LightManager
+#include "BaseManager.h"
+
+class LightManager : public BaseManager
 {
 private:
 	static LightManager* instance;

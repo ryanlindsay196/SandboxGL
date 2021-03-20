@@ -5,7 +5,6 @@ class RigidBody;
 class Collider
 {
 public:
-	Collider();
 #ifdef DEBUG
 	void CreateDebugLines();
 #endif //DEBUG

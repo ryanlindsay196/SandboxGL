@@ -2,10 +2,6 @@
 #include "RigidBody.h"
 #include "Debug/DrawRay.h"
 
-Collider::Collider()
-{
-}
-
 #ifdef DEBUG
 void Collider::CreateDebugLines()
 {

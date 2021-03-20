@@ -2,13 +2,14 @@
 #include "enet/enet.h"
 #include <vector>
 #include "glm.hpp"
+#include "BaseManager.h"
 
 class EntityManager;
 class Entity;
 class Controller;
 class ControllerManager;
 
-class NetworkManager
+class NetworkManager : public BaseManager
 {
 private:
 	NetworkManager();

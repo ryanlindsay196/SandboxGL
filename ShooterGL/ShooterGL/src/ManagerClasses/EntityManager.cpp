@@ -173,7 +173,7 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 	Entity* entity = new Entity();
 	entity->Instantiate(startPos, angleAxis, rotationAngle, startScale, parent);
 	entities.push_back(entity);
-
+	unsigned int componentIndex = 0;
 	for (EntityData entityData : entityProperties->entityData)
 	{
 		if (entityData.componentName == "Camera")
@@ -212,7 +212,8 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		}
 		else if (entityData.componentName == "RigidBody")
 		{
-			entity->AddComponent(PhysicsManager::GetInstance()->InitializeRigidBody(entity, 0.f, entityData.componentProperties));
+			RigidBody* rb = (PhysicsManager::GetInstance()->InitializeRigidBody(entity, 0.f, entityData.componentProperties, componentIndex));
+			entity->AddComponent(rb);
 		}
 		else if (entityData.componentName == "Player")
 		{
@@ -225,6 +226,7 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		{
 			std::cout << "EntityManager::InstantiateEntity(...)::Component " << entityData.componentName << " is not supported." << std::endl;
 		}
+		componentIndex++;
 	}
 
 	return entity;

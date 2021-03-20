@@ -27,7 +27,6 @@ private:
 
 	float reactivateTimer;
 public:
-	RigidBody();
 	~RigidBody();
 	void Initialize(std::vector<std::string>& rigidBodyProperties, Entity* spawningEntity);
 	void Update(float gameTime) override;
@@ -63,6 +62,8 @@ public:
 	void SetReactivateTimer(float newReactivateTimer);
 	unsigned int GetProperties();
 	void SetProperties(int i);
+
+	void MoveChildReferences() override;
 public:
 };
 

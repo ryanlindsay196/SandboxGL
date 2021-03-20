@@ -4,12 +4,13 @@
 #include "RigidBody.h"
 #include <iostream>
 #include <algorithm>
+#include "BaseManager.h"
 
 //Node in a linked list.
 struct RigidBodyNode
 {
-	//Pointer to a rigidbody in the rigidBodies list
-	RigidBody* rigidBody;
+	//Index of the rigidBody inside the rigidBodies list
+	unsigned int rigidBodyIndex;
 	//Pointer to the next node
 	RigidBodyNode* nextNode;
 };
@@ -25,7 +26,7 @@ struct PhysicsRegion
 	RigidBodyNode* startNode;
 };
 
-class PhysicsManager
+class PhysicsManager : public BaseManager
 {
 private:
 	static PhysicsManager* instance;
@@ -36,7 +37,7 @@ private:
 	glm::vec3 physicsRegionBounds;
 	//The total number of physics regions in the scene
 	glm::vec3 totalPhysicsRegions;
-	//update this whenever a new rigidbody is instantiated
+	//List of rigid bodies
 	std::vector<RigidBody> rigidBodies;
 	//initialize based on physicsRegionBounds
 	std::vector<std::vector<std::vector<PhysicsRegion>>> physicsRegions;
@@ -46,7 +47,7 @@ private:
 	void UpdatePhysicsRegions_RemoveNodes(float gameTime);
 
 	//Moves through all retions, adding rigidbodies that enter a region
-	void UpdatePhysicsRegions_AddNodes(RigidBody* rb, float gameTime);
+	void UpdatePhysicsRegions_AddNodes(RigidBody* rb, float gameTime, unsigned int rigidBodyIndex);
 
 	//Iterate through all rigidbodies (grouped by region), and check if they're colliding
 	void CheckCollisions(int iterations, float gameTime);
@@ -56,7 +57,7 @@ private:
 	bool IsColliding(Collider * collider1, Collider * collider2, float gameTime, glm::vec3& normalDirection);
 
 	//checks if a rigidbody is inside a particular region
-	bool RigidBodyInRegion(RigidBody* rb, PhysicsRegion& currentPhysicsRegion, bool addRB_Velocity, float gameTime);
+	bool RigidBodyInRegion(unsigned int rbIndex, PhysicsRegion& currentPhysicsRegion, bool addRB_Velocity, float gameTime);
 public:
 	static PhysicsManager* GetInstance();
 
@@ -65,8 +66,8 @@ public:
 	void FixedUpdate(float gameTime);
 
 	//Add rigidbody to the rigidbody list and add it to one or more physics regions
-	RigidBody* InitializeRigidBody(Entity* entity, float gameTime, std::vector<std::string> rigidBodyProperties);
+	RigidBody* InitializeRigidBody(Entity* entity, float gameTime, std::vector<std::string> rigidBodyProperties, unsigned int newEntityComponentIndex);
 	//Replace the starting node in a rigidbody region with a new one
-	void AddRigidBodyToRegion(RigidBody* rb, glm::vec3 region);
+	void AddRigidBodyToRegion(unsigned int rbIndex, glm::vec3 region);
 };
 

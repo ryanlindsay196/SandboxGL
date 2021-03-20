@@ -2,6 +2,12 @@ Fix bug with book animation
 Clear out warnings
 
 Check that PhysicsManager::rigidBodies is a list of <RigidBody> instead of <RigidBody*>
+Make sure that ModelManager::models is std::vector<Model> instead of std::vector<Model*>
+EntityManager::entities should be std::vector<Entity> instead of <Entity*>
+Repeat the above for all manager classes
+
+When loading a scene in debug mode, create a meta file that keeps track of how many models/rigid bodies/entities
+are in the scene. Make the default size of the storage vectors twice that size.
 
 When a model is out of view, don't draw it and don't update bone positions (frustrum culling?)
 

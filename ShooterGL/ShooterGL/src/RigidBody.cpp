@@ -1,11 +1,6 @@
 #include "RigidBody.h"
 #include "FileReader.h"
 
-RigidBody::RigidBody()
-{
-}
-
-
 RigidBody::~RigidBody()
 {
 }
@@ -253,4 +248,12 @@ unsigned int RigidBody::GetProperties()
 void RigidBody::SetProperties(int i)
 {
 	properties = i;
+}
+
+void RigidBody::MoveChildReferences()
+{
+	for (unsigned int i = 0; i < colliders.size(); i++)
+	{
+		colliders[i].colliderParent = this;
+	}
 }

@@ -1,11 +1,12 @@
 #pragma once
 #include <unordered_map>
-//#include "ObjectManager.h"
 #include <memory>
+#include "BaseManager.h"
 
 class Shader;
 
-class ShaderManager {
+class ShaderManager : public BaseManager
+{
 private:
 	ShaderManager();
 	static ShaderManager* instance;

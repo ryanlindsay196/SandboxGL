@@ -1,9 +1,10 @@
 #pragma once
 #include <vector>
+#include "BaseManager.h"
 
 class Player;
 
-class PlayerManager
+class PlayerManager : BaseManager
 {
 private:
 	static PlayerManager* instance;
