@@ -211,7 +211,8 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		}
 		else if (entityData.componentName == "Light:Point")
 		{
-			entity->AddComponent(LightManager::GetInstance()->AddLight(entityData.componentProperties));
+			Light* l = LightManager::GetInstance()->AddLight(entityData.componentProperties, componentIndex, entity);
+			entity->AddComponent(l);
 		}
 		else if (entityData.componentName == "RigidBody")
 		{

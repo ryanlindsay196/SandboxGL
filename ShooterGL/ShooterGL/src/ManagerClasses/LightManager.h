@@ -12,11 +12,11 @@ public:
 
 	void Initialize();
 
-	Light* AddLight(std::vector<std::string>& lightProperties);
+	Light* AddLight(std::vector<std::string>& lightProperties, unsigned int newEntityComponentIndex, Entity* parentEntity);
 
 	Light* GetLight(unsigned int i);
 	unsigned int TotalLights();
 
 private:
-	std::vector<Light*> m_lights;
+	std::vector<Light> m_lights;
 };

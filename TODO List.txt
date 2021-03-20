@@ -14,6 +14,8 @@ are in the scene. Make the default size of the storage vectors twice that size.
 
 When a model is out of view, don't draw it and don't update bone positions (frustrum culling?)
 
+Create a particleRenderer that batch renders all particles inside the view frustum
+
 Collisions with a rectangle should send the other object in the direction of the face normal
 Give each collider a normalized "elasticity" factor that controls bounce speed.
 
