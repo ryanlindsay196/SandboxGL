@@ -185,7 +185,8 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		{
 			ModelData modelTransform = ModelData();
 			modelTransform.ReadModelData(entityData.componentProperties);
-			entity->AddComponent(ModelManager::GetInstance()->LoadModel(modelTransform.modelPath, modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale));
+			Model* m = ModelManager::GetInstance()->LoadModel(modelTransform.modelPath, modelTransform.materialPath, modelTransform.position, modelTransform.rotationAxis, modelTransform.rotationAngle, modelTransform.scale, componentIndex, entity);
+			entity->AddComponent(m);
 		}
 		else if (entityData.componentName == "ParticleSystem")
 		{

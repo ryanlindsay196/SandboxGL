@@ -22,7 +22,6 @@ class Model : public WorldComponent
 public:
 	//std::string directory;
 
-	Model();
 	~Model();
 
 	//Initialize variables and load model vertex data

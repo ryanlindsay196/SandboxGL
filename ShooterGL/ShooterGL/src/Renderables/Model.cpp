@@ -19,12 +19,6 @@
 #include "AnimationDataStructures.h"
 #define M_PI   3.14159265358979323846264338327950288
 
-
-Model::Model()
-{
-
-}
-
 Model::~Model()
 {
 	//Don't delete vertex data, as it's stored in a common area among models

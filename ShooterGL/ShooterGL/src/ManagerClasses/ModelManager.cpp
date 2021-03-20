@@ -15,8 +15,9 @@ ModelManager::ModelManager()
 
 ModelManager::~ModelManager()
 {
-	for (unsigned int i = 0; i < models.size(); i++)
-		delete models[i];
+	models.clear();
+	//for (unsigned int i = 0; i < models.size(); i++)
+	//	delete models[i];
 }
 
 ModelManager * ModelManager::GetInstance()
@@ -28,18 +29,19 @@ ModelManager * ModelManager::GetInstance()
 
 void ModelManager::Initialize()
 {
-	for (unsigned int i = 0; i < models.size(); i++)
-		delete models[i];
+	//for (unsigned int i = 0; i < models.size(); i++)
+	//	delete models[i];
 	models.clear();
 	m_textureManager = TextureManager::GetInstance();
 }
 
-Model* ModelManager::LoadModel(std::string& modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset)
+Model* ModelManager::LoadModel(std::string& modelPath, std::string materialPath, glm::vec3 positionOffset, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 scaleOffset, unsigned int newEntityComponentIndex, Entity* parentEntity)
 {
-	models.push_back(new Model());
-	models[models.size() - 1]->Initialize(positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, materialPath);
+	//models.push_back(new Model());
+	AddComponent(models, newEntityComponentIndex, parentEntity);
+	models[models.size() - 1].Initialize(positionOffset, rotationAxis, rotationAngle, scaleOffset, modelPath, materialPath);
 
-	return models[models.size() - 1];
+	return &models[models.size() - 1];
 }
 
 std::shared_ptr<ModelData> ModelManager::LoadModelData(std::string hashID)
@@ -62,9 +64,9 @@ std::shared_ptr<ModelData> ModelManager::LoadModelData(std::string hashID)
 
 void ModelManager::LoadShaders()
 {
-	for (Model* model : models)
+	for (unsigned int i = 0; i < models.size(); i++)
 	{
-		model->LoadShaders();
+		models[i].LoadShaders();
 	}
 }
 
@@ -87,7 +89,7 @@ void ModelManager::UnloadModelData()
 
 Model * ModelManager::GetModel(int index)
 {
-	return models[index];
+	return &models[index];
 }
 
 unsigned int ModelManager::LoadedModelsCount()
