@@ -5,8 +5,9 @@
 #include <GLFW/glfw3.h>
 #include "ManagerClasses/ObjectManager.h"
 
-//#include "Debug/GenerateSpreadsheet.h"
-
+#ifdef DEBUG
+#include "Debug/GenerateSpreadsheet.h"
+#endif //DEBUG
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -56,8 +57,10 @@ int main()
 	glCullFace(GL_BACK);
 	bool firstFrame = true;
 
-	//GenerateSpreadsheet sheet = GenerateSpreadsheet();
-	//sheet.Initialize(std::string("frameOutput.csv"));
+#ifdef DEBUG
+	GenerateSpreadsheet sheet = GenerateSpreadsheet();
+	sheet.Initialize(std::string("frameOutput.csv"));
+#endif //DEBUG
 
 #pragma region Gameplay Loop
 	while (!glfwWindowShouldClose(window))
@@ -80,8 +83,10 @@ int main()
 		lastFrame = currentFrame;
 		//std::cout << "Last frametime = " << 1 / deltaTime << std::endl;
 
-		//sheet.AppendText(std::string(std::to_string(1 / deltaTime)));
-		//sheet.AppendText(",");
+#ifdef DEBUG
+		sheet.AppendText(std::string(std::to_string(1 / deltaTime)));
+		sheet.AppendText(",");
+#endif
 	}
 #pragma endregion
 	//sheet.CloseFile();
