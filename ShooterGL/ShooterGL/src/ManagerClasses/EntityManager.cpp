@@ -195,7 +195,7 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		}
 		else if (entityData.componentName == "Controller")
 		{
-			entity->AddComponent(ControllerManager::GetInstance()->CreateController(nullptr));
+			entity->AddComponent(ControllerManager::GetInstance()->CreateController(entity, componentIndex));
 
 			Player* latestPlayer = PlayerManager::GetInstance()->GetPlayer(PlayerManager::GetInstance()->TotalPlayers() - 1);
 			//if the player was added before the controller

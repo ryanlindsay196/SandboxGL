@@ -17,13 +17,8 @@ public:
 	~ControllerManager();
 
 	void Initialize(GLFWwindow* window);
-	Controller* CreateController(Entity* newCameraParentEntity);
-	Controller* GetController(int i)
-	{
-		if ((unsigned int)i < controllers.size())
-			return &controllers[i];
-		return nullptr;
-	}
+	Controller* CreateController(Entity* newCameraParentEntity, unsigned int newEntityComponentIndex);
+	Controller* GetController(int i);
 	unsigned int TotalControllers();
 
 	GLFWwindow* m_window;
