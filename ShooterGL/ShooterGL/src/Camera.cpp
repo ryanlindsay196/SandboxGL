@@ -1,8 +1,7 @@
 #include "Camera.h"
 
-void Camera::Initialize(Entity * newParent)
+void Camera::Initialize()
 {
-	componentParent = newParent;
 	//cameraViewMatrix = componentParent->GetTransform();
 
 	//viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -1.0f));

@@ -178,7 +178,8 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 	{
 		if (entityData.componentName == "Camera")
 		{
-			entity->AddComponent(CameraManager::GetInstance()->CreateCamera(entity));
+			Camera* c = CameraManager::GetInstance()->CreateCamera(entity, componentIndex);
+			entity->AddComponent(c);
 		}
 		else if (entityData.componentName == "Model")
 		{

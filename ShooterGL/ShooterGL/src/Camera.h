@@ -8,7 +8,7 @@ private:
 	float drawPosX, drawPosY, drawWidth, drawHeight;//TODO: Use these to implement split screen
 	glm::vec3 cameraDirection, cameraRight, cameraUp;
 public:
-	void Initialize(Entity* newParent);
+	void Initialize();
 	virtual void Update(float gameTime) override;
 
 	glm::vec3 GetCameraDirection();

@@ -14,7 +14,7 @@ private:
 public:
 	static CameraManager* GetInstance();
 	void Initialize();
-	Camera* CreateCamera(Entity* newParent);
+	Camera* CreateCamera(Entity* newParent, const unsigned int newEntityComponentIndex);
 	Camera* GetCamera(int i);
 	void Update();
 };

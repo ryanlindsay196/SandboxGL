@@ -20,12 +20,10 @@ void CameraManager::Initialize()
 	cameras.reserve(4);
 }
 
-Camera* CameraManager::CreateCamera(Entity * newParent)
+Camera* CameraManager::CreateCamera(Entity * newParent, const unsigned int newEntityComponentIndex)
 {
-	cameras.push_back(Camera());
-	cameras[cameras.size() - 1].Initialize(newParent);
-	//cameras[cameras.size() - 1].componentParent = newParent;
-	//newParent->AddComponent(&cameras[cameras.size() - 1]);
+	AddComponent<Camera>(cameras, newEntityComponentIndex, newParent);
+	cameras[cameras.size() - 1].Initialize();
 	return &cameras[cameras.size() - 1];
 }
 
