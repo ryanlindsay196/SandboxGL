@@ -195,7 +195,8 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 		}
 		else if (entityData.componentName == "Controller")
 		{
-			entity->AddComponent(ControllerManager::GetInstance()->CreateController(entity, componentIndex));
+			Controller* c = ControllerManager::GetInstance()->CreateController(entity, componentIndex);
+			entity->AddComponent(c);
 
 			Player* latestPlayer = PlayerManager::GetInstance()->GetPlayer(PlayerManager::GetInstance()->TotalPlayers() - 1);
 			//if the player was added before the controller
@@ -203,7 +204,7 @@ Entity* EntityManager::InstantiateEntity(EntityProperties* entityProperties, glm
 			if (latestPlayer != nullptr && latestPlayer->componentParent == entity)
 			{
 				//Set the controller in the current entity's player component to the newly created controller
-				latestPlayer->SetController(ControllerManager::GetInstance()->GetController(ControllerManager::GetInstance()->TotalControllers() - 1));
+				latestPlayer->SetController(c);
 			}
 		}
 		else if (entityData.componentName == "Light:Point")
