@@ -164,7 +164,7 @@ RigidBody* PhysicsManager::InitializeRigidBody(Entity* entity, float gameTime, s
 				{
 					//add it to the region
 					AddRigidBodyToRegion(rigidBodies.size() - 1, physicsRegionRangeToCheck);
-					std::cout << "Added rigidBody: " << &rb << " to physics region " << physicsRegionRangeToCheck.x << ", " << physicsRegionRangeToCheck.y << ", " << physicsRegionRangeToCheck.z << std::endl;
+					std::cout << "Added rigidBody: " << rigidBodies.size() - 1 << " to physics region " << physicsRegionRangeToCheck.x << ", " << physicsRegionRangeToCheck.y << ", " << physicsRegionRangeToCheck.z << std::endl;
 				}
 			}
 		}
@@ -176,7 +176,7 @@ RigidBody* PhysicsManager::InitializeRigidBody(Entity* entity, float gameTime, s
 		outerPhysicsRegion.startNode = new RigidBodyNode();
 		outerPhysicsRegion.startNode->rigidBodyIndex = rigidBodies.size() - 1;
 		outerPhysicsRegion.startNode->nextNode = oldStartNode;
-		std::cout << "Added rigidBody: " << &rb << " to the outer physics region." << std::endl;
+		std::cout << "Added rigidBody: " << rigidBodies.size() - 1 << " to the outer physics region." << std::endl;
 	}
 	return &rb;
  }
@@ -202,7 +202,7 @@ void PhysicsManager::UpdatePhysicsRegions_RemoveNodes(float gameTime)
 		//If the rigidBody isn't inside the region
 		if (RigidBodyInRegion(rbNode->rigidBodyIndex, outerPhysicsRegion, false, gameTime) && RigidBodyInRegion(rbNode->rigidBodyIndex, outerPhysicsRegion, true, gameTime))
 		{
-			std::cout << "Removed rigidBody: " << &rigidBodies[rbNode->rigidBodyIndex] << " from outer physics region." << std::endl;
+			std::cout << "Removed rigidBody: " << rbNode->rigidBodyIndex << " from outer physics region." << std::endl;
 			//If not at the head node for the physics region
 			if (prevRBNode != nullptr && rbNode != outerPhysicsRegion.startNode)
 			{
