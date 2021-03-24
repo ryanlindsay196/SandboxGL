@@ -7,6 +7,7 @@ class LightManager : public BaseManager
 private:
 	static LightManager* instance;
 	LightManager();
+	LightManager(LightManager&) = delete;
 public:
 	static LightManager* GetInstance();
 

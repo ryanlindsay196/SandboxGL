@@ -11,6 +11,7 @@ private:
 	std::vector<Camera> cameras;
 	static CameraManager* instance;
 	CameraManager();
+	CameraManager(CameraManager&) = delete;
 public:
 	static CameraManager* GetInstance();
 	void Initialize();

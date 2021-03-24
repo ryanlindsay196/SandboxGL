@@ -11,6 +11,7 @@ private:
 	std::vector<Controller> controllers;
 
 	ControllerManager();
+	ControllerManager(ControllerManager&) = delete;
 	static ControllerManager* instance;
 public:
 	static ControllerManager* GetInstance();

@@ -99,14 +99,14 @@ void ObjectManager::Render()
 	const int totalGridLines = 30;
 	for (int i = 0; i <= totalGridLines; i++)
 	{
-		DebugLines::AddLine(glm::vec3(-totalGridLines / 2, 5, i - (totalGridLines / 2)), glm::vec3(totalGridLines / 2, 5, i - (totalGridLines / 2)), nullptr);
-		DebugLines::AddLine(glm::vec3(i - totalGridLines / 2, 5, -totalGridLines / 2), glm::vec3(i - totalGridLines / 2, 5, totalGridLines / 2), nullptr);
+		DebugLines::AddLine(glm::vec3(-totalGridLines / 2, 0, i - (totalGridLines / 2)), glm::vec3(totalGridLines / 2, 0, i - (totalGridLines / 2)), nullptr);
+		DebugLines::AddLine(glm::vec3(i - totalGridLines / 2, 0, -totalGridLines / 2), glm::vec3(i - totalGridLines / 2, 0, totalGridLines / 2), nullptr);
 	}
 
-	glDepthFunc(GL_ALWAYS);
+	//glDepthFunc(GL_ALWAYS);
 
 	DebugLines::GetInstance()->DrawLines();
-	glDepthFunc(GL_LESS);
+	//glDepthFunc(GL_LESS);
 #endif //DEBUG
 }
 

@@ -9,6 +9,7 @@ class TextureManager : public BaseManager
 private:
 	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 	TextureManager();
+	TextureManager(const TextureManager&) = delete;
 	static TextureManager* instance;
 public:
 	static TextureManager* GetInstance();

@@ -1,4 +1,3 @@
-Fix bug with book animation
 Clear out warnings
 
 In Mesh.cpp, when changing the second argument of the 6th glVertexAttribPointer, non-skinned meshes don't render
@@ -22,7 +21,6 @@ Assync model loading
 
 All singleton manager classes' copy constructor = delete
 
-Batch rendering for debug collider boxes
 Batch rendering for particles
 
 Create bounding boxes based on skinned mesh

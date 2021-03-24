@@ -9,6 +9,7 @@ class ShaderManager : public BaseManager
 {
 private:
 	ShaderManager();
+	ShaderManager(const ShaderManager&) = delete;
 	static ShaderManager* instance;
 
 	std::unordered_map<std::string, std::shared_ptr<Shader>> shaders;

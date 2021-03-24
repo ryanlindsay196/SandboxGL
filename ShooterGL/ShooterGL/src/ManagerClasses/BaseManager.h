@@ -7,6 +7,7 @@ class BaseManager
 private:
 public:
 	BaseManager();
+	BaseManager(BaseManager&) = delete;
 	virtual ~BaseManager();
 
 	template <class t>

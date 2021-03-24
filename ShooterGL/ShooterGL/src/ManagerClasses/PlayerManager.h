@@ -8,6 +8,7 @@ class PlayerManager : BaseManager
 private:
 	static PlayerManager* instance;
 	PlayerManager();
+	PlayerManager(PlayerManager&) = delete;
 public:
 	static PlayerManager* GetInstance();
 

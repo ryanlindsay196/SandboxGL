@@ -19,6 +19,7 @@ private:
 
 	static ModelManager* instance;
 	ModelManager();
+	ModelManager(ModelManager&) = delete;
 public:
 	~ModelManager();
 

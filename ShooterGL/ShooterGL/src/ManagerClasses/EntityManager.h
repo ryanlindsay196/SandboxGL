@@ -84,6 +84,7 @@ private:
 	std::vector<Entity> entities;
 
 	EntityManager();
+	EntityManager(EntityManager&) = delete;
 	static EntityManager* instance;
 public:
 	static EntityManager* GetInstance();

@@ -19,6 +19,7 @@ class ObjectManager
 {
 private:
 	ObjectManager();
+	ObjectManager(ObjectManager&) = delete;
 	static ObjectManager* instance;
 public:
 	static ObjectManager* GetInstance();

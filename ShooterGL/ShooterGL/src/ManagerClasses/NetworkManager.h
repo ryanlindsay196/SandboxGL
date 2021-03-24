@@ -13,6 +13,7 @@ class NetworkManager : public BaseManager
 {
 private:
 	NetworkManager();
+	NetworkManager(NetworkManager&) = delete;
 	static NetworkManager* instance;
 public:
 	static NetworkManager* GetInstance();

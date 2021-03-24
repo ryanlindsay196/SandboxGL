@@ -31,6 +31,7 @@ class PhysicsManager : public BaseManager
 private:
 	static PhysicsManager* instance;
 	PhysicsManager();
+	PhysicsManager(PhysicsManager&) = delete;
 
 private:
 	//set this in initialize

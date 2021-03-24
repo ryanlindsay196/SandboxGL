@@ -1,6 +1,6 @@
 PREFAB : Resources/Prefabs/Player.prefab
 {
-	Position : 0,0,12
+	Position : 0,3,12
 	EulerAngles : 0,1,0
 	RotationAngle : -1.57
 	Scale : 1,1,1
