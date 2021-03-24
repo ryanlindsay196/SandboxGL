@@ -12,3 +12,18 @@ ShooterGL_Server/ShooterGL_Server/Debug
 *.obj
 *.exe
 ShooterGL_Server/.vs/ShooterGL_Server/v15/Browse.VC.opendb
+ShooterGL/ShooterGL/Resources/Models/read me.txt
+ShooterGL/ShooterGL/Resources/Models/Model/Drone/render.png
+ShooterGL/ShooterGL/Resources/Models/Model/Drone/model/Drone Blender_2.90.blend
+ShooterGL/ShooterGL/Resources/Models/Model/Drone/model/Drone.mtl
+ShooterGL/ShooterGL/Resources/Models/Model/Drone/model/Textures/light_fire_.png
+ShooterGL/ShooterGL/Resources/Models/Model/Drone/model/Textures/studio_small_03_8k.hdr
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/model/Drone Charging.mtl
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/model/Drone Charging textures/_Bump_drone charging_.png
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/model/Drone Charging textures/_COLOR_drone charging_.png
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/model/Drone Charging textures/_LIGHT_drone charging_.png
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/model/Drone Charging textures/_NM_drone charging_.png
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/model/Drone Charging textures/_Roughness_drone charging_.png
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/drone charging.png
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/model/Drone Charging Blender_2.90_.blend
+ShooterGL/ShooterGL/Resources/Models/Model/drone charging/model/Drone Charging.fbx

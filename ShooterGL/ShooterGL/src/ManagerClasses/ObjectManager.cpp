@@ -86,16 +86,28 @@ void ObjectManager::Update(float gameTime)
 		fixedUpdateTimer = 0;
 	}
 
-#ifdef DEBUG
-	DebugLines::GetInstance()->DrawLines();
-#endif //DEBUG
-
 	cameraManager->Update();
 }
 
 void ObjectManager::Render()
 {
 	entityManager->Render(lightManager);
+
+
+
+#ifdef DEBUG
+	const int totalGridLines = 30;
+	for (int i = 0; i <= totalGridLines; i++)
+	{
+		DebugLines::AddLine(glm::vec3(-totalGridLines / 2, 5, i - (totalGridLines / 2)), glm::vec3(totalGridLines / 2, 5, i - (totalGridLines / 2)), nullptr);
+		DebugLines::AddLine(glm::vec3(i - totalGridLines / 2, 5, -totalGridLines / 2), glm::vec3(i - totalGridLines / 2, 5, totalGridLines / 2), nullptr);
+	}
+
+	glDepthFunc(GL_ALWAYS);
+
+	DebugLines::GetInstance()->DrawLines();
+	glDepthFunc(GL_LESS);
+#endif //DEBUG
 }
 
 void ObjectManager::LoadScene(std::string scenePath, GLFWwindow* window)

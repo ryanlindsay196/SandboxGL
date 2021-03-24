@@ -17,16 +17,17 @@
 
 Mesh::Mesh(aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, MeshData* meshData, const aiNode* node, std::unordered_map<std::string, BoneData>& boneMap, unsigned int & numBones)
 {
+
+	//Handle edge case where mesh already loaded vertices
+	if (meshData->vertices.size() > 0)
+		return;
+
 	meshData->vertices.reserve(mesh->mNumVertices);
 
 	m_materialPath = materialPath;
 	parentMesh = newParent;
 	textureManager = TextureManager::GetInstance();
 	m_meshData = meshData;
-
-	//Handle edge case where mesh already loaded vertices
-	if (meshData->vertices.size() > 0)
-		return;
 
 	// walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -132,23 +133,27 @@ Mesh::Mesh(aiMesh* mesh, std::string& materialPath, WorldComponent * newParent, 
 	//unsigned int numBones = 0;
 	for (unsigned int i = 0; i < mesh->mNumBones; i++)
 	{
-		unsigned int BoneIndex = 0;
+		unsigned int BoneIndex = boneMap.size();
 		std::string BoneName(mesh->mBones[i]->mName.data);
 
 		if (boneMap.find(BoneName) == boneMap.end())
 		{
 			BoneIndex = numBones;
 			numBones++;
-			std::pair<std::string, BoneData> boneMapEntry(BoneName, BoneData(BoneIndex));
-			boneMap.insert(boneMapEntry);
-			boneMap[BoneName].Initialize();
-			boneMap[BoneName].SetTransform(glm::mat4(
+			boneMap.insert(std::pair<std::string, BoneData>(BoneName, BoneData(BoneIndex)));
+
+			BoneData& boneMapEntry = boneMap[BoneName];
+
+			boneMapEntry.Initialize();
+			boneMapEntry.SetTransform(glm::mat4(
 				mesh->mBones[i]->mOffsetMatrix.a1, mesh->mBones[i]->mOffsetMatrix.b1, mesh->mBones[i]->mOffsetMatrix.c1, mesh->mBones[i]->mOffsetMatrix.d1,
 				mesh->mBones[i]->mOffsetMatrix.a2, mesh->mBones[i]->mOffsetMatrix.b2, mesh->mBones[i]->mOffsetMatrix.c2, mesh->mBones[i]->mOffsetMatrix.d2,
 				mesh->mBones[i]->mOffsetMatrix.a3, mesh->mBones[i]->mOffsetMatrix.b3, mesh->mBones[i]->mOffsetMatrix.c3, mesh->mBones[i]->mOffsetMatrix.d3,
 				mesh->mBones[i]->mOffsetMatrix.a4, mesh->mBones[i]->mOffsetMatrix.b4, mesh->mBones[i]->mOffsetMatrix.c4, mesh->mBones[i]->mOffsetMatrix.d4
 			));
 		}
+		else
+			BoneIndex = boneMap[BoneName].boneID;
 		
 		for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; j++)
 		{
@@ -267,7 +272,6 @@ void Mesh::SetupMesh()
 	// vertex boneID
 	glEnableVertexAttribArray(5);
 	glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, BoneID));
-	//glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, BoneID));
 	// vertex bone weights
 	glEnableVertexAttribArray(6);
 	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, WeightValue));

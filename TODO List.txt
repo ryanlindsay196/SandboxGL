@@ -1,10 +1,7 @@
 Fix bug with book animation
 Clear out warnings
 
-Check that PhysicsManager::rigidBodies is a list of <RigidBody> instead of <RigidBody*>
-Make sure that ModelManager::models is std::vector<Model> instead of std::vector<Model*>
-EntityManager::entities should be std::vector<Entity> instead of <Entity*>
-Repeat the above for all manager classes
+In Mesh.cpp, when changing the second argument of the 6th glVertexAttribPointer, non-skinned meshes don't render
 
 When a rigidbody quickly moves out of a region and then back into the region, it might not get added back into
 the region's linked list

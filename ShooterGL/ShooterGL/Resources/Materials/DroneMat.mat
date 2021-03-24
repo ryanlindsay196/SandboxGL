@@ -1,0 +1,16 @@
+&&VertexShader Shaders/VertexDefault.glsl
+&&FragmentShader Shaders/FragmentDefault.glsl
+<ATTACH AND LINK SHADER>
+textures
+{
+	albedoMap : Resources/Textures/COLOR_8K_DRON_1.png
+	normalMap : Resources/Textures/COLOR_8K_DRON_1.png
+	specularMap : Resources/Textures/Rock_MetallicSmoothness.png
+}
+vec3
+{
+}
+float
+{
+	mat.shininess : 0.1
+}

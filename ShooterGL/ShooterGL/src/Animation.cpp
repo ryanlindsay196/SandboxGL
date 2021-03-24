@@ -26,7 +26,6 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex, s
 		scene->mRootNode->mTransformation.a3, scene->mRootNode->mTransformation.b3, scene->mRootNode->mTransformation.c3, scene->mRootNode->mTransformation.d3,
 		scene->mRootNode->mTransformation.a4, scene->mRootNode->mTransformation.b4, scene->mRootNode->mTransformation.c4, scene->mRootNode->mTransformation.d4);
 
-	m_GlobalInverseTransform = glm::inverse(m_GlobalInverseTransform);
 	aiAnimation* animation = new aiAnimation(*scene->mAnimations[animationIndex]);
 	ticksPerSecond = animation->mTicksPerSecond;
 

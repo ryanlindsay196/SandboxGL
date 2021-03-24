@@ -74,6 +74,7 @@ DebugLines * DebugLines::GetInstance()
 
 void DebugLines::AddLine(glm::vec3 startPos, glm::vec3 endPos, Entity* parentEntity)
 {
+	GetInstance();
 	instance->vertices.push_back(startPos.x);
 	instance->vertices.push_back(startPos.y);
 	instance->vertices.push_back(startPos.z);
@@ -91,12 +92,15 @@ void DebugLines::DrawLines()
 
 	for (unsigned int i = 0; i < instance->parentEntities.size(); i++)
 	{
-		instance->vertices[(i * 6) + 0] += instance->parentEntities[i]->GetTranslation().x;
-		instance->vertices[(i * 6) + 1] += instance->parentEntities[i]->GetTranslation().y;
-		instance->vertices[(i * 6) + 2] += instance->parentEntities[i]->GetTranslation().z;
-		instance->vertices[(i * 6) + 3] += instance->parentEntities[i]->GetTranslation().x;
-		instance->vertices[(i * 6) + 4] += instance->parentEntities[i]->GetTranslation().y;
-		instance->vertices[(i * 6) + 5] += instance->parentEntities[i]->GetTranslation().z;
+		if (instance->parentEntities[i] != nullptr)
+		{
+			instance->vertices[(i * 6) + 0] += instance->parentEntities[i]->GetTranslation().x;
+			instance->vertices[(i * 6) + 1] += instance->parentEntities[i]->GetTranslation().y;
+			instance->vertices[(i * 6) + 2] += instance->parentEntities[i]->GetTranslation().z;
+			instance->vertices[(i * 6) + 3] += instance->parentEntities[i]->GetTranslation().x;
+			instance->vertices[(i * 6) + 4] += instance->parentEntities[i]->GetTranslation().y;
+			instance->vertices[(i * 6) + 5] += instance->parentEntities[i]->GetTranslation().z;
+		}
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, instance->VBO);
