@@ -2,11 +2,11 @@ Components
 {
 	Model
 	{
-		Path : Resources/Models/arms.FBX
+		Path : Resources/Models/FrogWalking.FBX
 		PositionOffset : 0,0,-0.24
 		EulerAngles : 0,0,1
 		RotationAngle : 1.57
-		ScaleOffset : 0.07,0.07,0.07
+		ScaleOffset : 0.4,0.4,0.4
 		Material : Resources/Materials/BackPackMaterial.mat
 	}
 	Model

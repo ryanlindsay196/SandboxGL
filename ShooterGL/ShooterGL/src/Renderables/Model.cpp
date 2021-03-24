@@ -97,9 +97,9 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 	for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 	{
 		//TODO: Remove the animation copy
-		Animation newAnim = Animation();
+		m_modelData->animations.push_back(Animation());
+		Animation& newAnim = m_modelData->animations[i];
 		newAnim.Initialize(scene, i, &m_modelData->boneKeyMap);
-		m_modelData->animations.push_back(newAnim);
 	}
 }
 
@@ -201,6 +201,9 @@ void Model::Render(LightManager* lightManager)
 	//If there are no bones, set gBones[0] to identity matrix so the model renders
 	if (boneMap.size() == 0)
 		m_meshes[0].shader->SetShaderUniform_mat4fv((char*)"gBones[0]", glm::mat4(1), GL_FALSE);
+
+	if (animationTime > 160)
+		animationTime = 0;
 
 	if (m_modelData->animations.size() > 0)
 	//Calculate bone transformations recursively, for the current animation frame.

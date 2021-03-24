@@ -2,21 +2,9 @@
 #include "assimp/scene.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
-#include "gtc/quaternion.hpp"
-#include "Renderables/Mesh.h"
-#include "Renderables/Model.h"
 #include "AnimationDataStructures.h"
 
-
-//TODO: Delete
-#include <GLFW/glfw3.h>
-//TODO: Delete
-#include <stdio.h>
-//TODO: Delete
-#include <iostream>
-//TODO: Delete
-
-void Animation::Initialize(const aiScene * scene, unsigned int animationIndex, std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap)
+void Animation::Initialize(const aiScene * scene, const unsigned int& animationIndex, std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap)
 {
 	this->boneKeyMap = boneKeyMap;
 
@@ -70,8 +58,6 @@ void Animation::Initialize(const aiScene * scene, unsigned int animationIndex, s
 
 void Animation::ReadNodeHierarchy(Node* node, const glm::mat4 & parentTransform, std::unordered_map<std::string, BoneData> & boneMap, float& animationTime)
 {
-	//std::string NodeName(node->name);
-	//TODO: Remove all references to the hash map by tracking the children of "node"
 	if (node->boneKeyFrames == nullptr && boneKeyMap->find(node->name) != boneKeyMap->end())
 		node->boneKeyFrames = &(*boneKeyMap)[node->name];
 	glm::mat4 NodeTransformation = node->transform;
@@ -79,8 +65,7 @@ void Animation::ReadNodeHierarchy(Node* node, const glm::mat4 & parentTransform,
 	//If there are no animations, exit the function
 	if (boneKeyMap == nullptr)
 		return;
-	//auto pBoneKeyFrame = boneKeyMap->find(NodeName);
-	//if(pBoneKeyFrame != boneKeyMap->end()) {
+
 	if(node->boneKeyFrames) {
 		// Interpolate scaling and generate scaling transformation matrix
 		glm::vec3 Scaling;
@@ -116,8 +101,6 @@ void Animation::CalculateInterpolatedPosition(glm::vec3& out, Node* node, std::u
 {
 	BoneKeyFrames* currentBoneKeyFrames = node->boneKeyFrames;
 
-	//currentBoneKeyFrames->lastPositionKeyFrame = boneMap[nodeName].lastPositionKeyFrame;
-
 	if (currentBoneKeyFrames->transformKeyFrames.size() == 1) {
 		out = glm::vec3(currentBoneKeyFrames->transformKeyFrames[0].x, currentBoneKeyFrames->transformKeyFrames[0].y, currentBoneKeyFrames->transformKeyFrames[0].z);
 		return;
@@ -142,16 +125,12 @@ void Animation::CalculateInterpolatedPosition(glm::vec3& out, Node* node, std::u
 	out = Start + Factor * Delta;
 
 	std::swap(globalAnimationTime, animationTime);
-
-	//boneMap[nodeName].lastPositionKeyFrame = currentBoneKeyFrames->lastPositionKeyFrame;
 }
 
 void Animation::CalculateInterpolatedRotation(glm::quat& out, Node* node, std::unordered_map<std::string, BoneData>& boneMap, float& animationTime)
 {
 	BoneKeyFrames* currentBoneKeyFrames = node->boneKeyFrames;
 	// we need at least two values to interpolate...
-
-	//currentBoneKeyFrames->lastRotationKeyFrame = boneMap[nodeName].lastRotationKeyFrame;
 
 	if (currentBoneKeyFrames->rotationKeyFrames.size() == 1) {
 		out = glm::quat(currentBoneKeyFrames->rotationKeyFrames[0].x, currentBoneKeyFrames->rotationKeyFrames[0].y, currentBoneKeyFrames->rotationKeyFrames[0].z, currentBoneKeyFrames->rotationKeyFrames[0].w);
@@ -176,15 +155,11 @@ void Animation::CalculateInterpolatedRotation(glm::quat& out, Node* node, std::u
 	out = normalize(out);
 
 	std::swap(globalAnimationTime, animationTime);
-
-	//boneMap[nodeName].lastRotationKeyFrame = currentBoneKeyFrames->lastRotationKeyFrame;
 }
 
 void Animation::CalculateIntorpolatedScaling(glm::vec3& out, Node* node, std::unordered_map<std::string, BoneData>& boneMap, float& animationTime)
 {
 	BoneKeyFrames* currentBoneKeyFrames = node->boneKeyFrames;
-
-	//currentBoneKeyFrames->lastScaleKeyFrame = boneMap[nodeName].lastScaleKeyFrame;
 
 	if (currentBoneKeyFrames->scaleKeyFrames.size() == 1) {
 		out = glm::vec3(currentBoneKeyFrames->scaleKeyFrames[0].x, currentBoneKeyFrames->scaleKeyFrames[0].y, currentBoneKeyFrames->scaleKeyFrames[0].z);
@@ -209,8 +184,6 @@ void Animation::CalculateIntorpolatedScaling(glm::vec3& out, Node* node, std::un
 	out = Start + Factor * Delta;
 
 	std::swap(globalAnimationTime, animationTime);
-
-	//boneMap[nodeName].lastScaleKeyFrame = currentBoneKeyFrames->lastScaleKeyFrame;
 }
 
 unsigned int Animation::FindPosition(BoneKeyFrames* currentBoneKeyFrames, Node* node, float& animationTime)

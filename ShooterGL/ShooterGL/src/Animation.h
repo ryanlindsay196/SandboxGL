@@ -29,7 +29,7 @@ public:
 		return (T(0) < val) - (val < T(0));
 	}
 
-	void Initialize(const aiScene * scene, unsigned int animationIndex, std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap);
+	void Initialize(const aiScene * scene, const unsigned int& animationIndex, std::unordered_map<std::string, BoneKeyFrames>* boneKeyMap);
 	//void SetBoneKeyMap(std::unordered_map<std::string, BoneKeyFrames>* newBoneKeyMap);
 	void ReadNodeHierarchy(Node* node, const glm::mat4& parentTransform, std::unordered_map<std::string, BoneData> & boneMap, float& animationTime);
 
