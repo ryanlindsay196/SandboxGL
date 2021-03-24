@@ -15,43 +15,43 @@ void Animation::Initialize(const aiScene * scene, const unsigned int& animationI
 		scene->mRootNode->mTransformation.a4, scene->mRootNode->mTransformation.b4, scene->mRootNode->mTransformation.c4, scene->mRootNode->mTransformation.d4);
 
 	aiAnimation* animation = new aiAnimation(*scene->mAnimations[animationIndex]);
-	ticksPerSecond = animation->mTicksPerSecond;
+	ticksPerSecond = (float)animation->mTicksPerSecond;
 
 	if (boneKeyMap == nullptr || boneKeyMap->empty())
 	{
 		boneKeyMap->reserve(animation->mNumChannels);
 		for (unsigned int i = 0; i < animation->mNumChannels; i++)
 		{
-			//TODO: Find the performance implications of making a pair of string, BoneKeyFrames*
-			std::pair<std::string, BoneKeyFrames> boneKey(animation->mChannels[i]->mNodeName.C_Str(), BoneKeyFrames());
+			boneKeyMap->insert(std::pair<std::string, BoneKeyFrames> (animation->mChannels[i]->mNodeName.C_Str(), BoneKeyFrames()));
+			std::string NodeName = animation->mChannels[i]->mNodeName.C_Str();
+			BoneKeyFrames& boneKey = (*boneKeyMap)[NodeName];
 			for (unsigned int j = 0; j < animation->mChannels[i]->mNumPositionKeys; j++)
 			{
-				boneKey.second.transformKeyFrames.reserve(animation->mChannels[i]->mNumPositionKeys);
-				boneKey.second.transformKeyFrames.push_back(
+				boneKey.transformKeyFrames.reserve(animation->mChannels[i]->mNumPositionKeys);
+				boneKey.transformKeyFrames.push_back(
 					glm::vec3(animation->mChannels[i]->mPositionKeys[j].mValue.x, animation->mChannels[i]->mPositionKeys[j].mValue.y, animation->mChannels[i]->mPositionKeys[j].mValue.z)
 				);
-				boneKey.second.transformKeyTimes.push_back((float)animation->mChannels[i]->mPositionKeys[j].mTime);
+				boneKey.transformKeyTimes.push_back((float)animation->mChannels[i]->mPositionKeys[j].mTime);
 			}
 			for (unsigned int j = 0; j < animation->mChannels[i]->mNumRotationKeys; j++)
 			{
-				boneKey.second.rotationKeyFrames.reserve(animation->mChannels[i]->mNumRotationKeys);
-				boneKey.second.rotationKeyFrames.push_back(
+				boneKey.rotationKeyFrames.reserve(animation->mChannels[i]->mNumRotationKeys);
+				boneKey.rotationKeyFrames.push_back(
 					glm::quat(animation->mChannels[i]->mRotationKeys[j].mValue.z,
 						animation->mChannels[i]->mRotationKeys[j].mValue.w,
 						animation->mChannels[i]->mRotationKeys[j].mValue.x,
 						animation->mChannels[i]->mRotationKeys[j].mValue.y)
 				);
-				boneKey.second.rotationKeyTimes.push_back((float)animation->mChannels[i]->mRotationKeys[j].mTime);
+				boneKey.rotationKeyTimes.push_back((float)animation->mChannels[i]->mRotationKeys[j].mTime);
 			}
 			for (unsigned int j = 0; j < animation->mChannels[i]->mNumScalingKeys; j++)
 			{
-				boneKey.second.scaleKeyFrames.reserve(animation->mChannels[i]->mNumScalingKeys);
-				boneKey.second.scaleKeyFrames.push_back(
+				boneKey.scaleKeyFrames.reserve(animation->mChannels[i]->mNumScalingKeys);
+				boneKey.scaleKeyFrames.push_back(
 					glm::vec3(animation->mChannels[i]->mScalingKeys[j].mValue.x, animation->mChannels[i]->mScalingKeys[j].mValue.y, animation->mChannels[i]->mScalingKeys[j].mValue.z)
 				);
-				boneKey.second.scaleKeyTimes.push_back((float)animation->mChannels[i]->mScalingKeys[j].mTime);
+				boneKey.scaleKeyTimes.push_back((float)animation->mChannels[i]->mScalingKeys[j].mTime);
 			}
-			boneKeyMap->insert(boneKey);
 		}
 	}
 }

@@ -112,8 +112,6 @@ void ObjectManager::Render()
 
 void ObjectManager::LoadScene(std::string scenePath, GLFWwindow* window)
 {
-	//TODO: Fix memory leak somewhere in this function
-
 #ifdef DEBUG
 	DebugLines::ClearVertices();
 #endif //DEBUG

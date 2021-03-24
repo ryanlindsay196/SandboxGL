@@ -96,7 +96,6 @@ void Model::LoadModel(std::string modelPath, std::string materialPath)
 
 	for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 	{
-		//TODO: Remove the animation copy
 		m_modelData->animations.push_back(Animation());
 		Animation& newAnim = m_modelData->animations[i];
 		newAnim.Initialize(scene, i, &m_modelData->boneKeyMap);
