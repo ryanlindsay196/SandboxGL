@@ -5,6 +5,7 @@ class Texture
 {
 public:
 	Texture();
+	Texture(Texture&) = delete;
 	~Texture();
 
 	void LoadTexture(char* texturePath);

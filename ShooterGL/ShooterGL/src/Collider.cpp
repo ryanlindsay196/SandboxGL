@@ -10,42 +10,42 @@ void Collider::CreateDebugLines()
 	//Lines that span the z-axis
 	debugLines->AddLine(colliderCenter + glm::vec3(-scale.x, -scale.y, -scale.z),
 		colliderCenter + glm::vec3(-scale.x, -scale.y, scale.z),
-		colliderParent->componentParent);
+		colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, -scale.z),
 		colliderCenter + glm::vec3(scale.x, -scale.y, scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(-scale.x, scale.y, -scale.z),
 		colliderCenter + glm::vec3(-scale.x, scale.y, scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, scale.y, -scale.z),
 		colliderCenter + glm::vec3(scale.x, scale.y, scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	//lines that span the y-axis
 	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, -scale.z),
 		colliderCenter + glm::vec3(scale.x, scale.y, -scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, scale.z),
 		colliderCenter + glm::vec3(scale.x, scale.y, scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(-scale.x, scale.y, scale.z),
 		colliderCenter + glm::vec3(-scale.x, -scale.y, scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(-scale.x, scale.y, -scale.z),
 		colliderCenter + glm::vec3(-scale.x, -scale.y, -scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	//Lines that span the x-axis
 	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, -scale.z),
 		colliderCenter + glm::vec3(-scale.x, -scale.y, -scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, -scale.y, scale.z),
 		colliderCenter + glm::vec3(-scale.x, -scale.y, scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, scale.y, -scale.z),
 		colliderCenter + glm::vec3(-scale.x, scale.y, -scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 	debugLines->AddLine(colliderCenter + glm::vec3(scale.x, scale.y, scale.z),
 		colliderCenter + glm::vec3(-scale.x, scale.y, scale.z),
-	colliderParent->componentParent);
+	colliderParent->componentParent, glm::vec3(1,0,0));
 }
 #endif //DEBUG
 

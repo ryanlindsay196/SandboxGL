@@ -2,6 +2,11 @@
 #include "ManagerClasses/CameraManager.h"
 #include "../Entity.h"
 
+#ifdef DEBUG
+#include <iostream>
+#endif //DEBUG
+
+
 DebugLines* DebugLines::instance = 0;
 
 DebugLines::DebugLines()
@@ -16,14 +21,17 @@ DebugLines * DebugLines::GetInstance()
 
 		const char *vertexShaderSource = "#version 330 core\n"
 			"layout (location = 0) in vec3 aPos;\n"
+			"layout (location = 1) in vec3 aColor;\n"
 			"uniform mat4 MVP;\n"
+			"out vec3 color;\n"
 			"void main()\n"
 			"{\n"
+			"	color = aColor;\n"
 			"   gl_Position = MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 			"}\0";
 		const char *fragmentShaderSource = "#version 330 core\n"
 			"out vec4 FragColor;\n"
-			"uniform vec3 color;\n"
+			"in vec3 color;\n"
 			"void main()\n"
 			"{\n"
 			"   FragColor = vec4(color, 1.0f);\n"
@@ -48,6 +56,16 @@ DebugLines * DebugLines::GetInstance()
 		glLinkProgram(instance->shaderProgram);
 		// check for linking errors
 
+
+		int success;
+		char infoLog[512];
+		glGetProgramiv(instance->shaderProgram, GL_LINK_STATUS, &success);
+		if (!success) {
+			glGetProgramInfoLog(instance->shaderProgram, 512, NULL, infoLog);
+			std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << std::endl;
+
+		}
+
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
 
@@ -59,9 +77,12 @@ DebugLines * DebugLines::GetInstance()
 		//glBufferData(GL_ARRAY_BUFFER, instance->vertices.size() * sizeof(float), instance->vertices.data(), GL_STATIC_DRAW);
 
 		//Allocate 1000 vertices (500 debug lines) in this buffer
-		glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * 1000, nullptr, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float) * 1000, nullptr, GL_DYNAMIC_DRAW);
 
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -72,15 +93,21 @@ DebugLines * DebugLines::GetInstance()
 	return instance;
 }
 
-void DebugLines::AddLine(glm::vec3 startPos, glm::vec3 endPos, Entity* parentEntity)
+void DebugLines::AddLine(glm::vec3 startPos, glm::vec3 endPos, Entity* parentEntity, glm::vec3 color)
 {
 	GetInstance();
 	instance->vertices.push_back(startPos.x);
 	instance->vertices.push_back(startPos.y);
 	instance->vertices.push_back(startPos.z);
+	instance->vertices.push_back(color.x);
+	instance->vertices.push_back(color.y);
+	instance->vertices.push_back(color.z);
 	instance->vertices.push_back(endPos.x);
 	instance->vertices.push_back(endPos.y);
 	instance->vertices.push_back(endPos.z);
+	instance->vertices.push_back(color.x);
+	instance->vertices.push_back(color.y);
+	instance->vertices.push_back(color.z);
 
 	instance->parentEntities.push_back(parentEntity);
 }
@@ -94,12 +121,12 @@ void DebugLines::DrawLines()
 	{
 		if (instance->parentEntities[i] != nullptr)
 		{
-			instance->vertices[(i * 6) + 0] += instance->parentEntities[i]->GetTranslation().x;
-			instance->vertices[(i * 6) + 1] += instance->parentEntities[i]->GetTranslation().y;
-			instance->vertices[(i * 6) + 2] += instance->parentEntities[i]->GetTranslation().z;
-			instance->vertices[(i * 6) + 3] += instance->parentEntities[i]->GetTranslation().x;
-			instance->vertices[(i * 6) + 4] += instance->parentEntities[i]->GetTranslation().y;
-			instance->vertices[(i * 6) + 5] += instance->parentEntities[i]->GetTranslation().z;
+			instance->vertices[(i * 12) + 0] += instance->parentEntities[i]->GetTranslation().x;
+			instance->vertices[(i * 12) + 1] += instance->parentEntities[i]->GetTranslation().y;
+			instance->vertices[(i * 12) + 2] += instance->parentEntities[i]->GetTranslation().z;
+			instance->vertices[(i * 12) + 6] += instance->parentEntities[i]->GetTranslation().x;
+			instance->vertices[(i * 12) + 7] += instance->parentEntities[i]->GetTranslation().y;
+			instance->vertices[(i * 12) + 8] += instance->parentEntities[i]->GetTranslation().z;
 		}
 	}
 
@@ -107,11 +134,11 @@ void DebugLines::DrawLines()
 	glBufferSubData(GL_ARRAY_BUFFER, 0, instance->vertices.size() * sizeof(float), &instance->vertices[0]);
 
 	glm::mat4 MVP = CameraManager::GetInstance()->GetCamera(0)->projectionMatrix * CameraManager::GetInstance()->GetCamera(0)->cameraViewMatrix;
-	glm::vec3 lineColor = glm::vec3(0, 1, 0);
+	//glm::vec3 lineColor = glm::vec3(0, 1, 0);
 
 	glUseProgram(instance->shaderProgram);
 	glUniformMatrix4fv(glGetUniformLocation(instance->shaderProgram, "MVP"), 1, GL_FALSE, &MVP[0][0]);
-	glUniform3fv(glGetUniformLocation(instance->shaderProgram, "color"), 1, &lineColor[0]);
+	//glUniform3fv(glGetUniformLocation(instance->shaderProgram, "color"), 1, &lineColor[0]);
 
 	glBindVertexArray(instance->VAO);
 	glDrawArrays(GL_LINES, 0, instance->vertices.size());

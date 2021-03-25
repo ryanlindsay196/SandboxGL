@@ -99,8 +99,8 @@ void ObjectManager::Render()
 	const int totalGridLines = 30;
 	for (int i = 0; i <= totalGridLines; i++)
 	{
-		DebugLines::AddLine(glm::vec3(-totalGridLines / 2, 0, i - (totalGridLines / 2)), glm::vec3(totalGridLines / 2, 0, i - (totalGridLines / 2)), nullptr);
-		DebugLines::AddLine(glm::vec3(i - totalGridLines / 2, 0, -totalGridLines / 2), glm::vec3(i - totalGridLines / 2, 0, totalGridLines / 2), nullptr);
+		DebugLines::AddLine(glm::vec3(-totalGridLines / 2, 0, i - (totalGridLines / 2)), glm::vec3(totalGridLines / 2, 0, i - (totalGridLines / 2)), nullptr, glm::vec3(0,1,1));
+		DebugLines::AddLine(glm::vec3(i - totalGridLines / 2, 0, -totalGridLines / 2), glm::vec3(i - totalGridLines / 2, 0, totalGridLines / 2), nullptr, glm::vec3(0,1,1));
 	}
 
 	//glDepthFunc(GL_ALWAYS);
