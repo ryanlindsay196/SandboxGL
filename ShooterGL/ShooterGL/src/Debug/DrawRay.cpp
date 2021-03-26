@@ -93,18 +93,18 @@ DebugLines * DebugLines::GetInstance()
 	return instance;
 }
 
-void DebugLines::AddLine(glm::vec3 startPos, glm::vec3 endPos, Entity* parentEntity, glm::vec3 color)
+void DebugLines::AddLine(glm::vec3 startOffsetPos, glm::vec3 endOffsetPos, Entity* parentEntity, glm::vec3 color)
 {
 	GetInstance();
-	instance->vertices.push_back(startPos.x);
-	instance->vertices.push_back(startPos.y);
-	instance->vertices.push_back(startPos.z);
+	instance->vertices.push_back(startOffsetPos.x);
+	instance->vertices.push_back(startOffsetPos.y);
+	instance->vertices.push_back(startOffsetPos.z);
 	instance->vertices.push_back(color.x);
 	instance->vertices.push_back(color.y);
 	instance->vertices.push_back(color.z);
-	instance->vertices.push_back(endPos.x);
-	instance->vertices.push_back(endPos.y);
-	instance->vertices.push_back(endPos.z);
+	instance->vertices.push_back(endOffsetPos.x);
+	instance->vertices.push_back(endOffsetPos.y);
+	instance->vertices.push_back(endOffsetPos.z);
 	instance->vertices.push_back(color.x);
 	instance->vertices.push_back(color.y);
 	instance->vertices.push_back(color.z);
@@ -121,12 +121,26 @@ void DebugLines::DrawLines()
 	{
 		if (instance->parentEntities[i] != nullptr)
 		{
-			instance->vertices[(i * 12) + 0] += instance->parentEntities[i]->GetTranslation().x;
-			instance->vertices[(i * 12) + 1] += instance->parentEntities[i]->GetTranslation().y;
-			instance->vertices[(i * 12) + 2] += instance->parentEntities[i]->GetTranslation().z;
-			instance->vertices[(i * 12) + 6] += instance->parentEntities[i]->GetTranslation().x;
-			instance->vertices[(i * 12) + 7] += instance->parentEntities[i]->GetTranslation().y;
-			instance->vertices[(i * 12) + 8] += instance->parentEntities[i]->GetTranslation().z;
+			glm::vec4 startVertex(
+				instance->vertices[(i * 12) + 0],
+				instance->vertices[(i * 12) + 1],
+				instance->vertices[(i * 12) + 2],
+				1
+			);
+			glm::vec4 endVertex(
+				instance->vertices[(i * 12) + 6],
+				instance->vertices[(i * 12) + 7],
+				instance->vertices[(i * 12) + 8],
+				1
+			);
+			startVertex = instance->parentEntities[i]->GetTransform() * startVertex;
+			endVertex = instance->parentEntities[i]->GetTransform() * endVertex;
+			instance->vertices[(i * 12) + 0] = startVertex.x;
+			instance->vertices[(i * 12) + 1] = startVertex.y;
+			instance->vertices[(i * 12) + 2] = startVertex.z;
+			instance->vertices[(i * 12) + 6] = endVertex.x;
+			instance->vertices[(i * 12) + 7] = endVertex.y;
+			instance->vertices[(i * 12) + 8] = endVertex.z;
 		}
 	}
 

@@ -1,9 +1,17 @@
-Clear out warnings
+Collisions with a rectangle should send the other object in the direction of the face normal
 
-In Mesh.cpp, when changing the second argument of the 6th glVertexAttribPointer, non-skinned meshes don't render
+Give each collider a normalized "elasticity" factor that controls bounce speed.
 
 When a rigidbody quickly moves out of a region and then back into the region, it might not get added back into
 the region's linked list
+
+Create bounding boxes based on skinned mesh
+Implement GJK collision
+
+
+Clear out warnings
+
+In Mesh.cpp, when changing the second argument of the 6th glVertexAttribPointer, non-skinned meshes don't render
 
 When loading a scene in debug mode, create a meta file that keeps track of how many models/rigid bodies/entities
 are in the scene. Make the default size of the storage vectors twice that size.
@@ -12,19 +20,11 @@ When a model is out of view, don't draw it and don't update bone positions (frus
 
 Create a particleRenderer that batch renders all particles inside the view frustum
 
-Collisions with a rectangle should send the other object in the direction of the face normal
-Give each collider a normalized "elasticity" factor that controls bounce speed.
-
 Sphere colliders should draw sphere debug lines
 
 Assync model loading
 
-All singleton manager classes' copy constructor = delete
-
 Batch rendering for particles
-
-Create bounding boxes based on skinned mesh
-Implement GJK collision
 
 Nested prefabs
 Debug Rays

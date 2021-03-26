@@ -40,7 +40,7 @@ Components
 			IsTrigger : 0
 		}
 		EndCollider
-		UseGravity : 0
+		UseGravity : 1
 	}
 }
 Tags

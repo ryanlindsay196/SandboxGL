@@ -18,7 +18,7 @@ private:
 	unsigned int VBO, VAO;
 public:
 	static DebugLines* GetInstance();
-	static void AddLine(glm::vec3 startPos, glm::vec3 endPos, Entity* parentEntity, glm::vec3 color);
+	static void AddLine(glm::vec3 startOffsetPos, glm::vec3 endOffsetPos, Entity* parentEntity, glm::vec3 color);
 	static void DrawLines();
 
 	static void ClearVertices();
