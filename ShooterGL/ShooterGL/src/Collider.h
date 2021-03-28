@@ -7,6 +7,7 @@ class Collider
 public:
 #ifdef DEBUG
 	void CreateDebugLines();
+	glm::vec3 debugLinesColor;
 #endif //DEBUG
 
 	void Update(float gameTime);

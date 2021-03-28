@@ -326,6 +326,11 @@ void PhysicsManager::CheckCollisionsInRegion(PhysicsRegion physicsRegion, float 
 					{
 						RigidBody* rb1 = &rigidBodies[rbNode1->rigidBodyIndex];
 						RigidBody* rb2 = &rigidBodies[rbNode2->rigidBodyIndex];
+						
+						rb1->OnCollisionEnter(nullptr);
+						rb2->OnCollisionEnter(nullptr);
+						continue; 
+
 						if (currentCollider1->isTrigger)
 							rb2->componentParent->OnTriggerEnter(rb1->componentParent);
 						else

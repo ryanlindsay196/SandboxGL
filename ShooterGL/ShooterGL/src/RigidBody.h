@@ -53,7 +53,7 @@ public:
 	void OnCollisionEnter(Entity* entity);
 	void OnTriggerEnter(Entity* entity);
 
-	std::vector<Collider> GetColliders();
+	std::vector<Collider>& GetColliders();
 	Collider* GetColliderRef(int i);
 
 	void SetIsActive(bool newIsActive);

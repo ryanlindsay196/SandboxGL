@@ -78,9 +78,9 @@ void RigidBody::Initialize(std::vector<std::string>& rigidBodyProperties, Entity
 
 void RigidBody::Update(float gameTime)
 {
-	for (Collider collider : colliders)
+	for (unsigned int i = 0; i < colliders.size(); i++)
 	{
-		collider.Update(gameTime);
+		colliders[i].Update(gameTime);
 	}
 }
 
@@ -110,6 +110,11 @@ void RigidBody::FixedUpdate(float gameTime)
 	}
 	storedVelocity = glm::vec3(0);
 	componentParent->Translate(positionConstraints * velocity * gameTime);
+
+#ifdef DEBUG
+	for (unsigned int i = 0; i < colliders.size(); i++)
+		colliders[i].debugLinesColor = glm::vec3(1, 0, 0);
+#endif //DEBUG
 }
 
 void RigidBody::SetSpawnedBy(Entity * spawningEntity)
@@ -200,7 +205,10 @@ void RigidBody::SetVelocity(glm::vec3 newVelocity)
 
 void RigidBody::OnCollisionEnter(Entity * entity)
 {
-
+#ifdef DEBUG
+	for (int i = 0; i < colliders.size(); i++)
+		colliders[i].debugLinesColor = glm::vec3(0, 1, 0);
+#endif
 }
 
 void RigidBody::OnTriggerEnter(Entity * entity)
@@ -208,7 +216,7 @@ void RigidBody::OnTriggerEnter(Entity * entity)
 
 }
 
-std::vector<Collider> RigidBody::GetColliders()
+std::vector<Collider>& RigidBody::GetColliders()
 {
 	return colliders;
 }

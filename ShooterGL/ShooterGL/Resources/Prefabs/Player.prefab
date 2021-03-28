@@ -31,7 +31,7 @@ Components
 	{
 		PositionConstaints : 1,1,1
 		RotationConstraints : 0,0,0
-		Mass : 1
+		Mass : 10000
 		Collider
 		{
 			ColliderType : 0
@@ -40,7 +40,7 @@ Components
 			IsTrigger : 0
 		}
 		EndCollider
-		UseGravity : 1
+		UseGravity : 0
 	}
 }
 Tags
