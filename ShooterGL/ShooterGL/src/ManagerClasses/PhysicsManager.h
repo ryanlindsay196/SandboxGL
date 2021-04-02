@@ -33,6 +33,20 @@ private:
 	PhysicsManager();
 	PhysicsManager(PhysicsManager&) = delete;
 
+	float CalculateCollisionTime(const glm::vec3 startPos, const glm::vec3 endPos, const glm::vec3 startVelocity, const glm::vec3 acceleration, const float maxTimeStep, const float timeStep, RigidBody& rb1, RigidBody& rb2);
+
+public:
+	static inline glm::vec3 CalculateDisplacement(const glm::vec3 startVelocity, const glm::vec3 acceleration, const float gameTime) {
+		return (startVelocity * gameTime) + (acceleration * 0.5f * gameTime * gameTime);
+	};
+	static inline glm::vec3 CalculateVelocity(const glm::vec3 startVelocity, const glm::vec3 acceleration, const float gameTime) { return startVelocity + (acceleration * gameTime); };
+
+	static inline glm::vec3 CalculateVelocity(const glm::vec3 startVelocity, const glm::vec3 acceleration, const glm::vec3 displacement) {
+		glm::vec3 finalVelocitySquared = (startVelocity * startVelocity) + (acceleration * displacement * 2.f);
+		return glm::vec3(sqrtf(finalVelocitySquared.x), sqrtf(finalVelocitySquared.y), sqrtf(finalVelocitySquared.z));
+	}
+	;
+
 private:
 	//set this in initialize
 	glm::vec3 physicsRegionBounds;
@@ -70,5 +84,8 @@ public:
 	RigidBody* InitializeRigidBody(Entity* entity, float gameTime, std::vector<std::string> rigidBodyProperties, unsigned int newEntityComponentIndex);
 	//Replace the starting node in a rigidbody region with a new one
 	void AddRigidBodyToRegion(unsigned int rbIndex, glm::vec3 region);
+public:
+	static inline glm::vec3 Acceleration() { return glm::vec3(0, -1, 0); }
+
 };
 

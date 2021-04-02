@@ -1,6 +1,7 @@
 #include "Collider.h"
 #include "RigidBody.h"
 #include "Debug/DrawRay.h"
+#include "../ManagerClasses/PhysicsManager.h"
 
 #ifdef DEBUG
 void Collider::CreateDebugLines()
@@ -69,6 +70,7 @@ Collider::ColliderProjections Collider::CalculateProjections(bool addVelocity, b
 
 	glm::vec3 velocity = colliderParent->GetVelocity();
 	glm::vec3 storedVelocity = colliderParent->GetStoredVelocity();
+	glm::vec3 displacement = PhysicsManager::CalculateDisplacement(velocity, PhysicsManager::Acceleration(), gameTime);
 
 	glm::mat4 colliderMatrix = colliderParent->componentParent->GetTransform() * glm::translate(glm::mat4(1), positionOffset) * glm::scale(glm::mat4(1), scale);
 
@@ -76,12 +78,12 @@ Collider::ColliderProjections Collider::CalculateProjections(bool addVelocity, b
 	glm::vec3 jhat = glm::normalize(glm::vec3(colliderMatrix[0][1], colliderMatrix[1][1], colliderMatrix[2][1]));
 	glm::vec3 khat = glm::normalize(glm::vec3(colliderMatrix[0][2], colliderMatrix[1][2], colliderMatrix[2][2]));
 
-	projections.x[0] = glm::dot(colliderCenter, glm::vec3(1,0,0)) + (velocity.x * addVelocity * gameTime) + (storedVelocity.x * addStoredVelocity * gameTime) - scale.x;
-	projections.x[1] = glm::dot(colliderCenter, glm::vec3(1,0,0)) + (velocity.x * addVelocity * gameTime) + (storedVelocity.x * addStoredVelocity * gameTime) + scale.x;
-	projections.y[0] = glm::dot(colliderCenter, glm::vec3(0,1,0)) + (velocity.y * addVelocity * gameTime) + (storedVelocity.y * addStoredVelocity * gameTime) - scale.y;
-	projections.y[1] = glm::dot(colliderCenter, glm::vec3(0,1,0)) + (velocity.y * addVelocity * gameTime) + (storedVelocity.y * addStoredVelocity * gameTime) + scale.y;
-	projections.z[0] = glm::dot(colliderCenter, glm::vec3(0,0,1)) + (velocity.z * addVelocity * gameTime) + (storedVelocity.z * addStoredVelocity * gameTime) - scale.z;
-	projections.z[1] = glm::dot(colliderCenter, glm::vec3(0,0,1)) + (velocity.z * addVelocity * gameTime) + (storedVelocity.z * addStoredVelocity * gameTime) + scale.z;
+	projections.x[0] = glm::dot(colliderCenter, glm::vec3(1,0,0)) + displacement.x/* + (velocity.x * addVelocity * gameTime) + (storedVelocity.x * addStoredVelocity * gameTime)*/ - scale.x;
+	projections.x[1] = glm::dot(colliderCenter, glm::vec3(1,0,0)) + displacement.x/* + (velocity.x * addVelocity * gameTime) + (storedVelocity.x * addStoredVelocity * gameTime)*/ + scale.x;
+	projections.y[0] = glm::dot(colliderCenter, glm::vec3(0,1,0)) + displacement.y/* + (velocity.y * addVelocity * gameTime) + (storedVelocity.y * addStoredVelocity * gameTime)*/ - scale.y;
+	projections.y[1] = glm::dot(colliderCenter, glm::vec3(0,1,0)) + displacement.y/* + (velocity.y * addVelocity * gameTime) + (storedVelocity.y * addStoredVelocity * gameTime)*/ + scale.y;
+	projections.z[0] = glm::dot(colliderCenter, glm::vec3(0,0,1)) + displacement.z/* + (velocity.z * addVelocity * gameTime) + (storedVelocity.z * addStoredVelocity * gameTime)*/ - scale.z;
+	projections.z[1] = glm::dot(colliderCenter, glm::vec3(0,0,1)) + displacement.z/* + (velocity.z * addVelocity * gameTime) + (storedVelocity.z * addStoredVelocity * gameTime)*/ + scale.z;
 
 	return projections;
 }

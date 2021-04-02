@@ -7,6 +7,49 @@ PhysicsManager::PhysicsManager()
 {
 }
 
+float PhysicsManager::CalculateCollisionTime(const glm::vec3 startPos, const glm::vec3 endPos, const glm::vec3 startVelocity, const glm::vec3 acceleration, const float maxTimeStep, const float timeStep, RigidBody& rb1, RigidBody& rb2)
+{
+	const float timePrecision = 0.000046f;
+	glm::vec3 normalDirection;
+	float currentTime = 0;
+	float lowerTimeBound = 0;
+	float upperTimeBound = maxTimeStep;
+	while (currentTime < maxTimeStep)
+	{
+		for (unsigned int i = 0; i < rb1.GetColliders().size(); i++)
+		{
+			Collider* collider1 = &rb1.GetColliders()[i];
+			for (unsigned int j = 0; j < rb2.GetColliders().size(); j++)
+			{
+				Collider* collider2 = &rb2.GetColliders()[i];
+				currentTime += timeStep;
+				//if not colliding at currentTime
+				if (!IsColliding(collider1, collider2, currentTime, normalDirection))
+					lowerTimeBound = currentTime;
+				else //if a collision is found...
+				{
+					upperTimeBound = currentTime;
+					//loop to find the convergence point of the collision
+					while (upperTimeBound - lowerTimeBound > timePrecision)
+					{
+						float averageTimeBound = (upperTimeBound + lowerTimeBound) * 0.5f;
+						if (IsColliding(collider1, collider2, averageTimeBound, normalDirection))
+						{
+							upperTimeBound = averageTimeBound;
+						}
+						else
+							lowerTimeBound = averageTimeBound;
+					}
+					//when upper and lower time bounds are close enough, return their average
+					return (upperTimeBound + lowerTimeBound) * 0.5f;
+				}
+			}
+		}
+	}
+
+	//If no collision has been detected, return -1
+	return -1;
+}
 
 PhysicsManager::~PhysicsManager()
 {

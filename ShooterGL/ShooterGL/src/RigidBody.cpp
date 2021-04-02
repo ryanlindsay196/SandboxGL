@@ -1,5 +1,6 @@
 #include "RigidBody.h"
 #include "FileReader.h"
+#include "../ManagerClasses/PhysicsManager.h"
 
 RigidBody::~RigidBody()
 {
@@ -99,7 +100,7 @@ void RigidBody::FixedUpdate(float gameTime)
 
 	if (useGravity)
 	{
-		velocity.y -= 1 * gameTime;
+		velocity = PhysicsManager::CalculateVelocity(velocity, PhysicsManager::Acceleration(), gameTime);
 		velocity.y = std::max(-5.f, velocity.y);
 		velocity.y = std::min(5.f, velocity.y);
 	}
